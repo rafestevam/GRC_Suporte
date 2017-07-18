@@ -1,0 +1,82 @@
+package QUOTATION_RuleSet
+expander quotation.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+
+# OBJECT    client_objid       LONG       Client ID                                                                                                         
+# OBJECT    client_sign        CLIENTSIGN Client                                                                                                            
+# OBJECT    create_date        DATE       Creation date                                                                                                     
+# OBJECT    creator_user_id    LONG       User ID (creator)                                                                                                 
+# OBJECT    delete_date        DATE       Deletion date                                                                                                     
+# OBJECT    guid               STRING     GUID                                                                                                              
+# OBJECT    obj_id             LONG       ID                                                                                                                
+# OBJECT    obj_type           OBJECTTYPE Object type                                                                                                       
+# OBJECT    root_guid          STRING     Root GUID                                                                                                         
+# OBJECT    versions           LONG       Number of versions                                                                                                
+# VERSION   aris_change_date   DATE       ARIS change date                                                                                                  
+# VERSION   change_date        DATE       Change date                                                                                                       
+# VERSION   change_type        ENUM       Change type          changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)
+# VERSION   change_user_id     LONG       User ID (editor)                                                                                                  
+# VERSION   deactivated        BOOLEAN    Deactivated                                                                                                       
+# VERSION   id                 LONG       ID                                                                                                                
+# VERSION   substitute_user_id LONG       User ID (substitute)                                                                                              
+# VERSION   version_active     BOOLEAN    Current version                                                                                                   
+# VERSION   version_number     LONG       Version number                                                                                                    
+# QUOTATION description        TEXT       Description                                                                                                       
+# QUOTATION isDefault          BOOLEAN    Is default                                                                                                        
+# QUOTATION isSnapshot         BOOLEAN    Is snapshot                                                                                                       
+# QUOTATION name               STRING     Name                                                                                                              
+# QUOTATION value              DOUBLE     Value                                                                                                             
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+rule "define all standard attributes editable and mandatory [I,V]"
+
+	salience 10400
+	no-loop true
+
+	when
+
+	then
+		set "name"                editable
+		set "description"         editable
+		set "value"               editable
+
+        set "name"                mandatory
+end
+
+rule "define all standard attributes readonly if isSnapshot=true [I,V]"
+
+	salience 10000
+	no-loop true
+
+	when
+        ( value comparison fulfilled: ":transient:" attr_value "isSnapshot" "EQUALS" value "true" OR
+                  value comparison fulfilled: ":transient:" attr_value "isDefault" "EQUALS" value "true" )
+
+	then
+		set "name"                readonly
+		set "description"         readonly
+		set "value"               readonly
+
+end
+
+################
+# Custom Rules #
+################
+
+rule "set_fields_mandatory[I,V]"
+
+	salience 10300
+	no-loop true
+	
+	when
+	
+	then
+		set "value" mandatory
+		set "description" invisible
+
+end

@@ -1,0 +1,223 @@
+package AUDITSTEPTEMPLATE_RuleSet
+expander auditsteptemplate.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.auditmanagement.re.AuditsteptemplateHelper;
+
+# OBJECT            client_objid         LONG       Client ID                                                                                                                                                     
+# OBJECT            client_sign          CLIENTSIGN Client                                                                                                                                                        
+# OBJECT            create_date          DATE       Creation date                                                                                                                                                 
+# OBJECT            creator_user_id      LONG       User ID (creator)                                                                                                                                             
+# OBJECT            delete_date          DATE       Deletion date                                                                                                                                                 
+# OBJECT            guid                 STRING     GUID                                                                                                                                                          
+# OBJECT            obj_id               LONG       ID                                                                                                                                                            
+# OBJECT            obj_type             OBJECTTYPE Object type                                                                                                                                                   
+# OBJECT            root_guid            STRING     Root GUID                                                                                                                                                     
+# OBJECT            versions             LONG       Number of versions                                                                                                                                            
+# VERSION           aris_change_date     DATE       ARIS change date                                                                                                                                              
+# VERSION           change_date          DATE       Change date                                                                                                                                                   
+# VERSION           change_type          ENUM       Change type                       changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                               
+# VERSION           change_user_id       LONG       User ID (editor)                                                                                                                                              
+# VERSION           deactivated          BOOLEAN    Deactivated                                                                                                                                                   
+# VERSION           id                   LONG       ID                                                                                                                                                            
+# VERSION           substitute_user_id   LONG       User ID (substitute)                                                                                                                                          
+# VERSION           version_active       BOOLEAN    Current version                                                                                                                                               
+# VERSION           version_number       LONG       Version number                                                                                                                                                
+# RECURRING         control_period       ENUM       Control period (target)           controlperiod (unspecified=0,day=1,week=2,month=3,quarter=4,semiannual=5,year=6)                                            
+# RECURRING         duration             LONG       Duration                                                                                                                                                      
+# RECURRING         enddate              DATE       End date                                                                                                                                                      
+# RECURRING         event_driven_allowed BOOLEAN    Event-driven audit steps allowed                                                                                                                              
+# RECURRING         frequency            ENUM       Frequency                         frequency (all=-1,unspecified=0,oneoff=1,daily=2,weekly=3,monthly=4,quarterly=5,semiannually=6,annually=7,everysecondyear=8)
+# RECURRING         control_period_offset LONG      Offset
+# RECURRING         owner_group          LIST       Audit step owner group            to 1 USERGROUP (LT=5080)                                                                                                    
+# RECURRING         reviewer_group       LIST       Reviewer group                    to 1 USERGROUP (LT=5100)                                                                                                    
+# RECURRING         startdate            DATE       Start date                                                                                                                                                    
+# AUDITSTEPTEMPLATE audittemplate        LIST       Audit template                    to 1 AUDITTEMPLATE (LT=5091)                                                                                                
+# AUDITSTEPTEMPLATE description          TEXT       Description                                                                                                                                                   
+# AUDITSTEPTEMPLATE documents            LIST       Documents                         to * DOCUMENTs (LT=5101)                                                                                                    
+# AUDITSTEPTEMPLATE name                 STRING     Name                                                                                                                                                          
+# AUDITSTEPTEMPLATE plannedenddate       DATE       End date of audit step (target)                                                                                                                               
+# AUDITSTEPTEMPLATE plannedstartdate     DATE       Start date of audit step (target)                                                                                                                             
+# AUDITSTEPTEMPLATE processingtime       LONG       Processing time (target)                                                                                                                                      
+# AUDITSTEPTEMPLATE questions            LIST       Questions                         to * QUESTIONs (LT=5092)
+# AUDITSTEPTEMPLATE scope                LIST       Audit step scope                  to 1 HIERARCHY (LT=5070)
+# AUDITSTEPTEMPLATE step_type            ENUM       Audit step type                   auditsteptype (all=-1,point_of_audit_task=1,logistic_task=2)
+# AUDITSTEPTEMPLATE steps                LIST       Audit steps                       to * AUDITSTEPTEMPLATEs (LT=5090)
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+
+rule "define mandatory [I,V]"
+
+    salience 10900
+    no-loop true
+
+    when
+        user has at object role "auditmanager"
+
+    then
+        set "name" mandatory
+#       set "area" mandatory
+#       set "process" mandatory
+#       set "subprocess" mandatory
+#       set "control" mandatory
+
+end
+
+rule "Audit step fields recommended [I,V]"
+
+	salience 10800
+
+	when
+		user has at object role "auditmanager"
+
+	then
+        set "plannedstartdate" recommended
+        set "plannedenddate" recommended
+        set "processingtime" recommended
+        set "owner_group" recommended
+
+end
+
+rule "define mandatory if audit template is released [I,V]"
+
+    salience 10700
+    no-loop true
+
+    when
+        user has at object role "auditmanager"
+        audit template is released
+
+    then
+        set "name" mandatory
+        set "plannedstartdate" mandatory
+        set "plannedenddate" mandatory
+        set "processingtime" mandatory
+        set "owner_group" mandatory
+        set "area" mandatory
+        set "process" mandatory
+        set "subprocess" mandatory
+        set "control" mandatory
+
+
+end
+
+rule "define editable [I,V]"
+
+    salience 10600
+    no-loop true
+
+    when
+		user has at object role "auditmanager"
+
+    then
+        set "name" editable
+        set "description" editable
+        set "step_type" editable
+        set "plannedstartdate" editable
+        set "plannedenddate" editable
+        set "processingtime" editable
+        set "owner_group" editable
+        set "scope" editable
+        set "documents" editable
+        set "steps" editable
+        set "area" editable
+        set "process" editable
+        set "subprocess" editable
+        set "control" editable
+
+end
+
+rule "protect auditsteptemplates from being edited as long as audit step template is not persistent yet [I,V]"
+
+	salience 10500
+	when
+		user has at object role "auditmanager"
+		object is new
+
+	then
+		set "steps" readonly
+		add object "information" message "auditmanagement.auditsteptemplates.deny.assigning.auditsteptemplates.DBI"
+
+end
+
+rule "plannedstartdate_invalid_[V]"
+
+	salience 10400
+	no-loop true
+
+	when
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "plannedstartdate" "GREATER THAN" ":transient:" attr_value "plannedenddate"
+
+	then
+		set "plannedstartdate" invalid
+		add "error" message "error.date.range.DBI" to "plannedstartdate"
+
+end
+
+rule "period_invalid_[V]"
+
+	salience 10300
+	no-loop true
+
+	when
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+		audit step period is not within audit period
+
+	then
+		set "plannedstartdate" invalid
+		add "error" message "error.auditstepperiod.not.in.auditperiod.ERR" to "plannedstartdate"
+
+end
+
+rule "period_sub_step_invalid_[V]"
+
+	salience 10200
+	no-loop true
+
+	when
+		"steps" is dirty
+		audit step period of sub step is not within audit period
+
+	then
+		set "steps" invalid
+		add "error" message "error.auditstepperiod.not.in.auditperiod.ERR" to "steps"
+
+end
+
+rule "processingtime_invalid_[V]"
+
+	salience 10100
+	no-loop true
+
+	when
+    	user has at object role "auditmanager"
+		"processingtime" is filled
+        value comparison fulfilled: ":transient:" attr_value "processingtime" "EQUALS" value "0000:00:00:00"
+
+	then
+		set "processingtime" invalid
+		add "error" message "error.auditstep.processingtime.invalid.ERR" to "processingtime"
+
+end
+
+rule "planned_processing_time_exceeds_planned_processing_period_[V]"
+
+    salience 10000
+	no-loop true
+
+	when
+	    user has at object role "auditmanager"
+		"processingtime" is filled
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+        audit step processing time "processingtime" exceeds the planned processing period of "plannedstartdate" and "plannedenddate"
+
+	then
+	    set "processingtime" invalid
+		add "error" message "error.auditstep.processingtime.not.in.target.period.ERR" to "processingtime"
+
+end

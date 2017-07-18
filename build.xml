@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ARCM Customizing Tool v1.6" default="create customizing zip-file">
+	
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="../lib/ant-contrib-1.0b3.jar"/>
+	  </classpath>
+	</taskdef>
+	
+	<tstamp>
+		<format property="TIMESTAMP" pattern="yyyy-MM-dd_HH-mm-ss" />
+	</tstamp>
+
+	<property name="CTK.VERSION" 		value="1.6" />
+	<property name="CTK.WORKSPACE" 		value="Eclipse Luna for ARCM 9.8" />	
+	<property name="WORKSPACE.DIR" 		value="${basedir}\.." />
+	
+	<property name="PROJECT.DIR.WEBCONTENT" 	value="${basedir}\WebContent" />	
+	<property name="PROJECT.DIR.SOURCES" 		value="${basedir}\src" />
+	<property name="PROJECT.DIR.MIGRATION" 		value="${basedir}\migration" />
+	<property name="PROJECT.DIR.BUILD" 			value="${basedir}\build" />
+	<property name="PROJECT.DIR.BUILD.CLASSES" 	value="${PROJECT.DIR.BUILD}\classes" />
+	<property name="PROJECT.DIR.BUILD.TEMP" 	value="${PROJECT.DIR.BUILD}\temp" />
+	<property name="PROJECT.DIR.XML.MIGRATION" 	value="${PROJECT.DIR.WEBCONTENT}\WEB-INF\config\custom" />
+	<property name="PROJECT.DIR.XML.MIGRATION.BACKUP" 	value="${basedir}\backup" />
+	
+	<property name="ARCM_TOMCAT_LIB" 	value="${ARCM_TOMCAT_HOME}\lib" />
+
+	<property name="VERSION.SOURCE.JAR" value="arcm_common_config*.jar" />
+
+	
+	<target name="create customizing zip-file" 
+		description="Creates the customizing enhancement archive, containing all customized resources/classes and support-zip file">
+		
+		<!-- clean directory -->	
+		<delete dir="${PROJECT.DIR.BUILD.TEMP}" verbose="false" />
+		<mkdir dir="${PROJECT.DIR.BUILD.TEMP}" />
+		
+		<!-- create support zip -->
+		<antcallback target="buildArcmVersion" return="ARCM.VERSION"/>		
+		<property name="CUSTOM.SOURCES.ZIP.NAME" value="arcm_${ARCM.VERSION}_customizing_for_support.zip" />
+		<property name="CUSTOM.SOURCES.ZIP.FILE" value="${PROJECT.DIR.BUILD.TEMP}\${CUSTOM.SOURCES.ZIP.NAME}" />
+
+		<antcall target="createExportZip">
+			<param name="outputFile" value="${CUSTOM.SOURCES.ZIP.FILE}"/>
+		</antcall>
+		
+		<!-- create customizing jar -->		
+		<property name="CUSTOM.JAR.FILE" value="${PROJECT.DIR.BUILD.TEMP}\arcm_custom_classes-${ARCM.VERSION}.jar" />
+		<antcall target="createCustomLibrary">
+			<param name="outputFile" value="${CUSTOM.JAR.FILE}"/>
+		</antcall>
+										
+		<!-- pack whole customizing archive -->
+		<antcall target="createCustomizingEnhancementZip">
+			<param name="customClassesJar" value="${CUSTOM.JAR.FILE}"/>
+		</antcall>
+				 
+		<!-- clean directory -->
+		<delete dir="${PROJECT.DIR.BUILD.TEMP}" verbose="false" />			
+	</target>
+
+	<target name="create database migration jar-file" 
+		description="creates database migration enhancement">
+		
+		<!-- clean directory -->	
+		<delete dir="${PROJECT.DIR.BUILD.TEMP}" verbose="false" />
+		<mkdir dir="${PROJECT.DIR.BUILD.TEMP}" />
+
+		<antcallback target="buildArcmVersion" return="ARCM.VERSION"/>	
+				
+		<!-- create migration jar -->		
+		<property name="MIGRATION.JAR.FILE" value="${PROJECT.DIR.BUILD}\arcm_datalayer_migration_migsteps-${ARCM.VERSION}.jar" />
+		<antcall target="createMigrationLibrary">
+			<param name="outputFile" value="${MIGRATION.JAR.FILE}"/>
+		</antcall>
+								 
+		<!-- clean directory -->	
+		<delete dir="${PROJECT.DIR.BUILD.TEMP}" verbose="false" />		
+	</target>
+
+    <target name="customizing migration: find outdated elements" 
+    		description="Checks if the customizing fits to the installed ARCM. Possible problems caused by e.g. changes in the latest ARCM Hotfix will be logged">
+        <java classname="com.idsscheer.webapps.arcm.tools.migration.integrity.CustomizingIntegrityCheck"> 
+    		<classpath>
+				<fileset dir="${WORKSPACE.DIR}/.metadata/.plugins/org.eclipse.wst.server.core">
+    			 	<include name="**/wtpwebapps/arcm/WEB-INF/lib/*.jar"/>
+				</fileset>
+				<fileset dir="${ARCM_TOMCAT_LIB}">
+    			 	<include name="*.jar"/>
+				</fileset>
+			</classpath>     
+        	<sysproperty key="org.apache.commons.logging.Log" value="org.apache.commons.logging.impl.SimpleLog"/>
+        	<sysproperty key="org.apache.commons.logging.simplelog.defaultlog" value="ERROR"/>       
+        </java>
+    </target>	         
+		
+    <target name="validate configuration" 
+    		description="Validates the customizing. Possible problems will be logged"> 
+        <java classname="com.idsscheer.webapps.arcm.tools.migration.integrity.CustomizingMetadataCheck"> 
+    		<classpath>
+				<fileset dir="${WORKSPACE.DIR}/.metadata/.plugins/org.eclipse.wst.server.core">
+    			 	<include name="**/wtpwebapps/arcm/WEB-INF/lib/*.jar"/>
+				</fileset>
+				<fileset dir="${WORKSPACE.DIR}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ARCM_TOMCAT_LIB}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>             	
+        	<sysproperty key="org.apache.commons.logging.Log" value="org.apache.commons.logging.impl.SimpleLog"/>
+        	<sysproperty key="org.apache.commons.logging.simplelog.defaultlog" value="ERROR"/>       
+        </java>
+    </target>
+	
+    <target name="customizing migration: XSD changes migration" description="Migrate XML customizing to ARCM version used by CTK. Possible problems will be logged">
+        <java classname="com.aris.arcm.migration.xml.runner.CustomXMLMigrationTool">
+        	
+        	<arg value="${PROJECT.DIR.XML.MIGRATION}/xml"/>
+        	<arg value="${PROJECT.DIR.XML.MIGRATION}/xsd"/>
+    	
+        	<arg value="${PROJECT.DIR.XML.MIGRATION.BACKUP}"/>
+     	
+    		<classpath>
+				<fileset dir="${WORKSPACE.DIR}/.metadata/.plugins/org.eclipse.wst.server.core">
+    			 	<include name="**/wtpwebapps/arcm/WEB-INF/lib/*.jar"/>
+				</fileset>
+				<fileset dir="${WORKSPACE.DIR}/lib">
+					<include name="**/*.jar" />
+				</fileset>
+				<fileset dir="${ARCM_TOMCAT_LIB}">
+					<include name="*.jar" />
+				</fileset>
+			</classpath>       	
+        	<sysproperty key="org.apache.commons.logging.Log" value="org.apache.commons.logging.impl.SimpleLog"/>
+        	<sysproperty key="org.apache.commons.logging.simplelog.defaultlog" value="ERROR"/>       
+        </java>
+    </target>	
+		
+	<target name="createCustomLibrary">
+		<echo message="Creating custom library '${outputFile}'..."/>		
+		<antcall target="buildManifest" />		
+		
+		<mkdir dir="${PROJECT.DIR.BUILD.TEMP}/exploded/customJar"/>
+	    <copy todir="${PROJECT.DIR.BUILD.TEMP}/exploded/customJar" includeemptydirs="false">
+	        <fileset dir="${PROJECT.DIR.BUILD.CLASSES}">
+				<exclude name="**/readme.txt" />
+				<exclude name="log4j.properties" />
+				<exclude name="com/idsscheer/webapps/arcm/dl/datamigration/**" />	
+				<include name="**/*.*" />
+			</fileset>
+	    </copy>
+		
+		<jar destfile="${outputFile}" update="false" manifest="${PROJECT.DIR.BUILD.TEMP}/MANIFEST.MF" >
+			<include name="build" />										
+			<fileset dir="${PROJECT.DIR.BUILD.TEMP}/exploded/customJar"/>
+		</jar>
+
+	</target>
+	
+	<target name="createMigrationLibrary">
+		<echo message="Creating migration library '${outputFile}'..."/>		
+		<antcall target="buildManifest" />		
+		<jar destfile="${outputFile}" update="false" manifest="${PROJECT.DIR.BUILD.TEMP}/MANIFEST.MF" >
+			<include name="build/classes/com/idsscheer/webapps/arcm/dl/datamigration" />							
+			<fileset dir="${PROJECT.DIR.BUILD.CLASSES}">
+				<exclude name="**/readme.txt" />
+				<exclude name="log4j.properties" />
+				<include name="**/*.*" />
+			</fileset>
+		</jar>
+	</target>	
+		
+	<target name="createCustomizingEnhancementZip">		
+		<property name="CUSTOM.ZIP.NAME" value="arcm_${ARCM.VERSION}_customizing_${TIMESTAMP}.zip" />
+		<property name="CUSTOM.ZIP.FILE" value="${PROJECT.DIR.BUILD}\${CUSTOM.ZIP.NAME}" />
+
+		<echo message="Packing custom archive '${CUSTOM.ZIP.FILE}'..."/>
+		<zip destfile="${CUSTOM.ZIP.FILE}" update="false">
+			<zipfileset file="${customClassesJar}" prefix="WEB-INF/lib"/>
+			<zipfileset dir="${PROJECT.DIR.WEBCONTENT}">
+				<exclude name="**/runtimeconfig.xml" />
+				<exclude name="**/custom.xsd" />
+				<exclude name="**/WEB-INF/migration/readme.txt"/>
+			</zipfileset>
+			<zipfileset file="${CUSTOM.SOURCES.ZIP.FILE}" prefix="WEB-INF/support"/>
+		</zip>
+	</target>
+
+	<target name="createExportZip">
+		<echo message="Packing support archive '${outputFile}'..."/>
+		<antcallback target="buildManifest" return="ARCM.VERSION"/>
+		<zip destfile="${outputFile}" update="false" >			
+			<zipfileset dir="${PROJECT.DIR.SOURCES}" prefix="src" />
+			<zipfileset dir="${PROJECT.DIR.MIGRATION}" prefix="migration" />
+			<zipfileset dir="${PROJECT.DIR.WEBCONTENT}" prefix="WebContent"/>	
+			<zipfileset dir="${PROJECT.DIR.BUILD.TEMP}" prefix="">
+				<include name="**/MANIFEST.MF" />
+			</zipfileset>		
+		</zip>
+	</target>
+		
+	<target name="buildManifest">
+		<copy todir="${PROJECT.DIR.BUILD.TEMP}" flatten="true" verbose="false">
+    		<fileset dir="${basedir}/../.metadata/.plugins/org.eclipse.wst.server.core/" includes="**/${VERSION.SOURCE.JAR}"/>	
+		</copy>	
+		<!-- get file with manifest depending on pattern of VERSION.SOURCE.JAR -->
+		<first id="jarId"><fileset dir="${PROJECT.DIR.BUILD.TEMP}" includes="${VERSION.SOURCE.JAR}"/></first>
+		<property name="FILE.WITH.MANIFEST" refid="jarId"/>
+    	<loadmf jar="${FILE.WITH.MANIFEST}"/>					
+		<substring text="${ARCM.Specification-Version}" start="0" end="7" property="ARCM.VERSION" />
+		<manifest file="${PROJECT.DIR.BUILD.TEMP}/MANIFEST.MF">
+			<!-- Who is building this jar? -->
+			<attribute name="Built-By" 					value="${user.name}" />			
+			<attribute name="CTK-Version" 				value="${CTK.VERSION}" />
+			<attribute name="CTK-Workspace"				value="${CTK.WORKSPACE}" />
+			<!-- ARCM version that was used to build the customizing -->
+			<attribute name="Specification-Version"    	value="${ARCM.Specification-Version}" />
+			<!-- Information about the program itself -->
+			<attribute name="Implementation-Vendor"    	value="Software AG" />
+			<attribute name="Implementation-Title" 	   	value="ARCM Customizing JAR" />
+			<attribute name="Implementation-Version"   	value="${TIMESTAMP}" />
+		</manifest>
+	</target>
+	
+	<target name="buildArcmVersion">
+		<copy todir="${PROJECT.DIR.BUILD.TEMP}" flatten="true" verbose="false">
+    		<fileset dir="${basedir}/../.metadata/.plugins/org.eclipse.wst.server.core/" includes="**/${VERSION.SOURCE.JAR}"/>	
+		</copy>	
+		<!-- get file with manifest depending on pattern of VERSION.SOURCE.JAR -->
+		<first id="jarId"><fileset dir="${PROJECT.DIR.BUILD.TEMP}" includes="${VERSION.SOURCE.JAR}"/></first>
+		<property name="FILE.WITH.MANIFEST" refid="jarId"/>
+    	<loadmf jar="${FILE.WITH.MANIFEST}"/>
+		<substring text="${ARCM.Specification-Version}" start="0" end="7" property="ARCM.VERSION" />		
+	</target>
+	
+	<macrodef name="loadmf">
+        <attribute name="jar"/>
+		<sequential>
+            <loadproperties>
+                <zipentry zipfile="@{jar}" name="META-INF/MANIFEST.MF"/>
+                <filterchain>
+                    <prefixlines prefix="ARCM." id="Specification-Version"/>
+                </filterchain>
+            </loadproperties>
+        </sequential>
+    </macrodef>
+    	
+    <scriptdef name="substring" language="javascript">
+	     <attribute name="text" />
+	     <attribute name="start" />
+	     <attribute name="end" />
+	     <attribute name="property" />
+	     <![CDATA[
+	       var text = attributes.get("text");
+	       var start = attributes.get("start");
+	       var end = attributes.get("end") || text.length();
+	       project.setProperty(attributes.get("property"), text.substring(start, end));
+	     ]]>
+	  </scriptdef>
+	
+</project>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+	<filter id="riskassessment2control" dataSource.idref="riskassessment2control">
+        <filterRow id="control_name">
+            <filterElement dataReference.idref="control_name"  />
+        </filterRow>
+        <filterRow id="controls">
+            <filterElement dataReference.idref="controls"  />
+        </filterRow>
+        <filterRow id="groupname" propertyKey="filter.row.control.manager.DBI">
+            <filterElement dataReference.idref="groupname"  />
+        </filterRow>
+        <filterRow id="key_control">
+            <filterElement dataReference.idref="key_control" default="-1"  />
+        </filterRow>
+        <filterRow id="control_type">
+            <filterElement dataReference.idref="control_type" default="6"  /><!-- GAP - GRC29 -->
+        </filterRow>
+        <filterRow id="control_frequency">
+            <filterElement dataReference.idref="control_frequency" default="-1"  />
+        </filterRow>
+        <filterRow id="control_execution">
+            <filterElement dataReference.idref="control_execution" default="1"  /><!-- GAP - GRC29 -->
+        </filterRow>
+        <filterRow id="control_effect">
+            <filterElement dataReference.idref="control_effect" default="-1"  />
+        </filterRow>
+        <filterRow id="deactivated">
+            <filterElement dataReference.idref="deactivated"  >
+                <parameter name="showAll" value="false"/>
+            </filterElement>
+        </filterRow>
+    </filter>	
+    
+</custom>

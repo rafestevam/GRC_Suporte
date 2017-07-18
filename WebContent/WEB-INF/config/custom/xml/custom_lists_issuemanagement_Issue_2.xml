@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+ 
+ 	<list id="Issues2"
+         view.idref="Issues2"
+         filter.idref="issues2"
+         idColumn.idref="IssueID"
+         defaultOrderColumn.idref="IssueID"
+         allowMarkAsIssueRelevant="true"
+         relatedObjectType.idref="ISSUE"
+         propertyKey="list.Issues2.DBI">
+        <roleRestriction role="issuemanager"/>
+        <roleRestriction role="issueauditor"/>
+
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="IssueID"/>
+            <simpleFilter filterRow.idref="remediationPlannedBefore"/> 
+        </simpleFilterRow>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="creator_status"/>
+            <simpleFilter filterRow.idref="owner_status"/>
+        </simpleFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="creator_name"/>
+            <extendedFilter filterRow.idref="owner_name"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="reviewer_name"/>
+            <extendedFilter filterRow.idref="reviewer_status"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="stateTime"/>
+            <extendedFilter filterRow.idref="remark"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="remediationMeasure"/>
+            <extendedFilter filterRow.idref="category"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="created_by_testcase"/>
+            <extendedFilter filterRow.idref="deactivated"/>
+        </extendedFilterRow>
+
+	   	<extendedFilterRow>
+            <extendedFilter filterRow.idref="rsk_name"/>
+            <extendedFilter filterRow.idref="cst_appsystem"/>
+       	</extendedFilterRow>
+
+	   	<extendedFilterRow>
+            <extendedFilter filterRow.idref="cst_modelname"/>
+            <extendedFilter filterRow.idref="cst_process"/>
+       	</extendedFilterRow>
+       	
+       	<extendedFilterRow>
+       		<extendedFilter filterRow.idref="process_environment"/>
+       		<extendedFilter filterRow.idref="business_unit"/>
+       	</extendedFilterRow>
+       	
+         <listHeaderRow>
+            <listHeader column="LC_Issues_1" propertyKey="tableheader.issue.id.DBI" width="5%"/>
+            <listHeader column="LC_Issues_2" propertyKey="tableheader.issue.action_type.DBI" width="5%"/>
+            <listHeader column="LC_Issues_3" propertyKey="tableheader.issue.name.DBI" width="5%"/>
+            <listHeader column="LC_Issues_13" propertyKey="tableheader.issue.recurrent.DBI" width="3%"/>
+            <listHeader column="LC_Issues_14" propertyKey="tableheader.issue.process_environment.DBI" width="3%"/>
+            <listHeader column="LC_Issues_15" propertyKey="tableheader.issue.business_unit.DBI" width="2%"/>
+            <listHeader column="LC_Issues_29" propertyKey="tableheader.issue.cst_appsystem.DBI" width="2%"/>
+            <listHeader column="LC_Issues_16" propertyKey="tableheader.issue.root_cause.DBI" width="9%"/>
+            <listHeader column="LC_Issues_4" propertyKey="tableheader.issue.priority.DBI" width="3%"/>
+            <listHeader column="LC_Issues_5" propertyKey="tableheader.issue.creator.DBI" width="3%"/>
+            <listHeader column="LC_Issues_6" propertyKey="tableheader.issue.remedationPlannedBefore.short.DBI" tooltip="tableheader.issue.remedationPlannedBefore.DBI" width="3%"/>
+            <listHeader column="LC_Issues_12" propertyKey="tableheader.issue.creatorStatus.short.DBI" tooltip="tableheader.issue.creatorStatus.DBI" width="3%"/>
+            <listHeader column="LC_Issues_7" propertyKey="tableheader.issue.ownerStatus.short.DBI" tooltip="tableheader.issue.ownerStatus.DBI" width="3%"/>
+            <listHeader column="LC_Issues_8" propertyKey="tableheader.issue.reviewerStatus.short.DBI" tooltip="tableheader.issue.reviewerStatus.DBI" width="3%"/>
+            <listHeader column="LC_Issues_9" propertyKey="tableheader.issue.stateTime.short.DBI" tooltip="tableheader.issue.stateTime.DBI" width="5%"/>
+            <listHeader column="LC_Issues_10" propertyKey="tableheader.description.DBI" width="8%"/>
+            <listHeader column="LC_Issues_11" propertyKey="tableheader.issue.remediationMeasure.DBI" width="8%"/>            
+            <listHeader column="LC_Issues_17" propertyKey="tableheader.issue.replanned.DBI" width="4%"/>
+			<listHeader column="LC_Issues_18" propertyKey="tableheader.issue.risk_name.DBI" width="4%"/>
+			<listHeader column="LC_Issues_19" propertyKey="tableheader.issue.ra_result.DBI" width="4%"/>
+			<listHeader column="LC_Issues_20" propertyKey="tableheader.issue.ra_residualfinal.DBI" width="5%"/>
+			<listHeader column="LC_Issues_21" propertyKey="tableheader.issue.cst_modelname.DBI" width="5%"/> 
+			<listHeader column="LC_Issues_22" propertyKey="tableheader.issue.cst_process.DBI" width="5%"/>    
+			<listHeader column="LC_Issues_23" propertyKey="tableheader.issue.owner_name.DBI" width="5%"/>		 
+			<listHeader column="LC_Issues_24" propertyKey="tableheader.issue.reviewer_name.DBI" width="2%"/>  
+			<listHeader column="LC_Issues_25" propertyKey="tableheader.issue.cst_rescheduling.DBI" width="2%"/>
+			<listHeader column="LC_Issues_26" propertyKey="tableheader.issue.cst_plandtini.DBI" width="2%"/>
+			<listHeader column="LC_Issues_27" propertyKey="tableheader.issue.cst_aging_plan.DBI" width="2%"/>
+			<listHeader column="LC_Issues_28" propertyKey="tableheader.issue.cst_aging_pend.DBI" width="2%"/>						        
+			   
+        </listHeaderRow>
+        <column id="LC_Issues_1" dataReference.idref="IssueID" template="openObject">
+            <parameter name="idColumn" value="IssueID"/>
+        </column>
+        <column id="LC_Issues_2" dataReference.idref="action_type" >
+            <parameter name="idColumn" value="action_type"/>
+        </column>
+        <column id="LC_Issues_3" dataReference.idref="name"/>
+        <column id="LC_Issues_13" dataReference.idref="recurrent"/>
+        <column id="LC_Issues_14" dataReference.idref="process_environment">
+        <parameter name="deactivatedColumn" value="process_environment"/>
+        </column>
+        <column id="LC_Issues_15" dataReference.idref="business_unit"/>
+        <column id="LC_Issues_29" dataReference.idref="cst_appsystem"/>
+        <column id="LC_Issues_16" dataReference.idref="root_cause"/> 
+        <column id="LC_Issues_4" align="center" dataReference.idref="priority">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_Issues_5" dataReference.idref="creator_name" template="object">
+            <parameter name="deactivatedColumn" value="creator_deactivated"/>
+        </column>
+        
+        <column id="LC_Issues_6" align="center" dataReference.idref="plannedenddate"/>
+            <column id="LC_Issues_12" align="center" dataReference.idref="creator_status">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_Issues_7" align="center" dataReference.idref="owner_status">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_Issues_8" align="center" dataReference.idref="reviewer_status">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_Issues_9" align="center" dataReference.idref="stateTime">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_Issues_10" dataReference.idref="description"/>
+        <column id="LC_Issues_11" dataReference.idref="remediationMeasure"/>
+        <column id="LC_Issues_17" dataReference.idref="replanned" />
+		<column id="LC_Issues_18" dataReference.idref="rsk_name" />
+		<column id="LC_Issues_19" dataReference.idref="ra_result" />
+		<column id="LC_Issues_20" dataReference.idref="ra_residualfinal" />
+		<column id="LC_Issues_21" dataReference.idref="cst_modelname" /> 
+		<column id="LC_Issues_22" dataReference.idref="cst_process" />
+		<column id="LC_Issues_23" dataReference.idref="owner_name" />		
+		<column id="LC_Issues_24" dataReference.idref="reviewer_name" /> 
+		<column id="LC_Issues_25" dataReference.idref="cst_rescheduling" /> 
+		<column id="LC_Issues_26" dataReference.idref="cst_plandtini" /> 		
+		<column id="LC_Issues_27" dataReference.idref="cst_aging_plan"/>
+		<column id="LC_Issues_28" dataReference.idref="cst_aging_pend"/>
+		
+        <listButtons>
+            <buttonReference button.idref="LIST_CREATE"/>
+            <buttonReference button.idref="LIST_OPEN"/>
+            <buttonReference button.idref="LIST_DELETE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="EXCEL_REPORT"/>
+        </listButtons>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+            <buttonReference button.idref="LISTROW_DELETE"/>
+        </rowButtons>
+    </list>
+	
+	</custom>

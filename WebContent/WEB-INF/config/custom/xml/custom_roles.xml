@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+<roles>
+<role id="auditowner" level="O" licensedComponentIds="am" userLicenses="operate">
+  <system component.idref="view.open.audits"/>
+  <system component.idref="view.mashzone.url.builder"/>
+  <object right.idref="r----" objectType.id="USERGROUP"/>
+  <object right.idref="r----" objectType.id="HIERARCHY"/>
+        <object right.idref="r----" objectType.id="AUDITTEMPLATE" />
+        <object right.idref="r----" objectType.id="AUDITSTEPTEMPLATE" />
+        <object right.idref="rwcdu" objectType.id="AUDIT">
+            <relation right.idref="ar" listAttrType.id="steps"/>
+            <relation right.idref="ar" listAttrType.id="scope"/>
+            <relation right.idref="ar" listAttrType.id="documents"/>
+            <relation right.idref="ar" listAttrType.id="conclusiondocuments"/>
+            <relation right.idref="ar" listAttrType.id="reviewer_group"/>
+            <relation right.idref="ar" listAttrType.id="auditor_group"/>
+            <relation right.idref="ar" listAttrType.id="predecessor"/>
+            <relation right.idref="ar" listAttrType.id="risk"/>
+            <relation right.idref="ar" listAttrType.id="methodology"/>
+            <relation right.idref="ar" listAttrType.id="regulation"/>
+            <relation right.idref="ar" listAttrType.id="process"/>
+        </object>
+        <object right.idref="rwcd-" objectType.id="AUDITSTEP">
+            <action actionRight.idref="reset"/>
+            <relation right.idref="ar" listAttrType.id="owner_group"/>
+            <relation right.idref="ar" listAttrType.id="steps"/>
+            <relation right.idref="ar" listAttrType.id="scope"/>
+            <relation right.idref="ar" listAttrType.id="documents"/>
+            <relation right.idref="ar" listAttrType.id="area"/>
+            <relation right.idref="ar" listAttrType.id="process"/>
+            <relation right.idref="ar" listAttrType.id="subprocess"/>
+            <relation right.idref="ar" listAttrType.id="control"/>
+        </object>
+        <object right.idref="rwc--" objectType.id="AUDITSCOPE" />
+        <object right.idref="r----" objectType.id="RISK"/>
+        <object right.idref="r----" objectType.id="CONTROL"/>
+        <object right.idref="r----" objectType.id="TESTDEFINITION"/>
+        <object right.idref="r----" objectType.id="TESTCASE"/>
+        <object right.idref="r----" objectType.id="DEFICIENCY"/>
+        <object right.idref="r----" objectType.id="RISKASSESSMENT"/>
+        <object right.idref="r----" objectType.id="RA_IMPACTTYPE"/>
+        <object right.idref="r----" objectType.id="INCIDENT"/>
+        <object right.idref="r----" objectType.id="LOSS"/>
+        <object right.idref="r----" objectType.id="SURVEY"/>
+        <object right.idref="r----" objectType.id="QUESTIONNAIRE"/>
+        <object right.idref="r----" objectType.id="ANSWER"/>
+        <object right.idref="r----" objectType.id="QUESTIONNAIRESECTION"/>
+        <object right.idref="r----" objectType.id="POLICY"/>
+ </role>
+ <role id="auditstepowner" level="O" licensedComponentIds="am" userLicenses="operate">
+  <system component.idref="view.open.auditsteps"/>
+  <system component.idref="view.mashzone.url.builder"/>
+        <system component.idref="send.recommendation"/>
+  <object right.idref="r----" objectType.id="USERGROUP"/>
+  <object right.idref="r----" objectType.id="HIERARCHY"/>
+        <object right.idref="r----" objectType.id="AUDIT" />
+        <object right.idref="rw---" objectType.id="AUDITSTEP">
+            <relation right.idref="ar" listAttrType.id="documents"/>
+            <relation right.idref="ar" listAttrType.id="stepconclusiondocuments"/>
+            <relation right.idref="ar" listAttrType.id="area"/>
+            <relation right.idref="ar" listAttrType.id="process"/>
+            <relation right.idref="ar" listAttrType.id="subprocess"/>
+            <relation right.idref="ar" listAttrType.id="control"/>
+        </object>
+        <object right.idref="r----" objectType.id="AUDITSCOPE" />
+        <object right.idref="r----" objectType.id="RISK"/>
+        <object right.idref="r----" objectType.id="CONTROL"/>
+        <object right.idref="r----" objectType.id="TESTCASE"/>
+        <object right.idref="r----" objectType.id="DEFICIENCY"/>
+        <object right.idref="r----" objectType.id="RISKASSESSMENT"/>
+        <object right.idref="r----" objectType.id="RA_IMPACTTYPE"/>
+        <object right.idref="r----" objectType.id="INCIDENT"/>
+        <object right.idref="r----" objectType.id="LOSS"/>
+        <object right.idref="r----" objectType.id="SURVEY"/>
+        <object right.idref="r----" objectType.id="QUESTIONNAIRE"/>
+        <object right.idref="r----" objectType.id="ANSWER"/>
+        <object right.idref="r----" objectType.id="QUESTIONNAIRESECTION"/>
+        <object right.idref="r----" objectType.id="POLICY"/>
+ </role>
+<role id="auditmanager" level="XC" licensedComponentIds="am" userLicenses="operate">
+  <system component.idref="view.administration" />
+  <system component.idref="view.mashzone.url.builder"/>
+  <system component.idref="view.auditmanagement"/>
+  <system component.idref="view.monitoring"/>
+  <system component.idref="generate.audit"/>
+  <system component.idref="check.audit"/>
+  <system component.idref="check.auditstep"/>
+        <system component.idref="view.home.dashboards"/>
+  <object right.idref="r----" objectType.id="USERGROUP"/>
+  <object right.idref="r----" objectType.id="HIERARCHY"/>
+  <object right.idref="rwcdu" objectType.id="AUDITTEMPLATE">
+            <action actionRight.idref="duplicate"/>
+            <relation right.idref="ar" listAttrType.id="scope"/>
+            <relation right.idref="ar" listAttrType.id="auditor_group"/>
+            <relation right.idref="ar" listAttrType.id="owner_group"/>
+            <relation right.idref="ar" listAttrType.id="reviewer_group"/>
+            <relation right.idref="ar" listAttrType.id="steps"/>
+            <relation right.idref="ar" listAttrType.id="documents"/>
+            <relation right.idref="ar" listAttrType.id="risk"/>
+            <relation right.idref="ar" listAttrType.id="methodology"/>
+            <relation right.idref="ar" listAttrType.id="regulation"/>
+            <relation right.idref="ar" listAttrType.id="process"/>
+        </object>
+        <object right.idref="rwcd-" objectType.id="AUDITSTEPTEMPLATE">
+            <relation right.idref="ar" listAttrType.id="audittemplate"/>
+            <relation right.idref="ar" listAttrType.id="scope"/>
+            <relation right.idref="ar" listAttrType.id="owner_group"/>
+            <relation right.idref="ar" listAttrType.id="reviewer_group"/>
+            <relation right.idref="ar" listAttrType.id="steps"/>
+            <relation right.idref="ar" listAttrType.id="documents"/>
+            <relation right.idref="ar" listAttrType.id="area"/>
+            <relation right.idref="ar" listAttrType.id="process"/>
+            <relation right.idref="ar" listAttrType.id="subprocess"/>
+            <relation right.idref="ar" listAttrType.id="control"/>
+        </object>
+        <object right.idref="rw-du" objectType.id="AUDIT">
+            <relation right.idref="ar" listAttrType.id="auditor_group"/>
+            <relation right.idref="ar" listAttrType.id="owner_group"/>
+            <relation right.idref="ar" listAttrType.id="reviewer_group"/>
+            <relation right.idref="ar" listAttrType.id="risk"/>
+            <relation right.idref="ar" listAttrType.id="methodology"/>
+            <relation right.idref="ar" listAttrType.id="regulation"/>
+            <relation right.idref="ar" listAttrType.id="process"/>
+        </object>
+        <object right.idref="r--d-" objectType.id="AUDITSTEP"/>
+        <object right.idref="rwc--" objectType.id="AUDITSCOPE" />
+        <object right.idref="r----" objectType.id="JOBINFORMATION"/>
+        <object right.idref="r----" objectType.id="RISK"/>
+        <object right.idref="r----" objectType.id="CONTROL"/>
+        <object right.idref="r----" objectType.id="TESTDEFINITION"/>
+        <object right.idref="r----" objectType.id="TESTCASE"/>
+        <object right.idref="r----" objectType.id="QUESTIONNAIRE"/>
+        <object right.idref="r----" objectType.id="SURVEY"/>
+        <object right.idref="r----" objectType.id="RISKASSESSMENT"/>
+        <object right.idref="r----" objectType.id="RA_IMPACTTYPE"/>
+        <object right.idref="r----" objectType.id="DEFICIENCY"/>
+        <object right.idref="r----" objectType.id="LOSS"/>
+        <object right.idref="r----" objectType.id="INCIDENT"/>
+        <object right.idref="r----" objectType.id="ANSWER"/>
+        <object right.idref="r----" objectType.id="QUESTIONNAIRESECTION"/>
+        <object right.idref="r----" objectType.id="POLICY"/>
+        <object right.idref="r----" objectType.id="DASHBOARDCONNECTION"/>
+ </role>
+</roles>
+	
+	</custom>

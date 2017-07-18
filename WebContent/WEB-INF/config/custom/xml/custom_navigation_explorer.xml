@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+<navigation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/navigation.xsd">
+
+    <nav.module module.id="module.explorer" propertyKey="module.explorer.DBI">
+        <nav.item item.idref="item.explorer.audit.management"/>
+        <nav.item item.idref="item.explorer.change.management"/>
+        <nav.item item.idref="item.explorer.deficiency.management"/>
+        <nav.item item.idref="item.explorer.incident.management"/>
+        <nav.item item.idref="item.explorer.issue.management"/>
+        <nav.item item.idref="item.explorer.policy.management"/>
+        <nav.item item.idref="item.explorer.risk.management"/>
+        <nav.item item.idref="item.explorer.signoff.management"/>
+        <nav.item item.idref="item.explorer.survey.management"/>
+        <nav.item item.idref="item.explorer.test.management"/>
+        <nav.item item.idref="item.explorer.offline.processing"/>
+        <nav.item item.idref="item.explorer.control.management"/>
+    </nav.module>
+
+
+    <!-- AUDIT MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.audit.management" propertyKey="item.explorer.audit.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="am"/>
+        </nav.access>
+
+        <!-- for audit managers -->
+        <nav.data.grid dataGrid.idref="audittemplate">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.auditmanagement" />
+            </nav.access>
+        </nav.data.grid>
+
+
+        <!-- for audit owners -->
+        <nav.data.grid dataGrid.idref="audit_owner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.audits" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for audit reviewers -->
+        <nav.data.grid dataGrid.idref="audit_reviewer">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.review.audits" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for audit managers / auditors -->
+        <nav.data.grid dataGrid.idref="createdaudits">
+            <nav.access>
+                <nav.access.role roleIDs="auditauditor, auditmanager" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for audit step owners -->
+        <nav.data.grid dataGrid.idref="auditstep_owner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.auditsteps" />
+            </nav.access>
+        </nav.data.grid>
+
+
+    </nav.item>
+
+
+    <!-- CHANGE MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.change.management" propertyKey="item.explorer.change.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="cm"/>
+        </nav.access>
+        <!-- for hierarchy managers / auditors-->
+        <nav.data.grid dataGrid.idref="createdChangeReviews">
+            <nav.access>
+                <nav.access.role roleIDs="hierarchymanager, hierarchyauditor" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for hierarchy owners -->
+        <nav.data.grid dataGrid.idref="changeReviewOwner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.changereview" />
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+    <!-- DEFICIENCY MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.deficiency.management" propertyKey="item.explorer.deficiency.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="dm"/>
+        </nav.access>
+        <!-- for deficiency managers and auditors -->
+        <nav.data.grid dataGrid.idref="deficiency">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.deficiency.mgr,view.deficiency.audit" />
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+
+    <!-- INCIDENT MANAGEMENT WITHOUT LOSS -->
+
+    <nav.item item.id="item.explorer.incident.management" propertyKey="item.explorer.incident.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="in"/>
+        </nav.access>
+        <!-- for incident owners -->
+        <nav.data.grid dataGrid.idref="IncidentOwner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.incidents" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for incident reviewers -->
+        <nav.data.grid dataGrid.idref="IncidentReviewer">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.review.incidents" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for incident managers -->
+        <nav.data.grid dataGrid.idref="incidents">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.incidents" />
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+    <!-- ISSUE MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.issue.management" propertyKey="item.explorer.issue.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="im"/>
+        </nav.access>
+        <!-- for all users -->
+        <nav.data.grid dataGrid.idref="MyCreatedOpenIssues2">
+            <nav.access>
+                <nav.access.privilege objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="IssueOwner2">
+            <nav.access>
+                <nav.access.privilege objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="IssueReviewer2">
+            <nav.access>
+                <nav.access.privilege objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="MyCreatedIssues2">
+            <nav.access>
+                <nav.access.privilege objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- GAP-GRC104 -->
+        <nav.data.grid dataGrid.idref="ReportIssues">
+            <nav.access>
+                <nav.access.privilege objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- GAP-GRC104 -->
+        <!-- for issue manager, issue auditor -->
+        <nav.data.grid dataGrid.idref="Issues3">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.issues" objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        
+        <nav.data.grid dataGrid.idref="Issues2">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.issues" objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        
+       
+    </nav.item>
+
+
+    <!-- POLICY MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.policy.management" propertyKey="item.explorer.policy.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="pm"/>
+        </nav.access>
+        <!-- for policy managers, policy owners, policy auditors -->
+        <nav.data.grid dataGrid.idref="policydefinition">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.policymanagement"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <!-- for policy owners -->
+        <nav.data.grid dataGrid.idref="openpolicies">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.policies"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for policy managers -->
+        <nav.data.grid dataGrid.idref="createdpolicies" uniqueID="createdpolicies.policymanager">
+            <nav.access>
+                <nav.access.role roleIDs="policymanager"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for policy auditors -->
+        <nav.data.grid dataGrid.idref="createdpolicies.auditor" uniqueID="createdpolicies.policyauditor">
+            <nav.access>
+                <nav.access.role roleIDs="policyauditor"/>
+            </nav.access>
+            <nav.parameter name="__filterSetParam=owner_status" value="-1"/>
+        </nav.data.grid>
+
+        <nav.data.grid dataGrid.idref="openpolicyreviews">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.policies"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for policy managers -->
+        <nav.data.grid dataGrid.idref="createdpolicyreviews">
+            <nav.access>
+                <nav.access.role roleIDs="policymanager"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <!-- for policy approvers -->
+        <nav.data.grid dataGrid.idref="policyapprovals">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.policyapprovals"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for policy addressees -->
+        <nav.data.grid dataGrid.idref="policyconfirmations">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.policyconfirmations"/>
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+    <!-- RISK MANAGEMENT -->
+    <nav.item item.id="item.explorer.risk.management" propertyKey="item.explorer.risk.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="rm,il"/>
+        </nav.access>
+        <!-- for many roles... -->
+        <nav.data.grid dataGrid.idref="risk">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.risk"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for risk owners-->
+        <nav.data.grid dataGrid.idref="riskassessment_owner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.riskassessments"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for risk reviewers-->
+        <nav.data.grid dataGrid.idref="riskassessment_reviewer">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.review.riskassessments"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for risk managers, risk auditors -->
+        <nav.data.grid dataGrid.idref="riskassessment">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.riskassessments"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <nav.data.grid dataGrid.idref="IncidentOwner">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il,in" />
+                <nav.access.privilege componentPrivilegeIDs="view.open.incidents" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for incident reviewers -->
+        <nav.data.grid dataGrid.idref="IncidentReviewer">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il,in" />
+                <nav.access.privilege componentPrivilegeIDs="view.review.incidents" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for incident managers -->
+        <nav.data.grid dataGrid.idref="incidents">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il,in" />
+                <nav.access.privilege componentPrivilegeIDs="view.incidents" />
+            </nav.access>
+        </nav.data.grid>
+
+        <!-- for loss owners -->
+        <nav.data.grid dataGrid.idref="acceptedIncident">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il" />
+                <nav.access.privilege componentPrivilegeIDs="view.open.losses" />
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="LossOwner">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il" />
+                <nav.access.privilege componentPrivilegeIDs="view.open.losses" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for loss reviewers -->
+        <nav.data.grid dataGrid.idref="LossReviewer">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il" />
+                <nav.access.privilege componentPrivilegeIDs="view.review.losses" />
+            </nav.access>
+        </nav.data.grid>
+        <!-- for loss manager, loss auditor, risk mnager, risk owner, risk reviewer  -->
+        <nav.data.grid dataGrid.idref="losses">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="il" />
+                <nav.access.privilege componentPrivilegeIDs="view.losses" />
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+    <!-- SIGNOFF MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.signoff.management" propertyKey="item.explorer.signoff.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="so"/>
+        </nav.access>
+
+        <!-- for signoff managers-->
+        <nav.data.grid dataGrid.idref="sotask">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.signoff"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for signoff owners -->
+        <nav.data.grid dataGrid.idref="soowner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.signoff.owner.processes"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for signoff reviewers -->
+        <nav.data.grid dataGrid.idref="soreviewer">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.signoff.reviewer.processes"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for signoff managers-->
+        <nav.data.grid dataGrid.idref="soprocess">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.signoff"/>
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+    <!-- SURVEY MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.survey.management" propertyKey="item.explorer.survey.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="sm"/>
+        </nav.access>
+        <!-- for survey managers, auditors -->
+        <nav.data.grid dataGrid.idref="questionnaire_template">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.surveymanagement.baseobjects"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="question">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.surveymanagement.baseobjects"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="optionset">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.surveymanagement.baseobjects"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="option">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.surveymanagement.baseobjects"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="surveytask">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.surveymanagement.baseobjects"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <nav.data.grid dataGrid.idref="surveyreviewer_surveys">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.review.questionnaires"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <!-- for survey managers, reviewers, auditors -->
+        <nav.data.grid dataGrid.idref="createdSurveys">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.surveys"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <!-- for questionnaire owners -->
+        <nav.data.grid dataGrid.idref="questionnaires_owner">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.questionnaires"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for survey reviewers -->
+        <nav.data.grid dataGrid.idref="questionnaires_reviewer">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.review.questionnaires"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for survey managers, auditors -->
+        <nav.data.grid dataGrid.idref="createdQuestionnaires">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.questionnaires"/>
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+
+    <!-- TEST MANAGEMENT -->
+
+    <nav.item item.id="item.explorer.test.management" propertyKey="item.explorer.test.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="tm"/>
+        </nav.access>
+        <!-- for many roles... -->
+        <nav.data.grid uniqueID="test.management.risk" dataGrid.idref="risk">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.risk"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for test managers, risk managers, control managers, auditors-->
+        <nav.data.grid dataGrid.idref="control">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.control"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="testdefinition">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.testdef"/>
+            </nav.access>
+        </nav.data.grid>
+
+        <!-- for testers -->
+        <nav.data.grid dataGrid.idref="testactionTester">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.open.testactions"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for test reviewers -->
+        <nav.data.grid dataGrid.idref="testactionReviewer">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.ineffective.testactions"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for external test auditor -->
+        <nav.data.grid dataGrid.idref="testactionExternalAuditor">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.external.auditor"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for test managers, auditors -->
+        <nav.data.grid dataGrid.idref="createdTestactions">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.created.testcases"/>
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+    <nav.item item.id="item.explorer.offline.processing" propertyKey="item.explorer.offline.processing.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="tm,sm,rm,pm"/>
+            <nav.access.privilege objectPrivilege="READ" relatedObjectTypeID="OFFLINEPROCESSINGENTRY"/>
+        </nav.access>
+
+        <nav.data.grid dataGrid.idref="ope">
+            <nav.access>
+                <nav.access.role roleIDs="POLICYMANAGER,RISKMANAGER,SURVEYMANAGER,TESTMANAGER" />
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="myope" uniqueID="explorer.myope" />
+    </nav.item>
+
+    <!-- CONTROL EXECUTION -->
+    <nav.item item.id="item.explorer.control.management" propertyKey="item.explorer.control.management.DBI">
+        <nav.access>
+            <nav.access.component licensedComponentIDs="tm"/>
+        </nav.access>
+        <nav.data.grid dataGrid.idref="control">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.control"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="controlexecutiontask">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.controlexecutiontask"/>
+            </nav.access>
+        </nav.data.grid>
+        <nav.data.grid dataGrid.idref="controlexecution" propertyKey="list.controlexecution.DBI">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.controlexecution"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- for control execution owner -->
+        <nav.data.grid dataGrid.idref="controlexecution" propertyKey="list.controlexecution.owner.DBI">
+            <nav.access>
+                <nav.access.privilege componentPrivilegeIDs="view.owner.controlexecution"/>
+            </nav.access>
+        </nav.data.grid>
+    </nav.item>
+
+</navigation>
+</custom>

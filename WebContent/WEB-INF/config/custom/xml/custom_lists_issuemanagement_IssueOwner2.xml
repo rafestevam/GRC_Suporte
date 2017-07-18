@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+    <list id="IssueOwner2"
+         view.idref="IssueOwner2"
+         filter.idref="issueOwner2"
+         idColumn.idref="IssueID"
+         defaultOrderColumn.idref="IssueID"
+         allowMarkAsIssueRelevant="true"
+         relatedObjectType.idref="ISSUE"
+         propertyKey="list.IssueOwner.DBI">
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="IssueID"/>
+            <simpleFilter filterRow.idref="remediationPlannedBefore"/>
+        </simpleFilterRow>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="name"/>
+            <simpleFilter filterRow.idref="description"/>
+        </simpleFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="creator_name"/>
+            <extendedFilter filterRow.idref="reviewer_name"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="owner_status"/>
+            <extendedFilter filterRow.idref="stateTime"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="remark"/>
+            <extendedFilter filterRow.idref="remediationMeasure"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="category"/>
+            <extendedFilter filterRow.idref="creator_status"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="created_by_testcase"/>
+            <extendedFilter filterRow.idref="deactivated"/>
+        </extendedFilterRow>
+        <extendedFilterRow>
+            <extendedFilter filterRow.idref="action_type"/>
+        </extendedFilterRow>
+        <listHeaderRow>
+            <listHeader column="LC_IssueOwner_1" propertyKey="tableheader.issue.id.DBI" width="8%"/>
+			<listHeader column="LC_IssueOwner_10" propertyKey="tableheader.issue.action_type.DBI" width="12%"/>
+            <listHeader column="LC_IssueOwner_2" propertyKey="tableheader.issue.name.DBI" width="13%"/>
+            <listHeader column="LC_IssueOwner_3" propertyKey="tableheader.issue.priority.DBI" width="7%"/>
+            <listHeader column="LC_IssueOwner_4" propertyKey="tableheader.issue.creator.DBI" width="14%"/>
+            <listHeader column="LC_IssueOwner_5" propertyKey="tableheader.issue.remedationPlannedBefore.short.DBI" tooltip="tableheader.issue.remedationPlannedBefore.DBI" width="8%"/>
+            <listHeader column="LC_IssueOwner_6" propertyKey="tableheader.issue.ownerStatus.short.DBI" tooltip="tableheader.issue.ownerStatus.DBI" width="4%"/>
+            <listHeader column="LC_IssueOwner_7" propertyKey="tableheader.issue.stateTime.short.DBI" tooltip="tableheader.issue.stateTime.DBI" width="4%"/>
+            <listHeader column="LC_IssueOwner_8" propertyKey="tableheader.description" width="21%"/>
+            <listHeader column="LC_IssueOwner_9" propertyKey="tableheader.issue.remediationMeasure.DBI" width="21%"/>
+
+        </listHeaderRow>
+        <column id="LC_IssueOwner_1" dataReference.idref="IssueID" template="openObject">
+            <parameter name="idColumn" value="IssueID"/>
+        </column>
+        <column id="LC_IssueOwner_10" dataReference.idref="action_type" >
+            <parameter name="showText" value="action_type"/>
+        </column>        
+        <column id="LC_IssueOwner_2" dataReference.idref="name"/>
+        <column id="LC_IssueOwner_3" align="center" dataReference.idref="priority">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_IssueOwner_4" dataReference.idref="creator_name" template="object">
+            <parameter name="deactivatedColumn" value="creator_deactivated"/>
+        </column>
+        <column id="LC_IssueOwner_5" align="center" dataReference.idref="plannedenddate"/>
+        <column id="LC_IssueOwner_6" align="center" dataReference.idref="owner_status">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_IssueOwner_7" align="center" dataReference.idref="stateTime">
+            <parameter name="showText" value="false"/>
+        </column>
+        <column id="LC_IssueOwner_8" dataReference.idref="description"/>
+        <column id="LC_IssueOwner_9" dataReference.idref="remediationMeasure"/>
+        <listButtons>
+            <buttonReference button.idref="LIST_OPEN"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="EXCEL_REPORT"/>
+        </listButtons>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+        </rowButtons>
+    </list>
+
+ 
+	</custom>

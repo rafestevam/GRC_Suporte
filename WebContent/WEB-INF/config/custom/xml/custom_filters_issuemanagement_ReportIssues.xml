@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<filter id="ReportIssues" dataSource.idref="ReportIssues">
+       <filterRow id="IssueID" propertyKey="filter.row.issue.id.DBI">
+            <filterElement dataReference.idref="IssueID"  />
+      </filterRow>
+      <filterRow id="rsk_name">
+            <filterElement dataReference.idref="rsk_name"  />
+      </filterRow>
+      <filterRow id="cst_modelname">
+            <filterElement dataReference.idref="cst_modelname"  />
+        </filterRow>
+        <filterRow id="cst_process">
+            <filterElement dataReference.idref="cst_process"  />
+        </filterRow>
+        <filterRow id="process_environment">
+            <filterElement dataReference.idref="process_environment"  />
+        </filterRow>
+        <filterRow id="business_unit">
+            <filterElement dataReference.idref="business_unit"  />
+      </filterRow>
+      <filterRow id="issuedate" propertyKey="filter.row.issue.issue_date.DBI">
+            <filterCell>
+            <filterElement dataReference.idref="issue_date"  >
+                <parameter name="propertyKey" value="filter.from.DBI"/>
+                <filterType.parameter name="daterange" value="issue_date2"/>
+            </filterElement>
+            <filterElement dataReference.idref="issue_date2"  >
+                 <parameter name="propertyKey" value="filter.to.DBI"/>
+            </filterElement>
+            </filterCell>
+        </filterRow>
+       <filterRow id="cst_appsystem">
+            <filterElement dataReference.idref="cst_appsystem"  />
+        </filterRow>
+    </filter>
+   
+</custom>    

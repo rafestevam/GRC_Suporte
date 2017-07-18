@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<blClassMapping>
+		<!-- 
+	    <mappingType name="Modifier">
+	        <mapping name="beginOfDay"          clsName="com.aris.arcm.bl.modifier.impl.BeginOfDayModifier"/>
+	        <mapping name="endOfDay"            clsName="com.aris.arcm.bl.modifier.impl.EndOfDayModifier"/>
+	        <mapping name="hierarchical_enum"   clsName="com.aris.arcm.bl.modifier.impl.HierarchicalEnumModifier"/>
+	        <mapping name="defaultDouble"       clsName="com.aris.arcm.bl.modifier.impl.DefaultDoubleValueModifier"/>
+	        <mapping name="customToday"         clsName="com.aris.arcm.bl.modifier.impl.CustomTodayModifier"/>
+	    </mappingType>
+	    -->
+	    
+	    <mappingType name="Command">
+	    	<mapping name="customUpdateStatus"      clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateIssueStatus"/>
+	    	<mapping name="customUpdCreatorStatus"  clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateCreatorStatus"/>
+	    	<mapping name="customUpdOwnerStatus"    clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateOwnerStatus"/>
+	    	<mapping name="customUpdReviewerStatus" clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateReviewerStatus"/>
+	    	<mapping name="customCreateIssue"       clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomCreateIssueCommand"/>
+	    	<mapping name="testdefinitionFindLinkedControlAndRisks" clsName="com.idsscheer.webapps.arcm.bl.component.testmanagement.commands.job.generator.CustomTestdefinitionFindLinkedControlAndRisksCommand" />
+<!-- 	    	<mapping name="customSaveDependentObjects"     clsName="com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands.CustomSaveDependentObjectsCommand" /> -->
+	    </mappingType>
+	    
+	    <mappingType name="objectTreeProvider">
+	        <mapping name="audit"                   clsName="com.idsscheer.webapps.arcm.bl.component.auditmanagement.tree.CustomAuditTreeProvider"/>
+	        <mapping name="auditstep"               clsName="com.idsscheer.webapps.arcm.bl.component.auditmanagement.tree.CustomAuditTreeProvider"/>
+	        <mapping name="audittemplate"           clsName="com.idsscheer.webapps.arcm.bl.component.auditmanagement.tree.CustomAuditTreeProvider"/>
+	        <mapping name="auditsteptemplate"       clsName="com.idsscheer.webapps.arcm.bl.component.auditmanagement.tree.CustomAuditTreeProvider"/>
+	        <mapping name="questionnaire"           clsName="com.idsscheer.webapps.arcm.bl.component.surveymanagement.tree.QuestionnaireTreeProvider"/>
+	        <mapping name="questionnaire_template"  clsName="com.idsscheer.webapps.arcm.bl.component.surveymanagement.tree.QuestionnaireTemplateTreeProvider"/>
+	        <mapping name="soprocess"               clsName="com.idsscheer.webapps.arcm.bl.component.signoffmanagement.tree.SignOffProcessTreeProvider"/>
+    	</mappingType>
+	    
+    </blClassMapping>
+
+</custom>

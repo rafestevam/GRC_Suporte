@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+		<objectType id="AUDITTEMPLATE" xmlexport="true" clientDependent="true" extends="RECURRING" licensedComponentIds="am"
+                displayAttribute="name" descriptionAttributes="description"
+                mashzoneId="260" arisImportRole="auditmanager" image="iconlib/icons/content/audit_template_16.png">
+
+        <!-- Doc-Name: Template status-->
+        <enumAttrType id="template_status" enumeration="audittemplatestatus" defaultValue="1"/>
+
+        <!-- Doc-Name: Name, API-Name: AT_NAME mapped to RECURRING:name -->
+
+        <!-- Doc-Name: Description, API-Name: AT_DESC -->
+        <textAttrType id="description"/>
+
+        <!-- Doc-Name: Audit objectives, API-Name: unknown -->
+        <textAttrType id="objectives"/>
+
+        <!-- Doc-Name: Audit client, API-Name: unknown-->
+        <textAttrType id="audit_client"/>
+
+        <!-- Doc-Name: Audit scope, API-Name: unknown-->
+        <listAttrType id="scope" maxSize="1" objectType.idref="HIERARCHY" linkType="5010"> <!-- linktype? -->
+            <listRestriction>
+                <attributeRestriction attribute="type" value="financialaccount"/>
+            </listRestriction>
+            <listRestriction>
+                <attributeRestriction attribute="type" value="orgunit"/>
+            </listRestriction>
+            <listRestriction>
+                <attributeRestriction attribute="type" value="process"/>
+            </listRestriction>
+            <listRestriction>
+                <attributeRestriction attribute="type" value="category"/>
+            </listRestriction>
+            <listRestriction>
+                <attributeRestriction attribute="type" value="applicationsystemtype"/>
+            </listRestriction>
+
+        </listAttrType>
+
+    <!-- Customizations of GAU01 -->
+    <listAttrType id="risk" objectType.idref="RISK" linkType="21001">
+            <!-- Add List Restrictions -->
+        </listAttrType>
+    <listAttrType id="methodology" objectType.idref="HIERARCHY" linkType="21002">
+            <!-- Add List Restrictions -->
+            <listRestriction>
+                <attributeRestriction attribute="type" value="financialaccount"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="regulation" objectType.idref="HIERARCHY" linkType="21003">
+            <!-- Add List Restrictions -->
+            <listRestriction>
+                <attributeRestriction attribute="type" value="financialaccount"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="process" objectType.idref="HIERARCHY" linkType="21004">
+            <!-- Add List Restrictions -->
+            <listRestriction>
+                <attributeRestriction attribute="type" value="process"/>
+            </listRestriction>
+        </listAttrType>
+				<!-- End of Customizations of GAU01 -->
+				<longAttrType id="percentage_completed" defaultValue="0" precision="3:0"/>
+				<longAttrType id="percentage_total" defaultValue="100" precision="3:0"/>
+
+        <!-- Doc-Name: preparation start date, API-Name: unknown-->
+        <dateAttrType id="plannedstartdate">
+            <modify name="beginOfDay"/>
+        </dateAttrType>
+
+        <dateAttrType id="plannedenddate">
+            <modify name="endOfDay"/>
+        </dateAttrType>
+
+        <!-- Doc-Name: audit start date, API-Name: unknown-->
+        <dateAttrType id="auditstartdate">
+            <modify name="beginOfDay"/>
+        </dateAttrType>
+
+        <!-- Doc-Name: audit end date, API-Name: unknown-->
+        <dateAttrType id="auditenddate">
+            <validate name="date"/>
+            <modify name="endOfDay"/>
+        </dateAttrType>
+
+
+        <!-- Doc-Name: Control start date, API-Name: unknown-->
+        <!-- Remark start and end date has to be absolute. No recurring generation of AuditProject-->
+        <dateAttrType id="controlstartdate">
+            <modify name="beginOfDay"/>
+        </dateAttrType>
+
+        <!-- Doc-Name: Control end date, API-Name: unknown-->
+        <!-- Remark start and end date has to be absolute. No recurring generation of AuditProject-->
+        <dateAttrType id="controlenddate">
+            <modify name="endOfDay"/>
+        </dateAttrType>
+
+        <!-- Doc-Name: Audit Steps, API-Name: unknown-->
+        <listAttrType id="steps" objectType.idref="AUDITSTEPTEMPLATE" linkType="5020"  orderType="user" isHierarchical="true"/> <!-- linktype? -->
+
+        <!-- Doc-Name: Documents, API-Name: documents-->
+        <listAttrType id="documents" objectType.idref="DOCUMENT" linkType="5030"/>
+
+        <!-- Doc-Name: Audit owner group, API-Name: unknown-->
+        <!-- inheritance attribute taken from RECURRING: owner_group -->
+        <listAttrType id="owner_group" objectType.idref="USERGROUP" linkType="5040" maxSize="1">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="auditowner"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+
+        <!-- Doc-Name: Audit reviewer group, API-Name: unknown-->
+        <!-- inheritance attribute taken from RECURRING: reviewer_group -->
+        <listAttrType id="reviewer_group" objectType.idref="USERGROUP" linkType="5050" maxSize="1">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="auditreviewer"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        
+        <!-- Doc-Name: Audit auditor group, API-Name: unknown-->
+        <listAttrType id="auditor_group" objectType.idref="USERGROUP" linkType="5060" maxSize="1">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="auditauditor"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+
+        <index id="I_AUDITTEMPLATE_1" type="normal">
+            <attributeRef attribute="controlstartdate"/>
+        </index>
+        <index id="I_AUDITTEMPLATE_2" type="normal">
+            <attributeRef attribute="controlenddate"/>
+        </index>
+        <index id="I_AUDITTEMPLATE_3" type="normal">
+            <attributeRef attribute="name"/>
+        </index>
+    </objectType>
+</custom>

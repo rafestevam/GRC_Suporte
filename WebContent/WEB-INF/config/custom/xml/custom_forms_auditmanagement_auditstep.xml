@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+	<form id="FORM_AUDITSTEP">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="OBJECT_RESET"/>
+            <buttonReference button.idref="OBJECT_DELETE"/>
+            <buttonReference button.idref="OBJECT_REACTIVATE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+        </formButtons>
+        <page id="audit_step" licensedComponentIds="am">
+            <rowGroup id="audit_step.1">
+                <row id="client_sign">
+                    <element attribute.idref="client_sign"/>
+                </row>
+                <row id="name">
+                    <element attribute.idref="name"/>
+                </row>
+                <row id="description">
+                    <element attribute.idref="description"/>
+                </row>
+
+                 <!-- Customizations of GAU01 -->
+                <!-- Removal of fields
+                 <rowGroup id="audit_step_template.2">
+                <row id="step_type">
+                    <element attribute.idref="step_type"/>
+                </row>
+                <row id="scope">
+                    <element attribute.idref="scope">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+            </rowGroup>
+                -->
+               
+                <row id="area">
+                    <element attribute.idref="area">
+                        <parameter name="selectionList" value="AUTO:ignoreRoleRestriction=true"/>
+                        <button.remove button.idref="RELATION_OPEN" location="toolbar"/>
+                        <button.add button.idref="RELATION_POPUP" location="row"/>
+                    </element>
+                </row>
+                <row id="process">
+                    <element attribute.idref="process">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="subprocess">
+                    <element attribute.idref="subprocess">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="control">
+                    <element attribute.idref="control">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <!-- End of Customizations of GAU01 -->
+               
+            </rowGroup>
+            <rowGroup id="audit_step.2">
+              <row id="percentage_completed">
+									<cell separator="{td}">
+                    <element attribute.idref="percentage_completed">
+                     <parameter name="size" value="3"/>
+                    </element>
+                    	<element attribute.idref="obj_id" template="formCompleteness">
+                        <parameter name="viewName" value="customShowAuditCompleteness"/>
+                        <parameter name="totalProperty" value="percentage_total"/>
+                        <parameter name="progressProperty" value="percentage_completed"/>
+                    </element>
+									</cell>
+                </row>
+                <!--
+                <row id="progressCustom" protocolRelevant="false" propertyKey="form.row.audit.progress.DBI">
+                    
+                </row>-->
+                <row id="obj_id">
+                    <element attribute.idref="obj_id"/>
+                </row>
+                <row id="owner_group">
+                    <element attribute.idref="owner_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+            </rowGroup>
+            <rowGroup id="audit_step.3">
+                <row id="audit_period" propertyKey="form.row.audit.period.DBI">
+                    <cell separator=" - ">
+                        <element name="auditstart" attribute.idref="audit" template="childAttribute">
+                            <parameter name="listAttribute1" value="auditstartdate"/>
+                        </element>
+                        <element name="auditend" attribute.idref="audit" template="childAttribute">
+                            <parameter name="listAttribute1" value="auditenddate"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="audit_step_period" propertyKey="form.row.auditstep.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="plannedstartdate"/>
+                        <element attribute.idref="plannedenddate"/>
+                    </cell>
+                </row>
+                <row id="audit_step_period_actual" propertyKey="form.row.auditstep.period.actual.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="actualstartdate"/>
+                        <element attribute.idref="actualenddate"/>
+                    </cell>
+                </row>
+                <row id="control_period" propertyKey="form.row.control.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="controlstartdate"/>
+                        <element attribute.idref="controlenddate"/>
+                    </cell>
+                </row>
+                <row id="processingtime">
+                    <cell>
+                        <element attribute.idref="processingtime">
+                            <parameter name="size" value="40"/>
+                        </element>
+                        <element name="postfix" attribute.idref="processingtime" template="label">
+                            <parameter name="propertyKey" value="format.duration.DBI"/>
+                            <parameter name="visibility" value="writable"/>
+                            <parameter name="mode" value="hint"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="actualprocessingtime">
+                    <cell>
+                        <element attribute.idref="actualprocessingtime">
+                            <parameter name="size" value="40"/>
+                        </element>
+                        <element name="postfix" attribute.idref="actualprocessingtime" template="label">
+                            <parameter name="propertyKey" value="format.duration.DBI"/>
+                            <parameter name="visibility" value="writable"/>
+                            <parameter name="mode" value="hint"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="execution_date">
+                    <element attribute.idref="execution_date"/>
+                </row>
+                <row id="owner">
+                    <element attribute.idref="owner" template="userSubstitute">
+                        <parameter name="substitute" value="owner_substitute"/>
+                    </element>
+                </row>
+                <row id="documents">
+                    <element attribute.idref="documents" template="doclink">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="owner_status">
+                    <element attribute.idref="owner_status" template="auditStepOwnerStatus">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="notconformreason">
+                    <element attribute.idref="notconformreason">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="measure">
+                    <element attribute.idref="measure"/>
+                </row>
+                <row id="stepconclusion">
+                    <element attribute.idref="stepconclusion"/>
+                </row>
+                <row id="stepconclusiondocuments">
+                    <element attribute.idref="stepconclusiondocuments" template="doclink">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+            </rowGroup>
+            <rowGroup id="audit_step.4">
+                <row id="remark">
+                    <element attribute.idref="remark"/>
+                </row>
+            </rowGroup>
+            <rowGroup id="audit_step.5">
+                <row id="duestatus">
+                    <element attribute.idref="duestatus"/>
+                </row>
+                <row id="steps">
+                    <element attribute.idref="steps">
+                        <parameter name="selectionList" value="AUTO:hierarchyRoot=audit"/>
+                        <parameter name="allowReorder" value="true"/>
+                        <parameter name="command" value="edit"/>
+                        <button.add button.idref="RELATION_CREATE" location="toolbar" type="writable"/>
+                        <button.add button.idref="RELATION_ROW_OPEN" location="row" type="writable"/>
+                    </element>
+                </row>
+            </rowGroup>
+        </page>
+    </form>
+	
+	</custom>

@@ -1,0 +1,91 @@
+package IMPACTTYPE_RuleSet
+expander impacttype.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+
+# OBJECT     client_objid       LONG       Client ID                                                                                                         
+# OBJECT     client_sign        CLIENTSIGN Client                                                                                                            
+# OBJECT     create_date        DATE       Creation date                                                                                                     
+# OBJECT     creator_user_id    LONG       User ID (creator)                                                                                                 
+# OBJECT     delete_date        DATE       Deletion date                                                                                                     
+# OBJECT     guid               STRING     GUID                                                                                                              
+# OBJECT     obj_id             LONG       ID                                                                                                                
+# OBJECT     obj_type           OBJECTTYPE Object type                                                                                                       
+# OBJECT     root_guid          STRING     Root GUID                                                                                                         
+# OBJECT     versions           LONG       Number of versions                                                                                                
+# VERSION    aris_change_date   DATE       ARIS change date                                                                                                  
+# VERSION    change_date        DATE       Change date                                                                                                       
+# VERSION    change_type        ENUM       Change type          changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)
+# VERSION    change_user_id     LONG       User ID (editor)                                                                                                  
+# VERSION    deactivated        BOOLEAN    Deactivated                                                                                                       
+# VERSION    id                 LONG       ID                                                                                                                
+# VERSION    substitute_user_id LONG       User ID (substitute)                                                                                              
+# VERSION    version_active     BOOLEAN    Current version                                                                                                   
+# VERSION    version_number     LONG       Version number                                                                                                    
+# IMPACTTYPE colors             TEXT       Colors                                                                                                            
+# IMPACTTYPE description        TEXT       Description                                                                                                       
+# IMPACTTYPE frequencies        LIST       Frequencies          to * FREQUENCYs (LT=5801)                                                                    
+# IMPACTTYPE isDefault          BOOLEAN    Is default                                                                                                        
+# IMPACTTYPE isSnapshot         BOOLEAN    Is snapshot                                                                                                       
+# IMPACTTYPE name               STRING     Name                                                                                                              
+# IMPACTTYPE quotations         LIST       Quotations           to * QUOTATIONs (LT=5800)                                                                    
+# IMPACTTYPE relatedObjectId    LONG       Related object                                                                                                    
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+rule "define all standard attributes editable and mandatory [I,V]"
+
+	salience 10400
+	no-loop true
+
+	when
+
+	then
+		set "name"                editable
+		set "description"         editable
+		set "quotations"          editable
+		set "frequencies"         editable
+		set "colors"              editable
+
+        set "name"                mandatory
+        set "quotations"          mandatory
+        set "frequencies"         mandatory
+        set "colors"              mandatory
+
+end
+
+rule "define all standard attributes readonly for the defualt impact type and snapshots [I,V]"
+
+	salience 10000
+	no-loop true
+
+	when
+        ( value comparison fulfilled: ":transient:" attr_value "isSnapshot" "EQUALS" value "true" OR
+          value comparison fulfilled: ":transient:" attr_value "isDefault" "EQUALS" value "true" )
+	then
+		set "name"                readonly
+		set "description"         readonly
+		set "quotations"          readonly
+		set "frequencies"         readonly
+		set "colors"              readonly
+
+end
+
+################
+# Custom Rules #
+################
+rule "set_frequency_not_mandatory[I,V]"
+
+	salience 9000
+	no-loop true
+	
+	when
+	
+	then
+		set "frequencies" not_mandatory
+		set "colors" not_mandatory
+
+end

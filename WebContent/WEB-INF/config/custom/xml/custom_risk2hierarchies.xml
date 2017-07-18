@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+<view id="custom_risk2hierarchies" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_customrisk2hierarchies_risk" objectType="RISK" isMainViewObject="true">
+            <viewColumn id="r_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="risk_version_active" attributeType="version_active" mashzoneRelevant="false"/>
+            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+        </viewObject>
+        <viewObject id="VO_customrisk2hierarchies_hierarchy" objectType="HIERARCHY">
+            <viewColumn id="h_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="h_type" attributeType="type" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="47,48,3162,3163,3164" firstViewObject="VO_customrisk2hierarchies_risk" secondViewObject="VO_customrisk2hierarchies_hierarchy" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="risk_version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+</custom>

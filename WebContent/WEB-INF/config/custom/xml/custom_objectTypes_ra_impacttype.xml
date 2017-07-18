@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+	<objectType id="RA_IMPACTTYPE" extends="VERSION" xmlexport="true" displayAttribute="obj_id"
+                clientDependent="true" licensedComponentIds="rm" image="iconlib/icons/impact_type_16.png">
+        <enumAttrType id="owner_status" enumeration="assessment_state" defaultValue="1"/>
+        <!-- set by the rules to indicate if qualitative and/or quantitative values are set completely -->
+        <booleanAttrType id="isFilled" defaultValue="false"/>
+        <!-- set by copy loss value feature to identify the losses which are used to pre-fill the quantitative values a-->
+        <textAttrType id="usedLosses" />
+        <listAttrType id="impacttype" linkType="5810" objectType.idref="IMPACTTYPE" maxSize="1" >
+            <listRestriction>
+                <attributeRestriction attribute="isSnapshot" value="true"/>
+            </listRestriction>
+        </listAttrType>
+
+        <enumAttrType id="type" enumeration="assessment_type" defaultValue="0"/>
+
+        <enumAttrType id="currency" enumeration="currency" defaultValue="0"/>
+        <doubleAttrType id="avg_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="max_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="min_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="frequ_avg_loss" precision="4:4">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:4:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="frequ_max_loss" precision="4:4">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:4:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="frequ_min_loss" precision="4:4">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:4:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_avg_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_max_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_min_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_frequ_avg_loss" precision="4:4">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:4:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_frequ_max_loss" precision="4:4">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:4:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_frequ_min_loss" precision="4:4">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:4:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="exp_avg_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="exp_max_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="exp_min_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_exp_avg_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_exp_max_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="red_exp_min_loss">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="th_impact_score">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+        <doubleAttrType id="th_red_impact_score">
+            <validate name="double" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="double" arg0="leq:999999999999999:value.must.not.be.greater.than.bound.ERR"/>
+            <validate name="double" arg0="scale:2:value.must.have.at.most.decimal.places.ERR"/>
+        </doubleAttrType>
+
+        <listAttrType id="lossQual" linkType="5811" objectType.idref="QUOTATION" maxSize="1" >
+            <listRestriction>
+                <attributeRestriction attribute="isSnapshot" value="true"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="frequLossQual" linkType="5812" objectType.idref="FREQUENCY" maxSize="1" >
+            <listRestriction>
+                <attributeRestriction attribute="isSnapshot" value="true"/>
+            </listRestriction>
+        </listAttrType>
+
+        <listAttrType id="redLossQual" linkType="5813" objectType.idref="QUOTATION" maxSize="1" >
+            <listRestriction>
+                <attributeRestriction attribute="isSnapshot" value="true"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="redFrequLossQual" linkType="5814" objectType.idref="FREQUENCY" maxSize="1" >
+            <listRestriction>
+                <attributeRestriction attribute="isSnapshot" value="true"/>
+            </listRestriction>
+        </listAttrType>
+        
+        <!-- Inicio GAP GRC29 -->
+        <stringAttrType id="result_assessment" maxCharCount="30" isMassEditable="false" defaultValue="TESTE"/>
+        <!-- Fim GAP GRC29 -->
+        
+    </objectType>
+    
+</custom>

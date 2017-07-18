@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+	<form id="FORM_AUDITTEMPLATE">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="OBJECT_RESCHEDULE"/>
+            <buttonReference button.idref="OBJECT_DUPLICATE"/>
+            <buttonReference button.idref="OBJECT_DELETE"/>
+            <buttonReference button.idref="OBJECT_REACTIVATE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+        </formButtons>
+        <page id="audit_template" licensedComponentIds="am">
+            <rowGroup id="audit_template.1">
+                <row id="client_sign">
+                    <element attribute.idref="client_sign"/>
+                </row>
+                <row id="obj_id">
+                    <element attribute.idref="obj_id"/>
+                </row>
+                <row id="name">
+                    <element attribute.idref="name"/>
+                </row>
+                <row id="template_status">
+                    <element attribute.idref="template_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="description">
+                    <element attribute.idref="description"/>
+                </row>
+                
+               
+                
+                <!-- Customizations of GAU01 -->
+                <!-- Removal of fields
+                <row id="objectives">
+                    <element attribute.idref="objectives"/>
+                </row>
+                 <row id="scope">
+                    <element attribute.idref="scope">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="audit_client">
+                    <element attribute.idref="audit_client"/>
+                </row>
+                -->
+                </rowGroup>
+                <rowGroup id="audit_template.1.1" >
+                <row id="risk">
+                    <element attribute.idref="risk">
+                        <parameter name="selectionList" value="AUTO:ignoreRoleRestriction=true"/>
+                        <button.remove button.idref="RELATION_OPEN" location="toolbar"/>
+                        <button.add button.idref="RELATION_POPUP" location="row"/>
+                    </element>
+                </row>
+                <row id="methodology">
+                    <element attribute.idref="methodology">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="regulation">
+                    <element attribute.idref="regulation">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="process">
+                    <element attribute.idref="process">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                </rowGroup>
+                <!-- End of Customizations of GAU01 -->
+                
+                <rowGroup id="audit_template.1.2">
+                <row id="owner_group">
+                    <element attribute.idref="owner_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="reviewer_group">
+                    <element attribute.idref="reviewer_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="auditor_group">
+                    <element attribute.idref="auditor_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                </rowGroup>
+                <rowGroup id="audit_template.1.3">
+                <!-- "Preparation start date" of audittemplate -->
+                <row id="plannedstartdate">
+                    <element attribute.idref="plannedstartdate"/>
+                </row>
+                <!-- "Audit start date" and "Audit end date" of audittemplate -->
+                <row id="audit_period" propertyKey="form.row.audittemplate.audit.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="auditstartdate"/>
+                        <element attribute.idref="auditenddate"/>
+                    </cell>
+                </row>
+                </rowGroup>
+                <rowGroup id="audit_template.1.4">
+                <row id="control_period" propertyKey="form.row.audittemplate.control.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="controlstartdate"/>
+                        <element attribute.idref="controlenddate"/>
+                    </cell>
+                </row>
+           	     <row id="steps">
+                    <element attribute.idref="steps">
+                        <parameter name="selectionList" value="AUTO:hierarchyRoot=audittemplate"/>
+                        <parameter name="allowReorder" value="true"/>
+                        <parameter name="command" value="edit"/>
+                        <button.add button.idref="RELATION_CREATE" location="toolbar" type="writable"/>
+                    </element>
+                </row>
+                <row id="documents">
+                    <element attribute.idref="documents" template="doclink">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+            </rowGroup>
+        </page>
+    </form>	
+	
+</custom>

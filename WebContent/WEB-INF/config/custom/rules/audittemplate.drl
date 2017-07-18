@@ -1,0 +1,284 @@
+package AUDITTEMPLATE_RuleSet
+expander audittemplate.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.auditmanagement.re.AudittemplateHelper;
+
+# OBJECT        client_objid         LONG       Client ID                                                                                                                                                  
+# OBJECT        client_sign          CLIENTSIGN Client                                                                                                                                                     
+# OBJECT        create_date          DATE       Creation date                                                                                                                                              
+# OBJECT        creator_user_id      LONG       User ID (creator)                                                                                                                                          
+# OBJECT        delete_date          DATE       Deletion date                                                                                                                                              
+# OBJECT        guid                 STRING     GUID                                                                                                                                                       
+# OBJECT        obj_id               LONG       ID                                                                                                                                                         
+# OBJECT        obj_type             OBJECTTYPE Object type                                                                                                                                                
+# OBJECT        root_guid            STRING     Root GUID                                                                                                                                                  
+# OBJECT        versions             LONG       Number of versions                                                                                                                                         
+# VERSION       aris_change_date     DATE       ARIS change date                                                                                                                                           
+# VERSION       change_date          DATE       Change date                                                                                                                                                
+# VERSION       change_type          ENUM       Change type                    changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                               
+# VERSION       change_user_id       LONG       User ID (editor)                                                                                                                                           
+# VERSION       deactivated          BOOLEAN    Deactivated                                                                                                                                                
+# VERSION       id                   LONG       ID                                                                                                                                                         
+# VERSION       substitute_user_id   LONG       User ID (substitute)                                                                                                                                       
+# VERSION       version_active       BOOLEAN    Current version                                                                                                                                            
+# VERSION       version_number       LONG       Version number                                                                                                                                             
+# RECURRING     control_period       ENUM       Control period (target)        controlperiod (unspecified=0,day=1,week=2,month=3,quarter=4,semiannual=5,year=6)                                            
+# RECURRING     duration             LONG       Duration                                                                                                                                                   
+# RECURRING     enddate              DATE       End date                                                                                                                                                   
+# RECURRING     event_driven_allowed BOOLEAN    Event-driven audits allowed                                                                                                                                
+# RECURRING     frequency            ENUM       Frequency                      frequency (all=-1,unspecified=0,oneoff=1,daily=2,weekly=3,monthly=4,quarterly=5,semiannually=6,annually=7,everysecondyear=8)
+# RECURRING     control_period_offset LONG      Offset
+# RECURRING     owner_group          LIST       Audit owner group              to 1 USERGROUP (LT=5040)                                                                                                    
+# RECURRING     reviewer_group       LIST       Audit reviewer group           to 1 USERGROUP (LT=5050)                                                                                                    
+# RECURRING     startdate            DATE       Start date                                                                                                                                                 
+# AUDITTEMPLATE audit_client         TEXT       Audit client                                                                                                                                               
+# AUDITTEMPLATE auditenddate         DATE       End date of audit (target)                                                                                                                                 
+# AUDITTEMPLATE auditor_group        LIST       Audit auditor group            to * USERGROUPs (LT=5060)                                                                                                   
+# AUDITTEMPLATE auditstartdate       DATE       Start date of audit (target)                                                                                                                               
+# AUDITTEMPLATE controlenddate       DATE       End date of control (target)                                                                                                                               
+# AUDITTEMPLATE controlstartdate     DATE       Start date of control (target)                                                                                                                             
+# AUDITTEMPLATE description          TEXT       Description                                                                                                                                                
+# AUDITTEMPLATE documents            LIST       Documents                      to * DOCUMENTs (LT=5030)                                                                                                    
+# AUDITTEMPLATE name                 STRING     Name                                                                                                                                                       
+# AUDITTEMPLATE objectives           TEXT       Audit objectives                                                                                                                                           
+# AUDITTEMPLATE plannedenddate       DATE       End date of preparation                                                                                                                                    
+# AUDITTEMPLATE plannedstartdate     DATE       Start date of preparation                                                                                                                                  
+# AUDITTEMPLATE scope                LIST       Audit scope                    to 1 HIERARCHY (LT=5010)                                                                                                    
+# AUDITTEMPLATE steps                LIST       Audit steps                    to * AUDITSTEPTEMPLATEs (LT=5020)                                                                                           
+# AUDITTEMPLATE template_status      ENUM       Template status                audittemplatestatus (all=-1,in_preparation=1,released=2)
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+
+rule "audit manager - define mandatory fields [I,V]"
+
+    salience 11200
+    no-loop true
+
+    when
+        user has at object role "auditmanager"
+
+    then
+        set "name" mandatory
+#       set "risk" mandatory
+#		set "methodology" mandatory
+#       set "regulation" mandatory
+#       set "process" mandatory
+
+end
+
+rule "audit manager - define mandatory fields if audit template is released [I,V]"
+
+    salience 11100
+    no-loop true
+
+    when
+        user has at object role "auditmanager"
+        value comparison fulfilled: ":transient:" attr_value "template_status" "CONTAINS" value "released"
+
+    then
+        set "name" mandatory
+#        set "audit_client" mandatory
+        set "plannedstartdate" mandatory
+        set "auditenddate" mandatory
+        set "auditstartdate" mandatory
+        set "controlenddate" mandatory
+        set "controlstartdate" mandatory
+        set "owner_group" mandatory
+        set "reviewer_group" mandatory
+#		set "risk" mandatory
+#		set "methodology" mandatory
+#       set "regulation" mandatory
+#       set "process" mandatory
+end
+
+rule "audit manager - define editable fields [I,V]"
+
+    salience 11000
+    no-loop true
+
+    when
+		user has at object role "auditmanager"
+		
+    then
+        set "name" editable
+        set "description" editable
+        set "template_status" editable
+        set "objectives" editable
+        set "scope" editable
+        set "audit_client" editable
+        set "owner_group" editable
+        set "reviewer_group" editable
+        set "auditor_group" editable
+        set "plannedstartdate" editable
+        set "auditstartdate" editable
+        set "auditenddate" editable
+        set "controlstartdate" editable
+        set "controlenddate" editable
+        set "steps" editable
+        set "documents" editable
+        set "risk" editable
+        set "methodology" editable
+        set "regulation" editable
+        set "process" editable
+end
+
+rule "audit manager - define read only field template status [I,V]"
+
+    salience 10900
+    no-loop true
+
+    when
+		user has at object role "auditmanager"
+		value comparison fulfilled: ":persistent:" attr_value "template_status" "CONTAINS" value "released"
+
+    then
+        set "template_status" readonly
+end
+
+rule "protect steps from being edited as long as audit template is not persistent yet [I,V]"
+
+	salience 10800
+	when
+		user has at object role "auditmanager"
+		object is new
+
+	then
+		set "steps" readonly
+		add object "information" message "auditmanagement.audittemplates.deny.assigning.auditsteptemplates.DBI"
+
+end
+
+rule "period_invalid_[V]"
+
+	salience 10700
+	no-loop true
+
+	when
+		value comparison fulfilled: ":transient:" attr_value "template_status" "CONTAINS" value "released"
+		audit step period is not within audit period
+
+	then
+		set "steps" invalid
+		set period error messages for "steps"
+
+end
+
+rule "auditstartdate_invalid_[V]"
+
+	salience 10600
+	no-loop true
+
+	when
+		"auditstartdate" is filled
+		"auditenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "auditstartdate" "GREATER THAN" ":transient:" attr_value "auditenddate"
+
+	then
+		set "auditstartdate" invalid
+		add "error" message "error.date.range.DBI" to "auditstartdate"
+
+end
+
+rule "controlperiod_invalid_[V]"
+
+	salience 10500
+	no-loop true
+
+	when
+		"controlstartdate" is filled
+		"controlenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "controlstartdate" "GREATER THAN" ":transient:" attr_value "controlenddate"
+
+	then
+		set "controlstartdate" invalid
+		add "error" message "error.date.range.DBI" to "controlstartdate"
+
+end
+
+rule "plannedstartdate_invalid_[V]"
+
+	salience 10400
+	no-loop true
+
+	when
+		"auditstartdate" is filled
+		"plannedstartdate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "plannedstartdate" "GREATER THAN" ":transient:" attr_value "auditstartdate"
+
+	then
+		set "plannedstartdate" invalid
+		add "error" message "error.audit.preparationstartdate.ERR" to "plannedstartdate"
+
+end
+
+rule "changed_auditstartdate_invalid_[V]"
+
+	salience 10300
+	no-loop true
+
+	when
+		"auditstartdate" is filled
+		"auditstartdate" is dirty
+		"auditenddate" is filled
+		"steps" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "auditstartdate" "GREATER THAN" ":persistent:" attr_value "auditstartdate"
+		"auditstartdate" after first auditstepstartdate
+
+	then
+		set "auditstartdate" invalid
+		set period error messages for "auditstartdate"
+
+end
+
+rule "changed_auditenddate_invalid_[V]"
+
+	salience 10200
+	no-loop true
+
+	when
+		"auditstartdate" is filled
+		"auditenddate" is filled
+		"auditenddate" is dirty
+		"steps" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "auditenddate" "LESS THAN" ":persistent:" attr_value "auditenddate"
+		"auditenddate" before latest auditstependdate
+
+	then
+		set "auditenddate" invalid
+		set period error messages for "auditenddate"
+
+end
+
+rule "controlstartdate_invalid_[V]"
+
+	salience 10100
+	no-loop true
+
+	when
+		"auditstartdate" is filled
+		"controlstartdate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "controlstartdate" "GREATER THAN" ":transient:" attr_value "auditstartdate"
+
+	then
+		set "controlstartdate" invalid
+		add "error" message "error.audit.controlstartdate.ERR" to "controlstartdate"
+
+end
+
+rule "controlenddate_invalid_[V]"
+
+	salience 10000
+	no-loop true
+
+	when
+		"auditenddate" is filled
+		"controlenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "controlenddate" "GREATER THAN" ":transient:" attr_value "auditenddate"
+
+	then
+		set "controlenddate" invalid
+		add "error" message "error.audit.controlenddate.ERR" to "controlenddate"
+
+end

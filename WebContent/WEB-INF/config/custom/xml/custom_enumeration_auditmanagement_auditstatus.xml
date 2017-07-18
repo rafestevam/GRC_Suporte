@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">	
+	<enum id="auditstatus" isMultiple="false" type="Number" itemClass="ColoredEnumerationItem">
+		
+        <enumitem id="all" value="-1" extendedMeaning="all" />
+        <enumitem id="open" value="-2" evaluationRelevant="false" virtualScope.idrefs="in_preparation,released,in_progress" />
+        <enumitem id="closed" value="-3" evaluationRelevant="false" virtualScope.idrefs="conform,notconform,notauditable,notcompleted" />
+
+        <!-- workflow states -->
+        <enumitem id="incomplete" value="-5" evaluationRelevant="false" virtualScope.idrefs="notauditable,notcompleted" filterRelevant="false"/>
+        <enumitem id="complete" value="-6" evaluationRelevant="false" virtualScope.idrefs="conform,notconform" filterRelevant="false"/>
+        <!-- / workflow states -->
+
+        <enumitem id="in_preparation" value="1" formRelevant="false" image="iconlib/icons/states/state_in_preparation_16.png">
+            <parameter name="Background" value="E0E0FF"/> <!-- light blue -->
+        </enumitem>  
+        <enumitem id="in_execution" value="-4" virtualScope.idrefs="released,in_progress">
+            <parameter name="Background" value="0094E9"/> <!-- blue -->
+        </enumitem>
+        <enumitem id="released" value="2" image="iconlib/icons/states/state_released_16.png" />
+        <enumitem id="in_progress" value="3" image="iconlib/icons/states/state_in_process_16.png"/>
+        
+        <enumitem id="conform" value="4" image="iconlib/icons/states/state_effective_16.png">
+            <parameter name="Background" value="ADCF00"/>  <!-- green -->
+        </enumitem>
+        <enumitem id="notconform" value="5" image="iconlib/icons/states/state_noneffective_16.png">
+            <parameter name="Background" value="EF4231"/>  <!-- red -->
+        </enumitem>
+        <enumitem id="notauditable" value="-10" evaluationRelevant="false" filterRelevant="false" virtualScope.idrefs="complete" image="iconlib/icons/states/state_not_testable_16.png">
+            <parameter name="Background" value="EAEA85"/>  <!-- yellow -->           
+        </enumitem>
+        <enumitem id="notcompleted" value="-11" evaluationRelevant="false" filterRelevant="false" virtualScope.idrefs="complete" image="iconlib/icons/states/state_not_processed_16.png">
+            <parameter name="Background" value="EBB585"/>  <!-- orange -->
+        </enumitem>
+    </enum>
+
+	
+	</custom>
+

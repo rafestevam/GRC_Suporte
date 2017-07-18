@@ -1,0 +1,121 @@
+<adapterRec>
+    <!--
+    <adapter type="converter"
+             name="x2y Converter"
+             ext="txt"
+             or !
+             filename="_specialfilename.xml"
+             class="com.idsscheer.webapps.arcm.bl.datatransport.xmlmlimport.adapter. ... "/>
+    -->
+    
+    <adapter type="amlExport"
+             name="AML export data scope"
+              ext="dataScope"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.amlexport.xmlexport.DataScope"/>
+
+    <adapter type="amlExport"
+             name="AML export maping provider"
+              ext="mappingProvider"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.amlexport.xmlexport.Aris2ARCMMappingProvider"/>
+
+<!-- Inicio GAP - GRC39 -->
+    <!--
+    <adapter type="validation"
+             name="Condition validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.ConditionValidator"/>
+    -->
+    <adapter type="validation"
+             name="Condition validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.CustomConditionValidator"/>
+<!-- Fim GAP - GRC39 -->
+
+    <adapter type="validation"
+             name="Hierarchy validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.HierarchyValidator"/>
+
+    <adapter type="validation"
+             name="Questionnaire template validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.QuestionnaireTemplateValidator"/>
+
+    <adapter type="validation"
+             name="Audit template validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.AuditTemplateValidator"/>
+
+
+    <adapter type="validation"
+             name="Usergroup validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.UserGroupValidator"/>
+
+    <adapter type="validation"
+             name="User validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.UserValidator"/>
+
+
+    <adapter type="validation"
+             name="Control to risk validator"
+              ext="ARIS"
+              approach="rba"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.testmanagement.ControlToRiskValidator"/>
+
+    <adapter type="validation"
+             name="Testdefinition to control validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.testmanagement.TestdefinitionToControlValidator"/>
+
+    <adapter type="validation"
+             name="Object validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.ObjectValidator"/>
+
+    <adapter type="validation"
+             name="Link validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.LinkValidator"/>
+
+    <adapter type="validation"
+             name="Risk validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.RiskValidator"/>
+
+    <adapter type="validation"
+             name="Control execution task validator"
+             ext="ARIS"
+             class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.ControlExecutionTaskValidator"/>
+
+    <adapter type="validation"
+             name="Control exeecution task to control validator"
+             ext="ARIS"
+             class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.ControlExecutionTaskToControlValidator"/>
+
+    <adapter type="validation"
+             name="Testdefinition validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.TestdefinitionValidator"/>
+
+    <adapter type="validation"
+             name="Question validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.QuestionValidator"/>
+
+    <adapter type="validation"
+             name="Policy definition validator"
+              ext="ARIS"
+              class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.PolicydefinitionValidator"/>
+
+    <adapter type="validation"
+             name="Policy review task validator"
+             ext="ARIS"
+             class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.PolicyReviewTaskValidator"/>
+
+    <adapter type="validation"
+             name="Survey task validator"
+             ext="ARIS"
+             class="com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.parsing.validation.SurveyTaskValidator"/>
+</adapterRec>
