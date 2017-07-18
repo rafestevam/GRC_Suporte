@@ -1,0 +1,147 @@
+package CONTROL_RuleSet
+expander control.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.testmanagement.re.ControlHelper;
+
+# OBJECT  client_objid          LONG       Client ID                                                                                                                                        
+# OBJECT  client_sign           CLIENTSIGN Client                                                                                                                                           
+# OBJECT  create_date           DATE       Creation date                                                                                                                                    
+# OBJECT  creator_user_id       LONG       User ID (creator)                                                                                                                                
+# OBJECT  delete_date           DATE       Deletion date                                                                                                                                    
+# OBJECT  guid                  STRING     GUID                                                                                                                                             
+# OBJECT  obj_id                LONG       ID                                                                                                                                               
+# OBJECT  obj_type              OBJECTTYPE Object type                                                                                                                                      
+# OBJECT  root_guid             STRING     Root GUID                                                                                                                                        
+# OBJECT  versions              LONG       Number of versions                                                                                                                               
+# VERSION aris_change_date      DATE       ARIS change date                                                                                                                                 
+# VERSION change_date           DATE       Change date                                                                                                                                      
+# VERSION change_type           ENUM       Change type                changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                         
+# VERSION change_user_id        LONG       User ID (editor)                                                                                                                                 
+# VERSION deactivated           BOOLEAN    Deactivated                                                                                                                                      
+# VERSION id                    LONG       ID                                                                                                                                               
+# VERSION substitute_user_id    LONG       User ID (substitute)                                                                                                                             
+# VERSION version_active        BOOLEAN    Current version                                                                                                                                  
+# VERSION version_number        LONG       Version number                                                                                                                                   
+# CONTROL control_effect        ENUM       Effect of control          controleffect (all=-1,unspecified=0,preventive=1,revealing=2)                                                         
+# CONTROL control_execution     ENUM       Control execution          controlexecution (manual=1,it=2)                                                                                      
+# CONTROL control_frequency     ENUM       Control frequency (target) controlfrequency (all=-1,unspecified=0,daily=1,weekly=2,monthly=3,quarterly=4,semiannually=5,annually=6,eventdriven=7)
+# CONTROL control_id            STRING     Control ID                                                                                                                                       
+# CONTROL control_objective     TEXT       Control objective                                                                                                                                
+# CONTROL control_type          ENUM       COSO component             controltype (environment=1,risk_assessment=2,activity=3,information=4,monitoring=5)                                   
+# CONTROL controlexecutiontasks LIST       Control execution tasks    to * CONTROLEXECUTIONTASKs (LT=6050)                                                                                  
+# CONTROL controls              TEXT       Control activities                                                                                                                               
+# CONTROL key_control           BOOLEAN    Key control                                                                                                                                      
+# CONTROL manager_group         LIST       Control manager            to 1 USERGROUP (LT=13)                                                                                                
+# CONTROL name                  STRING     Name                                                                                                                                             
+# CONTROL testdefinitions       LIST       Test definitions           to * TESTDEFINITIONs (LT=15)                                                                                          
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+rule "define all standard attributes editable [I,V]"
+
+	salience 10200
+	when
+
+	then
+		set "control_effect"      editable
+		set "control_execution"   editable
+		set "control_frequency"   editable
+		set "control_id"          editable
+		set "control_objective"   editable
+		set "control_type"        editable
+		set "controls"            editable
+		set "key_control"         editable
+		set "manager_group"       editable
+		set "name"                editable
+		set "testdefinitions"     editable
+		set "controlexecutiontasks"     editable
+		set "custom_status_control"     readonly
+
+end
+
+rule "mark_mandatory_fields_[I,V]"
+
+	salience 10100
+	no-loop true
+
+	when
+
+	then
+		set "key_control"       mandatory
+#		set "controls"          mandatory
+#		set "control_effect"    mandatory
+		set "control_execution" mandatory
+		set "control_frequency" mandatory
+		set "name"              mandatory
+
+end
+#
+# Add custom rule
+# By default the new attribute is visible and readonly. This rule shall make it editable if the creator of the object opens the form
+#
+rule "control_export_relevant_editable_[I,V]"
+	salience 9000
+	
+	no-loop true
+	
+	when
+
+	then
+		set "control_export_relevant" invisible
+		set "control_effect"          invisible
+end
+
+rule "custom_userroles_readonly[I,V]"
+
+	salience 8900
+	no-loop true
+	
+	when
+		user has in_general role "controlexecutionowner"
+
+	then
+		set "control_effect"      readonly
+		set "control_execution"   readonly
+		set "control_frequency"   readonly
+		set "control_id"          readonly
+		set "control_objective"   readonly
+		set "control_type"        readonly
+		set "controls"            readonly
+		set "key_control"         readonly
+		set "manager_group"       readonly
+		set "name"                readonly
+		set "testdefinitions"     readonly
+		set "controlexecutiontasks"     readonly
+		set "custom_status_control"     readonly
+
+end
+
+rule "custom_userroles_readonly_man[I,V]"
+
+	salience 8800
+	no-loop true
+	
+	when
+		( user has in_general role "controlmanager" ) OR
+		( user has in_general role "riskmanager" )    OR
+		( user has in_general role "testmanager" )
+		
+	then
+		set "control_export_relevant"       readonly
+		set "control_id"                    readonly
+		set "name"                          readonly
+		set "control_objective"             readonly
+		set "key_control"                   readonly
+		set "control_type"                  readonly
+		set "manager_group"                 readonly
+		set "controls"                      readonly
+		set "control_frequency"             readonly
+		set "control_execution"             readonly
+		set "control_effect"                readonly
+		set "custom_status_control"         readonly
+
+end

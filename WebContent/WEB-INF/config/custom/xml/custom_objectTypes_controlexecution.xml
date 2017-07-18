@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+    <objectType id="CONTROLEXECUTION" xmlexport="true" extends="MONITORABLE" displayAttribute="obj_id" licensedComponentIds="tm"
+                dataKind="transactiondata" image="iconlib/icons/doctype/control_execution_16.png" mashzoneId="310">
+        <listAttrType id="controlexecutiontask" maxSize="1" objectType.idref="CONTROLEXECUTIONTASK" linkType="6055" usingFixChildVersion="true"/>
+        <listAttrType id="owner_group" maxSize="1" objectType.idref="USERGROUP" linkType="6056">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="controlexecutionowner"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="owner" maxSize="1" objectType.idref="USER" linkType="6057" />
+        <listAttrType id="owner_substitute" maxSize="1" objectType.idref="USER" linkType="6058"/>
+        <!-- represents the documentation state -->
+        
+        <!-- Inicio GAP - GRC29 -->
+<!--         <enumAttrType id="owner_status" enumeration="controlexecution_owner_status" defaultValue="1"/> -->
+        <enumAttrType id="owner_status" enumeration="controlexecution_owner_status" defaultValue="1"/>
+        <!-- Fim GAP - GRC29 -->
+        
+        <!-- reviewer is not used at the moment, but has to be define due to the inheritance of the MONITORABLE-object -->
+        <listAttrType id="reviewer_group" maxSize="0" objectType.idref="USERGROUP" linkType="6059"/>
+        <listAttrType id="reviewer" maxSize="1" objectType.idref="USER" linkType="6060" />
+        <listAttrType id="reviewer_substitute" maxSize="0" objectType.idref="USER" linkType="6061"/>
+        <enumAttrType id="reviewer_status" enumeration="controlexecution_reviewer_status" defaultValue="-1"/>
+
+        <!-- atttributes from control execution task object -->
+        <listAttrType id="affected_orgunit" maxSize="1" objectType.idref="HIERARCHY" linkType="6062" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="orgunit"/>
+            </listRestriction>
+        </listAttrType>
+        <textAttrType id="activities"/>
+        <textAttrType id="selectivity"/>
+        <textAttrType id="result_format"/>
+        <listAttrType id="documents" objectType.idref="DOCUMENT" linkType="6063"/>
+        <listAttrType id="control" objectType.idref="CONTROL" linkType="6064" usingFixChildVersion="true"/>
+
+        <!-- additional hierarchy connections relevant for evaluations -->
+        <listAttrType id="process" maxSize="1" objectType.idref="HIERARCHY" linkType="6066" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="process"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="finaccount" objectType.idref="HIERARCHY" linkType="6067" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="financialaccount"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="risk_category" objectType.idref="HIERARCHY" linkType="6068" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="category"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="appsystem" objectType.idref="HIERARCHY" linkType="6069" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="applicationsystemtype"/>
+            </listRestriction>
+        </listAttrType>
+
+        <!-- own additional attributes -->
+        <longAttrType id="items_to_control">
+            <validate name="long" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="long" arg0="scale:0:errors.long"/>
+        </longAttrType>
+        <longAttrType id="items_actual_controlled">
+            <validate name="long" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="long" arg0="scale:0:errors.long"/>
+        </longAttrType>
+        <textAttrType id="selected_sample_data"/>
+        <longAttrType id="sum_items_ok">
+            <validate name="long" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="long" arg0="scale:0:errors.long"/>
+        </longAttrType>
+        <longAttrType id="sum_items_not_ok">
+            <validate name="long" arg0="geq:0:value.must.not.be.smaller.than.bound.ERR"/>
+            <validate name="long" arg0="scale:0:errors.long"/>
+        </longAttrType>
+        <textAttrType id="anomalies_description"/>
+        <doubleAttrType id="anomaly_rate"/>
+        <doubleAttrType id="completion_rate"/>
+        <enumAttrType id="due_status" defaultValue="1" enumeration="due_status" />
+        <textAttrType id="remark"/>
+        <listAttrType id="execution_documents" objectType.idref="DOCUMENT" linkType="6065"/>
+        
+        <!-- Inicio GAP GRC29 -->
+        <stringAttrType id="control_id" maxCharCount="80" isMassEditable="true" objectType.idref="CONTROL"/>
+        <!-- Fim GAP GRC29 -->
+        
+        <!-- Inicio GAP GRC98 -->
+        <enumAttrType id="custom_controlexecstatus" defaultValue="1" enumeration="custom_controlexecstatus" />
+        <!-- Fim GAP GRC98 -->
+    </objectType>
+        
+</custom>

@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+    <!-- Inicio GAP GRC29 -->
+    <!-- Redefinição das categorias de risco -->
+    <enum id="categderisco" isMultiple="false" type="Number">
+        <enumitem id="financial_reporting" value="1"/>
+        <enumitem id="compliance" value="2"/>
+        <enumitem id="operations" value="3"/>
+        <enumitem id="strategic" value="4"/>
+        <enumitem id="image" value="5"/>
+        <enumitem id="tecnology" value="6"/>
+    </enum>
+    
+    <!-- Redefinição da Frequencia de Controles -->
+    <enum id="custom_controlfreq" isMultiple="false" type="Number">
+        <enumitem id="all" value="-1" extendedMeaning="all"/>
+        <enumitem id="unspecified" value="0" extendedMeaning="please_select" filterRelevant="false"/>
+        <enumitem id="daily" value="1"/>
+        <enumitem id="severally" value="2"/>
+        <enumitem id="weekly" value="3"/>
+        <enumitem id="monthly" value="4"/>
+        <enumitem id="quarterly" value="5"/>
+        <enumitem id="semiannually" value="6"/>
+        <enumitem id="annually" value="7"/>
+        <enumitem id="eventdriven" value="8"/>
+        <!--
+        <enumitem id="weekly" value="2"/>
+        <enumitem id="semiannually" value="5"/>
+        <enumitem id="eventually" value="9"/>
+        -->
+    </enum>
+    
+    <!-- Redefinição das Classificações de Controle -->
+    <enum id="custom_controltype" isMultiple="false" type="Number">
+    	<enumitem id="all" value="-1" extendedMeaning="all" filterRelevant="true"/>
+        <enumitem id="preventive" value="6"/>
+        <enumitem id="detective" value="7"/>
+    </enum>    
+    
+    <!-- Redefinição dos Tipos de Controle -->
+	<enum id="custom_controlexecution" isMultiple="false" type="Number">
+		<enumitem id="all" value="-1" extendedMeaning="all" filterRelevant="true"/>
+        <enumitem id="manual" value="1"/>
+        <enumitem id="it" value="2"/>
+        <enumitem id="automatic" value="3"/>
+    </enum>
+    
+    <!-- Redefinição do Status de Proprietário da Avaliação de Risco -->
+    <enum id="assessment_state" isMultiple="false" type="Number">
+        <enumitem id="all" value="-1" extendedMeaning="all" formRelevant="false" />
+        <enumitem id="open" value="0" formRelevant="false" virtualScope.idrefs="new,in_progress"/>
+<!--         <enumitem id="closed" value="-3" formRelevant="false" filterRelevant="false" virtualScope.idrefs="assessed,assessment_not_possible,not_assessed"/> -->
+        <enumitem id="closed" value="-3" formRelevant="false" filterRelevant="false" virtualScope.idrefs="assessed,not_assessed"/>
+        <enumitem id="new" value="1" formRelevant="false" image="iconlib/icons/states/state_new_16.png"/>
+        <enumitem id="in_progress" value="2" image="iconlib/icons/states/state_in_process_16.png"/>
+        <enumitem id="to_be_reviewed" value="-2" formRelevant="false" virtualScope.idrefs="assessed,assessment_not_possible"/>
+        <enumitem id="assessed" value="3" image="iconlib/icons/states/state_effective_16.png"/>
+        <enumitem id="assessment_not_possible" value="4" formRelevant="false" filterRelevant="false" virtualScope.idrefs="in_progress"/>
+        <enumitem id="not_assessed" value="5" formRelevant="false" image="iconlib/icons/states/state_not_processed_16.png"/>
+    </enum>
+    
+    <!-- Redefinição do Status de Proprietário da Execução de Controle -->
+    <enum id="controlexecution_owner_status" isMultiple="false" type="Number" itemClass="ColoredEnumerationItem">
+        <enumitem id="all" value="-1" extendedMeaning="all" formRelevant="false"/>
+        <enumitem id="open" value="0" formRelevant="false" virtualScope.idrefs="new,in_progress">
+            <parameter name="Background" value="0094E9"/> <!-- blue -->
+        </enumitem>
+        <enumitem id="new" value="1" image="iconlib/icons/states/state_new_16.png" formRelevant="false"/>
+        <enumitem id="in_progress" value="2" image="iconlib/icons/states/state_in_process_16.png"/>
+        <enumitem id="completed" value="3" image="iconlib/icons/content/check_16.png">
+            <parameter name="Background" value="ADCF00"/>  <!-- green -->
+        </enumitem>
+        <enumitem id="not_possible" value="4" filterRelevant="false" formRelevant="false" virtualScope.idrefs="in_progress" />
+<!--         <enumitem id="not_possible" value="4" image="iconlib/icons/states/state_not_testable_16.png"> -->
+<!--             <parameter name="Background" value="FFDE00"/>  yellow -->
+<!--         </enumitem> -->
+    </enum>
+    <!-- Fim GAP GRC29 -->
+    
+    <!-- Inicio GAP GRC39 -->
+    <!-- Enumeração dos Status de Atraso da Avaliação de Risco -->
+    <enum id="custom_progress" isMultiple="false" type="Number">
+    	<enumitem id="on_time" value="1"  image="iconlib/icons/states/state_on_time_16.png"/>
+        <enumitem id="overdue" value="2"  image="iconlib/icons/states/state_overdue_16.png"/>
+    </enum>
+    <!-- Fim GAP GRC39 -->
+    
+    <!-- Inicio GAP GRC98 -->
+    <enum id="custom_controlexecstatus" isMultiple="false" type="Number">
+    	<enumitem id="effective" value="1" image="iconlib/icons/states/state_effective_16.png"/>
+    	<enumitem id="ineffective" value="2" image="iconlib/icons/states/state_noneffective_16.png"/>
+    </enum>
+    <!-- Fim GAP GRC98 -->
+    
+    <enum id="custom_enumactiontype" isMultiple="false" type="Number">
+    	<enumitem id="all" value="-1" extendedMeaning="all" />
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="actionplan" value="1"/>
+    	<enumitem id="issue" value="2"/>
+<!--     	<enumitem id="empty" value="3"/> -->
+    </enum>
+    
+    <!-- Inicio GAP - GRC66 -->
+    <enum id="cenum_is_creator_status" isMultiple="false" type="Number">
+    	<enumitem id="all" 	value="-1" extendedMeaning="all" />
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="new" value="1" image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="in_review" value="2" image="iconlib/icons/states/state_running_16.png"/>
+    </enum>
+    
+    <enum id="cenum_is_owner_status" isMultiple="false" type="Number">
+    	<!-- Status de Workflow -->
+<!--     	<enumitem id="stepby" value="-3" virtualScope.idrefs="please_select" formRelevant="false" filterRelevant="false"/> -->
+    	<enumitem id="open_for_execution" value="-2" virtualScope.idrefs="in_review,in_progress,fup" formRelevant="false" filterRelevant="false"/>
+    	<!-- / Status de Workflow -->
+    	<enumitem id="all" 	value="-1" extendedMeaning="all" /> 
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" filterRelevant="false"/>
+    	<enumitem id="in_review" value="1"        image="iconlib/icons/states/state_running_16.png"/>
+    	<enumitem id="open" value="2"             image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="in_progress" value="3"      image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="fup" value="4"              image="iconlib/icons/states/state_warnings_16.png"/>
+    	<enumitem id="to_be_reviewed" value="5"   image="iconlib/icons/states/state_to_be_approved_16.png"/>
+    	<!-- Status de Workflow -->
+<!--     	<enumitem id="open_for_execution" value="5" virtualScope.idrefs="in_review,in_progress,fup" formRelevant="false" filterRelevant="false"/> -->
+    	<!-- / Status de Workflow -->  
+<!--     	<enumitem id="attended" value="6" image="iconlib/icons/states/state_auto_accepted_16.png"/> -->
+<!--     	<enumitem id="risk_assumed" value="7" image="iconlib/icons/states/state_prio_high_16.png"/> -->
+<!--     	<enumitem id="settled" value="8" image="iconlib/icons/states/state_prio_low_16.png"/> -->
+    	<!-- Status de Workflow -->
+<!--     	<enumitem id="to_be_reviewed" value="9" virtualScope.idrefs="attended,risk_assumed,settled" formRelevant="false" filterRelevant="false"/> -->
+    	<!-- / Status de Workflow -->    	
+    </enum>
+    
+    <enum id="cenum_is_reviewer_status" isMultiple="false" type="Number">
+<!--         <enumitem id="stepby" value="-3" virtualScope.idrefs="please_select" formRelevant="false" filterRelevant="false"/> -->
+    	<enumitem id="all" 	value="-2" extendedMeaning="all" />
+    	<!-- Status de Workflow -->
+    	<enumitem id="to_be_reviewed" value="-1" virtualScope.idrefs="in_progress,fup, please_select" filterRelevant="false"/>
+    	<!-- / Status de Workflow -->
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="in_progress" value="1" image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="attended" value="2" image="iconlib/icons/states/state_auto_accepted_16.png"/>
+    	<enumitem id="risk_assumed" value="3" image="iconlib/icons/states/state_prio_high_16.png"/>
+    	<enumitem id="settled" value="4" image="iconlib/icons/states/state_prio_low_16.png"/>
+    	<!-- Status de Workflow -->
+    	<enumitem id="approved" value="5" virtualScope.idrefs="attended,risk_assumed,settled" formRelevant="false" filterRelevant="false"/>
+    	<!-- / Status de Workflow -->
+    	<enumitem id="fup" value="6" image="iconlib/icons/states/state_warnings_16.png"/>
+    </enum>
+    
+    <enum id="cenum_ap_creator_status" isMultiple="false" type="Number">
+        <enumitem id="iniciated" value="-3" virtualScope.idrefs="new" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="to_be_evaluated" value="-2" virtualScope.idrefs="in_progress" filterRelevant="false"/>
+    	<enumitem id="all" 	value="-1" extendedMeaning="all" />
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="new" value="1" image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="pending" value="2" image="iconlib/icons/states/state_level_empty_16.png"/>
+    	<enumitem id="in_progress" value="3" image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="fup" value="4" image="iconlib/icons/states/state_warnings_16.png"/>
+    	<enumitem id="risk_assumed" value="5" image="iconlib/icons/states/state_prio_high_16.png"/>
+    	<!-- Status de Workflow -->
+    	<enumitem id="to_be_reviewed" value="6" virtualScope.idrefs="fup,risk_assumed" formRelevant="false" filterRelevant="false"/>
+<!--     	<enumitem id="in_creation" value="7" virtualScope.idrefs="new,in_progress" formRelevant="false" filterRelevant="false"/> -->
+    	<!-- / Status de Workflow -->
+    </enum>
+    
+    <enum id="cenum_ap_owner_status" isMultiple="false" type="Number">
+    	<!-- Status de Workflow -->
+<!--     	<enumitem id="stepby" value="-3" virtualScope.idrefs="please_select" formRelevant="false" filterRelevant="false"/> -->
+    	<enumitem id="open" value="-2" virtualScope.idrefs="in_progress" filterRelevant="false"/>
+    	<!-- / Status de Workflow -->
+    	<enumitem id="all" 	value="-1" extendedMeaning="all" />
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="in_progress" value="1" image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="pending" value="2" image="iconlib/icons/states/state_level_empty_16.png"/>
+    	<enumitem id="fup" value="3" image="iconlib/icons/states/state_warnings_16.png"/>
+    	<enumitem id="risk_assumed" value="4" image="iconlib/icons/states/state_prio_high_16.png"/>
+    	<!-- Status de Workflow -->
+    	<enumitem id="to_be_reviewed" value="5" virtualScope.idrefs="fup,risk_assumed" formRelevant="false" filterRelevant="false"/>
+    	<!-- / Status de Workflow -->
+    </enum>
+    
+    <enum id="cenum_ap_reviewer_status" isMultiple="false" type="Number">
+		<!-- Status de Workflow -->
+<!-- 		<enumitem id="stepby" value="-4" virtualScope.idrefs="please_select" formRelevant="false" filterRelevant="false"/> -->
+		<enumitem id="rejected" value="-3" virtualScope.idrefs="not_approved, please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="open" value="-2" virtualScope.idrefs="fup,in_progress, please_select" filterRelevant="false"/>
+    	<!-- / Status de Workflow -->
+    	<enumitem id="all" 	value="-1" extendedMeaning="all" />
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="in_progress" value="1" image="iconlib/icons/states/state_in_process_16.png"/>
+    	<enumitem id="fup" value="2" formRelevant="false" filterRelevant="false" image="iconlib/icons/states/state_warnings_16.png"/>
+    	<enumitem id="not_approved" value="3" image="iconlib/icons/content/error_16.png"/>
+    	<enumitem id="settled" value="4" image="iconlib/icons/states/state_prio_low_16.png"/>
+    	<enumitem id="attended" value="5" image="iconlib/icons/states/state_auto_accepted_16.png"/>
+    	<enumitem id="risk_assumed" value="6" image="iconlib/icons/states/state_prio_high_16.png"/>
+		<!-- Status de Workflow -->
+		<enumitem id="approved" value="7" virtualScope.idrefs="settled,attended,risk_assumed" formRelevant="false" filterRelevant="false"/>
+<!-- 		<enumitem id="to_be_approved" value="8" virtualScope.idrefs="fup,risk_assumed,in_progress" formRelevant="false" filterRelevant="false"/> -->
+    	<!-- / Status de Workflow -->    	
+    </enum>
+    <!-- Fim GAP - GRC66 -->
+
+<!-- Inicio GAP GRC52 -->
+<!-- Origem do teste -->
+        <enum id="origemteste_test" isMultiple="false" type="Number">
+            <enumitem id="all" value="-1" extendedMeaning="all" />
+            <enumitem id="1linhadefesa" value="1" />
+            <enumitem id="2linhadefesa" value="2" />                  
+        </enum>
+<!-- Técnica do Teste-->
+        <enum id="natureoftest" isMultiple="true" type="Number">
+        <enumitem id="observation" value="1"/>
+        <enumitem id="inquiry" value="2"/>        
+        <enumitem id="reperformance" value="3"/>
+        <enumitem id="examination" value="4"/>
+        <enumitem id="confirmation" value="5"/>
+        </enum>
+
+   <enum id="measure" isMultiple="false" type="Number">
+        <enumitem id="all" value="-1" extendedMeaning="all" formRelevant="false"/>
+        <enumitem id="to_be_checked" evaluationRelevant="false" value="-2" virtualScope.idrefs="unspecified, deactivated"/>
+        <enumitem id="specifiedByReviewer" evaluationRelevant="false" value="-3" virtualScope.idrefs="none, deficiency, issue"/>
+        <enumitem id="unspecified" value="0" extendedMeaning="please_select" image="iconlib/icons/content/undecided_16.png" />
+        <enumitem id="none" value="1" image="iconlib/icons/states/state_no_measure_16.png"/>
+        <enumitem id="issue" value="3" image="iconlib/icons/states/state_issue_16.png"/>
+        <enumitem id="deactivated" value="4" formRelevant="false"  image="iconlib/icons/states/state_measure_deactivated_16.png"/>
+        <enumitem id="deficiency" value="2" image="iconlib/icons/states/state_deficiency_16.png"/>
+    </enum>          
+<!-- Final GAP GRC52 -->
+
+<!-- Inicial GAP GRC74 -->
+<!-- Process Environment -->
+ <enum id="processenvironment" isMultiple="true" type="Number">
+        <enumitem id="cip"   value="1"/>
+        <enumitem id="cetip" value="2"/>        
+        <enumitem id="tivit" value="3"/>
+        <enumitem id="bb"    value="4"/>      
+ </enum>  
+ 
+ <!-- Acting Front -->
+        <enum id="acting_front_test" isMultiple="false" type="Number">
+            <enumitem id="all" value="-1" extendedMeaning="all" />
+            <enumitem id="actingfront1"  value="1"  />
+            <enumitem id="actingfront2"  value="2"  />
+            <enumitem id="actingfront3"  value="3"  />
+            <enumitem id="actingfront4"  value="4"  />
+            <enumitem id="actingfront5"  value="5"  />
+            <enumitem id="actingfront6"  value="6"  />
+            <enumitem id="actingfront7"  value="7"  />
+            <enumitem id="actingfront8"  value="8"  />
+            <enumitem id="actingfront9"  value="9"  />
+            <enumitem id="actingfront10" value="10" />   
+            <enumitem id="actingfront11" value="11" />
+            <enumitem id="actingfront12" value="12" />
+            <enumitem id="actingfront13" value="13" />
+         </enum>    
+
+<!-- Business Unit -->
+        <enum id="business_unit_test" isMultiple="true" type="Number">
+            <enumitem id="corporativo"  value="1"  />
+            <enumitem id="imf"          value="2"  />
+            <enumitem id="servicos"     value="3"  />
+		</enum>  
+ 		
+<!-- Origem do apontamento -->
+        <enum id="issuesource_test" isMultiple="false" type="Number">
+            <enumitem id="all" value="-1" extendedMeaning="all" />
+            <enumitem id="1linha" value="1" />
+            <enumitem id="2linha" value="2" />                  
+            <enumitem id="3linha" value="3" />
+        </enum>		
+        
+	<enum id="issue_owner_status" isMultiple="false" type="Number">
+        <enumitem id="all" 	value="-1" extendedMeaning="all" />
+        <enumitem id="open" value="0" virtualScope.idrefs="new,in_progress,on_hold"/>
+        <enumitem id="to_be_reviewed" value="-2" virtualScope.idrefs="finished,not_possible"/>
+        <enumitem id="new" value="1" formRelevant="false"  image="iconlib/icons/states/state_new_16.png"/>
+        <enumitem id="in_progress" value="2" image="iconlib/icons/states/state_in_process_16.png"/>
+        <enumitem id="finished" value="3" image="iconlib/icons/states/state_effective_16.png"/>
+        <enumitem id="on_hold" value="4" image="iconlib/icons/states/state_on_hold_16.png"/>
+        <enumitem id="not_possible" value="5" image="iconlib/icons/states/state_not_testable_16.png"/>
+        <enumitem id="in_fup" value="7" image="iconlib/icons/states/state_in_process_16.png"/>
+        <enumitem id="attended" value="8" image="iconlib/icons/states/state_effective_16.png"/>
+        <enumitem id="assumed_risk" value="9" image="iconlib/icons/states/state_effective_16.png"/>
+       
+        <!-- workflow states -->
+        <enumitem id="open_for_execution" value="6" virtualScope.idrefs="new,in_progress" formRelevant="false" filterRelevant="false"/>
+        <!-- / workflow states -->
+    </enum>        					
+<!-- Final GAP GRC74 -->
+
+	<enum id="testcase_owner_status" isMultiple="false" type="Number" itemClass="ColoredEnumerationItem">
+        <enumitem id="all" value="-1" extendedMeaning="all" formRelevant="false"/>
+        <enumitem id="open" value="0" formRelevant="false" virtualScope.idrefs="new,in_process">
+            <parameter name="Background" value="0094E9"/> <!-- blue -->
+        </enumitem>
+        <enumitem id="new" value="1" formRelevant="false" image="iconlib/icons/states/state_new_16.png"/>
+        <enumitem id="in_process" value="2" image="iconlib/icons/states/state_in_process_16.png"/>
+        <enumitem id="effective" value="3" image="iconlib/icons/states/state_effective_16.png">
+            <parameter name="Background" value="ADCF00"/>  <!-- green -->
+        </enumitem>
+        <enumitem id="noneffective" value="4" image="iconlib/icons/states/state_noneffective_16.png">
+            <parameter name="Background" value="EF4231"/>  <!-- red -->
+        </enumitem>
+        <!-- Excluir o status não realizável do campo status do teste de controle - DMM - 2017/07/12 -->
+        <enumitem id="nottestable" value="5" image="iconlib/icons/states/state_not_testable_16.png" formRelevant="false" filterRelevant="false">
+            <parameter name="Background" value="FFDE00"/>  <!-- yellow -->
+        </enumitem>
+        <enumitem id="nottested" value="6" formRelevant="false" image="iconlib/icons/states/state_not_processed_16.png">
+            <parameter name="Background" value="F9B600"/>  <!-- orange -->
+        </enumitem>
+        <!-- Status de Workflow -->
+        <enumitem id="to_be_reviewed" value="7" virtualScope.idrefs="effective, noneffective" filterRelevant="false" formRelevant="false"/>
+        <!-- / Status de Workflow -->
+    </enum>	
+
+	<!-- GRC 100 -->
+	<enum id="custom_jobs" isMultiple="false" itemClass="JobEnumerationItem" type="Number">
+        <!-- GRC 100 -->
+		<enumitem id="updateIssuesJob" value="1">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssuePendingUpdateJob"/>
+        </enumitem>
+        <!-- GRC 100 -->
+        
+        <!-- GRC 82 -->
+		<enumitem id="updateIssueSLAUpdateJob" value="2">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/>
+        </enumitem>
+        <!-- GRC 82 -->
+    </enum>
+	<!-- GRC 100 -->
+
+<!-- Inicio GRC100 -->
+
+    <enum id="jobs" isMultiple="false" itemClass="JobEnumerationItem" type="Number">
+        <enumitem id="all" value="-1" extendedMeaning="all" />
+        <enumitem id="undefined" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+        <enumitem id="cleaningJob" value="3">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CleaningJob"/>
+        </enumitem>
+        <enumitem id="xmlExportJob" value="11">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.XMLExportJob"/>
+        </enumitem>
+        <enumitem id="xmlImportJob" value="12">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.XMLImportJob"/>
+        </enumitem>
+        <enumitem id="asynDefaultReportJob" value="14">
+            <parameter name="ClassName" value="com.idsscheer.webapps.aam.logic.jobs.AsyncDefaultReportJob"/>
+        </enumitem>
+        <enumitem id="jobListCleaningJob" value="15">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.JobListCleaningJob"/>
+        </enumitem>
+        <enumitem id="umcSyncJob" value="16">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.UMCSyncJob"/>
+        </enumitem>
+        <enumitem id="objectExportJob" value="17">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.AMLExportJob"/>
+            <parameter name="AllowedObjectTypes" value="RISK,USER" />
+        </enumitem>
+
+        <enumitem id="checkOutJob" value="21">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.offlineprocessing.jobs.CheckOutJob"/>
+            <parameter name="AllowedObjectTypes" value="TESTCASE,RISKASSESSMENT,QUESTIONNAIRE" />
+        </enumitem>
+
+        <enumitem id="offlineProcessingAutoConfirmationJob" value="22">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.offlineprocessing.jobs.OfflineProcessingAutoConfirmationJob"/>
+            <parameter name="AllowedObjectTypes" value="TESTCASE,RISKASSESSMENT,QUESTIONNAIRE" />
+        </enumitem>
+
+        <enumitem id="generatorJob" value="40">
+            <parameter name="ClientDependent" value="true"/>
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.generic.generator.GeneratorJob"/>
+            <parameter name="AllowedObjectTypes" value="TESTCASE,RISKASSESSMENT,SURVEY,SOPROCESS,AUDIT,POLICY,POLICYREVIEW,CHANGEREVIEW,CONTROLEXECUTION" />
+        </enumitem>
+        <enumitem id="followupGeneratorJob" value="41">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.generic.generator.FollowupGeneratorJob"/>
+            <parameter name="AllowedObjectTypes" value="TESTCASE" />
+        </enumitem>
+        <enumitem id="monitorJob" value="42">
+            <parameter name="ClientDependent" value="true"/>
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.generic.monitor.MonitorJob"/>
+            <parameter name="AllowedObjectTypes" value="TESTCASE,RISKASSESSMENT,SURVEY,QUESTIONNAIRE,SOPROCESS,ISSUE,AUDIT,AUDITSTEP,POLICY,POLICYCONFIRMATION,POLICYAPPROVAL,POLICYREVIEW,CHANGEREVIEW,CONTROLEXECUTION" />
+        </enumitem>
+        <enumitem id="updaterJob" value="43">
+            <parameter name="ClientDependent" value="true"/>
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.generic.updater.UpdaterJob"/>
+            <parameter name="AllowedObjectTypes" value="TESTCASE,SURVEY,POLICY" />
+        </enumitem>
+        <enumitem id="backupJob" value="44">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.BackupJob"/>
+        </enumitem>
+        <enumitem id="restoreJob" value="45">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.RestoreBackupJob"/>
+        </enumitem>
+        <enumitem id="backupClientJob" value="46">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.BackupJob"/>
+        </enumitem>
+        <enumitem id="restoreClientJob" value="47">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.RestoreBackupJob"/>
+        </enumitem>
+        <enumitem id="eventImportJob" value="48">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CEPImportJob"/>
+        </enumitem>
+        <enumitem id="transferJob" value="49">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.TransferJob"/>
+        </enumitem>
+        
+        <!-- GRC 100 -->
+		<enumitem id="updateIssuesJob" value="1">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssuePendingUpdateJob"/>
+        </enumitem>
+        <!-- GRC 100 -->
+        
+        <!-- GRC 82 -->
+		<enumitem id="updateIssueSLAUpdateJob" value="2">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/>
+        </enumitem>
+        <!-- GRC 82 -->
+        
+        <!-- GAU25 -->
+        <enumitem id="IssueAgingReplanJob" value="50">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueAgingReplanJob"/>
+        </enumitem>
+        <!-- GAU25 -->
+        
+        <!-- GRC14 -->
+        <enumitem id="RADelayMailJob" value="51">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.RADelayMailJob"/>
+        </enumitem>
+        
+        <enumitem id="CEDelayMailJob" value="52">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CEDelayMailJob"/>
+        </enumitem>
+        <!-- /GRC14 -->
+        
+    </enum>
+    
+</custom>

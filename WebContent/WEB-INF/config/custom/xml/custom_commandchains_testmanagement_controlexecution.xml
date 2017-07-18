@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<!--
+    *
+    *   CONTROLEXECUTION
+    *
+    -->
+    <catalog id="controlexecution">
+
+        <commandchain id="prepareJob">
+            <command id="dueCheck" />
+            <command id="assignedUsergroupsCheck">
+                <parameter name="usergroup_attributes" value="owner_group"/>
+            </command>
+            <command id="controlExecutionFindLinkedObjs" />
+            <command id="controlexecutionGenerate" />
+        </commandchain>
+
+        <commandchain id="prepareManual">
+            <command id="createObjectDialog" />
+            <command id="determineControlExecutionTask" />
+            <command id="checkObjectPersistent" />
+            <command id="isEventDrivenCheck" />
+            <command id="assignedUsergroupsCheck">
+                <parameter name="usergroup_attributes" value="owner_group"/>
+            </command>
+            <command id="requestDialog" >
+                <parameter name="dialogID" value="controlexecution_create" />
+            </command>
+            <command id="controlExecutionFindLinkedObjs" />
+            <command id="controlexecutionGenerate" />
+        </commandchain>
+
+        <commandchain id="insertJob">
+            <command id="prepareJobMessage">
+                <parameter name="message_template" value="generatorjob" />
+                <parameter name="list_name" value="controlexecution" />
+                <parameter name="filter_name" value="controlexecution" />
+                <parameter name="filter_value" value="open" />
+            </command>
+        </commandchain>
+
+        <commandchain id="insertManual">
+        	<!-- GAP GRC14 - Envio de Email na Criação da Execução do Controle -->
+            <command id="sendMail">
+                <parameter name="template" value="controlexecution_created"/>
+                <parameter name="to" value="owner_group"/>
+            </command>	
+            <!-- / GAP GRC14 -->
+            <command id="update">
+            </command>
+        </commandchain>
+
+        <commandchain id="executionInProgress">
+            <command id="controlExecutionCalculate" />
+            <command id="update">
+                <parameter name="owner_status" value="in_progress" />
+            </command>
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+        </commandchain>
+
+        <commandchain id="completed">
+            <command id="controlExecutionCalculate" />
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            <command id="update">
+                <parameter name="execution_date" value="$now" />
+            </command>
+            <command id="update">
+                <parameter name="owner_status" value="completed" />
+            </command>
+        </commandchain>
+
+        <commandchain id="notPossible">
+            <command id="controlExecutionCalculate" />
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            <command id="update">
+                <parameter name="execution_date" value="$now" />
+            </command>
+            <command id="update">
+                <parameter name="owner_status" value="not_possible" />
+            </command>
+        </commandchain>
+
+        <commandchain id="delete">
+            <!--<command id="checkSignOffLockForDeletion" />-->
+        </commandchain>
+
+        <commandchain id="recover"/>
+
+    </catalog>  
+
+</custom>
+
+    

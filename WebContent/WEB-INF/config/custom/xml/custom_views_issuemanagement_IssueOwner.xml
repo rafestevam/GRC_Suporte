@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+
+     <view id="IssueOwner2" view.parameter="DISTINCT">
+        <viewObject id="VO_IssueOwner_ISSUE" objectType="ISSUE" isMainViewObject="true">
+            <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true"/>
+ 			<viewColumn id="action_type" attributeType="action_type" isSelectColumn="true" isSortable="true"/>    
+            <viewColumn id="name" attributeType="name" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="plannedenddate" attributeType="plannedenddate" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="plannedenddate2" attributeType="plannedenddate" isSortable="true"/>
+            <viewColumn id="remediationMeasure" attributeType="remediationMeasure" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="description" attributeType="description" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="remark" attributeType="remark" isSortable="true"/>
+            <viewColumn id="category" attributeType="category" isSortable="true"/>
+            <viewColumn id="owner_status" attributeType="owner_status" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="reviewer_status" attributeType="reviewer_status" isSortable="true"/>
+            <viewColumn id="creator_status" attributeType="creator_status"/>
+            <viewColumn id="stateTime" attributeType="stateTime" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="priority" attributeType="priority" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="created_by_testcase" attributeType="created_by_testcase"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_IssueOwner_CREATOR" objectType="USER">
+            <viewColumn id="creator_name" attributeType="name" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="creator_version_active" attributeType="version_active"/>
+            <viewColumn id="creator_deactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_IssueOwner_OWNER" objectType="USER" restrictToCurrentUser.id="obj_id">
+            <viewColumn id="owner_ID" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_IssueOwner_REVIEWER" objectType="USER">
+            <viewColumn id="reviewer_name" attributeType="name"/>
+            <viewColumn id="reviewer_version_active" attributeType="version_active"/>
+        </viewObject>
+        <link linktype.id="3100" firstViewObject="VO_IssueOwner_ISSUE" secondViewObject="VO_IssueOwner_OWNER"/>
+        <link linktype.id="3101" firstViewObject="VO_IssueOwner_ISSUE" secondViewObject="VO_IssueOwner_REVIEWER"/>
+        <link linktype.id="3103" firstViewObject="VO_IssueOwner_ISSUE" secondViewObject="VO_IssueOwner_CREATOR"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="IssueID" compareType="EQ"/>
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="description" compareType="LIKE"/>
+                <condition column.id="remediationMeasure" compareType="LIKE"/>
+                <condition column.id="plannedenddate" compareType="GE"/>
+                <condition column.id="plannedenddate2" compareType="LE"/>
+                <condition column.id="remark" compareType="LIKE"/>
+                <condition column.id="category" compareType="IN"/>
+                <condition column.id="created_by_testcase" compareType="EQ"/>
+                <condition column.id="owner_status" compareType="IN"/>
+                <condition column.id="stateTime" compareType="IN"/>
+                <condition column.id="creator_status" compareType="IN"/>
+                <condition column.id="creator_name" compareType="LIKE"/>
+                <condition column.id="creator_version_active" compareType="EQ" value="true"/>
+                <condition column.id="reviewer_name" compareType="LIKE"/>
+                <condition column.id="reviewer_version_active" compareType="EQ" value="true"/>
+                <condition column.id="action_type" compareType="IN"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+
+    
+</custom>

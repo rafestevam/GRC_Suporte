@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<form id="FORM_AUDITSTEPTEMPLATE">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="OBJECT_DELETE"/>
+            <buttonReference button.idref="OBJECT_REACTIVATE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+        </formButtons>
+        <page id="audit_step_template" licensedComponentIds="am">
+            <rowGroup id="audit_step_template.1">
+                <row id="client_sign">
+                    <element attribute.idref="client_sign"/>
+                </row>
+                <row id="obj_id">
+                    <element attribute.idref="obj_id"/>
+                </row>
+                <row id="name">
+                    <element attribute.idref="name"/>
+                </row>
+                <row id="description">
+                    <element attribute.idref="description"/>
+                </row>
+            </rowGroup>
+           
+            <rowGroup id="audit_step_template.3">
+                <!-- "Audit start date" and "Audit end date" of parent audittemplate -->
+                <row id="audit_period" propertyKey="form.row.audittemplate.audit.period.DBI">
+                    <cell separator=" - ">
+                        <element name="auditstart" attribute.idref="audittemplate" template="childAttribute">
+                            <parameter name="listAttribute1" value="auditstartdate"/>
+                        </element>
+                        <element name="auditend" attribute.idref="audittemplate" template="childAttribute">
+                            <parameter name="listAttribute1" value="auditenddate"/>
+                        </element>
+                    </cell>
+                </row>
+            </rowGroup>
+            <rowGroup id="audit_step_template.4">
+                <row id="audit_step_period" propertyKey="form.row.auditsteptemplate.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="plannedstartdate"/>
+                        <element attribute.idref="plannedenddate"/>
+                    </cell>
+                </row>
+                <row id="processingtime">
+                    <cell>
+                        <element attribute.idref="processingtime">
+                            <parameter name="size" value="40"/>
+                        </element>
+                        <element name="postfix" attribute.idref="processingtime" template="label">
+                            <parameter name="propertyKey" value="format.duration.DBI"/>
+                            <parameter name="visibility" value="writable"/>
+                            <parameter name="mode" value="hint"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="owner_group">
+                    <element attribute.idref="owner_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                
+                </rowGroup>
+                 <!-- Customizations of GAU01 -->
+                <!-- Removal of fields
+                 <rowGroup id="audit_step_template.2">
+                <row id="step_type">
+                    <element attribute.idref="step_type"/>
+                </row>
+                <row id="scope">
+                    <element attribute.idref="scope">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+            </rowGroup>
+                -->
+            <rowGroup id="audit_step_template.5">
+
+                <row id="area">
+                    <element attribute.idref="area">
+                        <parameter name="selectionList" value="AUTO:ignoreRoleRestriction=true"/>
+                        <button.remove button.idref="RELATION_OPEN" location="toolbar"/>
+                        <button.add button.idref="RELATION_POPUP" location="row"/>
+                    </element>
+                </row>
+                <row id="process">
+                    <element attribute.idref="process">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="subprocess">
+                    <element attribute.idref="subprocess">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <row id="control">
+                    <element attribute.idref="control">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.remove location="row" button.idref="RELATION_OPEN"/>
+                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    </element>
+                </row>
+                <!-- End of Customizations of GAU01 -->
+            </rowGroup>
+            <rowGroup id="audit_step_template.6">
+                <row id="documents">
+                    <element attribute.idref="documents" template="doclink">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="steps">
+                    <element attribute.idref="steps">
+                        <parameter name="selectionList" value="AUTO:hierarchyRoot=audittemplate"/>
+                        <parameter name="allowReorder" value="true"/>
+                        <parameter name="command" value="edit"/>
+                        <button.add button.idref="RELATION_CREATE" location="toolbar" type="writable"/>
+                    </element>
+                </row>
+            </rowGroup>
+        </page>
+    </form>
+	
+</custom>

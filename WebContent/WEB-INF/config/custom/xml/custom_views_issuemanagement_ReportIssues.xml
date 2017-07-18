@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+  <view id="ReportIssues" view.parameter="DISTINCT">
+        <viewObject id="VO_ReportIssues_ISSUE" objectType="ISSUE" isMainViewObject="true">
+            <viewColumn id="creator_id" attributeType="creator_user_id"/>
+            <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="name" attributeType="name" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="creator_status" attributeType="creator_status" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="rsk_name" attributeType="rsk_name" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="ra_result" attributeType="ra_result" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="ra_residualfinal" attributeType="ra_residualfinal" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="recurrent" attributeType="recurrent" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="process_environment" attributeType="process_environment" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="cst_appsystem" attributeType="cst_appsystem" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="cst_modelname" attributeType="cst_modelname" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="cst_process" attributeType="cst_process" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <!--<viewColumn id="issueRelevantObjects" attributeType="issueRelevantObjects" isSelectColumn="true" isSortable="true" isGrouped="true"/>-->
+            <viewColumn id="replanned" attributeType="replanned" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="business_unit" attributeType="business_unit" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="issue_date" attributeType="issue_date" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="issue_date2" attributeType="issue_date" isSortable="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true" isGrouped="true"/>            
+       	    <viewColumn id="cst_rescheduling" attributeType="cst_rescheduling" isSelectColumn="true" isGrouped="true"/>
+						<viewColumn id="cst_plandtini" attributeType="cst_plandtini" isSelectColumn="true" isGrouped="true"/>
+						<viewColumn id="cst_aging_plan" attributeType="cst_aging_plan" isSelectColumn="true" isGrouped="true"/> 
+						<viewColumn id="cst_aging_pend" attributeType="cst_aging_pend" isSelectColumn="true" isGrouped="true"/>
+            
+        </viewObject>
+        <viewObject id="VO_ReportIssues_CREATOR" objectType="USER">
+            <viewColumn id="creator_name" attributeType="name" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="creator_version_active" attributeType="version_active"/>
+            <viewColumn id="creator_deactivated" attributeType="deactivated" isSelectColumn="true" isGrouped="true"/>
+        </viewObject>
+        <viewObject id="VO_ReportIssues_OWNER" objectType="USER">
+        		<viewColumn id="owner_name" attributeType="name" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="owner_id" attributeType="obj_id" isSelectColumn="true" isSortable="true" function="COUNT"/>
+            <viewColumn id="owner_version_active" attributeType="version_active"/>
+        </viewObject>
+        <link linktype.id="3100" firstViewObject="VO_ReportIssues_ISSUE" secondViewObject="VO_ReportIssues_OWNER" joinType="LEFT"/>
+        <link linktype.id="3103" firstViewObject="VO_ReportIssues_ISSUE" secondViewObject="VO_ReportIssues_CREATOR" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="IssueID" compareType="EQ"/>
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="creator_status" compareType="EQ"/>
+                <condition column.id="ra_result" compareType="LIKE"/>
+                <condition column.id="ra_residualfinal" compareType="LIKE"/>
+                <condition column.id="recurrent" compareType="EQ"/>
+                <condition column.id="owner_name" compareType="LIKE"/>
+                <condition column.id="process_environment" compareType="EQ"/>
+                <condition column.id="cst_modelname" compareType="EQ"/>
+                <condition column.id="cst_process" compareType="EQ"/>
+                <condition column.id="issue_date" compareType="GE"/>
+                <condition column.id="issue_date2" compareType="LE"/>
+                <!--<condition column.id="issueRelevantObjects" compareType="EQ"/>-->
+                <condition column.id="replanned" compareType="EQ"/>
+                <condition column.id="cst_appsystem" compareType="EQ"/>
+
+                <!--<compoundCondition conditionConnect="OR">
+                    <condition column.id="owner_version_active" compareType="EQ" value="true"/>
+                    <condition column.id="owner_version_active" compareType="ISNULL"/>
+                </compoundCondition>-->
+            </compoundCondition>
+        </conditions>
+    </view>
+  
+</custom>

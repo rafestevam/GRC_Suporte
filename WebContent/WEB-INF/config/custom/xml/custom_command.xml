@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+	<!-- Mapeamento de comando customizado para alterar atributo "testeAttr" -->
+	<!-- 
+	<blClassMapping>
+		<mappingType name="Command">
+			<mapping name="customUpdateClassification" clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateClassification" />
+		</mappingType>
+	</blClassMapping>
+	 -->
+	  
+	<!-- Inicio GAP GRC29: Customização de Comando de Cópia de ImpactTypes -->
+	<!--
+	<blClassMapping>
+		<mappingType name="Command">
+			<mapping name="createCopyOfImpactType" clsName="com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands.CustomCreateCopyOfImpactTypeCommand" />
+		</mappingType>
+	</blClassMapping>
+	-->
+	<!-- Fim GAP GRC29 --> 
+
+</custom>

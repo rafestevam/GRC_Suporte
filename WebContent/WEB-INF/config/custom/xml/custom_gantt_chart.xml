@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    <!-- start your customizing here -->
+ 
+ 
+    <!-- *********************************************************
+           Audit plan gantt charts
+          *********************************************************-->
+    <evaluation id="auditGanttChart"
+         controlName="chart"
+         type="chart"
+         filter.idref="base"
+         definitionClass="com.idsscheer.webapps.arcm.bl.component.auditmanagement.evaluation.chart.gantt.CustomAuditGanttChartDefinition"/>
+ 
+<evaluation id="auditTemplateGanttChart"
+         controlName="chart"
+         type="chart"
+         filter.idref="base"
+         definitionClass="com.idsscheer.webapps.arcm.bl.component.auditmanagement.evaluation.chart.gantt.CustomAuditGanttChartDefinition"/>
+ 
+ <evaluation id="auditPlan"
+         controlName="statistic"
+         type="statistic"
+         filter.idref="none">
+        <statistic>
+            <statistic.tree id="auditPlan"/>
+            <statistic.data.filter/>
+            <statistic.columns>
+                <statistic.data id="tree"/>
+                <statistic.calculator id="auditPlan"/>
+                <statistic.link id="auditPlan"/>
+                <statistic.column.tree width="43%" linkedNodeTypes="AUDIT, AUDITSTEP">
+                    <parameter name="windowType" value="form"/>
+                    <parameter name="preserveRightsCheck" value="true"/>
+                </statistic.column.tree>
+                <statistic.column.value dataReference="auditstartdate" width="5%" propertyKey="evaluation.audit.plan.header.start.date.DBI" template="date"/>
+                <statistic.column.value dataReference="auditenddate" width="5%" propertyKey="evaluation.audit.plan.header.end.date.DBI" template="date"/>
+                <statistic.column.value dataReference="owner_group" width="12%" propertyKey="evaluation.audit.plan.header.owner.group.DBI" template="object">
+                    <parameter name="objectType" value="USERGROUP"/>
+                </statistic.column.value>
+                <statistic.column.value dataReference="owner_status" width="5%" propertyKey="evaluation.audit.plan.header.owner.status.DBI" template="enumIcon"/>
+                <statistic.column.value dataReference="percentage_completed" width="5%" propertyKey="evaluation.audit.plan.header.percentage.completed.DBI" template="object"/>
+  
+                <statistic.column.value dataReference="scope" width="13%" propertyKey="evaluation.audit.plan.header.scope.DBI" template="object">
+                    <parameter name="objectType" value="HIERARCHY"/>
+                </statistic.column.value>
+                <statistic.column.value dataReference="scope_id" width="5%" propertyKey="evaluation.audit.plan.header.scoping.DBI" template="string" link.idref="scoping" link.type="evaluation"/>
+                <statistic.column.value dataReference="object_id" width="5%" propertyKey="html.empty.DBI" template="auditplanActions" showOnlyAt="UI"/>
+            </statistic.columns>
+        </statistic>
+        <toolbarButtons/>
+    </evaluation>
+    
+     <evaluation id="auditTemplatePlan"
+         controlName="statistic"
+         type="statistic"
+         filter.idref="none">
+        <statistic>
+            <statistic.tree id="auditPlan"/>
+            <statistic.data.filter/>
+            <statistic.columns>
+                <statistic.data id="tree"/>
+                <statistic.calculator id="auditPlan"/>
+                <statistic.column.tree width="43%" linkedNodeTypes="AUDITSTEPTEMPLATE">
+                    <parameter name="windowType" value="form"/>
+                </statistic.column.tree>
+                <statistic.column.value dataReference="auditstartdate" width="5%" propertyKey="evaluation.audit.plan.header.start.date.DBI" template="date"/>
+                <statistic.column.value dataReference="auditenddate" width="5%" propertyKey="evaluation.audit.plan.header.end.date.DBI" template="date"/>
+                <statistic.column.value dataReference="owner_group" width="20%" propertyKey="evaluation.audit.plan.header.owner.group.DBI" template="object">
+                    <parameter name="objectType" value="USERGROUP"/>
+                </statistic.column.value>
+                <statistic.column.value dataReference="owner_status" width="5%" propertyKey="evaluation.audit.plan.header.owner.status.DBI" template="enumIcon"/>
+                <statistic.column.value dataReference="percentage_completed" width="5%" propertyKey="evaluation.audit.plan.header.percentage.completed.DBI" template="object"/>
+                <statistic.column.value dataReference="scope" width="22%" propertyKey="evaluation.audit.plan.header.scope.DBI" template="object">
+                    <parameter name="objectType" value="HIERARCHY"/>
+                </statistic.column.value>
+            </statistic.columns>
+        </statistic>
+        <toolbarButtons/>
+    </evaluation>
+        
+    <actionCommands>
+ 	<objectTypeCommands>
+ 				<commandSet name="auditstep">
+            <actionCommand commandId="save" 		clsName="com.idsscheer.webapps.arcm.ui.components.auditmanagement.actioncommands.CustomAuditStepSaveActionCommand"/>
+        </commandSet>
+ 	</objectTypeCommands>
+ 	</actionCommands>
+ 
+ 	<view id="customShowAuditCompleteness" view.parameter="DISTINCT">
+        <viewObject id="VO_customShowAuditCompleteness_audit" objectType="AUDIT" isMainViewObject="true">
+            <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="versionActive" attributeType="version_active"/>
+            <viewColumn id="deactivated" attributeType="deactivated"/>
+            <viewColumn id="percentage_completed" attributeType="percentage_completed"/>
+            <viewColumn id="percentage_total" attributeType="percentage_total"/>
+            
+        </viewObject>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="obj_id" compareType="EQ"/>
+                <condition column.id="versionActive" compareType="EQ" value="true"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+    <view id="audit_owner" view.parameter="DISTINCT">
+        <viewObject id="AUDIT" objectType="AUDIT" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="execution_date" attributeType="execution_date" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="owner_status" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="reviewer_status" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="audittype" attributeType="audittype" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="plannedstartdate" attributeType="plannedstartdate"/>
+            <viewColumn id="plannedstartdate2" attributeType="plannedstartdate"/>
+            <viewColumn id="auditstartdate" attributeType="auditstartdate" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="auditenddate" attributeType="auditenddate" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="actualstartdate" attributeType="actualstartdate"/>
+            <viewColumn id="actualenddate" attributeType="actualenddate"/>
+            <viewColumn id="controlstartdate" attributeType="controlstartdate"/>
+            <viewColumn id="controlenddate" attributeType="controlenddate"/>
+            <viewColumn id="audit_client" attributeType="audit_client"/>
+            <viewColumn id="description" attributeType="description"/>
+            <viewColumn id="objectives" attributeType="objectives"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="percentage_completed" attributeType="percentage_completed" isSelectColumn="true"/>
+            <viewColumn id="percentage_total" attributeType="percentage_total" isSelectColumn="true"/>
+           
+        </viewObject>
+        <viewObject id="AUDIT_ownerGroup" objectType="USERGROUP">
+            <viewColumn id="ownerGroupID" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerGroupName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerGroupDeactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_reviewerGroup" objectType="USERGROUP">
+            <viewColumn id="reviewerGroupID" attributeType="obj_id"/>
+            <viewColumn id="reviewerGroupName" attributeType="name"/>
+            <viewColumn id="reviewerGroupDeactivated" attributeType="deactivated"/>
+        </viewObject>
+        <viewObject id="AUDIT_auditorGroup" objectType="USERGROUP">
+            <viewColumn id="auditorGroupID" attributeType="obj_id"/>
+            <viewColumn id="auditorGroupName" attributeType="name"/>
+            <viewColumn id="auditorGroupDeactivated" attributeType="deactivated"/>
+        </viewObject>
+        <viewObject id="AUDIT_scope" objectType="AUDITSCOPE">
+            <viewColumn id="scopeName" attributeType="object_name" isSelectColumn="true"/>
+            <viewColumn id="object_objtype" attributeType="object_objtype" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_owner" objectType="USER">
+            <viewColumn id="ownerId" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerDeactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_ownerSubstitute" objectType="USER">
+            <viewColumn id="substituteId" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substituteName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substituteDeactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="5160" firstViewObject="AUDIT" secondViewObject="AUDIT_ownerGroup"/>
+        <link linktype.id="5200" firstViewObject="AUDIT" secondViewObject="AUDIT_reviewerGroup"/>
+        <link linktype.id="5220" firstViewObject="AUDIT" secondViewObject="AUDIT_auditorGroup" joinType="LEFT"/>
+        <link linktype.id="5130" firstViewObject="AUDIT" secondViewObject="AUDIT_scope" joinType="LEFT"/>
+        <link linktype.id="5180" firstViewObject="AUDIT" secondViewObject="AUDIT_owner" joinType="LEFT"/>
+        <link linktype.id="5190" firstViewObject="AUDIT" secondViewObject="AUDIT_ownerSubstitute" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="description" compareType="LIKE"/>
+                <condition column.id="objectives" compareType="LIKE"/>
+                <condition column.id="controlstartdate" compareType="LE"/>
+                <condition column.id="controlenddate" compareType="GE"/>
+                <condition column.id="plannedstartdate" compareType="GE"/>
+                <condition column.id="plannedstartdate2" compareType="LE"/>
+                <condition column.id="auditstartdate" compareType="LE"/>
+                <condition column.id="auditenddate" compareType="GE"/>
+                <condition column.id="actualstartdate" compareType="LE"/>
+                <condition column.id="actualenddate" compareType="GE"/>
+                <condition column.id="audit_client" compareType="LIKE"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="owner_status" compareType="IN"/>
+                <condition column.id="reviewer_status" compareType="IN"/>
+                <condition column.id="client_sign" compareType="LIKE"/>
+                <condition column.id="ownerGroupName" compareType="LIKE"/>
+                <condition column.id="reviewerGroupName" compareType="LIKE"/>
+                <condition column.id="auditorGroupName" compareType="LIKE"/>
+                <condition column.id="scopeName" compareType="LIKE"/>
+                <condition column.id="ownerName" compareType="LIKE"/>
+                <condition column.id="substituteName" compareType="LIKE"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+
+    <view id="audit_reviewer" view.parameter="DISTINCT">
+        <viewObject id="AUDIT" objectType="AUDIT" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="execution_date" attributeType="execution_date" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="owner_status" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="reviewer_status" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="audittype" attributeType="audittype" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="plannedstartdate" attributeType="plannedstartdate"/>
+            <viewColumn id="plannedstartdate2" attributeType="plannedstartdate"/>
+            <viewColumn id="auditstartdate" attributeType="auditstartdate"/>
+            <viewColumn id="auditenddate" attributeType="auditenddate"/>
+            <viewColumn id="actualstartdate" attributeType="actualstartdate"/>
+            <viewColumn id="actualenddate" attributeType="actualenddate"/>
+            <viewColumn id="controlstartdate" attributeType="controlstartdate"/>
+            <viewColumn id="controlenddate" attributeType="controlenddate"/>
+            <viewColumn id="audit_client" attributeType="audit_client"/>
+            <viewColumn id="description" attributeType="description"/>
+            <viewColumn id="objectives" attributeType="objectives"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="percentage_completed" attributeType="percentage_completed" isSelectColumn="true"/>
+            <viewColumn id="percentage_total" attributeType="percentage_total" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_ownerGroup" objectType="USERGROUP">
+            <viewColumn id="ownerGroupID" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerGroupName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerGroupDeactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_reviewerGroup" objectType="USERGROUP">
+            <viewColumn id="reviewerGroupID" attributeType="obj_id"/>
+            <viewColumn id="reviewerGroupName" attributeType="name"/>
+            <viewColumn id="reviewerGroupDeactivated" attributeType="deactivated"/>
+        </viewObject>
+        <viewObject id="AUDIT_auditorGroup" objectType="USERGROUP">
+            <viewColumn id="auditorGroupID" attributeType="obj_id"/>
+            <viewColumn id="auditorGroupName" attributeType="name"/>
+            <viewColumn id="auditorGroupDeactivated" attributeType="deactivated"/>
+        </viewObject>
+        <viewObject id="AUDIT_scope" objectType="AUDITSCOPE">
+            <viewColumn id="scopeName" attributeType="object_name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="object_objtype" attributeType="object_objtype" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_owner" objectType="USER">
+            <viewColumn id="ownerId" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerDeactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_ownerSubstitute" objectType="USER">
+            <viewColumn id="substituteId" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substituteName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substituteDeactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="5160" firstViewObject="AUDIT" secondViewObject="AUDIT_ownerGroup"/>
+        <link linktype.id="5200" firstViewObject="AUDIT" secondViewObject="AUDIT_reviewerGroup"/>
+        <link linktype.id="5220" firstViewObject="AUDIT" secondViewObject="AUDIT_auditorGroup" joinType="LEFT"/>
+        <link linktype.id="5130" firstViewObject="AUDIT" secondViewObject="AUDIT_scope" joinType="LEFT"/>
+        <link linktype.id="5180" firstViewObject="AUDIT" secondViewObject="AUDIT_owner" joinType="LEFT"/>
+        <link linktype.id="5190" firstViewObject="AUDIT" secondViewObject="AUDIT_ownerSubstitute" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="description" compareType="LIKE"/>
+                <condition column.id="objectives" compareType="LIKE"/>
+                <condition column.id="controlstartdate" compareType="LE"/>
+                <condition column.id="controlenddate" compareType="GE"/>
+                <condition column.id="plannedstartdate" compareType="GE"/>
+                <condition column.id="plannedstartdate2" compareType="LE"/>
+                <condition column.id="auditstartdate" compareType="LE"/>
+                <condition column.id="auditenddate" compareType="GE"/>
+                <condition column.id="actualstartdate" compareType="LE"/>
+                <condition column.id="actualenddate" compareType="GE"/>
+                <condition column.id="audit_client" compareType="LIKE"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="owner_status" compareType="IN"/>
+                <condition column.id="reviewer_status" compareType="IN"/>
+                <condition column.id="client_sign" compareType="LIKE"/>
+                <condition column.id="ownerGroupName" compareType="LIKE"/>
+                <condition column.id="reviewerGroupName" compareType="LIKE"/>
+                <condition column.id="auditorGroupName" compareType="LIKE"/>
+                <condition column.id="scopeName" compareType="LIKE"/>
+                <condition column.id="ownerName" compareType="LIKE"/>
+                <condition column.id="substituteName" compareType="LIKE"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+    <view id="createdaudits" view.parameter="DISTINCT">
+        <viewObject id="AUDIT" objectType="AUDIT" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="execution_date" attributeType="execution_date" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="owner_status" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="reviewer_status" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="audittype" attributeType="audittype" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="plannedstartdate" attributeType="plannedstartdate"/>
+            <viewColumn id="plannedstartdate2" attributeType="plannedstartdate"/>
+            <viewColumn id="auditstartdate" attributeType="auditstartdate"/>
+            <viewColumn id="auditenddate" attributeType="auditenddate"/>
+            <viewColumn id="actualstartdate" attributeType="actualstartdate"/>
+            <viewColumn id="actualenddate" attributeType="actualenddate"/>
+            <viewColumn id="controlstartdate" attributeType="controlstartdate"/>
+            <viewColumn id="controlenddate" attributeType="controlenddate"/>
+            <viewColumn id="audit_client" attributeType="audit_client"/>
+            <viewColumn id="description" attributeType="description"/>
+            <viewColumn id="objectives" attributeType="objectives"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="percentage_completed" attributeType="percentage_completed" isSelectColumn="true"/>
+            <viewColumn id="percentage_total" attributeType="percentage_total" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_ownerGroup" objectType="USERGROUP">
+            <viewColumn id="ownerGroupID" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerGroupName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerGroupDeactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_reviewerGroup" objectType="USERGROUP">
+            <viewColumn id="reviewerGroupID" attributeType="obj_id"/>
+            <viewColumn id="reviewerGroupName" attributeType="name"/>
+            <viewColumn id="reviewerGroupDeactivated" attributeType="deactivated"/>
+        </viewObject>
+        <viewObject id="AUDIT_auditorGroup" objectType="USERGROUP">
+            <viewColumn id="auditorGroupID" attributeType="obj_id"/>
+            <viewColumn id="auditorGroupName" attributeType="name"/>
+            <viewColumn id="auditorGroupDeactivated" attributeType="deactivated"/>
+        </viewObject>
+        <viewObject id="AUDIT_scope" objectType="AUDITSCOPE">
+            <viewColumn id="scopeName" attributeType="object_name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="object_objtype" attributeType="object_objtype" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_owner" objectType="USER">
+            <viewColumn id="ownerId" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownerDeactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="AUDIT_ownerSubstitute" objectType="USER">
+            <viewColumn id="substituteId" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substituteName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substituteDeactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="5160" firstViewObject="AUDIT" secondViewObject="AUDIT_ownerGroup"/>
+        <link linktype.id="5200" firstViewObject="AUDIT" secondViewObject="AUDIT_reviewerGroup"/>
+        <link linktype.id="5220" firstViewObject="AUDIT" secondViewObject="AUDIT_auditorGroup" joinType="LEFT"/>
+        <link linktype.id="5130" firstViewObject="AUDIT" secondViewObject="AUDIT_scope" joinType="LEFT"/>
+        <link linktype.id="5180" firstViewObject="AUDIT" secondViewObject="AUDIT_owner" joinType="LEFT"/>
+        <link linktype.id="5190" firstViewObject="AUDIT" secondViewObject="AUDIT_ownerSubstitute" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="description" compareType="LIKE"/>
+                <condition column.id="objectives" compareType="LIKE"/>
+                <condition column.id="controlstartdate" compareType="LE"/>
+                <condition column.id="controlenddate" compareType="GE"/>
+                <condition column.id="plannedstartdate" compareType="GE"/>
+                <condition column.id="plannedstartdate2" compareType="LE"/>
+                <condition column.id="auditstartdate" compareType="LE"/>
+                <condition column.id="auditenddate" compareType="GE"/>
+                <condition column.id="actualstartdate" compareType="LE"/>
+                <condition column.id="actualenddate" compareType="GE"/>
+                <condition column.id="audit_client" compareType="LIKE"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="owner_status" compareType="IN"/>
+                <condition column.id="reviewer_status" compareType="IN"/>
+                <condition column.id="client_sign" compareType="LIKE"/>
+                <condition column.id="ownerGroupName" compareType="LIKE"/>
+                <condition column.id="reviewerGroupName" compareType="LIKE"/>
+                <condition column.id="auditorGroupName" compareType="LIKE"/>
+                <condition column.id="scopeName" compareType="LIKE"/>
+                <condition column.id="ownerName" compareType="LIKE"/>
+                <condition column.id="substituteName" compareType="LIKE"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+    <list id="audit_owner"
+         view.idref="audit_owner"
+         filter.idref="audit_owner"
+         idColumn.idref="obj_id"
+         defaultOrderColumn.idref="name"
+         allowMarkAsIssueRelevant="true"
+         relatedObjectType.idref="AUDIT"
+         propertyKey="list.audit.owner.DBI"
+         rightsPath.datakind="transactiondata">
+        <roleRestriction role="auditowner"/>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="name"/>
+            <simpleFilter filterRow.idref="plannedstartdate"/>
+        </simpleFilterRow>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="owner_status"/>
+            <simpleFilter filterRow.idref="reviewer_status"/>
+        </simpleFilterRow>
+        <listHeaderRow>
+            <listHeader rowSpan="2" column="audits_1" propertyKey="tableheader.audit.DBI" width="9%"/>
+            <listHeader rowSpan="2" column="audits_2" propertyKey="tableheader.client.DBI" width="7%"/>
+            <listHeader rowSpan="2" column="audits_3" propertyKey="tableheader.name.DBI" width="15%"/>
+            <listHeader rowSpan="2" column="audits_4" propertyKey="tableheader.auditscope.DBI" width="18%"/>
+            <listHeader rowSpan="2" column="audits_5" propertyKey="tableheader.auditowner.DBI" width="15%"/>
+            <listHeader rowSpan="2" column="audits_6" propertyKey="tableheader.audit.performed.by.DBI" width="15%"/>
+            <listHeader colSpan="2" propertyKey="tableheader.auditperiod.DBI" width="8%"/>
+            <listHeader rowSpan="2" column="audits_9" propertyKey="tableheader.audit.progress.DBI" width="5%"/>
+            <listHeader rowSpan="2" column="audits_10" propertyKey="tableheader.audit.owner.status.DBI" width="4%"/>
+            <listHeader rowSpan="2" column="audits_11" propertyKey="tableheader.audit.reviewer.status.DBI" width="4%"/>
+        </listHeaderRow>
+        <listHeaderRow>
+            <listHeader column="audits_7" propertyKey="tableheader.begin" width="4%"/>
+            <listHeader column="audits_8" propertyKey="tableheader.end" width="4%"/>
+        </listHeaderRow>
+        <column id="audits_1" dataReference.idref="obj_id" template="openObject">
+            <parameter name="idColumn" value="obj_id"/>
+        </column>
+        <column id="audits_2" dataReference.idref="client_sign" align="center"/>
+        <column id="audits_3" dataReference.idref="name"/>
+        <column id="audits_4" dataReference.idref="scopeName" template="object"/>
+        <column id="audits_5" dataReference.idref="ownerGroupName" template="object">
+            <parameter name="deactivatedColumn" value="ownerGroupDeactivated"/>
+        </column>
+        <column id="audits_6" dataReference.idref="ownerName" template="userSubstitute">
+            <parameter name="substitute" value="substituteName"/>
+            <parameter name="deactivatedProperty" value="ownerDeactivated"/>
+            <parameter name="substituteDeactivatedProperty" value="substituteDeactivated"/>
+        </column>
+        <column id="audits_7" dataReference.idref="auditstartdate" align="center"/>
+        <column id="audits_8" dataReference.idref="auditenddate" align="center"/>
+        <column id="audits_9" dataReference.idref="percentage_total" align="center" template="completeness">
+            <parameter name="progressProperty" value="percentage_completed"/>
+        </column>
+        <column id="audits_10" dataReference.idref="owner_status" align="center"/>
+        <column id="audits_11" dataReference.idref="reviewer_status" align="center"/>
+        <listButtons>
+            <buttonReference button.idref="LIST_OPEN"/>
+            <buttonReference button.idref="LIST_DELETE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="EXCEL_REPORT"/>
+        </listButtons>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+            <buttonReference button.idref="LISTROW_DELETE"/>
+        </rowButtons>
+    </list>
+
+    <list id="audit_reviewer"
+         view.idref="audit_reviewer"
+         filter.idref="audit_reviewer"
+         idColumn.idref="obj_id"
+         defaultOrderColumn.idref="name"
+         allowMarkAsIssueRelevant="true"
+         relatedObjectType.idref="AUDIT"
+         propertyKey="list.audit.reviewer.DBI"
+         rightsPath.datakind="transactiondata">
+        <roleRestriction role="auditreviewer"/>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="name"/>
+            <simpleFilter filterRow.idref="plannedstartdate"/>
+        </simpleFilterRow>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="owner_status"/>
+            <simpleFilter filterRow.idref="reviewer_status"/>
+        </simpleFilterRow>
+        <listHeaderRow>
+            <listHeader column="audits_1" propertyKey="tableheader.audit.DBI" width="7%"/>
+            <listHeader column="audits_2" propertyKey="tableheader.client.DBI" width="7%"/>
+            <listHeader column="audits_3" propertyKey="tableheader.name.DBI" width="15%"/>
+            <listHeader column="audits_4" propertyKey="tableheader.auditscope.DBI" width="18%"/>
+            <listHeader column="audits_5" propertyKey="tableheader.auditowner.DBI" width="15%"/>
+            <listHeader column="audits_6" propertyKey="tableheader.audit.performed.by.DBI" width="15%"/>
+            <listHeader column="audits_7" propertyKey="tableheader.date.DBI" width="7%"/>
+            <listHeader column="audits_8" propertyKey="tableheader.audit.progress.DBI" width="8%"/>
+            <listHeader column="audits_9" propertyKey="tableheader.audit.owner.status.DBI" width="4%"/>
+            <listHeader column="audits_10" propertyKey="tableheader.audit.reviewer.status.DBI" width="4%"/>
+        </listHeaderRow>
+        <column id="audits_1" dataReference.idref="obj_id" template="openObject">
+            <parameter name="idColumn" value="obj_id"/>
+        </column>
+        <column id="audits_2" dataReference.idref="client_sign" align="center"/>
+        <column id="audits_3" dataReference.idref="name"/>
+        <column id="audits_4" dataReference.idref="scopeName" template="object"/>
+        <column id="audits_5" dataReference.idref="ownerGroupName" template="object">
+            <parameter name="deactivatedColumn" value="ownerGroupDeactivated"/>
+        </column>
+        <column id="audits_6" dataReference.idref="ownerName" template="userSubstitute">
+            <parameter name="substitute" value="substituteName"/>
+            <parameter name="deactivatedProperty" value="ownerDeactivated"/>
+            <parameter name="substituteDeactivatedProperty" value="substituteDeactivated"/>
+        </column>
+        <column id="audits_7" dataReference.idref="execution_date" align="center"/>
+        <column id="audits_8" dataReference.idref="percentage_total" align="center" template="completeness">
+            <parameter name="progressProperty" value="percentage_completed"/>
+        </column>
+        <column id="audits_9" dataReference.idref="owner_status" align="center"/>
+        <column id="audits_10" dataReference.idref="reviewer_status" align="center"/>
+        <listButtons>
+            <buttonReference button.idref="LIST_OPEN"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="EXCEL_REPORT"/>
+        </listButtons>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+        </rowButtons>
+    </list>
+    
+    <list id="createdaudits"
+         view.idref="createdaudits"
+         filter.idref="createdaudits"
+         idColumn.idref="obj_id"
+         defaultOrderColumn.idref="name"
+         allowMarkAsIssueRelevant="true"
+         relatedObjectType.idref="AUDIT"
+         propertyKey="list.createdaudits.DBI"
+         rightsPath.datakind="transactiondata">
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="name"/>
+            <simpleFilter filterRow.idref="plannedstartdate"/>
+        </simpleFilterRow>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="owner_status"/>
+            <simpleFilter filterRow.idref="reviewer_status"/>
+        </simpleFilterRow>
+        <listHeaderRow>
+            <listHeader column="audits_1" propertyKey="tableheader.audit.DBI" width="7%"/>
+            <listHeader column="audits_2" propertyKey="tableheader.client.DBI" width="7%"/>
+            <listHeader column="audits_3" propertyKey="tableheader.name.DBI" width="16%"/>
+            <listHeader column="audits_4" propertyKey="tableheader.auditscope.DBI" width="18%"/>
+            <listHeader column="audits_5" propertyKey="tableheader.auditowner.DBI" width="15%"/>
+            <listHeader column="audits_6" propertyKey="tableheader.audit.performed.by.DBI" width="15%"/>
+            <listHeader column="audits_7" propertyKey="tableheader.date.DBI" width="6%"/>
+            <listHeader column="audits_8" propertyKey="tableheader.audit.progress.DBI" width="8%"/>
+            <listHeader column="audits_9" propertyKey="tableheader.audit.owner.status.DBI" width="4%"/>
+            <listHeader column="audits_10" propertyKey="tableheader.audit.reviewer.status.DBI" width="4%"/>
+        </listHeaderRow>
+        <column id="audits_1" dataReference.idref="obj_id" template="openObject">
+            <parameter name="idColumn" value="obj_id"/>
+        </column>
+        <column id="audits_2" dataReference.idref="client_sign" align="center"/>
+        <column id="audits_3" dataReference.idref="name"/>
+        <column id="audits_4" dataReference.idref="scopeName" template="object"/>
+        <column id="audits_5" dataReference.idref="ownerGroupName" template="object">
+            <parameter name="deactivatedColumn" value="ownerGroupDeactivated"/>
+        </column>
+        <column id="audits_6" dataReference.idref="ownerName" template="userSubstitute">
+            <parameter name="substitute" value="substituteName"/>
+            <parameter name="deactivatedProperty" value="ownerDeactivated"/>
+            <parameter name="substituteDeactivatedProperty" value="substituteDeactivated"/>
+        </column>
+        <column id="audits_7" dataReference.idref="execution_date" align="center"/>
+        <column id="audits_8" dataReference.idref="percentage_total" align="center" template="completeness">
+            <parameter name="progressProperty" value="percentage_completed"/>
+        </column>
+        <column id="audits_9" dataReference.idref="owner_status" align="center"/>
+        <column id="audits_10" dataReference.idref="reviewer_status" align="center"/>
+        <listButtons>
+            <buttonReference button.idref="LIST_OPEN"/>
+            <buttonReference button.idref="LIST_DELETE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="EXCEL_REPORT"/>
+        </listButtons>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+            <buttonReference button.idref="LISTROW_DELETE"/>
+        </rowButtons>
+    </list>
+</custom>

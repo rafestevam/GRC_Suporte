@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+   
+	<form id="FORM_CONTROLEXECUTION">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="OBJECT_DELETE"/>
+            <buttonReference button.idref="OBJECT_REACTIVATE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+        </formButtons>
+        <page id="controlexecution" licensedComponentIds="tm">
+            <rowGroup id="controlexecution.1">
+                <row id="obj_id">
+                    <element attribute.idref="obj_id"/>
+                </row>
+                <row id="client_sign">
+                    <element attribute.idref="client_sign" template="clientSign"/>
+                </row>
+<!-- DMM - 2017/07/17 - change in form to include Control ID		-->
+                <row id="control_id">
+                    <element attribute.idref="control_id"/>
+                </row>                
+                <row id="control">
+                    <element attribute.idref="control"/>
+                </row>
+                <row id="controlexecutiontask">
+                    <element attribute.idref="controlexecutiontask"/>
+                </row>
+                <row id="activities">
+                    <element attribute.idref="activities"/>
+                </row>
+                <row id="selectivity">
+                    <element attribute.idref="selectivity"/>
+                </row>
+                <row id="result_format">
+                    <element attribute.idref="result_format"/>
+                </row>
+                <row id="owner_group">
+                    <element attribute.idref="owner_group"/>
+                </row>
+                <row id="accomplish_period" propertyKey="form.row.controlexecution.accomplish.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="plannedstartdate"/>
+                        <element attribute.idref="plannedenddate">
+                            <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="documented_period" propertyKey="form.row.controlexecution.documented.period.DBI">
+                    <cell separator=" - ">
+                        <element attribute.idref="controlstartdate"/>
+                        <element attribute.idref="controlenddate"/>
+                    </cell>
+                </row>
+                <row id="documents">
+                    <element attribute.idref="documents" template="doclink">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="items_to_control">
+                    <element attribute.idref="items_to_control"/>
+                </row>
+                <row id="items_actual_controlled">
+                    <element attribute.idref="items_actual_controlled"/>
+                </row>
+                <row id="selected_sample_data">
+                    <element attribute.idref="selected_sample_data"/>
+                </row>
+                <row id="sum_items_ok">
+                    <element attribute.idref="sum_items_ok"/>
+                </row>
+                <row id="sum_items_not_ok">
+                    <element attribute.idref="sum_items_not_ok"/>
+                </row>
+                <row id="anomalies_description">
+                    <element attribute.idref="anomalies_description"/>
+                </row>
+                <row id="completion_rate">
+                    <element attribute.idref="completion_rate"/>
+                </row>
+                <row id="anomaly_rate">
+                    <element attribute.idref="anomaly_rate"/>
+                </row>
+                <row id="owner_status" propertyKey="form.row.form_controlexecution.owner_status.DBI">
+                    <element attribute.idref="owner_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="custom_controlexecstatus"> 
+                	<element attribute.idref="custom_controlexecstatus">
+                		<javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                	</element>
+                </row>
+                <row id="due_status">
+                    <element attribute.idref="due_status"/>
+                </row>
+                <!-- Inicio GAP GRC98 -->
+                <!-- 
+                <row id="owner">
+                    <element attribute.idref="owner" template="userSubstitute">
+                        <parameter name="substitute" value="owner_substitute"/>
+                    </element>
+                </row>
+                -->
+                <!-- Fim GAP GRC98 : Exclusão de Atributos Desnecessários -->
+                <row id="execution_date">
+                    <element attribute.idref="execution_date"/>
+                </row>
+                <row id="remark">
+                    <element attribute.idref="remark"/>
+                </row>
+                <!-- Inicio GAP GRC98 : Exclusão de Atributos Desnecessários -->
+                <!-- 
+                <row id="execution_documents">
+                    <element attribute.idref="execution_documents" template="doclink">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                -->
+<!--                 <row id="custom_controlexecstatus">  -->
+<!--                 	<element attribute.idref="custom_controlexecstatus"> -->
+<!--                 		<javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/> -->
+<!--                 	</element> -->
+<!--                 </row> -->
+                <!-- Fim GAP GRC98 -->
+            </rowGroup>
+        </page>
+    </form>    
+         
+</custom>

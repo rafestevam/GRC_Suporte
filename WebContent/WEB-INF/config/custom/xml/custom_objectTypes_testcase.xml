@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+   
+<objectType id="TESTCASE" xmlexport="true" extends="MONITORABLE" displayAttribute="obj_id" licensedComponentIds="tm"
+                descriptionAttributes="type, plannedstartdate, plannedenddate, controlstartdate, controlenddate, execution_date, owner_status, walkthroughName, walkthroughCounter"
+                dataKind="transactiondata"
+                mashzoneId="70" image="iconlib/icons/content/testcase_16.png">
+        <enumAttrType id="type" enumeration="testcasetype" defaultValue="1"/>
+
+<!-- GRC52 ADD -->
+         <enumAttrType id="origemteste" enumeration="origemteste_test" defaultValue="1"/>                
+<!-- GRC52 ADD -->
+
+        <listAttrType id="owner_group" maxSize="1" objectType.idref="USERGROUP" linkType="57">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="tester"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="owner" maxSize="1" objectType.idref="USER" linkType="12" />
+        <listAttrType id="owner_substitute" maxSize="1" objectType.idref="USER" linkType="3110"/>
+        <enumAttrType id="owner_status" enumeration="testcase_owner_status" defaultValue="1"/>
+
+        <listAttrType id="reviewer_group" maxSize="1" objectType.idref="USERGROUP" linkType="58">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="testreviewer"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="manager_group" maxSize="1" objectType.idref="USERGROUP" linkType="5816">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="testmanager"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="reviewer" maxSize="1" objectType.idref="USER" linkType="4005" />
+        <listAttrType id="reviewer_substitute" maxSize="1" objectType.idref="USER" linkType="4006"/>
+        <enumAttrType id="reviewer_status" enumeration="testcase_reviewer_status" defaultValue="0"/>
+        <enumAttrType id="measure" enumeration="measure" defaultValue="0"/>
+        <textAttrType id="reviewer_remark"/>
+
+        <stringAttrType id="walkthroughName" maxCharCount="50">
+            <validate name="maxlength" arg0="50"/>
+        </stringAttrType>
+        <stringAttrType id="walkthroughCounter" maxCharCount="50">
+            <validate name="maxlength" arg0="50"/>
+        </stringAttrType>
+        <textAttrType id="testingsteps"/>
+        <enumAttrType id="test_nature" enumeration="natureoftest"/>
+        <textAttrType id="testextend"/>
+        <enumAttrType id="control_frequency" enumeration="controlfrequency" defaultValue="0"/>
+        <textAttrType id="design_description"/>
+        <textAttrType id="operative_description"/>
+        <textAttrType id="remark"/>
+        <listAttrType id="documents" objectType.idref="DOCUMENT" linkType="6"/>
+        <listAttrType id="recommendations" objectType.idref="RECOMMENDATION" linkType="7" />
+        <listAttrType id="risk" maxSize="1" objectType.idref="RISK" linkType="19" usingFixChildVersion="true"/>
+        <listAttrType id="control" maxSize="1" objectType.idref="CONTROL" linkType="16" usingFixChildVersion="true"/>
+        <listAttrType id="testdefinition" maxSize="1" objectType.idref="TESTDEFINITION" linkType="14" usingFixChildVersion="true"/>
+        <listAttrType id="process" maxSize="1" objectType.idref="HIERARCHY" linkType="54" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="process"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="predecessor" maxSize="1" objectType.idref="TESTCASE" linkType="55" />
+        <listAttrType id="followup" maxSize="1" objectType.idref="TESTCASE" linkType="56"/>
+        <enumAttrType id="effectiveness" enumeration="effectiveness"/>
+        <enumAttrType id="testtype" enumeration="testtype"/>
+        <listAttrType id="testerhierarchy" maxSize="1" objectType.idref="HIERARCHY" linkType="72" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="tester"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="orgunit" maxSize="1" objectType.idref="HIERARCHY" linkType="74" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="orgunit"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="finaccount" objectType.idref="HIERARCHY" linkType="75" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="financialaccount"/>
+            </listRestriction>
+        </listAttrType>
+        <index id="I_9_1" type="normal">
+            <attributeRef attribute="type"/>
+        </index>
+        <index id="I_9_5" type="normal">
+            <attributeRef attribute="walkthroughName"/>
+        </index>
+        <index id="I_9_6" type="normal">
+            <attributeRef attribute="walkthroughCounter"/>
+        </index>
+        <!--    <index id="I_9_8" type="fullText">
+            <attributeRef attribute="A_9_17"/>
+        </index>
+        <index id="I_9_9" type="fullText">
+            <attributeRef attribute="A_9_18"/>
+        </index>
+        <index id="I_9_10" type="fullText">
+            <attributeRef attribute="A_9_19"/>
+        </index>-->
+
+        <index id="I_9_12" type="normal">
+            <attributeRef attribute="owner_status"/>
+            <attributeRef attribute="version_active"/>
+            <attributeRef attribute="deactivated"/>
+            <attributeRef attribute="plannedstartdate"/>
+        </index>
+        <index id="I_9_13" type="normal">
+            <attributeRef attribute="owner_status"/>
+            <attributeRef attribute="version_active"/>
+            <attributeRef attribute="deactivated"/>
+            <attributeRef attribute="plannedenddate"/>
+        </index>
+        <index id="I_9_14" type="normal">
+            <attributeRef attribute="version_active"/>
+            <attributeRef attribute="deactivated"/>
+            <attributeRef attribute="plannedenddate"/>
+        </index>
+
+        <index id="I_9_15" type="normal">
+            <attributeRef attribute="version_active"/>
+            <attributeRef attribute="deactivated"/>
+            <attributeRef attribute="owner_status"/>
+            <attributeRef attribute="reviewer_group"/>
+            <attributeRef attribute="reviewer_status"/>
+            <attributeRef attribute="measure"/>
+        </index>
+
+        <index id="I_TESTCASE_1" type="normal">
+            <attributeRef attribute="measure"/>
+        </index>
+    </objectType> 
+ 
+</custom>

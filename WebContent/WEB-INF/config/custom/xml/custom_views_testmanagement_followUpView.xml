@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<view id="followUpView" view.parameter="DISTINCT">
+        <viewObject id="VO_followUpView_1" objectType="TESTCASE" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="client_id" attributeType="client_objid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="client_id2" attributeType="client_objid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ta_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ta_id2" attributeType="obj_id"/>
+            <viewColumn id="plannedstartdate" attributeType="plannedstartdate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="plannedenddate" attributeType="plannedenddate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="testdate" attributeType="execution_date" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="testactiontype" attributeType="type" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="testactionstate" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="reviewer_status" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="measure" attributeType="measure" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ta_version_active" attributeType="version_active" isSortable="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="controlstartdate" attributeType="controlstartdate"/>
+            <viewColumn id="controlenddate" attributeType="controlenddate"/>
+            <viewColumn id="ta2_id" attributeType="followup"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_3" objectType="USERGROUP">
+            <viewColumn id="groupid" attributeType="obj_id" isSelectColumn="true"/>
+            <viewColumn id="groupname" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="group_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_4" objectType="USER">
+            <viewColumn id="userid" attributeType="obj_id" isSelectColumn="true"/>
+            <viewColumn id="username" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="user_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_4b" objectType="USER">
+            <viewColumn id="substitute" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="substitute_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_6" objectType="TESTDEFINITION">
+            <viewColumn id="testdef_obj_id" attributeType="obj_id"/>
+            <viewColumn id="couldfollowup" attributeType="isfollowup"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_7" objectType="HIERARCHY">
+            <viewColumn id="hierarchyid" attributeType="obj_id" isSelectColumn="true"/>
+            <viewColumn id="hierarchyname" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="hierarchy_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_8" objectType="RISK">
+            <viewColumn id="risk_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="risk_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_followUpView_9" objectType="HIERARCHY">
+            <viewColumn id="function_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="57" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_3"/>
+        <link linktype.id="12" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_4" joinType="LEFT"/>
+        <link linktype.id="14" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_6" joinType="LEFT"/>
+        <link linktype.id="72" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_7"/>
+        <link linktype.id="54" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_9" joinType="LEFT"/>
+        <link linktype.id="19" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_8" joinType="LEFT"/>
+        <link linktype.id="3110" firstViewObject="VO_followUpView_1" secondViewObject="VO_followUpView_4b" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="ta_version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
+                <condition column.id="couldfollowup" compareType="EQ" value="true"/>
+                <condition column.id="ta2_id" compareType="ISNULL"/>
+                <compoundCondition conditionConnect="OR">
+                    <compoundCondition conditionConnect="AND">
+                        <!-- 'noneffective' and review 'accepted' but measure 'none'  -->
+                        <condition column.id="testactionstate" compareType="EQ" value="4"/>
+                        <condition column.id="reviewer_status" compareType="EQ" value="1"/>
+<!--                         <condition column.id="measure" compareType="EQ" value="1"/> -->
+                    </compoundCondition>
+                    <condition column.id="testactionstate" compareType="EQ" value="5"/>
+                    <condition column.id="testactionstate" compareType="EQ" value="6"/>
+                </compoundCondition>
+                <condition column.id="testactiontype" compareType="IN"/>
+                <condition column.id="ta_id" compareType="EQ"/>
+                <condition column.id="plannedstartdate" compareType="LE"/>
+                <condition column.id="plannedenddate" compareType="GE"/>
+                <condition column.id="function_name" compareType="LIKE"/>
+                <condition column.id="risk_name" compareType="LIKE"/>
+                <condition column.id="client_sign" compareType="LIKE"/>
+                <condition column.id="client_id2" compareType="IN"/>
+                <condition column.id="username" compareType="LIKE"/>
+                <condition column.id="substitute" compareType="LIKE"/>
+            </compoundCondition>
+        </conditions>
+    </view>  
+
+</custom>

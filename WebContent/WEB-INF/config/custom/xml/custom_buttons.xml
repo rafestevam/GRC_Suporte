@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+<!-- 
+    <buttonDefinition id="customsave" image="iconlib/icons/save_16.png" requiredRights="write" requireLock="true">
+        <button id="CUSTOM_OBJECT_SAVE" defaultFunction="aam_objectcommand('customsave', null, null, '_parent')" />
+	</buttonDefinition>
+ -->
+
+    <buttonDefinition id="customrisksave" image="iconlib/icons/save_16.png" requiredRights="write" requireLock="true">
+        <button id="CUSTOM_RISK_SAVE" defaultFunction="aam_objectcommand('customrisksave', null, null, '_parent')" />
+	</buttonDefinition>
+	
+	<!-- Inicio GAP GRC14 -->
+	<buttonDefinition id="customrasave" image="iconlib/icons/save_16.png" requiredRights="write" requireLock="true">
+		<button id="CUSTOM_RA_SAVE" defaultFunction="aam_objectcommand('customrasave', null, null, '_parent')" />
+	</buttonDefinition>
+	<!-- Fim GAP GRC14 --> 
+ 
+</custom>

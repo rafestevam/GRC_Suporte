@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+    <catalog id="issuerelevantobject">
+
+        <commandchain id="prepare">
+            <command id="fillObjectContainer" />
+        </commandchain>
+
+        <commandchain id="insert" />
+
+        <commandchain id="delete" />
+
+    </catalog>
+
+</custom>
+
+    

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<tabMapping id="risk" >
+		<tTab page="1" id="risk" propertyKey="tab.risk.DBI" action="object.do?__commandId=cache&amp;__objectType=risk&amp;__formPage=1"  />
+		<tTab page="2" id="riskmanagement" propertyKey="tab.risk.management.DBI" action="object.do?__commandId=cache&amp;__objectType=risk&amp;__formPage=2"  licensedComponentId="rm"/>
+		<!-- Inicio GAP GRC98 -->
+		<tTab page="3" id="residualrisk" propertyKey="tab.risk.residualrisk.DBI" action="object.do?__commandId=cache&amp;__objectType=risk&amp;__formPage=3" objectType="RISKASSESSMENT"/>
+		<!-- Fim GAP GRC98 -->
+		<tTab id="connect" propertyKey="tab.assignment.DBI" access="persistent">
+            <tSubTab id="assessments" propertyKey="tab.risk.assessments.DBI"  action="list.do?__commandId=init&amp;__listName=risk2riskassessment_rev_refs" objectType="RISKASSESSMENT"/>
+            <tSubTab id="losses" propertyKey="tab.losses.DBI"  action="list.do?__commandId=init&amp;__listName=risk2losses" objectType="LOSS"/>
+            <tSubTab id="incidents" propertyKey="tab.incidents.DBI"  action="list.do?__commandId=init&amp;__listName=risk2incidents" objectType="INCIDENT"/>
+			<tSubTab id="controls" propertyKey="tab.controls.DBI"  action="list.do?__commandId=init&amp;__listName=risk2control" objectType="CONTROL"/>
+			<tSubTab id="testdefinition" propertyKey="tab.testdefinitions.DBI"  action="list.do?__commandId=init&amp;__listName=risk2testdefinition" objectType="TESTDEFINITION"/>
+			<tSubTab id="testcase" propertyKey="tab.testactions.DBI"  action="list.do?__commandId=init&amp;__listName=risk2testaction" objectType="TESTCASE"/>
+            <tSubTab id="policies" propertyKey="tab.policies.DBI"  action="list.do?__commandId=init&amp;__listName=risk2policies" objectType="POLICY" />
+            <tSubTab id="surveys" propertyKey="tab.surveys.DBI"  action="list.do?__commandId=init&amp;__listName=risk2surveys" objectType="SURVEY" roles="riskmanager,riskowner,riskreviewer" licensedComponentId="sm"/>
+            <tSubTab id="questionnaires" propertyKey="tab.questionnaires.DBI"  action="list.do?__commandId=init&amp;__listName=risk2questionnaires" objectType="QUESTIONNAIRE" roles="riskmanager,riskowner,riskreviewer" licensedComponentId="sm"/>
+        </tTab>
+        <tTab id="charts" propertyKey="tab.evaluations.DBI"  >
+            <tSubTab id="quantitative1" propertyKey="tab.risk.assesments.chart.quantitative.amount.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=chartRiskTrendDamageQuantitative" objectType="RISKASSESSMENT"  />
+            <tSubTab id="quantitative2" propertyKey="tab.risk.assesments.chart.quantitative.frequ.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=chartRiskTrendFrequencyQuantitative" objectType="RISKASSESSMENT"  />
+            <tSubTab id="expectedLoss" propertyKey="tab.risk.assesments.chart.expected.loss.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=chartRiskTrendExpectedLoss" objectType="RISKASSESSMENT"  />
+            <tSubTab id="qualitative1" propertyKey="tab.risk.assesments.chart.qualitative.amount.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=chartRiskTrendDamageQualitative" objectType="RISKASSESSMENT"  />
+			<tSubTab id="qualitative2" propertyKey="tab.risk.assesments.chart.qualitative.freq.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=chartRiskTrendFrequencyQualitative" objectType="RISKASSESSMENT"  />
+			<tSubTab id="qualitative3" propertyKey="tab.risk.assesments.chart.qualitative.expected.impact.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=chartRiskExpectedImpactQualitative" objectType="RISKASSESSMENT"  />
+			<tSubTab id="incurredLoss" propertyKey="tab.risk.evaluations.chart.incurred.loss.DBI" action="evaluation.do?__commandId=init&amp;__evaluationId=lossDB_Chart_Risk_Incurred_Losses" objectType="LOSS" />
+		</tTab>
+        <tTab id="issue" propertyKey="tab.related.issues.DBI" action="list.do?__commandId=init&amp;__listName=RelatedIssues" objectType="ISSUE"/>
+		<tTab id="protocol" propertyKey="tab.protocol.DBI" >
+			<tSubTab id="protocol_risk" propertyKey="tab.risk.DBI" action="object.do?__objectType=risk&amp;__commandId=protocol"  />
+			<tSubTab id="protocol_controls" propertyKey="tab.controls.DBI"  action="object.do?__objectType=risk&amp;__commandId=protocol&amp;relationprotocol=controls" objectType="CONTROL"/>
+ 		</tTab>
+    </tabMapping>	
+
+</custom>

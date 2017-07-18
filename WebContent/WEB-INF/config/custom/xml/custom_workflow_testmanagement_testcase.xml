@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<workflow objectType.id="testcase">
+
+        <state.initial>
+            <prepare chain.id="prepareJob">
+                <permission.job id="generatorJob" />
+            </prepare>
+            <prepare chain.id="prepareFollowupJob">
+                <permission.job id="followupGeneratorJob" />
+            </prepare>
+            <prepare chain.id="prepareManual">
+                <permission.workflow id="testcase"/>
+                <permission.job id="eventImportJob"/>
+            </prepare>
+        </state.initial>
+
+        <state.prepared>
+            <insert chain.id="insertJob" to.state.id="openForExecution">
+                <permission.job id="generatorJob" />
+            </insert>
+            <insert chain.id="insertFollowupJob" to.state.id="openForExecution">
+                <permission.job id="followupGeneratorJob" />
+            </insert>
+
+            <!-- event enabling: generation of test cases in status new or in process -->
+            <insert chain.id="insertManual" to.state.id="openForExecution">
+                <permission.workflow id="testcase"/>
+                <permission.job id="eventImportJob"/>
+                <attribute.change id="owner_status" to="new"/>
+            </insert>
+            <insert chain.id="executionInProgress" to.state.id="openForExecution">
+                <permission.job id="eventImportJob"/>
+                <attribute.change id="owner_status" to="in_process"/>
+            </insert>
+
+            <!-- event enabling: generation of test cases in status effective or not effective -->
+<!--             <insert chain.id="executionEffective" to.state.id="executedAsEffective"> -->
+            <insert chain.id="executionEffective" to.state.id="openForReview">
+                <permission.job id="eventImportJob"/>
+                <attribute.change id="owner_status" to="effective"/>
+            </insert>
+            <insert chain.id="executionNotEffective" to.state.id="openForReview">
+                <permission.job id="eventImportJob"/>
+                <attribute.change id="owner_status" to="noneffective"/>
+            </insert>
+        </state.prepared>
+
+        <state id="openForExecution">
+            <attribute id="owner_status" value="open"/>
+            <attribute id="reviewer_status" value="to_be_reviewed"/>
+            <transitions>
+                <update to.state.id="openForExecution" chain.id="executionInProgress">
+                    <attribute.change id="owner_status"     to="open"/>
+                </update>
+<!--                 <update to.state.id="executedAsEffective" chain.id="executionEffective"> -->
+				<update to.state.id="openForReview" chain.id="executionEffective">
+                    <attribute.change id="owner_status"  to="effective"/>
+                </update>
+                <update to.state.id="openForReview" chain.id="executionNotEffective">
+                    <attribute.change id="owner_status"  to="noneffective"/>
+                </update>
+                <update to.state.id="executedAsNotTestable" chain.id="executionNotTestable">
+                    <attribute.change id="owner_status"  to="nottestable"/>
+                </update>                                                     
+                <update to.state.id="executedAsNotTested" chain.id="executionNotTested">
+                    <permission.workflow id="testcase"/>
+                    <permission.job id="monitorJob"/>
+                    <attribute.change id="owner_status"  to="nottested"/>
+                </update>
+                <delete to.state.id="executionDeleted" chain.id="delete" />
+            </transitions>
+        </state>
+
+        <state id="openForReview">
+<!--             <attribute id="owner_status" value="noneffective"/> -->
+			<attribute id="owner_status" value="to_be_reviewed"/>
+            <attribute id="reviewer_status" value="to_be_reviewed"/>
+            <transitions>
+                <!-- accept as not effective, create deficiency or issue according to chosen measure -->
+                <update to.state.id="reviewAccepted" chain.id="reviewAccept">
+                    <attribute.change id="reviewer_status"  to="accepted"/>
+                </update>
+                <update to.state.id="openForExecution" chain.id="reviewReject">
+                    <attribute.change id="reviewer_status"  to="rejected"/>
+                </update>
+                <!-- update if a followup is created by the followup generator and the follow up attribute is filled -->
+                <update to.state.id ="openForReview" chain.id="followupWhileReview">
+                    <permission.job id="followupGeneratorJob" />
+                    <attribute.change id="reviewer_status"  to="unspecified"/>
+                </update>
+
+            </transitions>
+        </state>
+
+        <state id="reviewAccepted">
+            <attribute id="owner_status" value="to_be_reviewed"/>
+            <attribute id="reviewer_status" value="accepted"/>
+            <attribute id="measure" value="unspecified, specifiedByReviewer"/>
+            <transitions>
+                <!-- when the assigned deficiency or issue was deleted (only possible if measure was 'issue' or 'deficiency' before) -->
+                <update to.state.id="measureDeactivated" chain.id="measureDeactivated">
+                    <permission.workflow id="deficiency"/>
+                    <permission.workflow id="issue"/>
+                    <attribute.change id="measure"  to="deactivated"/>
+                </update>
+            </transitions>
+        </state>
+
+        <state id="measureDeactivated">
+            <attribute id="owner_status" value="to_be_reviewed"/>
+            <attribute id="reviewer_status" value="accepted"/>
+            <attribute id="measure" value="deactivated"/>
+            <transitions>
+                <!-- when the previous measure was deactivated and this time the reviewer decides it to be 'none' -->
+                <update to.state.id="reviewAccepted" chain.id="newMeasureNone">
+                    <attribute.change id="measure"  to="none"/>
+                </update>
+                <!-- when a new deficiency should be created (only possible if measure is changed from "deactivated" to "deficiency"-->
+                <update to.state.id="reviewAccepted" chain.id="reviewCreateDeficiency">
+                    <attribute.change id="measure"  to="deficiency"/>
+                </update>
+                <!-- when a new issue should be created (only possible if measure is changed from "deactivated" to "issue" -->
+                <update to.state.id="reviewAccepted" chain.id="reviewCreateIssue">
+                    <attribute.change id="measure"  to="issue"/>
+                </update>
+            </transitions>
+        </state>
+
+<!--         <state id="executedAsEffective"> -->
+<!--             <attribute id="owner_status" value="effective"/> -->
+<!--             <attribute id="reviewer_status" value="to_be_reviewed"/> -->
+<!--         </state> -->
+
+        <state id="executedAsNotTestable">
+            <attribute id="owner_status" value="nottestable"/>
+            <attribute id="reviewer_status" value="to_be_reviewed"/>
+            <transitions>
+                <!-- update if a followup is created by the followup generator and the follow up attribute is filled -->
+                <update to.state.id ="executedAsNotTestable" chain.id="followupNotTestable">
+                    <permission.job id="followupGeneratorJob" />
+                </update>
+            </transitions>
+        </state>
+
+        <state id="executedAsNotTested">
+            <attribute id="owner_status" value="nottested"/>
+            <attribute id="reviewer_status" value="to_be_reviewed"/>
+            <transitions>
+                <!-- update if a followup is created by the followup generator and the follow up attribute is filled -->
+                <update to.state.id ="executedAsNotTested" chain.id="followupNotTested">
+                    <permission.job id="followupGeneratorJob" />
+                </update>
+            </transitions>
+        </state>
+
+        <state.deleted id="executionDeleted">
+            <attribute id="owner_status" value="open"/>
+            <attribute id="reviewer_status" value="to_be_reviewed"/>
+            <recover to.state.id="openForExecution" chain.id="recover"/>
+        </state.deleted>
+
+    </workflow>
+
+</custom>

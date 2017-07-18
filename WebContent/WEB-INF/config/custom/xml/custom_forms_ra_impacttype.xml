@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+  
+    <form id="FORM_RA_IMPACTTYPE">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+        </formButtons>
+        <page id="frequency">
+            <rowGroup id="riskassessment_impacttype.1">          
+                <row id="type">
+                    <element attribute.idref="type">
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+            </rowGroup>
+            <rowGroup id="riskassessment_impacttype.2">
+                <row id="amount_of_damage"
+                     propertyKey="form.row.risk.assessment.loss.DBI"
+                     errorModel="local">
+                    <cell separator="{td}">
+                        <element attribute.idref="min_loss" name="min_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.minimum.DBI"/>
+                        </element>
+                        <element attribute.idref="min_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="maxLength" value="20"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="avg_loss" name="avg_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.average.DBI"/>
+                        </element>
+                        <element attribute.idref="avg_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="maxLength" value="20"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="max_loss" name="max_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.maximum.DBI"/>
+                        </element>
+                        <element attribute.idref="max_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="maxLength" value="20"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="frequ_amount_of_damage"
+                     propertyKey="form.row.risk.assessment.frequ.loss.DBI"
+                     errorModel="local">
+                    <cell separator="{td}">
+                        <element attribute.idref="frequ_min_loss" name="frequ_min_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.minimum.DBI"/>
+                        </element>
+                        <element attribute.idref="frequ_min_loss" template="textField">
+                            <parameter name="alignment" value="right"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="frequ_avg_loss" name="frequ_avg_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.average.DBI"/>
+                        </element>
+                        <element attribute.idref="frequ_avg_loss" template="textField">
+                            <parameter name="alignment" value="right"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="frequ_max_loss" name="frequ_max_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.maximum.DBI"/>
+                        </element>
+                        <element attribute.idref="frequ_max_loss" template="textField">
+                            <parameter name="alignment" value="right"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="red_amount_of_damage"
+                     propertyKey="form.row.risk.assessment.reduced.loss.DBI"
+                     errorModel="local">
+                    <cell separator="{td}">
+                        <element attribute.idref="red_min_loss" name="red_min_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.minimum.DBI"/>
+                        </element>
+                        <element attribute.idref="red_min_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="maxLength" value="20"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="red_avg_loss" name="red_avg_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.average.DBI"/>
+                        </element>
+                        <element attribute.idref="red_avg_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="maxLength" value="20"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="red_max_loss" name="red_max_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.maximum.DBI"/>
+                        </element>
+                        <element attribute.idref="red_max_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="maxLength" value="20"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="frequ_red_amount_of_damage"
+                     propertyKey="form.row.risk.assessment.reduced.frequ.loss.DBI"
+                     errorModel="local">
+                    <cell separator="{td}">
+                        <element attribute.idref="red_frequ_min_loss" name="frequ_red_min_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.minimum.DBI"/>
+                        </element>
+                        <element attribute.idref="red_frequ_min_loss" template="textField">
+                            <parameter name="alignment" value="right"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="red_frequ_avg_loss" name="frequ_red_avg_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.average.DBI"/>
+                        </element>
+                        <element attribute.idref="red_frequ_avg_loss" template="textField">
+                            <parameter name="alignment" value="right"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="red_frequ_max_loss" name="frequ_red_max_amount_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.maximum.DBI"/>
+                        </element>
+                        <element attribute.idref="red_frequ_max_loss" template="textField">
+                            <parameter name="alignment" value="right"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                </row>
+            </rowGroup>
+            <rowGroup id="riskassessment_impacttype.3">
+                <row id="exp_loss"
+                     propertyKey="form.row.risk.assessment.expected.loss.DBI"
+                     errorModel="local">
+                    <cell separator="{td}">
+                        <element attribute.idref="exp_min_loss" name="min_exp_loss_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.minimum.DBI"/>
+                        </element>
+                        <element attribute.idref="exp_min_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="exp_avg_loss" name="avg_exp_loss_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.average.DBI"/>
+                        </element>
+                        <element attribute.idref="exp_avg_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="exp_max_loss" name="max_exp_loss_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.maximum.DBI"/>
+                        </element>
+                        <element attribute.idref="exp_max_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                </row>
+                <row id="red_exp_loss"
+                     propertyKey="form.row.risk.assessment.reduced.expected.loss.DBI"
+                     errorModel="local">
+                    <cell separator="{td}">
+                        <element attribute.idref="red_exp_min_loss" name="red_min_exp_loss_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.minimum.DBI"/>
+                        </element>
+                        <element attribute.idref="red_exp_min_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="red_exp_avg_loss" name="red_avg_exp_loss_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.average.DBI"/>
+                        </element>
+                        <element attribute.idref="red_exp_avg_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                    <cell separator="{td}">
+                        <element attribute.idref="red_exp_max_loss" name="red_max_exp_loss_title" template="label">
+                            <parameter name="propertyKey" value="form.risk.assessment.maximum.DBI"/>
+                        </element>
+                        <element attribute.idref="red_exp_max_loss" template="stringEnum">
+                            <parameter name="enumProperty" value="currency"/>
+                            <parameter name="size" value="20"/>
+                        </element>
+                    </cell>
+                </row>
+            </rowGroup>
+            <rowGroup id="riskassessment_impacttype.4">
+                <row id="lossQual"
+                     errorModel="local">
+                    <element attribute.idref="lossQual" template="rmSelection">
+                        <parameter name="source" value="quotations" />
+                        <!-- <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/> -->
+                        <javaScriptEvent expression="aam_objectcommand('customriskcache')" name="onChange"/>
+                    </element>
+                </row>
+                <!-- Inicio GAP GRC29: Exclusão de atributos desnecessários -->                 
+                <row id="frequLossQual"
+                     errorModel="local">
+                    <element attribute.idref="frequLossQual" template="rmSelection">
+                        <parameter name="source" value="frequencies" />
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                <row id="redLossQual"
+                     errorModel="local">
+                    <element attribute.idref="redLossQual" template="rmSelection">
+                        <parameter name="source" value="quotations" />
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                <row id="redFrequLossQual"
+                     errorModel="local">
+                    <element attribute.idref="redFrequLossQual" template="rmSelection">
+                        <parameter name="source" value="frequencies" />
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                <!-- Exclusão de Atributos Desnecessários -->
+<!--                 <row id="th_impact_score"> -->
+<!--                     <element attribute.idref="th_impact_score"> -->
+<!--                         <parameter name="maxLength" value="20"/> -->
+<!--                         <parameter name="size" value="20"/> -->
+<!--                     </element> -->
+<!--                 </row> -->
+<!--                 <row id="th_red_impact_score"> -->
+<!--                     <element attribute.idref="th_red_impact_score"> -->
+<!--                         <parameter name="maxLength" value="20"/> -->
+<!--                         <parameter name="size" value="20"/> -->
+<!--                     </element> -->
+<!--                 </row> -->
+                <!-- Fim GAP GRC29 -->
+            </rowGroup>
+        </page>
+    </form>
+   
+</custom>

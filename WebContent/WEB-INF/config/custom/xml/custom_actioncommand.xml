@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<actionCommands>
+		<commandIds>
+			<commandId id="customrisksave" description="Custom Risk Save Action" />
+			<commandId id="customrasave" description="Custom Risk Assessment Save Action" />
+			<commandId id="customriskcache" description="Custom Risk Assessment Cache Action" />
+			<commandId id="customriskload" description="Custom Risk Assessment Load Action" />
+			<commandId id="customcachersk" description="Custom Cache Action for Risk" />
+			<commandId id="customissuedate" description="Custom Issue Issue Date" />	
+			<commandId id="customissuegetrisk" description="Custom pegar risco" />
+		</commandIds>
+		
+		
+		<objectTypeCommands>
+			<commandSet name="risk">
+				<actionCommand commandId="customrisksave" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomRiskSaveCommand" /> <!-- GAP GRC39 -->
+				<actionCommand commandId="customcachersk" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomCacheRsk" /> <!-- GAP GRC39 -->
+			</commandSet>
+			
+			<commandSet name="riskassessment">
+				<actionCommand commandId="customriskcache" clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskCacheCommand" /><!-- GAP GRC39 -->
+				<actionCommand commandId="customriskload"  clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskLoadCommand" /><!-- GAP GRC39 -->
+				<actionCommand commandId="customrasave"    clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRASaveCommand" /><!-- GAP GRC14 -->
+			</commandSet>
+			
+			<commandSet name="control">
+				<actionCommand commandId="save"        clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomSaveControl" /><!-- GAP GRC14 -->
+				<actionCommand commandId="saveAndNext" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomSaveControl" /><!-- GAP GRC14 -->
+			</commandSet>
+			
+			<commandSet name="controlexecution">
+				<actionCommand commandId="save"        clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomSaveCEActionCommand" /><!-- GAP GRC14 -->
+			</commandSet>
+			
+			<commandSet name="testcase">						
+				<actionCommand commandId="save" 			clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomTestcaseSaveActionCommand"/>
+				<actionCommand commandId="saveAndNext" 		clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomTestcaseSaveActionCommand"/>
+			</commandSet>			
+		
+			<commandSet name="issue">
+				<actionCommand commandId="customissuedate"    clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueDateCommand" />									
+	            <actionCommand commandId="save"               clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueSaveActionCommand" />
+    	        <actionCommand commandId="customissuegetrisk" clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueGetRiskActionCommand" />					
+		    </commandSet>			    
+		</objectTypeCommands>
+		
+		<listCommands>
+			<commandSet name="common">
+<!-- 				<actionCommand commandId="attach" 	   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomAttachmentActionCommand"/>GAP GRC14 -->
+<!-- 				<actionCommand commandId="attachNew"   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomNewAttachmentActionCommand"/>GAP GRC14 -->
+<!-- 				<actionCommand commandId="detach" 	   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomDetachmentActionCommand"/>GAP GRC14 -->
+			</commandSet>
+		</listCommands>
+			
+		
+	</actionCommands>
+
+</custom>

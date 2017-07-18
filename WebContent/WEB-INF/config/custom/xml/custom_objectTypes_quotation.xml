@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+  
+    <objectType id="QUOTATION" extends="VERSION" xmlexport="true" displayAttribute="name" descriptionAttributes="description"
+                clientDependent="true" licensedComponentIds="rm" image="iconlib/icons/quotation_16.png">
+        <stringAttrType id="name" maxCharCount="200" />
+        <stringAttrType id="description" maxCharCount="200"/>
+        <doubleAttrType id="value" />
+        
+        <!-- Inicio GAP GRC29 -->
+		<!-- <doubleAttrType id="height" /> -->
+		<!-- Fim GAP GRC29 -->
+		
+        <booleanAttrType id="isDefault" defaultValue="false"/>
+        <booleanAttrType id="isSnapshot" defaultValue="false"/>
+        <longAttrType id="relatedObjectId" objectType.idref="IMPACTTYPE"/>
+        <longAttrType id="originalQuotation" objectType.idref="QUOTATION"/>
+
+        <index id="I_QUOTATION_S" type="normal">
+            <attributeRef attribute="isSnapshot"/>
+        </index>
+        <index id="I_QUOTATION_D" type="normal">
+            <attributeRef attribute="isDefault"/>
+        </index>
+        <index id="I_QUOTATION_R" type="normal">
+            <attributeRef attribute="relatedObjectId"/>
+        </index>
+    </objectType>
+    
+</custom>

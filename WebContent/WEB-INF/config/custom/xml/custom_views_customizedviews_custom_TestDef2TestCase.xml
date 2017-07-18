@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<view id="custom_TestDef2TestCase" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+		<viewObject id="VO_testdef" objectType="TESTDEFINITION" isMainViewObject="true">
+			<viewColumn id="tdef_id" attributeType="obj_id" isSelectColumn="true"/>
+			<viewColumn id="tdef_name" attributeType="name" isSelectColumn="true"/>	
+		</viewObject>
+		<viewObject id="VO_testcase" objectType="TESTCASE">
+            <viewColumn id="tcase_id" attributeType="obj_id" isSelectColumn="true"/>
+<!--             <viewColumn id="tcae_status" attributeType="custom_controlexecstatus" isSelectColumn="true"/> -->
+            <viewColumn id="tcase_create_date" attributeType="create_date" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="tcase_owner_status" attributeType="owner_status" isSelectColumn="true"/>
+            <viewColumn id="tcase_version_number" attributeType="version_number" isSelectColumn="true"/>
+            <viewColumn id="tcase_version_active" attributeType="version_active" />
+		</viewObject>
+		<link linktype.id="14" firstViewObject="VO_testdef" secondViewObject="VO_testcase"/>
+		<conditions>
+			<compoundCondition conditionConnect="AND">
+				<condition column.id="tcase_version_active" compareType="EQ" value="true"/>
+				<condition column.id="tdef_id" compareType="EQ" currentObjectType.id="TESTDEFINITION" currentAttributeType.id="obj_id"/>
+				<condition column.id="tdef_id" compareType="EQ"/>
+<!-- 				<condition column.id="ce_owner_status" compareType="EQ" value="3"/> -->
+			</compoundCondition>
+		</conditions>
+	</view>
+
+</custom>

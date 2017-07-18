@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<view id="custom_control2testdef" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_cstrisk2testdefinition_testdefinition" objectType="TESTDEFINITION" isMainViewObject="true">
+            <viewColumn id="testdefinition_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="testdefinition_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="testdefinition_version_number" attributeType="version_number" isSelectColumn="true"/>
+            <viewColumn id="testfrequency" attributeType="frequency" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="duration" attributeType="duration" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="startdate" attributeType="startdate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="test_nature" attributeType="test_nature"/>
+            <viewColumn id="testtype" attributeType="testtype"/>
+            <viewColumn id="testdefinition_version_active" attributeType="version_active"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_cstrisk2testdefinition_control" objectType="CONTROL">
+            <viewColumn id="control_id" attributeType="control_id" isSelectColumn="true"/>
+<!--             <viewColumn id="control_version_number" attributeType="version_number" isSelectColumn="true"/> -->
+            <viewColumn id="control_version_active" attributeType="version_active" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="15" firstViewObject="VO_cstrisk2testdefinition_control" secondViewObject="VO_cstrisk2testdefinition_testdefinition"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="testdefinition_version_active" compareType="EQ" value="true"/>
+                <condition column.id="control_version_active" compareType="EQ" value="true"/>
+                <condition column.id="control_id" compareType="EQ" currentObjectType.id="CONTROL" currentAttributeType.id="control_id"/>
+<!--                 <condition column.id="testdefinition_obj_id" compareType="EQ"/> -->
+<!--                 <condition column.id="testdefinition_name" compareType="LIKE"/> -->
+<!--                 <condition column.id="testfrequency" compareType="EQ"/> -->
+<!--                 <condition column.id="test_nature" compareType="EQ"/> -->
+<!--                 <condition column.id="testtype" compareType="EQ"/> -->
+            </compoundCondition>
+        </conditions>
+    </view>
+
+</custom>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+ <!-- *********************************************************
+           Audit plan gantt charts
+          *********************************************************-->
+<!--     <evaluation id="auditGanttChart" -->
+<!--          controlName="chart" -->
+<!--          type="chart" -->
+<!--          filter.idref="base" -->
+<!--          definitionClass="com.idsscheer.webapps.arcm.bl.component.auditmanagement.evaluation.chart.gantt.CIPAuditGanttChartDefinition"/> -->
+ 
+<!-- 	<evaluation id="auditTemplateGanttChart" -->
+<!--          controlName="chart" -->
+<!--          type="chart" -->
+<!--          filter.idref="base" -->
+<!--          definitionClass="com.idsscheer.webapps.arcm.bl.component.auditmanagement.evaluation.chart.gantt.CIPAuditGanttChartDefinition"/> -->
+
+</custom>
