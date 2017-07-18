@@ -304,11 +304,8 @@
         <enumitem id="noneffective" value="4" image="iconlib/icons/states/state_noneffective_16.png">
             <parameter name="Background" value="EF4231"/>  <!-- red -->
         </enumitem>
-<<<<<<< HEAD
+
         <!-- DMM - 12/07/2017 : Excluir o status não realizavel do campo status do teste de controle -->
-=======
-        <!-- Excluir o status não realizável do campo status do teste de controle - DMM - 2017/07/12 -->
->>>>>>> refs/heads/DEV_DANIEL
         <enumitem id="nottestable" value="5" image="iconlib/icons/states/state_not_testable_16.png" formRelevant="false" filterRelevant="false">
             <parameter name="Background" value="FFDE00"/>  <!-- yellow -->
         </enumitem>

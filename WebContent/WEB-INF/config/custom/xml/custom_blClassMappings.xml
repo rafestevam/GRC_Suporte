@@ -19,10 +19,7 @@
 	    	<mapping name="customUpdReviewerStatus" clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateReviewerStatus"/>
 	    	<mapping name="customCreateIssue"       clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomCreateIssueCommand"/>
 	    	<mapping name="testdefinitionFindLinkedControlAndRisks" clsName="com.idsscheer.webapps.arcm.bl.component.testmanagement.commands.job.generator.CustomTestdefinitionFindLinkedControlAndRisksCommand" />
-<<<<<<< HEAD
 <!-- 	    	<mapping name="customSaveDependentObjects"     clsName="com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands.CustomSaveDependentObjectsCommand" /> -->
-=======
->>>>>>> refs/heads/DEV_DANIEL
 	    </mappingType>
 	    
 	    <mappingType name="objectTreeProvider">
