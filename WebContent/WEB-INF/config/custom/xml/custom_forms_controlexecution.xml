@@ -20,6 +20,10 @@
                 <row id="client_sign">
                     <element attribute.idref="client_sign" template="clientSign"/>
                 </row>
+<!-- DMM - 2017/07/17 - change in form to include Control ID		-->
+                <row id="control_id">
+                    <element attribute.idref="control_id"/>
+                </row>                
                 <row id="control">
                     <element attribute.idref="control"/>
                 </row>

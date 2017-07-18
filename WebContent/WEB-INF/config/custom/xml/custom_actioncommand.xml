@@ -5,6 +5,7 @@
 		<commandIds>
 			<commandId id="customrisksave" description="Custom Risk Save Action" />
 			<commandId id="customrasave" description="Custom Risk Assessment Save Action" />
+<<<<<<< HEAD
 			<commandId id="customracache" description="Custom Risk Assessment Cache Action 2" />
 			<commandId id="customriskcache" description="Custom Risk Assessment Cache Action" />
 			<commandId id="customriskload" description="Custom Risk Assessment Load Action" />
@@ -25,6 +26,26 @@
 				<actionCommand commandId="customriskload"  clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskLoadCommand" /><!-- GAP GRC39 -->
 				<actionCommand commandId="customrasave"    clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRASaveCommand" /><!-- GAP GRC14 -->
 				<actionCommand commandId="customracache"   clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRACacheCommand" /><!-- GAP GRC14 -->
+=======
+			<commandId id="customriskcache" description="Custom Risk Assessment Cache Action" />
+			<commandId id="customriskload" description="Custom Risk Assessment Load Action" />
+			<commandId id="customcachersk" description="Custom Cache Action for Risk" />
+			<commandId id="customissuedate" description="Custom Issue Issue Date" />	
+			<commandId id="customissuegetrisk" description="Custom pegar risco" />
+		</commandIds>
+		
+		
+		<objectTypeCommands>
+			<commandSet name="risk">
+				<actionCommand commandId="customrisksave" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomRiskSaveCommand" /> <!-- GAP GRC39 -->
+				<actionCommand commandId="customcachersk" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomCacheRsk" /> <!-- GAP GRC39 -->
+			</commandSet>
+			
+			<commandSet name="riskassessment">
+				<actionCommand commandId="customriskcache" clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskCacheCommand" /><!-- GAP GRC39 -->
+				<actionCommand commandId="customriskload"  clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskLoadCommand" /><!-- GAP GRC39 -->
+				<actionCommand commandId="customrasave"    clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRASaveCommand" /><!-- GAP GRC14 -->
+>>>>>>> refs/heads/DEV_DANIEL
 			</commandSet>
 			
 			<commandSet name="control">

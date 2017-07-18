@@ -175,13 +175,11 @@ end
 ###########DMM 2017-07-14 Read-only FUP
 rule "read_only_fup [I,V]"
 
-      salience 900
-      no-loop true
-      
-      when
-      
-      then
-           set "isfollowup" readonly
+	salience 900
+	no-loop true
+	
+	when
+	
+	then
+		set "isfollowup" readonly
 end
-
-

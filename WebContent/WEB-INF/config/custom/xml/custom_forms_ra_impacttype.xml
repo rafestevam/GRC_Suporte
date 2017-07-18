@@ -219,6 +219,7 @@
                      errorModel="local">
                     <element attribute.idref="lossQual" template="rmSelection">
                         <parameter name="source" value="quotations" />
+<<<<<<< HEAD
 <!--                         <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/> -->
                         <javaScriptEvent expression="aam_objectcommand('customriskcache')" name="onChange"/>
                     </element>
@@ -230,6 +231,18 @@
                         <parameter name="source" value="frequencies" />
 <!--                         <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/> -->
 						<javaScriptEvent expression="aam_objectcommand('customracache')" name="onChange"/>
+=======
+                        <!-- <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/> -->
+                        <javaScriptEvent expression="aam_objectcommand('customriskcache')" name="onChange"/>
+                    </element>
+                </row>
+                <!-- Inicio GAP GRC29: Exclusão de atributos desnecessários -->                 
+                <row id="frequLossQual"
+                     errorModel="local">
+                    <element attribute.idref="frequLossQual" template="rmSelection">
+                        <parameter name="source" value="frequencies" />
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+>>>>>>> refs/heads/DEV_DANIEL
                     </element>
                 </row>
                 <row id="redLossQual"

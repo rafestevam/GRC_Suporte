@@ -585,3 +585,18 @@ rule "set reviewer_status [I,V]"
 end
 
 ##############Customize GRC52 FIM
+
+#############DMM 2017/07/14 - disable_test_case_fields 
+rule "disable_test_case_fields [I,V]"
+
+	salience 90  
+	no-loop true
+	when
+	
+	then
+		set "operative_description" invisible
+		set "control_frequency" invisible
+#########DMM - Disable measure		
+		set "measure" invisible
+
+end
