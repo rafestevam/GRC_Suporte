@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+	<!-- Returns all control execution tasks -->
+	<view id="controlexecutiontask" view.parameter="DISTINCT">
+        <viewObject id="VO_cet_task" objectType="CONTROLEXECUTIONTASK" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign" isSelectColumn="true"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true"/>
+<!--             <viewColumn id="id" attributeType="id" isSortable="true"/> --><!-- REO 17.07.2017 -->
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="frequency" attributeType="frequency" isSelectColumn="true"/>
+            <viewColumn id="activities" attributeType="activities" isSelectColumn="true"/>
+            <viewColumn id="selectivity" attributeType="selectivity" isSelectColumn="true"/>
+            <viewColumn id="result_format" attributeType="result_format" isSelectColumn="true"/>
+            <viewColumn id="event_driven_allowed" attributeType="event_driven_allowed" isSelectColumn="true"/>
+            <viewColumn id="startdate" attributeType="startdate" isSelectColumn="true"/>
+            <viewColumn id="enddate" attributeType="enddate" isSelectColumn="true"/>
+            <viewColumn id="duration" attributeType="duration" isSelectColumn="true"/>
+            <viewColumn id="control_period_offset" attributeType="control_period_offset" isSelectColumn="true"/>
+            <!-- cloned date attributes to support date-range filter -->
+            <viewColumn id="startdate_clone" attributeType="startdate"/>
+            <viewColumn id="enddate_clone" attributeType="enddate"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="guid" attributeType="guid" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_cet_control" objectType="CONTROL">
+            <viewColumn id="control_objId" attributeType="obj_id"/>
+            <viewColumn id="control_name" attributeType="name" isSelectColumn="true"/>
+            <viewColumn id="control_version_active" attributeType="version_active" isSelectColumn="true" /><!-- REO 17.07.2017 -->
+        </viewObject>
+        <viewObject id="VO_cet_usergroup" objectType="USERGROUP">
+            <viewColumn id="ownergroup_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ownergroup_version_active" attributeType="version_active"/>
+        </viewObject>
+        <viewObject id="VO_cet_hierarchy" objectType="HIERARCHY">
+            <viewColumn id="orgunit_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="orgunit_version_active" attributeType="version_active"/>
+        </viewObject>
+        <link linktype.id="6050" firstViewObject="VO_cet_control" secondViewObject="VO_cet_task" joinType="LEFT"/>
+        <link linktype.id="6051" firstViewObject="VO_cet_task" secondViewObject="VO_cet_usergroup"/>
+        <link linktype.id="6053" firstViewObject="VO_cet_task" secondViewObject="VO_cet_hierarchy"/>
+        <conditions>
+            <!-- arbitrary attributes -->
+            <compoundCondition conditionConnect="AND">
+            	<condition column.id="control_version_active" compareType="EQ" value="true"/><!-- REO 17.07.2017 -->
+                <!-- main object attributes -->
+                <condition column.id="client_sign" compareType="LIKE"/>
+                <condition column.id="obj_id" compareType="EQ"/>
+<!--                 <condition column.id="id" compareType="EQ"/> --><!-- REO 17.07.2017 -->
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="frequency" compareType="IN"/>
+                <condition column.id="selectivity" compareType="LIKE"/>
+                <condition column.id="result_format" compareType="LIKE"/>
+                <condition column.id="event_driven_allowed" compareType="EQ"/>
+                <condition column.id="deactivated" compareType="EQ"/>
+                <!-- date range -->
+                <condition column.id="startdate" compareType="GE"/>
+                <condition column.id="enddate" compareType="LE"/>
+                <!-- attributes of the other objects -->
+                <condition column.id="control_name" compareType="LIKE"/>
+                <condition column.id="ownergroup_name" compareType="LIKE"/>
+                <condition column.id="ownergroup_version_active" compareType="EQ" value="true"/>
+                <condition column.id="orgunit_name" compareType="LIKE"/>
+                <condition column.id="orgunit_version_active" compareType="EQ" value="true"/>
+                <condition column.id="guid" compareType="EQ"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+
+</custom>

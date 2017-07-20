@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
+	<!-- Returns all related control executions of the specific control execution task-->
 	<view id="control2controlexecutiontask" view.parameter="DISTINCT">
-
         <viewObject id="VO_cet_task" objectType="CONTROLEXECUTIONTASK" isMainViewObject="true">
             <viewColumn id="client_sign" attributeType="client_sign" isSelectColumn="true"/>
             <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true"/>
@@ -65,6 +65,49 @@
                 <condition column.id="orgunit_version_active" compareType="EQ" value="true"/>
             </compoundCondition>
         </conditions>
-    </view>	
+    </view>
+    
+	<!-- Returns all unassigned control execution tasks -->
+    <view id="control2controlexecutiontask_sel" view.parameter="DISTINCT">
+        <viewObject id="VO_control2cet_sel_cet" objectType="CONTROLEXECUTIONTASK" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSortable="true"/>
+            <viewColumn id="controlexecutiontask_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="controlexecutiontask_obj_id2" attributeType="obj_id" isSortable="true"/>
+            <viewColumn id="controlexecutiontask_obj_id3" attributeType="obj_id" isSortable="true"/>
+            <viewColumn id="frequency" attributeType="frequency" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="duration" attributeType="duration" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="startdate" attributeType="startdate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="startdate_2" attributeType="startdate" isSortable="true"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="enddate" attributeType="enddate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="enddate_2" attributeType="startdate" isSortable="true"/>
+        </viewObject>
+        <viewObject id="VO_control2cet_sel_usergroup" objectType="USERGROUP">
+            <viewColumn id="groupname" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="group_version_active" attributeType="version_active"/>
+        </viewObject>
+        <link linktype.id="6051" firstViewObject="VO_control2cet_sel_cet" secondViewObject="VO_control2cet_sel_usergroup"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="startdate" compareType="GE"/>
+                <condition column.id="startdate_2" compareType="LE"/>
+                <condition column.id="enddate" compareType="GE"/>
+                <condition column.id="enddate_2" compareType="LE"/>
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="controlexecutiontask_obj_id" compareType="NOTIN" currentObjectType.id="CONTROL" currentAttributeType.id="controlexecutiontasks"/>
+                <condition column.id="controlexecutiontask_obj_id2" compareType="NOTIN" refView.id="control2controlexecutiontask_sub_sel"/>
+                <condition column.id="controlexecutiontask_obj_id3" compareType="EQ"/>
+                <condition column.id="client_sign" compareType="EQ" currentObjectType.id="CONTROL" currentAttributeType.id="client_sign"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="obj_id" compareType="EQ"/>
+                <condition column.id="frequency" compareType="IN"/>
+                <condition column.id="groupname" compareType="LIKE"/>
+            </compoundCondition>
+        </conditions>
+    </view>    
 
 </custom>
