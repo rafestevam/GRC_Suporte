@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+	<form id="FORM_HIERARCHY">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="SWITCH_VIEW"/>
+            <buttonReference button.idref="SWITCH_EDIT"/>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="OBJECT_DELETE"/>
+            <buttonReference button.idref="OBJECT_REACTIVATE"/>
+            <buttonReference button.idref="CHANGEREVIEW_CREATE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </formButtons>
+        <page id="hierarchy">
+            <rowGroup id="hierarchy.1">
+                <row id="client_sign">
+                    <element attribute.idref="client_sign" template="clientSign"/>
+                </row>
+                <row id="name" propertyKey="form.row.name.DBI">
+                    <cell>
+                        <element attribute.idref="name"/>
+                    </cell>
+                </row>
+                <row id="hnumber">
+                    <element attribute.idref="hnumber"/>
+                </row>
+                <row id="type">
+                    <element attribute.idref="type"/>
+                </row>
+                <row id="description">
+                    <element attribute.idref="description"/>
+                </row>
+                <!--
+                <row id="status">
+                    <element attribute.idref="status" >
+                        <parameter name="yesKey" value="html.active"/>
+                        <parameter name="noKey" value="html.inactive"/>
+                    </element>
+                </row>
+-->
+                <row id="tester">
+                    <element attribute.idref="tester">
+                        <parameter name="selectionList" value="hierarchy_tester_sel"/>
+                    </element>
+                </row>
+                <row id="signoff">
+                    <element attribute.idref="signoff"/>
+                </row>
+                <row id="so_owner">
+                    <element attribute.idref="so_owner">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="auditor">
+                    <element attribute.idref="auditor">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="owner_group">
+                    <element attribute.idref="owner_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <row id="objectguid">
+                    <element attribute.idref="objectguid"/>
+                </row>
+                <row id="objectlink">
+                    <element attribute.idref="objectlink" template="modellink">
+                        <parameter name="guidProperty" value="objectguid"/>
+                        <parameter name="clientProperty" value="objectlinkpattern"/>
+                        <parameter name="mode" value="objectlink"/>
+                        <parameter name="icon" value="iconlib/icons/object_action_16.png"/>
+                    </element>
+                </row>
+                <row id="model_name">
+                    <element attribute.idref="model_name"/>
+                </row>
+                <row id="modelguid">
+                    <element attribute.idref="modelguid"/>
+                </row>
+                <row id="modellink">
+                    <element attribute.idref="modellink" template="modellink">
+                        <parameter name="guidProperty" value="modelguid"/>
+                        <parameter name="clientProperty" value="modellinkpattern"/>
+                    </element>
+                </row>
+            </rowGroup>
+        </page>
+        <page id="changeManagement" licensedComponentIds="cm">
+            <rowGroup id="changeManagement.1">
+                <row id="reviewRelevant">
+                    <element attribute.idref="reviewRelevant">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onClick"/>
+                    </element>
+                </row>
+                <row id="activities">
+                    <element attribute.idref="activities"/>
+                </row>
+                <row id="frequency">
+                    <element attribute.idref="frequency">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="event_driven_allowed">
+                    <element attribute.idref="event_driven_allowed"/>
+                </row>
+                <row id="duration">
+                    <element attribute.idref="duration"/>
+                </row>
+                <row id="startdate">
+                    <element attribute.idref="startdate"/>
+                </row>
+                <row id="enddate">
+                    <element attribute.idref="enddate"/>
+                </row>
+            </rowGroup>
+        </page>
+        
+        <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
+        <page id="cst_hierarchy">
+            <rowGroup id="cst_hierarchy.1">
+                <row id="cst_client_sign">
+                    <element attribute.idref="client_sign" template="clientSign"/>
+                </row>
+                <row id="cst_name" propertyKey="form.row.name.DBI">
+                    <cell>
+                        <element attribute.idref="name"/>
+                    </cell>
+                </row>
+                <row id="cst_hnumber">
+                    <element attribute.idref="hnumber"/>
+                </row>
+                <row id="cst_type">
+                    <element attribute.idref="type"/>
+                </row>
+                <row id="cst_description">
+                    <element attribute.idref="description"/>
+                </row>
+                <!--
+                <row id="status">
+                    <element attribute.idref="status" >
+                        <parameter name="yesKey" value="html.active"/>
+                        <parameter name="noKey" value="html.inactive"/>
+                    </element>
+                </row>
+-->
+<!--                 <row id="tester"> -->
+<!--                     <element attribute.idref="tester"> -->
+<!--                         <parameter name="selectionList" value="hierarchy_tester_sel"/> -->
+<!--                     </element> -->
+<!--                 </row> -->
+<!--                 <row id="signoff"> -->
+<!--                     <element attribute.idref="signoff"/> -->
+<!--                 </row> -->
+<!--                 <row id="so_owner"> -->
+<!--                     <element attribute.idref="so_owner"> -->
+<!--                         <parameter name="selectionList" value="AUTO"/> -->
+<!--                     </element> -->
+<!--                 </row> -->
+<!--                 <row id="auditor"> -->
+<!--                     <element attribute.idref="auditor"> -->
+<!--                         <parameter name="selectionList" value="AUTO"/> -->
+<!--                     </element> -->
+<!--                 </row> -->
+<!--                 <row id="owner_group"> -->
+<!--                     <element attribute.idref="owner_group"> -->
+<!--                         <parameter name="selectionList" value="AUTO"/> -->
+<!--                     </element> -->
+<!--                 </row> -->
+                <row id="cst_objectguid">
+                    <element attribute.idref="objectguid"/>
+                </row>
+                <row id="cst_objectlink">
+                    <element attribute.idref="objectlink" template="modellink">
+                        <parameter name="guidProperty" value="objectguid"/>
+                        <parameter name="clientProperty" value="objectlinkpattern"/>
+                        <parameter name="mode" value="objectlink"/>
+                        <parameter name="icon" value="iconlib/icons/object_action_16.png"/>
+                    </element>
+                </row>
+                <row id="cst_model_name">
+                    <element attribute.idref="model_name"/>
+                </row>
+                <row id="cst_modelguid">
+                    <element attribute.idref="modelguid"/>
+                </row>
+                <row id="cst_modellink">
+                    <element attribute.idref="modellink" template="modellink">
+                        <parameter name="guidProperty" value="modelguid"/>
+                        <parameter name="clientProperty" value="modellinkpattern"/>
+                    </element>
+                </row>
+            </rowGroup>
+        </page>
+        <page id="rcdetails">
+        	<rowGroup id="rcdetails.1">
+                <row id="rc_potencial">
+                	<element attribute.idref="rc_potencial"/>
+                </row>
+                <row id="rc_residual">
+                	<element attribute.idref="rc_residual"/>
+                </row>        		
+        	</rowGroup>
+<!--         	<rowGroup id="rcdetails.2"> -->
+        		
+<!--         	</rowGroup> -->
+        </page>
+        
+        <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
+    </form>
+    
+</custom>

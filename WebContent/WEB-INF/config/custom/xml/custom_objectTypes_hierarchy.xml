@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+	<objectType id="HIERARCHY" displayAttribute="name" extends="RECURRING" xmlexport="true"
+                descriptionAttributes="type, description, isroot" 
+                mashzoneId="190" arisImportRole="sysadmin" image="iconlib/icons/doctype/model_16.png">
+        <booleanAttrType id="isroot" defaultValue="false"/>
+        <stringAttrType id="hnumber" maxCharCount="50">
+            <validate name="maxlength" arg0="50"/>
+        </stringAttrType>
+        <enumAttrType id="type" enumeration="hierarchy_type" defaultValue="1"/>
+        <textAttrType id="description"/>
+        <booleanAttrType id="signoff"/>
+        <stringAttrType id="modellink" maxCharCount="500">
+            <validate name="maxlength" arg0="500"/>
+        </stringAttrType>
+        <stringAttrType id="modelguid" maxCharCount="25">
+            <validate name="maxlength" arg0="40"/>
+        </stringAttrType>
+        <stringAttrType id="objectlink" maxCharCount="500">
+            <validate name="maxlength" arg0="500"/>
+        </stringAttrType>
+        <stringAttrType id="objectguid" maxCharCount="25">
+            <validate name="maxlength" arg0="40"/>
+        </stringAttrType>
+        <listAttrType id="children" maxSize="200" linkType="46" objectType.idref="HIERARCHY" isHierarchical="true"/>
+        <listAttrType id="so_owner" maxSize="1" linkType="51" objectType.idref="USERGROUP" >
+            <listRestriction>
+                <attributeRestriction attribute="role" value="signoffowner"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <stringAttrType id="model_name" maxCharCount="200">
+            <validate name="maxlength" arg0="200"/>
+        </stringAttrType>
+        <listAttrType id="tester" linkType="69" objectType.idref="USERGROUP">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="tester"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="auditor" linkType="3112" objectType.idref="USERGROUP">     <!-- testmanagement auditor -->
+            <listRestriction>
+                <attributeRestriction attribute="role" value="testauditor"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>  
+        <listAttrType id="owner_group" maxSize="1" linkType="3113" objectType.idref="USERGROUP">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="hierarchyowner"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>  
+        <listAttrType id="reviewer_group" linkType="3114" objectType.idref="USERGROUP"/> <!-- not used -->
+        <booleanAttrType id="reviewRelevant" defaultValue="false"/>
+        <textAttrType id="activities"/>
+        <enumAttrType id="frequency" enumeration="frequency" defaultValue="0"/>
+        
+        <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
+        <stringAttrType id="rc_potencial" maxCharCount="200" defaultValue="Muito Alto"/>
+        <stringAttrType id="rc_residual" maxCharCount="200" defaultValue="Médio"/>
+        <booleanAttrType id="rc_type" defaultValue="true"/>
+        <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
+        
+        <index id="I_HIERARCHY_1" type="normal">
+            <attributeRef attribute="isroot"/>
+        </index>
+        <index id="I_HIERARCHY_2" type="normal">
+            <attributeRef attribute="type"/>
+        </index>
+        <index id="I_HIERARCHY_4" type="normal">
+            <attributeRef attribute="signoff"/>
+        </index>
+        <index id="I_HIERARCHY_NAME" type="normal">
+            <attributeRef attribute="name"/>
+        </index>
+        <index id="I_HIERARCHY_MODELLINK" type="normal">
+            <attributeRef attribute="modellink"/>
+        </index>
+        <index id="I_HIERARCHY_MODELGUID" type="normal">
+            <attributeRef attribute="modelguid"/>
+        </index>
+        <index id="I_HIERARCHY_OBJECTLINK" type="normal">
+            <attributeRef attribute="objectlink"/>
+        </index>
+        <index id="I_HIERARCHY_OBJECTGUID" type="normal">
+            <attributeRef attribute="objectguid"/>
+        </index>
+    </objectType>
+ 
+</custom>
