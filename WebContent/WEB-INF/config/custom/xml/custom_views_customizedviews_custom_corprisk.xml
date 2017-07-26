@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<!-- Inicio REO 26.07.2017 - Risco Corporativo -->
+	<view id="cst_view_corprisk" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
+        <viewObject id="VO_hierarchy" objectType="HIERARCHY" isMainViewObject="true">
+            <viewColumn id="rc_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_rcid" attributeType="rc_rcid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_type" attributeType="type" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_potencial" attributeType="rc_potencial" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_residual" attributeType="rc_residual" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="rc_type" compareType="EQ" value="12"/>
+<!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
+            </compoundCondition>
+        </conditions>
+    </view>
+<!-- Fim REO 26.07.2017 - Risco Corporativo -->
+
+</custom>

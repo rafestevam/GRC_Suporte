@@ -127,6 +127,9 @@
                 <row id="cst_client_sign">
                     <element attribute.idref="client_sign" template="clientSign"/>
                 </row>
+                <row id="rc_rcid">
+                	<element attribute.idref="rc_rcid"/>
+                </row>
                 <row id="cst_name" propertyKey="form.row.name.DBI">
                     <cell>
                         <element attribute.idref="name"/>

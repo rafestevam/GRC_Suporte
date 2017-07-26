@@ -57,9 +57,10 @@
         <enumAttrType id="frequency" enumeration="frequency" defaultValue="0"/>
         
         <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
-        <stringAttrType id="rc_potencial" maxCharCount="200" defaultValue="Muito Alto"/>
-        <stringAttrType id="rc_residual" maxCharCount="200" defaultValue="Médio"/>
+        <stringAttrType id="rc_potencial" maxCharCount="200" />
+        <stringAttrType id="rc_residual" maxCharCount="200" />
         <booleanAttrType id="rc_type" defaultValue="true"/>
+        <stringAttrType id="rc_rcid" maxCharCount="20"></stringAttrType>
         <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
         
         <index id="I_HIERARCHY_1" type="normal">

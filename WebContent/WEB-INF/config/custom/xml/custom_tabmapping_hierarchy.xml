@@ -4,8 +4,12 @@
 	<tabMapping id="hierarchy" frame="content" restrictionAttributeId="type">
 		<tTab page="1" id="hierarchyElement" propertyKey="tab.hierarchyElement.DBI" action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=1"  restrictionValue="tester,financialaccount,orgunit,process,category,applicationsystemtype"/>
         <tTab page="2" id="changeManagement" propertyKey="tab.changeManagement.DBI" action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=2"  restrictionValue="financialaccount" licensedComponentId="cm" roles="hierarchymanager,hierarchyowner,hierarchyauditor"/>
+        
+        <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
         <tTab page="3" id="rcElement"        propertyKey="tab.rcElement.DBI"        action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=3"  restrictionValue="corprisk" roles="riskmanager"/>
         <tTab page="4" id="rcdetails"        propertyKey="tab.rcdetails.DBI"        action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=4"  restrictionValue="corprisk" roles="riskmanager"/>
+        <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
+        
         <tTab id="connect" propertyKey="tab.assignment.DBI" access="persistent">
             <tSubTab id="changereviews" propertyKey="tab.hierarchy.changereview.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2changereviews" objectType="CHANGEREVIEW"    restrictionValue="financialaccount" licensedComponentId="cm" roles="hierarchymanager,hierarchyowner,hierarchyauditor"/>
 			<tSubTab id="risks" propertyKey="tab.risks.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2risk_refs" objectType="RISK"/>
