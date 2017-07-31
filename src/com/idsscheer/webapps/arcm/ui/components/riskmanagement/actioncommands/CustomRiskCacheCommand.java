@@ -73,6 +73,14 @@ public class CustomRiskCacheCommand extends RiskassessmentCacheActionCommand {
 					IAppObj intAppObj = internalModel.getAppObj();
 					boolean isChanged = intAppObj.isDirty();
 					
+					//Inicio REO 31.07.2017 - Ajuste para Mashzone
+					if(isChanged){
+						if(!intAppObj.getAttribute(IRa_impacttypeAttributeType.ATTR_ISFILLED).getRawValue()){
+							height = height_set;
+						}
+					}
+					//Fim REO 31.07.2017 - Ajuste para Mashzone
+					
 					if(value.length == 0){
 						appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).setRawValue("");
 						appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_HEIGHT).setRawValue(0);
