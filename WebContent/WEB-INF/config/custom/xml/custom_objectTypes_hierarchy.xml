@@ -59,7 +59,7 @@
         <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
         <stringAttrType id="rc_potencial" maxCharCount="200" />
         <stringAttrType id="rc_residual" maxCharCount="200" />
-        <booleanAttrType id="rc_type" defaultValue="true"/>
+        <booleanAttrType id="corprisk" defaultValue="true"/>
         <stringAttrType id="rc_rcid" maxCharCount="20"></stringAttrType>
         <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
         
