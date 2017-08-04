@@ -106,7 +106,7 @@
             <viewColumn id="r_cat2" attributeType="risk_catalog2" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="r_rmr" attributeType="risk_management_relevant" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="risk_version_active" attributeType="version_active" mashzoneRelevant="false"/>
-            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
 	    <viewColumn id="r_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
@@ -150,7 +150,7 @@
         <link linktype.id="52" firstViewObject="VO_riskdata_risk" secondViewObject="VO_riskdata_riskManager" joinType="LEFT"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
-                <condition column.id="deactivated" compareType="EQ" value="false"/>
+                <condition column.id="deactivated" compareType="EQ" />
             </compoundCondition>
         </conditions>
     </view>
@@ -300,7 +300,7 @@
             <viewColumn id="c_exec" attributeType="control_execution"/>
             <viewColumn id="c_effect" attributeType="control_effect" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="control_version_active" attributeType="version_active" mashzoneRelevant="false"/>
-            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
             <viewColumn id="c_custom_status_control" attributeType="custom_status_control" mashzoneRelevant="true" isSelectColumn="true"/>
@@ -323,7 +323,7 @@
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="control_version_active" compareType="EQ" value="true"/>
-                <condition column.id="deactivated" compareType="EQ" value="false"/>
+                <condition column.id="deactivated" compareType="EQ" />
             </compoundCondition>
         </conditions>
     </view>
@@ -605,7 +605,7 @@
             <viewColumn id="tc_effect" attributeType="effectiveness"/>
             <viewColumn id="tc_nature" attributeType="test_nature"/>
             <viewColumn id="testcase_version_active" attributeType="version_active" mashzoneRelevant="false"/>
-            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
             <viewColumn id="testcase_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
@@ -665,7 +665,7 @@
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="testcase_version_active" compareType="EQ" value="true"/>
-                <condition column.id="deactivated" compareType="EQ" value="false"/>
+                <condition column.id="deactivated" compareType="EQ" />
             </compoundCondition>
         </conditions>
     </view>

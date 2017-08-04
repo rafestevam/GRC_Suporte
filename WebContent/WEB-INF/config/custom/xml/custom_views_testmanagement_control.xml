@@ -8,7 +8,7 @@
             <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true"/>
             <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="controls" attributeType="controls" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+<!--             <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/> -->
             <viewColumn id="control_version_active" attributeType="version_active"/>
             <viewColumn id="control_frequency" attributeType="control_frequency"/>
             <viewColumn id="control_effect" attributeType="control_effect"/>
@@ -19,6 +19,7 @@
             <!-- Inicio GAP - GRC14 -->
             <viewColumn id="control_id" attributeType="control_id" isSortable="true" isSelectColumn="true"/>
             <!-- Fim GAP - GRC14 -->
+            <viewColumn id="control_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_controls_2" objectType="USERGROUP">
             <viewColumn id="userGroup_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
@@ -31,7 +32,7 @@
             <compoundCondition conditionConnect="AND">
                 <condition column.id="controls" compareType="LIKE"/>
                 <condition column.id="userGroup_name" compareType="LIKE"/>
-                <condition column.id="deactivated" compareType="EQ" value="false"/>
+<!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
                 <condition column.id="control_version_active" compareType="EQ" value="true"/>
                 <condition column.id="control_key" compareType="EQ"/>
                 <compoundCondition conditionConnect="OR">
@@ -46,6 +47,7 @@
                 <condition column.id="control_execution" compareType="EQ"/>
 <!--                 <condition column.id="control_id" compareType="EQ"/> -->
                 <condition column.id="guid" compareType="EQ"/>
+                <condition column.id="control_deactivated" compareType="EQ"/>
             </compoundCondition>
         </conditions>
     </view>    
