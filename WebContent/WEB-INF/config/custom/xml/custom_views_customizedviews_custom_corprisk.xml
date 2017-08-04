@@ -8,13 +8,13 @@
             <viewColumn id="id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_rcid" attributeType="rc_rcid" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="rc_type" attributeType="type" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_csttype" attributeType="rc_csttype" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_potencial" attributeType="rc_potencial" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_residual" attributeType="rc_residual" isSortable="true" isSelectColumn="true"/>
         </viewObject>
         <conditions>
             <compoundCondition conditionConnect="AND">
-                <condition column.id="rc_type" compareType="EQ" value="12"/>
+                <condition column.id="rc_csttype" compareType="EQ" value="12"/>
 <!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
             </compoundCondition>
         </conditions>

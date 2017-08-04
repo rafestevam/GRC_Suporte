@@ -1,0 +1,327 @@
+package HIERARCHY_RuleSet
+expander hierarchy.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.administration.re.HierarchyHelper;
+
+# OBJECT    client_objid         LONG       Client ID                                                                                                                                                             
+# OBJECT    client_sign          CLIENTSIGN Client                                                                                                                                                                
+# OBJECT    create_date          DATE       Creation date                                                                                                                                                         
+# OBJECT    creator_user_id      LONG       User ID (creator)                                                                                                                                                     
+# OBJECT    delete_date          DATE       Deletion date                                                                                                                                                         
+# OBJECT    guid                 STRING     GUID                                                                                                                                                                  
+# OBJECT    obj_id               LONG       ID                                                                                                                                                                    
+# OBJECT    obj_type             OBJECTTYPE Object type                                                                                                                                                           
+# OBJECT    root_guid            STRING     Root GUID                                                                                                                                                             
+# OBJECT    versions             LONG       Number of versions                                                                                                                                                    
+# VERSION   aris_change_date     DATE       ARIS change date                                                                                                                                                      
+# VERSION   change_date          DATE       Change date                                                                                                                                                           
+# VERSION   change_type          ENUM       Change type                               changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                               
+# VERSION   change_user_id       LONG       User ID (editor)                                                                                                                                                      
+# VERSION   deactivated          BOOLEAN    Deactivated                                                                                                                                                           
+# VERSION   id                   LONG       ID                                                                                                                                                                    
+# VERSION   substitute_user_id   LONG       User ID (substitute)                                                                                                                                                  
+# VERSION   version_active       BOOLEAN    Current version                                                                                                                                                       
+# VERSION   version_number       LONG       Version number                                                                                                                                                        
+# RECURRING control_period       ENUM       Attribute not supported for the hierarchy controlperiod (unspecified=0,day=1,week=2,month=3,quarter=4,semiannual=5,year=6)                                            
+# RECURRING duration             LONG       Time limit for execution in days                                                                                                                                      
+# RECURRING enddate              DATE       End date of review                                                                                                                                                    
+# RECURRING event_driven_allowed BOOLEAN    Event-driven review allowed                                                                                                                                           
+# RECURRING frequency            ENUM       Frequency                                 frequency (all=-1,unspecified=0,oneoff=1,daily=2,weekly=3,monthly=4,quarterly=5,semiannually=6,annually=7,everysecondyear=8)
+# RECURRING control_period_offset LONG      Attribute not supported for the hierarchy
+# RECURRING owner_group          LIST       Hierarchy owner                           to 1 USERGROUP (LT=3113)                                                                                                    
+# RECURRING reviewer_group       LIST       Attribute not supported for the hierarchy to * USERGROUPs (LT=3114)                                                                                                   
+# RECURRING startdate            DATE       Start date of review                                                                                                                                                  
+# HIERARCHY activities           TEXT       Activities                                                                                                                                                            
+# HIERARCHY auditor              LIST       Test auditor                              to * USERGROUPs (LT=3112)                                                                                                   
+# HIERARCHY children             LIST       Subordinate hierarchy elements            to 200 HIERARCHYs (LT=46)                                                                                                   
+# HIERARCHY description          TEXT       Description                                                                                                                                                           
+# HIERARCHY hnumber              STRING     Number                                                                                                                                                                
+# HIERARCHY isroot               BOOLEAN    Root                                                                                                                                                                  
+# HIERARCHY model_name           STRING     Model name                                                                                                                                                            
+# HIERARCHY modelguid            STRING     Model GUID                                                                                                                                                            
+# HIERARCHY modellink            STRING     Model link                                                                                                                                                            
+# HIERARCHY name                 STRING     Name                                                                                                                                                                  
+# HIERARCHY objectguid           STRING     Object GUID                                                                                                                                                           
+# HIERARCHY objectlink           STRING     Object link                                                                                                                                                           
+# HIERARCHY reviewRelevant       BOOLEAN    Review-relevant                                                                                                                                                       
+# HIERARCHY signoff              BOOLEAN    Sign-off-relevant                                                                                                                                                     
+# HIERARCHY so_owner             LIST       Sign-off owner                            to 1 USERGROUP (LT=51)                                                                                                      
+# HIERARCHY tester               LIST       Tester groups                             to * USERGROUPs (LT=69)                                                                                                     
+# HIERARCHY type                 ENUM       Type                                      hierarchy_type (all=0,tester=1,financialaccount=2,orgunit=3,process=4,category=10,applicationsystemtype=11)                 
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+rule "define all standard attributes editable [I,V]"
+
+    salience 10800
+	no-loop true
+
+	when
+
+	then
+		set "name"                 editable
+		set "hnumber"              editable
+		set "description"          editable
+		set "tester"               editable
+		set "signoff"              editable
+		set "so_owner"             editable
+		set "auditor"              editable
+		set "children"             editable
+		
+		set "owner_group"          editable
+		set "reviewRelevant"       editable
+        set "activities"           editable
+        set "frequency"            editable
+        set "event_driven_allowed" editable
+        set "duration"             editable
+        set "startdate"            editable
+        set "enddate"              editable
+
+end
+
+rule "make external link attributes invisible[I,V]"
+
+    salience 10900
+	no-loop true
+
+	when
+	    ( connect is not active AND
+	        business publisher is not active )
+	then
+		set "modelguid"            invisible
+		set "modellink"            invisible
+		set "objectguid"           invisible
+		set "objectlink"           invisible
+
+end
+
+rule "define visible attribute for connect only active[I,V]"
+
+    salience 10900
+	no-loop true
+
+	when
+	    ( connect is active AND business publisher is not active )
+	then
+		set "modelguid"            invisible
+		set "objectguid"           invisible
+
+end
+
+rule "define publisher attributes editable[I,V]"
+
+    salience 10900
+	no-loop true
+
+	when
+	    ( business publisher is active )
+	then
+		set "modelguid"            editable
+		set "modellink"            editable
+		set "objectguid"           editable
+		set "objectlink"           editable
+		set "model_name"           editable
+
+end
+
+rule "mark_name_mandatory_[I,V]"
+
+    salience 10800
+	no-loop true
+
+	when
+
+	then
+		set "name" mandatory
+
+end
+
+rule "enddate_invalid_[V]"
+
+	salience 10800
+	no-loop true
+
+	when
+		"startdate" is filled
+		"enddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "startdate" "GREATER THAN" ":transient:" attr_value "enddate"
+
+	then
+		set "enddate" invalid
+		add "error" message "error.date.range.DBI" to "enddate"
+
+end
+           	                                                 
+rule "change_management relevant --> some fields more mandatory [I,V]"
+
+    salience 10700
+	no-loop true
+	
+    when
+   	    value comparison fulfilled: ":transient:" attr_value "reviewRelevant" "EQUALS" value "true"
+   	        
+	then
+        set "owner_group"          mandatory
+        set "activities"           mandatory
+        set "frequency"            mandatory
+        set "event_driven_allowed" mandatory
+        set "duration"             mandatory
+        set "startdate"            mandatory
+
+end
+
+rule "hide_tester_[I,V]"
+
+    salience 10600
+	no-loop true
+
+	when
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS NOT" value "tester"
+
+	then
+		set "tester" invisible
+
+end
+
+rule "hide_hnumber_[I,V]"
+
+    salience 10500
+	no-loop true
+
+	when
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS NOT" value "financialaccount"
+
+	then
+		set "hnumber" invisible
+
+end
+
+rule "hide_signoff_[I,V]"
+
+    salience 10400
+	no-loop true
+
+	when
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS" value "category" OR
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS" value "applicationsystemtype"
+
+	then
+		set "signoff" invisible
+
+end
+
+#complementary rule to "hide_signoff_[I,V]"
+rule "mark_signoff_mandatory_[I,V]"
+
+    salience 10300
+	no-loop true
+
+	when
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS NOT" value "category" AND
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS NOT" value "applicationsystemtype"
+
+	then
+		set "signoff" mandatory
+
+end
+
+rule "hide_so_owner_[I,V]"
+
+    salience 10200
+	no-loop true
+
+	when
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS" value "category" OR
+	    value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS" value "applicationsystemtype"
+
+	then
+		set "so_owner" invisible
+
+end
+
+rule "set all attributes readonly for hierarchyowner [I,V]"
+
+    salience 10100
+	no-loop true
+
+	when
+        user has at object role "hierarchyowner"
+
+	then
+		set "owner_group"              readonly
+
+end
+
+rule "set all attributes readonly for test manager [I,V]"
+
+    salience 10100
+	no-loop true
+
+	when
+        user has in_general role "testmanager"
+
+	then
+		set "name"                readonly
+		set "hnumber"             readonly
+		set "description"         readonly
+		set "signoff"             readonly
+		set "tester"              readonly
+		set "owner_group"         readonly
+		set "so_owner"            readonly
+		set "auditor"             readonly
+		set "objectguid"          readonly
+		set "objectlink"          readonly
+		set "model_name"          readonly
+		set "modelguid"           readonly
+		set "modellink"           readonly
+
+end
+
+
+rule "test manager is only allowed to edit tester attribute [I,V]"
+
+    salience 10000
+	no-loop true
+
+	when
+        user has in_general role "testmanager"
+        value comparison fulfilled: ":transient:" attr_value "type" "CONTAINS" value "tester"
+
+	then
+		set "tester"              editable
+
+end
+
+
+## Inicio REO 04.08.2017 - Riscos Corporativos
+rule "set_category_invisible[I,V]"
+	
+	salience 9000
+	no-loop true
+	
+	when
+		value comparison fulfilled: ":transient:" attr_value "rc_csttype" "CONTAINS NOT" value "corprisk"
+		
+	then
+#		set "rc_category" invisible
+	
+end
+
+rule "set_category_visible[I,V]"
+
+	salience 8000
+	no-loop true
+	
+	when
+		value comparison fulfilled: ":transient:" attr_value "rc_csttype" "CONTAINS" value "corprisk"
+		
+	then
+		set "rc_category" visible
+		set "type" invisible
+		
+end
+## Fim REO 04.08.2017 - Riscos Corporativos

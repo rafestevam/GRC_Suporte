@@ -59,8 +59,10 @@
         <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
         <stringAttrType id="rc_potencial" maxCharCount="200" />
         <stringAttrType id="rc_residual" maxCharCount="200" />
-        <booleanAttrType id="corprisk" defaultValue="true"/>
-        <stringAttrType id="rc_rcid" maxCharCount="20"></stringAttrType>
+        <booleanAttrType id="corprisk" />
+        <stringAttrType id="rc_rcid" maxCharCount="20"/>
+        <stringAttrType id="rc_category" maxCharCount="30"/>
+        <enumAttrType id="rc_csttype" enumeration="custom_hierarchy_type" defaultValue="1"/>
         <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
         
         <index id="I_HIERARCHY_1" type="normal">

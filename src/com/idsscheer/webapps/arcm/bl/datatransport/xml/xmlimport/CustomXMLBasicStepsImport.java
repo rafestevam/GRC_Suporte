@@ -1,10 +1,8 @@
 package com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport;
 
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Locale;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
@@ -23,7 +21,6 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAt
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
-import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
 import com.idsscheer.webapps.arcm.dl.migframe.IMerge;
 import com.idsscheer.webapps.arcm.dl.migframe.IMigrationRecord;
@@ -417,5 +414,43 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		}
 		
 	}
+	
+	//Inicio REO 04.08.2017 - Riscos Corporativos
+	public void setcategory(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			if(sourceRec.containsField(columnMap.getSource())){
+				Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
+				if(corprisk)
+					targetRec.setString(columnMap.getTarget(), "Risco Corporativo");
+			}
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}
+	}
+	
+	public void settype(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			Long intType = new Long(0);
+			if(sourceRec.containsField(columnMap.getSource())){
+				Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
+				if(corprisk){
+					intType = Long.parseLong("12");
+				}else{
+					intType = (Long)sourceRec.getField("type");
+				}
+				targetRec.setLong(columnMap.getTarget(), intType);
+			}else{
+				intType = (Long)sourceRec.getField("type");
+				targetRec.setLong(columnMap.getTarget(), intType);
+			}
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}
+	}
+	//Fim REO 04.08.2017 - Riscos Corporativos
 	
 }

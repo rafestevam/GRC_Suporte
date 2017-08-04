@@ -32,6 +32,13 @@
                 <row id="type">
                     <element attribute.idref="type"/>
                 </row>
+                
+                <!-- Inicio REO 04.08.2017 - Riscos Corporativos -->
+                <row id="rc_category">
+                	<element attribute.idref="rc_category" />
+                </row>
+                <!-- Fim REO 04.08.2017 - Riscos Corporativos -->
+                
                 <row id="description">
                     <element attribute.idref="description"/>
                 </row>
