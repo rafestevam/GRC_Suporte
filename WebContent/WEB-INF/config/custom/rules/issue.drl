@@ -1032,3 +1032,22 @@ rule "custom_set_riskclassification[I,V]"
 		set risk classification
 
 end
+
+# Inicio REO 07.08.2017 - Evento EV107085
+rule "custom_set_plannedenddate_status[I,V]"
+
+	salience 80
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+	
+	then
+		set "plannedenddate" not_mandatory
+		set "plannedenddate" readonly
+
+end
