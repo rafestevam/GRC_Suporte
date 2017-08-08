@@ -597,7 +597,9 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
 				controlFacade.allocateLock(controlOVID, LockType.FORCEWRITE);
 				
-				if(this.fernanda.equals("ineffective")){
+				//REO 08.08.2017 - EV105079
+				//if(this.fernanda.equals("ineffective")){ 
+				if(this.fernanda.equals("noneffective")){
 					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
 				}else{
 					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
