@@ -1034,7 +1034,7 @@ rule "custom_set_riskclassification[I,V]"
 end
 
 # Inicio REO 07.08.2017 - Evento EV107085
-rule "custom_set_plannedenddate_status[I,V]"
+rule "custom_set_plannedenddate_status_issue[I,V]"
 
 	salience 80
 	no-loop true
@@ -1049,12 +1049,32 @@ rule "custom_set_plannedenddate_status[I,V]"
 	then
 		set "plannedenddate" not_mandatory
 		set "plannedenddate" readonly
+		set "custom_is_creator_status" to value "new"
+
+end
+
+rule "custom_set_plannedenddate_status_actionplan[I,V]"
+
+	salience 75
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "apOpenForCreation" )
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+	
+	then
+		set "plannedenddate" not_mandatory
+		set "plannedenddate" readonly
+		set "custom_ap_creator_status" to value "new"
 
 end
 
 rule "custom_set_action_type_mandatory[I,V]"
 	
-	salience 75
+	salience 70
 	no-loop true
 	
 	when
