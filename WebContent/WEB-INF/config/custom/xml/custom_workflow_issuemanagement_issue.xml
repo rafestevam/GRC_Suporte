@@ -35,8 +35,15 @@
             </insert>
             <insert to.state.id="apOpenForExecution" chain.id="insertExecution">
             	<attribute.change id="custom_ap_creator_status" 	to="in_progress"/>
-            	<attribute.change id="custom_ap_owner_status" 	    to="open"/>
-            </insert>            
+<!--             	<attribute.change id="custom_ap_owner_status" 	    to="open"/> --><!-- REO 14.08.2017 - EV108435 -->
+            </insert>
+            
+            <!-- Inicio REO 14.08.2017 - EV108435 -->
+            <insert to.state.id="apCreatorOnHold" chain.id="onHold">
+            	<attribute.change id="custom_ap_creator_status" 	to="pending"/>
+            </insert>
+            <!-- Fim REO 14.08.2017 - EV108435 -->
+                       
             <insert to.state.id="openForExecution" chain.id="insertExecutionByEventImportJob">
                 <permission.job id="eventImportJob"/>
             	<attribute.change id="custom_is_creator_status" 	to="in_review"/>

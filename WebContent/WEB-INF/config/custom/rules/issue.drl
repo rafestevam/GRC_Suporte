@@ -1065,10 +1065,11 @@ rule "custom_set_plannedenddate_status_actionplan[I,V]"
 		( object is opened by its creator OR
 		  user has at object role "issuemanager" )
 		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "please_select"
 	
 	then
-		set "plannedenddate" not_mandatory
-		set "plannedenddate" readonly
+#		set "plannedenddate" not_mandatory
+#		set "plannedenddate" readonly
 		set "custom_ap_creator_status" to value "new"
 
 end
