@@ -9,6 +9,9 @@
         <filterRow id="corprisk_name">
             <filterElement dataReference.idref="rc_name"  />
         </filterRow>
+        <filterRow id="corprisk_categ">
+        	<filterElement dataReference.idref="ct_name" />
+        </filterRow>
     </filter>	
 <!-- Fim REO 27.06.2017 - Risco Corporativo -->    
     

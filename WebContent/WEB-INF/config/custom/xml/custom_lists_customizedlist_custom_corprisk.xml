@@ -19,15 +19,17 @@
 		<listHeaderRow>
 			<listHeader column="LC_Corprisk_0" propertyKey="tableheader.corprisk.client"    width="8%"/>
 			<listHeader column="LC_Corprisk_1" propertyKey="tableheader.corprisk.id"        width="15%"/>
-			<listHeader column="LC_Corprisk_2" propertyKey="tableheader.corprisk.name"      width="47%"/>
-			<listHeader column="LC_Corprisk_3" propertyKey="tableheader.corprisk.potencial" width="15%"/>
-			<listHeader column="LC_Corprisk_4" propertyKey="tableheader.corprisk.residual"  width="15%"/>
+			<listHeader column="LC_Corprisk_2" propertyKey="tableheader.corprisk.name"      width="32%"/>
+			<listHeader column="LC_Corprisk_3" propertyKey="tableheader.corprisk.categ"     width="15%"/>
+			<listHeader column="LC_Corprisk_4" propertyKey="tableheader.corprisk.potencial" width="15%"/>
+			<listHeader column="LC_Corprisk_5" propertyKey="tableheader.corprisk.residual"  width="15%"/>
 		</listHeaderRow>
 		<column id="LC_Corprisk_0" align="center" dataReference.idref="rc_client" />
 		<column id="LC_Corprisk_1" align="left" dataReference.idref="rc_rcid" />
 		<column id="LC_Corprisk_2" align="left" dataReference.idref="rc_name" />
-		<column id="LC_Corprisk_3" align="center" dataReference.idref="rc_potencial" />
-		<column id="LC_Corprisk_4" align="center" dataReference.idref="rc_residual" />
+		<column id="LC_Corprisk_3" align="left" dataReference.idref="ct_name" />
+		<column id="LC_Corprisk_4" align="center" dataReference.idref="rc_potencial" />
+		<column id="LC_Corprisk_5" align="center" dataReference.idref="rc_residual" />
 		<listButtons>
 			<buttonReference button.idref="LIST_OPEN"/>
 <!--             <buttonReference button.idref="PDF_REPORT"/> -->

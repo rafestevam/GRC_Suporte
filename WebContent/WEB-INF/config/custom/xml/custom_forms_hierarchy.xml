@@ -134,9 +134,9 @@
                 <row id="cst_client_sign">
                     <element attribute.idref="client_sign" template="clientSign"/>
                 </row>
-                <row id="rc_rcid">
-                	<element attribute.idref="rc_rcid"/>
-                </row>
+<!--                 <row id="rc_rcid"> -->
+<!--                 	<element attribute.idref="riskid"/> -->
+<!--                 </row> -->
                 <row id="cst_name" propertyKey="form.row.name.DBI">
                     <cell>
                         <element attribute.idref="name"/>
@@ -210,10 +210,16 @@
         <page id="rcdetails">
         	<rowGroup id="rcdetails.1">
                 <row id="rc_potencial">
-                	<element attribute.idref="rc_potencial"/>
+                	<element attribute.idref="classpot"/>
                 </row>
                 <row id="rc_residual">
-                	<element attribute.idref="rc_residual"/>
+                	<element attribute.idref="residual"/>
+                </row>
+                <row id="conseq">
+                	<element attribute.idref="conseq"/>
+                </row>        		
+                <row id="justif">
+                	<element attribute.idref="justif"/>
                 </row>        		
         	</rowGroup>
 <!--         	<rowGroup id="rcdetails.2"> -->
