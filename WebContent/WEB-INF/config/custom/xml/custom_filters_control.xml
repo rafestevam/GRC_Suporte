@@ -37,7 +37,7 @@
             <filterElement dataReference.idref="guid" default="" filterType="string" compareType="EQ"/>
         </filterRow>
 		<filterRow id="deactivated">
-            <filterElement dataReference.idref="deactivated"  >
+            <filterElement dataReference.idref="control_deactivated"  >
                 <parameter name="showAll" value="false"/>
             </filterElement>
         </filterRow>

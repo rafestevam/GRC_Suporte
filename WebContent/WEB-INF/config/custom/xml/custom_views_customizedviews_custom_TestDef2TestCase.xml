@@ -4,7 +4,8 @@
 	<view id="custom_TestDef2TestCase" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
 		<viewObject id="VO_testdef" objectType="TESTDEFINITION" isMainViewObject="true">
 			<viewColumn id="tdef_id" attributeType="obj_id" isSelectColumn="true"/>
-			<viewColumn id="tdef_name" attributeType="name" isSelectColumn="true"/>	
+			<viewColumn id="tdef_name" attributeType="name" isSelectColumn="true"/>
+			<viewColumn id="tdef_deactivated" attributeType="deactivated" isSelectColumn="true" />
 		</viewObject>
 		<viewObject id="VO_testcase" objectType="TESTCASE">
             <viewColumn id="tcase_id" attributeType="obj_id" isSelectColumn="true"/>
@@ -13,6 +14,7 @@
             <viewColumn id="tcase_owner_status" attributeType="owner_status" isSelectColumn="true"/>
             <viewColumn id="tcase_version_number" attributeType="version_number" isSelectColumn="true"/>
             <viewColumn id="tcase_version_active" attributeType="version_active" />
+            <viewColumn id="tcase_deactivated" attributeType="deactivated" isSelectColumn="true" />
 		</viewObject>
 		<link linktype.id="14" firstViewObject="VO_testdef" secondViewObject="VO_testcase"/>
 		<conditions>
@@ -21,6 +23,8 @@
 				<condition column.id="tdef_id" compareType="EQ" currentObjectType.id="TESTDEFINITION" currentAttributeType.id="obj_id"/>
 				<condition column.id="tdef_id" compareType="EQ"/>
 <!-- 				<condition column.id="ce_owner_status" compareType="EQ" value="3"/> -->
+				<condition column.id="tdef_deactivated" compareType="EQ"/>
+				<condition column.id="tcase_deactivated" compareType="EQ"/>
 			</compoundCondition>
 		</conditions>
 	</view>

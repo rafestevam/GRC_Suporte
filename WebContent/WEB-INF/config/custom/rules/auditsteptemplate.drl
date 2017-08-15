@@ -221,3 +221,20 @@ rule "planned_processing_time_exceeds_planned_processing_period_[V]"
 		add "error" message "error.auditstep.processingtime.not.in.target.period.ERR" to "processingtime"
 
 end
+
+# Inicio REO 27.07.2017 - Criação de Medida de Auditoria
+rule "set_fields_not_mandatory[I,V]"
+
+	salience 9900
+	no-loop true
+	
+	when
+	
+	then
+		set "area"        not_mandatory
+		set "process"     not_mandatory
+		set "subprocess"  not_mandatory
+		set "control"     not_mandatory
+
+end
+# Fim REO 27.07.2017 - Criação de Medida de Auditoria
