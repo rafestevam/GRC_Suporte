@@ -372,6 +372,10 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getFullGrantUserContext());
 			for(IAppObj controlObj : controlList){
 				
+				//REO 17.08.2017 - EV108436
+				if(controlObj.getVersionData().isDeleted())
+					continue;
+				
 				log.info("Controle Afetado: " + controlObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
 				
 				/*IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
