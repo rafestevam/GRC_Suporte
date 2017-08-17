@@ -379,6 +379,10 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
 			for(IAppObj controlObj : controlList){
 				
+				//REO 17.08.2017 - EV108436
+				if(controlObj.getVersionData().isDeleted())
+					continue;
+				
 				/*IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
 				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
 				controlFacade.allocateWriteLock(controlOVID);*/
