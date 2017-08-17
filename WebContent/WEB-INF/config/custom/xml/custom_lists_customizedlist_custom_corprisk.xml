@@ -25,13 +25,15 @@
 			<listHeader column="LC_Corprisk_5" propertyKey="tableheader.corprisk.residual"  width="15%"/>
 		</listHeaderRow>
 		<column id="LC_Corprisk_0" align="center" dataReference.idref="rc_client" />
-		<column id="LC_Corprisk_1" align="left" dataReference.idref="rc_rcid" />
+		<column id="LC_Corprisk_1" align="left" dataReference.idref="rc_rcid" template="openObject">
+			<parameter name="idColumn" value="id" />
+		</column>
 		<column id="LC_Corprisk_2" align="left" dataReference.idref="rc_name" />
 		<column id="LC_Corprisk_3" align="left" dataReference.idref="ct_name" />
 		<column id="LC_Corprisk_4" align="center" dataReference.idref="rc_potencial" />
 		<column id="LC_Corprisk_5" align="center" dataReference.idref="rc_residual" />
 		<listButtons>
-			<buttonReference button.idref="LIST_OPEN"/>
+<!-- 			<buttonReference button.idref="LIST_OPEN"/> -->
 <!--             <buttonReference button.idref="PDF_REPORT"/> -->
 <!--             <buttonReference button.idref="EXCEL_REPORT"/> -->
 		</listButtons>

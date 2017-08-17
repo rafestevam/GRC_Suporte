@@ -307,7 +307,7 @@ rule "set_category_invisible[I,V]"
 		value comparison fulfilled: ":transient:" attr_value "rc_csttype" "CONTAINS NOT" value "corprisk"
 		
 	then
-#		set "rc_category" invisible
+		set "rc_category" invisible
 	
 end
 
@@ -321,6 +321,7 @@ rule "set_category_visible[I,V]"
 		
 	then
 		set "rc_category" visible
+		set "rc_category" readonly
 		set "type" invisible
 		
 end

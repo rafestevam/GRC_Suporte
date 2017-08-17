@@ -9,7 +9,7 @@
         <filterRow id="corprisk_name">
             <filterElement dataReference.idref="rc_name"  />
         </filterRow>
-        <filterRow id="corprisk_categ">
+        <filterRow id="corprisk_categ" propertyKey="filter.row.cst_filter_corprisk.corprisk_categ.DBI">
         	<filterElement dataReference.idref="ct_name" />
         </filterRow>
     </filter>	
