@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
     
-	<form id="FORM_HIERARCHY">
+	<form id="FORM_HIERARCHY" controlName="customhierarchyform">
         <logToolbarButtons>
             <buttonReference button.idref="ARIS_REPORT"/>
         </logToolbarButtons>
@@ -130,6 +130,7 @@
         
         <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
         <page id="cst_hierarchy">
+<!--         	<javaScriptRef scriptName="custom_corprisk" /> -->
             <rowGroup id="cst_hierarchy.1">
                 <row id="cst_client_sign">
                     <element attribute.idref="client_sign" template="clientSign"/>

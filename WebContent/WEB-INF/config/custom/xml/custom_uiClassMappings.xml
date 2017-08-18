@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<uiClassMapping>
+		
+		<!-- Inicio REO - 18.08.2017 - Riscos Corporativos -->
+		<controls>
+			<control name="customhierarchyform" clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.control.object.CustomHierarchyForm" />
+		</controls>
+		<!-- Fim REO - 18.08.2017 - Riscos Corporativos -->
+	
+	</uiClassMapping>
+
+</custom>

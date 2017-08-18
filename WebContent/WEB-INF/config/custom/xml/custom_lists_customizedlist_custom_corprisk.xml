@@ -33,7 +33,7 @@
 		<column id="LC_Corprisk_4" align="center" dataReference.idref="rc_potencial" />
 		<column id="LC_Corprisk_5" align="center" dataReference.idref="rc_residual" />
 		<listButtons>
-<!-- 			<buttonReference button.idref="LIST_OPEN"/> -->
+			<buttonReference button.idref="LIST_OPEN"/>
 <!--             <buttonReference button.idref="PDF_REPORT"/> -->
 <!--             <buttonReference button.idref="EXCEL_REPORT"/> -->
 		</listButtons>
