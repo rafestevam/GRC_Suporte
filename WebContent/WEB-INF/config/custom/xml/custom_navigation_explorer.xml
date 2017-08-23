@@ -244,12 +244,12 @@
         </nav.access>
         
         <!-- Inicio REO 27.06.2017 -->
-        <nav.data.grid dataGrid.idref="cst_list_corprisk">
-            <nav.access>
-                <nav.access.component licensedComponentIDs="rm"/>
-                <nav.access.role roleIDs="riskmanager"/>
-            </nav.access>
-        </nav.data.grid>
+<!--         <nav.data.grid dataGrid.idref="cst_list_corprisk"> -->
+<!--             <nav.access> -->
+<!--                 <nav.access.component licensedComponentIDs="rm"/> -->
+<!--                 <nav.access.role roleIDs="riskmanager"/> -->
+<!--             </nav.access> -->
+<!--         </nav.data.grid> -->
         <!-- Fim REO 27.06.2017 -->
         
         <!-- for many roles... -->
