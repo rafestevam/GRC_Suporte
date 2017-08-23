@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 	
-<!-- 	restrictionAttributeId="rc_csttype" -->
-	<tabMapping id="hierarchy" frame="content" restrictionAttributeId="type">
+<!-- 	restrictionAttributeId="type" -->
+	<tabMapping id="hierarchy" frame="content" restrictionAttributeId="rc_csttype">
 		<tTab page="1" id="hierarchyElement" propertyKey="tab.hierarchyElement.DBI" action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=1"  restrictionValue="tester,financialaccount,orgunit,process,category,applicationsystemtype"/>
         <tTab page="2" id="changeManagement" propertyKey="tab.changeManagement.DBI" action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=2"  restrictionValue="financialaccount" licensedComponentId="cm" roles="hierarchymanager,hierarchyowner,hierarchyauditor"/>
         
