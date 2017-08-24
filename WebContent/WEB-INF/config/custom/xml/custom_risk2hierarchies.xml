@@ -6,10 +6,16 @@
             <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="risk_version_active" attributeType="version_active" mashzoneRelevant="false"/>
             <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <!-- Inicio REO - 24.08.2017 - Riscos Corporativos -->
+            <viewColumn id="risk_id" attributeType="risk_id" isSelectColumn="true" mashzoneRelevant="true"/>
+            <!-- Fim REO - 24.08.2017 - Riscos Corporativos -->
         </viewObject>
         <viewObject id="VO_customrisk2hierarchies_hierarchy" objectType="HIERARCHY">
             <viewColumn id="h_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="h_type" attributeType="type" isSortable="true" isSelectColumn="true"/>
+            <!-- Inicio REO - 24.08.2017 - Riscos Corporativos -->
+            <viewColumn id="h_corprisk" attributeType="corprisk" isSortable="true" isSelectColumn="true"/>
+            <!-- Fim REO - 24.08.2017 - Riscos Corporativos -->
         </viewObject>
         <link linktype.id="47,48,3162,3163,3164" firstViewObject="VO_customrisk2hierarchies_risk" secondViewObject="VO_customrisk2hierarchies_hierarchy" joinType="LEFT"/>
         <conditions>
