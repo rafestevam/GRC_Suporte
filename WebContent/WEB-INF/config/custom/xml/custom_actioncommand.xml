@@ -11,6 +11,9 @@
 			<commandId id="customcachersk" description="Custom Cache Action for Risk" />
 			<commandId id="customissuedate" description="Custom Issue Issue Date" />	
 			<commandId id="customissuegetrisk" description="Custom pegar risco" />
+			<!-- Inicio REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
+			<commandId id="customdetach" description="Remover Atribuicao Controles de Risco" />
+			<!-- Fim REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
 		</commandIds>
 		
 		
@@ -48,13 +51,13 @@
 		    </commandSet>			    
 		</objectTypeCommands>
 		
+		<!-- Inicio REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
 		<listCommands>
 			<commandSet name="common">
-<!-- 				<actionCommand commandId="attach" 	   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomAttachmentActionCommand"/>GAP GRC14 -->
-<!-- 				<actionCommand commandId="attachNew"   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomNewAttachmentActionCommand"/>GAP GRC14 -->
-<!-- 				<actionCommand commandId="detach" 	   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomDetachmentActionCommand"/>GAP GRC14 -->
+				<actionCommand commandId="customdetach" 	   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomDetachmentActionCommand"/>
 			</commandSet>
 		</listCommands>
+		<!-- Fim REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
 			
 		
 	</actionCommands>
