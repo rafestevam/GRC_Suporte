@@ -21,6 +21,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestcaseAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestdefinitionAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
@@ -29,6 +30,7 @@ import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IListAttributeType;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.list.BaseDetachmentActionCommand;
 
 public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
@@ -37,6 +39,9 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 		super.execute();
 	}
 	
+	/*
+	 * REO 28.08.2017 - EV108436 - Correção do programa de contagem de controles
+	 */
 	protected void afterExecute(){
 		//this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, "attachment", new String[] { getStringRepresentation(this.formModel.getAppObj()) });
 		try{
@@ -48,6 +53,9 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 			double total3line = 0;
 			Map<String,Double> mapTestLine = new HashMap<String,Double>();
 			Map<String,String> mapClassCtrl = new HashMap<String,String>();
+			
+			IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+			riskFacade.allocateLock(this.appObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 			
 			IListAttribute ctrlList = this.appObj.getAttribute((IListAttributeType)lookupAttributeType(this.attributeType));
 			for(IAppObj controlObj : ctrlList.getElements(getFullGrantUserContext())){
@@ -85,7 +93,22 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 			double pond2line = inef2line / total2line;
 			double pond3line = inef3line / total3line;
 			
-			mapClassCtrl = this.getControlClassification(pond1line, pond2line, pond3line);	
+			mapClassCtrl = this.getControlClassification(pond1line, pond2line, pond3line);
+			
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(inef1line);
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(total1line);
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(inef2line);
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL2LINE).setRawValue(total2line);
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(inef3line);
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(total3line);
+			
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(mapClassCtrl.get("control1line"));
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(mapClassCtrl.get("control2line"));
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(mapClassCtrl.get("control3line"));
+			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(mapClassCtrl.get("controlfinal"));
+			
+			riskFacade.save(this.appObj, this.getDefaultTransaction(), true);
+			riskFacade.releaseLock(this.appObj.getVersionData().getHeadOVID());
 			
 		}catch(Exception e){
 			this.formModel.addControlInfoMessage(NotificationTypeEnum.ERROR, "attachment", new String[] { e.getLocalizedMessage() });
