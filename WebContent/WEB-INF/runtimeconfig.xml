@@ -237,7 +237,7 @@
         <parameterList name="generatorJobRiskAssessment">
             <parameter name="jobitem" value="generatorJob" />
             <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 02 02 ? * SUN-SAT"/>
+            <parameter name="executionTime" value="0 40 15 ? * SUN-SAT"/>
             <parameter name="clientexcludinglist" value=""/>
             <parameter name="clientincludinglist" value=""/>
             <parameter name="objecttypes" value="RISKASSESSMENT"/>
