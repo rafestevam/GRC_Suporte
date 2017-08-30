@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+	<!-- Risks, which are assigned to a hierarchy over master data-->
+    <view id="hierarchy2risk_refs_1" view.parameter="DISTINCT">
+        <viewObject id="VO_hierarchy2risk_refs_1_Orgunit" objectType="HIERARCHY">
+            <viewColumn id="id_orgH" attributeType="obj_id"/>
+            <viewColumn id="idlist_orgH" attributeType="obj_id"/>
+            <viewColumn id="idforexcludefilter_orgH" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_2" objectType="RISK" isMainViewObject="true" skipRightsConditionForRoleLevels="object">
+            <viewColumn id="clientSign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="description" attributeType="description" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="risk_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="risk_version_active" attributeType="version_active"/>
+            <!-- Inicio REO 30.08.2017 - Riscos Corporativos -->
+            <viewColumn id="risk_version_number" attributeType="version_number" isSelectColumn="true"/>
+            <!-- Fim REO 30.08.2017 - Riscos Corporativos -->
+            <viewColumn id="impact" attributeType="impact" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="probability" attributeType="probability" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="risktype" attributeType="risktype" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="assertions" attributeType="assertions" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_risk_owner" objectType="USERGROUP">
+            <viewColumn id="riskOwnerGroupName" attributeType="name" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_Control" objectType="CONTROL">
+            <viewColumn id="Control_obj_id" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_Testdef" objectType="TESTDEFINITION">
+            <viewColumn id="testdef_obj_id" attributeType="obj_id"/>
+            <viewColumn id="testmanager_group" attributeType="manager_group"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_7" objectType="USERGROUP">
+            <viewColumn id="responsible_2" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_REVIEWER" objectType="USERGROUP">
+            <viewColumn id="responsible_reviewer" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_RISKGROUPS" objectType="USERGROUP">
+            <viewColumn id="responsible_riskgroups" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_OPRISKGROUPS" objectType="USERGROUP">
+            <viewColumn id="responsible_opriskgroups" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_CONTROLGROUPS" objectType="USERGROUP">
+            <viewColumn id="responsible_controlgroups" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_riskhierarchiesProcess" objectType="HIERARCHY">
+            <viewColumn id="id_riskHPr" attributeType="obj_id"/>
+            <!-- needed for aggregated HierarchyReport -->
+            <viewColumn id="idPr" attributeType="obj_id"/>
+            <viewColumn id="idlist_riskHPr" attributeType="obj_id"/>
+            <viewColumn id="idforexcludefilter_riskHPr" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_riskhierarchiesFinacc" objectType="HIERARCHY">
+            <viewColumn id="id_riskHFA" attributeType="obj_id"/>
+            <!-- needed for aggregated HierarchyReport -->
+            <viewColumn id="idFA" attributeType="obj_id"/>
+            <viewColumn id="idlist_riskHFA" attributeType="obj_id"/>
+            <viewColumn id="idforexcludefilter_riskHFA" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_riskhierarchiesOR" objectType="HIERARCHY">
+            <viewColumn id="id_riskHOR" attributeType="obj_id"/>
+            <!-- needed for aggregated HierarchyReport -->
+            <viewColumn id="idOR" attributeType="obj_id"/>
+            <viewColumn id="idlist_riskHOR" attributeType="obj_id"/>
+            <viewColumn id="idforexcludefilter_riskHOR" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_refs_1_TG" objectType="USERGROUP">
+            <viewColumn id="testergroup" attributeType="obj_id"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy2risk_TesterHierarchy" objectType="HIERARCHY">
+            <viewColumn id="id_testerH" attributeType="obj_id"/>
+            <viewColumn id="idlist_testerH" attributeType="obj_id"/>
+            <viewColumn id="idforexcludefilter_testerH" attributeType="obj_id"/>
+        </viewObject>
+        <link linktype.id="52" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_1_RISKGROUPS" joinType="LEFT"/>
+        <link linktype.id="3160,3161" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_1_OPRISKGROUPS" joinType="LEFT"/>
+        <link linktype.id="47" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_riskhierarchiesProcess" joinType="LEFT"/>
+        <link linktype.id="48" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_riskhierarchiesFinacc" joinType="LEFT"/>
+        <link linktype.id="3163,3162,3164" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_riskhierarchiesOR" joinType="LEFT"/>
+        <link linktype.id="4" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_1_Control" joinType="LEFT"/>
+        <link linktype.id="52" firstViewObject="VO_hierarchy2risk_refs_1_2" secondViewObject="VO_hierarchy2risk_refs_risk_owner" joinType="LEFT"/>
+        <link linktype.id="13" firstViewObject="VO_hierarchy2risk_refs_1_Control" secondViewObject="VO_hierarchy2risk_refs_1_CONTROLGROUPS" joinType="LEFT"/>
+        <link linktype.id="15" firstViewObject="VO_hierarchy2risk_refs_1_Control" secondViewObject="VO_hierarchy2risk_refs_1_Testdef" joinType="LEFT"/>
+        <link linktype.id="49" firstViewObject="VO_hierarchy2risk_refs_1_Testdef" secondViewObject="VO_hierarchy2risk_refs_1_Orgunit" joinType="LEFT"/>
+        <link linktype.id="3" firstViewObject="VO_hierarchy2risk_refs_1_Testdef" secondViewObject="VO_hierarchy2risk_refs_1_7" joinType="LEFT"/>
+        <link linktype.id="3" firstViewObject="VO_hierarchy2risk_refs_1_Testdef" secondViewObject="VO_hierarchy2risk_refs_1_TG" joinType="LEFT"/>
+        <link linktype.id="53" firstViewObject="VO_hierarchy2risk_refs_1_Testdef" secondViewObject="VO_hierarchy2risk_refs_1_REVIEWER" joinType="LEFT"/>
+        <link linktype.id="69" firstViewObject="VO_hierarchy2risk_refs_1_TG" secondViewObject="VO_hierarchy2risk_TesterHierarchy" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="description" compareType="LIKE"/>
+                <condition column.id="risk_version_active" compareType="EQ" value="true"/>
+                <!-- filtered hierarchy -->
+                <compoundCondition conditionConnect="OR">
+                    <condition column.id="id_orgH" compareType="IN"/>
+                    <condition column.id="idlist_orgH" compareType="IN"/>
+                    <condition column.id="id_testerH" compareType="IN"/>
+                    <condition column.id="idlist_testerH" compareType="IN"/>
+                    <condition column.id="id_riskHPr" compareType="IN"/>
+                    <condition column.id="idPr" compareType="IN"/>
+                    <condition column.id="idlist_riskHPr" compareType="IN"/>
+                    <condition column.id="id_riskHFA" compareType="IN"/>
+                    <condition column.id="idFA" compareType="IN"/>
+                    <condition column.id="idlist_riskHFA" compareType="IN"/>
+                    <condition column.id="id_riskHOR" compareType="IN"/>
+                    <condition column.id="idOR" compareType="IN"/>
+                    <condition column.id="idlist_riskHOR" compareType="IN"/>
+                    <!-- groupconditions -->
+                    <compoundCondition conditionConnect="AND">
+                        <compoundCondition conditionConnect="OR">
+                            <condition column.id="responsible_2" compareType="IN"/>
+                            <condition column.id="responsible_reviewer" compareType="IN"/>
+                            <condition column.id="responsible_riskgroups" compareType="IN"/>
+                            <condition column.id="responsible_opriskgroups" compareType="IN"/>
+                            <condition column.id="responsible_controlgroups" compareType="IN"/>
+                        </compoundCondition>
+                        <compoundCondition conditionConnect="OR">
+                            <condition column.id="idforexcludefilter_orgH" compareType="IN"/>
+                            <condition column.id="idforexcludefilter_testerH" compareType="IN"/>
+                            <condition column.id="idforexcludefilter_riskHPr" compareType="IN"/>
+                            <condition column.id="idforexcludefilter_riskHFA" compareType="IN"/>
+                            <condition column.id="idforexcludefilter_riskHOR" compareType="IN"/>
+                        </compoundCondition>
+                    </compoundCondition>
+                </compoundCondition>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+</custom>

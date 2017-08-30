@@ -38,6 +38,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAt
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
@@ -47,6 +48,8 @@ import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.rights.roles.IRole;
 import com.idsscheer.webapps.arcm.config.metadata.rights.roles.Role;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
@@ -124,11 +127,14 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				if(this.ceControlExec.equals("3")){
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
+					this.affectCorpRisk(riskParentObj);
 				}
 			
 			//}
 			
 			
+		}catch(CustomCorpRiskException e1){
+			this.environment.getDialogManager().getNotificationDialog().addInfo(e1.getMessage());
 		}catch(Exception e){
 			//this.environment.getDialogManager().createSilentForwardDialog("ERRO", e.getMessage());
 			this.environment.getDialogManager().getNotificationDialog().addInfo(e.getMessage());
@@ -1001,5 +1007,22 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		}
 		
 	}*/
+	
+	private void affectCorpRisk(IAppObj risk) throws CustomCorpRiskException{
+		
+		try{
+			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
+			for(IAppObj corpRisk : corpRiskList){
+				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
+					CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, getFullGrantUserContext(), this.getDefaultTransaction());
+					String ret = crHierarchy.calculateResidualCR();
+				}
+			}
+		}catch(CustomCorpRiskException e){
+			throw e;
+		}
+		
+		
+	}
 
 }
