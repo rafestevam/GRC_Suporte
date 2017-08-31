@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
-<!-- Inicio REO 31.07.2017 - Risco Corporativo -->
-	<view id="cst_view_corprisk" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
+<!-- Inicio REO 26.07.2017 - Risco Corporativo -->
+	<view id="cst_view_corprisk2" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
 		<viewObject objectType="HIERARCHY" id="VO_corprisk_categ" isMainViewObject="true">
         	<viewColumn id="ct_obj_id" attributeType="obj_id" isSelectColumn="true"/>
         	<viewColumn id="ct_name" attributeType="name" isSelectColumn="true" isSortable="false"/>
@@ -16,19 +16,7 @@
             <viewColumn id="rc_potencial" attributeType="classpot" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_residual" attributeType="residual" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-        <viewObject id="VO_Risk" objectType="RISK" isMainViewObject="false">
-        	<viewColumn id="r_id" attributeType="risk_id" isSelectColumn="true"/>
-        	<viewColumn id="r_name" attributeType="name" isSelectColumn="true"/>
-        	<viewColumn id="r_residual" attributeType="ra_residualfinal" isSelectColumn="true" />
-        </viewObject>
-        <viewObject objectType="CONTROL" id="VO_Control">
-        	<viewColumn id="c_id" attributeType="obj_id" isSelectColumn="true" />
-        	<viewColumn id="c_name" attributeType="name" isSelectColumn="true" />
-        	<viewColumn id="c_status" attributeType="custom_status_control" isSelectColumn="true" />
-        </viewObject>
         <link firstViewObject="VO_corprisk_categ" linktype.id="46" secondViewObject="VO_hierarchy" joinType="LEFT"/>
-        <link firstViewObject="VO_Risk" linktype.id="3162" secondViewObject="VO_hierarchy" joinType="INNER"/>
-        <link linktype.id="4" firstViewObject="VO_Risk" secondViewObject="VO_Control" joinType="INNER"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="rc_csttype" compareType="EQ" value="12"/>
@@ -36,6 +24,6 @@
             </compoundCondition>
         </conditions>
     </view>
-<!-- Fim REO 31.07.2017 - Risco Corporativo -->
+<!-- Fim REO 26.07.2017 - Risco Corporativo -->
 
 </custom>
