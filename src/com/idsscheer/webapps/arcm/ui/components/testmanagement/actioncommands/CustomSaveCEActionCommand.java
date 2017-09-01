@@ -21,6 +21,10 @@ import com.idsscheer.webapps.arcm.bl.authorization.rights.support.RoleUtility;
 import com.idsscheer.webapps.arcm.bl.authorization.rights.support.UserRoleUtility;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectLockException;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectNotUniqueException;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.framework.jobs.BaseJob;
 import com.idsscheer.webapps.arcm.bl.framework.jobs.JobHelper;
 import com.idsscheer.webapps.arcm.bl.models.form.IRoleSelectionModel;
@@ -29,6 +33,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.navigation.stack.IBreadcrumb;
@@ -1008,17 +1013,24 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 	}*/
 	
-	private void affectCorpRisk(IAppObj risk) throws CustomCorpRiskException{
+	private void affectCorpRisk(IAppObj risk) throws Exception{
 		
 		try{
+			IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
 			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
 			for(IAppObj corpRisk : corpRiskList){
 				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
+					crFacade.allocateLock(corpRisk.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 					CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, getFullGrantUserContext(), this.getDefaultTransaction());
 					String ret = crHierarchy.calculateResidualCR();
+					if(ret != null || (!ret.equals(""))){
+						corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(ret);
+						crFacade.save(corpRisk, this.getDefaultTransaction(), true);
+						crFacade.releaseLock(corpRisk.getVersionData().getHeadOVID());
+					}
 				}
 			}
-		}catch(CustomCorpRiskException e){
+		}catch(Exception e){
 			throw e;
 		}
 		

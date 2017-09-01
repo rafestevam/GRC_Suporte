@@ -72,6 +72,12 @@ public class CustomCorpRiskHierarchy {
 		ptsGrade.put("alto", (resGrade.get("alto") * heightGrade.get("pAlto")));
 		ptsGrade.put("muito_alto", (resGrade.get("muito_alto") * heightGrade.get("pMAlto")));
 		
+		Iterator it = ptsGrade.entrySet().iterator();
+		while(it.hasNext()){
+			Map.Entry<String,Integer> mapEntry = (Map.Entry<String, Integer>)it.next();
+			finalGrade += mapEntry.getValue();
+		}
+		
 		distGrade = this.computeDistGrade(totalRisks, heightGrade);
 		residual = this.getResidualCR(finalGrade, distGrade);		
 		
@@ -133,10 +139,10 @@ public class CustomCorpRiskHierarchy {
 	
 	private Map<String,Integer[]> computeDistGrade(int totalRisks, Map<String,Integer> heightGrade){
 		Map<String, Integer[]> mapRet = new HashMap<String, Integer[]>();
-		int limitBaixo = totalRisks * heightGrade.get("baixo");
-		int limitMedio = totalRisks * heightGrade.get("medio");
-		int limitAlto = totalRisks * heightGrade.get("alto");
-		int limitMAlto = totalRisks * heightGrade.get("muito_alto");
+		int limitBaixo = totalRisks * heightGrade.get("pBaixo");
+		int limitMedio = totalRisks * heightGrade.get("pMedio");
+		int limitAlto = totalRisks * heightGrade.get("pAlto");
+		int limitMAlto = totalRisks * heightGrade.get("pMAlto");
 		
 		List<Integer> listBaixo = new ArrayList<Integer>();
 		List<Integer> listMedio = new ArrayList<Integer>();
@@ -148,28 +154,32 @@ public class CustomCorpRiskHierarchy {
 			count += 1;
 			listBaixo.add(count);
 		}
-		mapRet.put("baixo", (Integer[])listBaixo.toArray());
+		Integer[] arrBaixo = Arrays.copyOf(listBaixo.toArray(), listBaixo.size(), Integer[].class);
+		mapRet.put("baixo", arrBaixo);
 		
-		count = 0;
+		count = limitBaixo;
 		for(int i = (limitBaixo + 1); i <= limitMedio; i++){
 			count += 1;
 			listMedio.add(count);
 		}
-		mapRet.put("medio", (Integer[])listMedio.toArray());
+		Integer[] arrMedio = Arrays.copyOf(listMedio.toArray(), listMedio.size(), Integer[].class);
+		mapRet.put("medio", arrMedio);
 		
-		count = 0;
+		count = limitMedio;
 		for(int i = (limitMedio + 1); i <= limitAlto; i++){
 			count += 1;
 			listAlto.add(count);
 		}
-		mapRet.put("alto", (Integer[])listAlto.toArray());
+		Integer[] arrAlto = Arrays.copyOf(listAlto.toArray(), listAlto.size(), Integer[].class);
+		mapRet.put("alto", arrAlto);
 		
-		count = 0;
+		count = limitAlto;
 		for(int i = (limitAlto + 1); i <= limitMAlto; i++){
 			count += 1;
 			listMAlto.add(count);
 		}
-		mapRet.put("muito_alto", (Integer[])listMAlto.toArray());
+		Integer[] arrMAlto = Arrays.copyOf(listMAlto.toArray(), listMAlto.size(), Integer[].class);
+		mapRet.put("muito_alto", arrMAlto);
 		
 		return mapRet;
 	}
