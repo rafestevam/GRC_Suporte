@@ -56,7 +56,10 @@
         </listAttrType>
         <listAttrType id="risk_category" objectType.idref="HIERARCHY" linkType="3162">
             <listRestriction>
-                <attributeRestriction attribute="type" value="category"/>
+                <!-- Inicio REO 23.08.2017 - Risco Corporativo -->
+<!--                 <attributeRestriction attribute="type" value="category"/> -->
+                <attributeRestriction attribute="rc_csttype" value="category"/>
+                <!-- Fim REO 23.08.2017 - Risco Corporativo -->
             </listRestriction>
         </listAttrType>
         <listAttrType id="orgunit" objectType.idref="HIERARCHY" linkType="3163">
@@ -173,7 +176,10 @@
         <doubleAttrType id="ra_inef3line" />
         <doubleAttrType id="ra_final3line" />
         <!-- Fim GAP GRC98 -->
-
+        
+        <!-- Inicio REO - 24.08.2017 - Riscos Corporativos -->
+        <stringAttrType id="rc_riskcateg" maxCharCount="50"/>
+        <!-- Fim REO - 24.08.2017 - Riscos Corporativos -->
 
         <index id="I_6_1" type="normal">
             <attributeRef attribute="name"/>
