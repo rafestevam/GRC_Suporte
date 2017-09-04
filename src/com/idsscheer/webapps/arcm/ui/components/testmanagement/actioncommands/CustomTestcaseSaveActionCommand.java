@@ -139,7 +139,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
 					this.controlClassification(currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
-					//this.affectCorpRisk(riskParentObj);
+					this.affectCorpRisk(riskParentObj);
 				}
 			
 			}
