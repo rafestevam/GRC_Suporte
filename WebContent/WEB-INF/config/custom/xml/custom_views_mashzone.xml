@@ -1271,6 +1271,11 @@
 	    <viewColumn id="is_cst_process" attributeType="cst_process" mashzoneRelevant="true" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
+            
+            <!-- Inicio REO 04.09.2017 - Riscos Corporativos -->
+          	<viewColumn id="is_cst_actiontype" attributeType="action_type" mashzoneRelevant="true" isSelectColumn="true"/>
+          	<!-- Final REO 04.09.2017 - Riscos Corporativos -->
+            
         </viewObject>
         <viewObject id="VO_issuedata_creator" objectType="USER">
             <viewColumn id="is_creator_id" attributeType="obj_id" mashzoneRelevant="false"/>
