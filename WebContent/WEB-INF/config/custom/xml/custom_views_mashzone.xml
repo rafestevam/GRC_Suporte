@@ -1269,6 +1269,9 @@
 
 	    <viewColumn id="is_cst_modelname" attributeType="cst_modelname" mashzoneRelevant="true" isSelectColumn="true"/>
 	    <viewColumn id="is_cst_process" attributeType="cst_process" mashzoneRelevant="true" isSelectColumn="true"/>
+	    <!-- Inicio REO 04.09.2017 - Riscos Corporativos -->
+	    <viewColumn id="is_cst_actiontype" attributeType="action_type" mashzoneRelevant="true" isSelectColumn="true"/>
+	    <!-- Final REO 04.09.2017 - Riscos Corporativos -->
             
             <!-- Customizing for Mashzone -->
         </viewObject>
