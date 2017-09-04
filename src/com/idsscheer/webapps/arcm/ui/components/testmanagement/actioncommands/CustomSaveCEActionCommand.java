@@ -132,7 +132,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				if(this.ceControlExec.equals("3")){
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
-					this.affectCorpRisk(riskParentObj);
+					//this.affectCorpRisk(riskParentObj);
 				}
 			
 			//}

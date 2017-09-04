@@ -22,6 +22,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestCaseAttributeTypeCustom;
@@ -32,6 +33,7 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
@@ -137,6 +139,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
 					this.controlClassification(currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
+					//this.affectCorpRisk(riskParentObj);
 				}
 			
 			}
@@ -1031,6 +1034,29 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		}
 		
 		return isSame;
+		
+	}
+	
+	private void affectCorpRisk(IAppObj risk) throws Exception{
+		
+		try{
+			IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
+			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
+			for(IAppObj corpRisk : corpRiskList){
+				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
+					crFacade.allocateLock(corpRisk.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+					CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, getFullGrantUserContext(), this.getDefaultTransaction());
+					String ret = crHierarchy.calculateResidualCR();
+					if(ret != null || (!ret.equals(""))){
+						corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(ret);
+						crFacade.save(corpRisk, this.getDefaultTransaction(), true);
+						crFacade.releaseLock(corpRisk.getVersionData().getHeadOVID());
+					}
+				}
+			}
+		}catch(Exception e){
+			throw e;
+		}
 		
 	}
 	
