@@ -325,4 +325,17 @@ rule "set_category_visible[I,V]"
 		set "type" invisible
 		
 end
+
+rule "set_links_disabled[I,V]"
+
+	salience 7000
+	no-loop true
+
+	when
+
+	then
+		set "modellink" invisible
+		set "objectlink" invisible
+
+end
 ## Fim REO 04.08.2017 - Riscos Corporativos

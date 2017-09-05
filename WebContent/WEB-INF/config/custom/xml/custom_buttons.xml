@@ -14,6 +14,13 @@
 	<buttonDefinition id="customrasave" image="iconlib/icons/save_16.png" requiredRights="write" requireLock="true">
 		<button id="CUSTOM_RA_SAVE" defaultFunction="aam_objectcommand('customrasave', null, null, '_parent')" />
 	</buttonDefinition>
-	<!-- Fim GAP GRC14 --> 
+	<!-- Fim GAP GRC14 -->
+	
+	<!-- Inicio REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
+	<buttonDefinition id="customdetach" image="iconlib/icons/detach_anchor_link_16.png" requireLock="true">
+        <button id="LIST_CSTDETACH" defaultFunction="aam_listcommand('customdetach',null,'_parent')"/>
+        <button id="LISTROW_CSTDETACH" defaultFunction="aam_listcommand('customdetach','[id]','_parent')"/>
+    </buttonDefinition>
+    <!-- Fim REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
  
 </custom>
