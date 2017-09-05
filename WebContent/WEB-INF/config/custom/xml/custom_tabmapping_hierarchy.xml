@@ -13,7 +13,10 @@
         
         <tTab id="connect" propertyKey="tab.assignment.DBI" access="persistent">
             <tSubTab id="changereviews" propertyKey="tab.hierarchy.changereview.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2changereviews" objectType="CHANGEREVIEW"    restrictionValue="financialaccount" licensedComponentId="cm" roles="hierarchymanager,hierarchyowner,hierarchyauditor"/>
-			<tSubTab id="risks" propertyKey="tab.risks.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2risk_refs" objectType="RISK" licensedComponentId="rm" roles="riskmanager" />
+			<tSubTab id="risks" propertyKey="tab.risks.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2risk_refs" objectType="RISK" licensedComponentId="rm" roles="riskmanager" restrictionValue="tester,financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<!-- Inicio REO 05.09.2017 - Riscos Corporativos -->
+			<tSubTab id="risksp" propertyKey="tab.risksp.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2risk_refs" objectType="RISK" licensedComponentId="rm" roles="riskmanager" restrictionValue="corprisk"/>
+			<!-- Fim REO 05.09.2017 - Riscos Corporativos -->
 			<tSubTab id="controls" propertyKey="tab.controls.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2control_refs" objectType="CONTROL"                             restrictionValue="tester,financialaccount,orgunit,process"/>
 			<tSubTab id="testdefinitions" propertyKey="tab.testdefinitions.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2testdefinition_refs" objectType="TESTDEFINITION" restrictionValue="tester,financialaccount,orgunit,process"/>
 			<tSubTab id="testactions" propertyKey="tab.testactions.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2testaction_refs" objectType="TESTCASE"                   restrictionValue="tester,financialaccount,orgunit,process"/>

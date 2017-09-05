@@ -153,8 +153,10 @@
                     <element attribute.idref="description"/>
                 </row>
                 <row id="cst_category">
-                	<element attribute.idref="rc_category"/>
+<!--                 	<element attribute.idref="rc_category"/> -->
+                	<element attribute.idref="rc_csttype"/>
                 </row>
+                <row id="cst_rskcateg"/>
                 <!--
                 <row id="status">
                     <element attribute.idref="status" >

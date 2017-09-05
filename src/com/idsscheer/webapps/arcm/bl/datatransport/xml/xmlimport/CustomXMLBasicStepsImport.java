@@ -422,8 +422,8 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 			
 			if(sourceRec.containsField(columnMap.getSource())){
 				Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
-				if(corprisk)
-					targetRec.setString(columnMap.getTarget(), "Risco Corporativo");
+				//if(corprisk)
+					//targetRec.setString(columnMap.getTarget(), "Risco Corporativo");
 			}
 			
 		}catch(Exception e){
