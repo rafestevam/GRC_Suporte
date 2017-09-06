@@ -6,6 +6,7 @@
 		<viewObject objectType="HIERARCHY" id="VO_corprisk_categ" isMainViewObject="true">
         	<viewColumn id="ct_obj_id" attributeType="obj_id" isSelectColumn="true"/>
         	<viewColumn id="ct_name" attributeType="name" isSelectColumn="true" isSortable="false"/>
+        	<viewColumn id="ct_version_number" attributeType="version_number" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_hierarchy" objectType="HIERARCHY" isMainViewObject="false">
             <viewColumn id="rc_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
