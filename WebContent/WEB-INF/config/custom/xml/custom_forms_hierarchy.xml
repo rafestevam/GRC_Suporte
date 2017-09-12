@@ -15,6 +15,9 @@
             <buttonReference button.idref="CHANGEREVIEW_CREATE"/>
             <buttonReference button.idref="PDF_REPORT"/>
             <buttonReference button.idref="ARIS_REPORT"/>
+            <!-- Inicio REO 12.09.2017 - Riscos Corporativos -->
+            <buttonReference button.idref="CST_CR_VALIDATION"/>
+            <!-- Fim REO 12.09.2017 - Riscos Corporativos -->
         </formButtons>
         <page id="hierarchy">
             <rowGroup id="hierarchy.1">
