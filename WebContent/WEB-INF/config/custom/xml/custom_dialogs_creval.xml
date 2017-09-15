@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<dialog id="custom_cr_evaluation" type="okCancel">
+<!-- 		<stringAttribute id="title" defaultValue="TESTE"/> -->
+	</dialog>
+	
+<!-- 	<form id="DIALOG_CUSTOM_CR_EVALUATION"> -->
+<!-- 		<page id="page.1" propertyKey="dialog.custom_cr_evaluation.DBI">		 -->
+<!-- 			<rowGroup id="row.1"> -->
+<!-- 				<row id="title"> -->
+<!-- 					<element attribute.idref="title"/> -->
+<!-- 				</row> -->
+<!-- 			</rowGroup> -->
+<!-- 		</page>  -->
+<!-- 	</form> -->
+
+</custom>
