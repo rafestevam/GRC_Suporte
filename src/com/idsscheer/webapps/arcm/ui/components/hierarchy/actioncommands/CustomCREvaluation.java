@@ -1,48 +1,43 @@
 package com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.util.Map;
 
-import javax.servlet.jsp.tagext.BodyContent;
-
-import com.idsscheer.webapps.arcm.bl.models.dialog.DialogRequest;
-import com.idsscheer.webapps.arcm.bl.models.dialog.IBLDialogModel;
-import com.idsscheer.webapps.arcm.bl.models.dialog.IDialogRequest;
-import com.idsscheer.webapps.arcm.bl.navigation.stack.IPage;
-import com.idsscheer.webapps.arcm.bl.navigation.toolbar.BreadcrumbStackEvent;
-import com.idsscheer.webapps.arcm.config.metadata.actioncommand.ActionCommandId;
-import com.idsscheer.webapps.arcm.ui.framework.actioncommands.ActionCommandIds;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseCacheActionCommand;
-import com.idsscheer.webapps.arcm.ui.framework.dialog.InputDialog;
-import com.idsscheer.webapps.arcm.ui.web.taglib.PopUpTag;
+import com.idsscheer.webapps.arcm.ui.framework.support.breadcrumb.IHTMLPage;
 
 public class CustomCREvaluation extends BaseCacheActionCommand{
 	
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
-		//this.environment.getDialogManager().getNotificationDialog().addInfo("TESTETESTE");
-		//this.environment.getDialogManager().getNotificationDialog().addJavascript("alert('TESTE')");
-		//this.environment.getDialogManager().getNotificationDialog().getJavascript();
 		
+		try{
 		
-		/*String js = this.notificationDialog.getJavascript();
-		this.environment.getDialogManager().getNotificationDialog().addWarning(js);*/
+			CustomCorpRiskHierarchy crEvaluation = new CustomCorpRiskHierarchy(this.formModel.getAppObj(), this.getFullGrantUserContext(), this.getDefaultTransaction());
+			String riskClass = crEvaluation.calculateResidualCR();
+			if(null == riskClass || riskClass.equals("")){
+				riskClass = "Não Classificado";
+			}
+			
+			this.notificationDialog.setHeaderMessageKey("message.corp_risk_evaluation.DBI");
+	
+			this.notificationDialog.addInfo("Quantidade de Riscos Processo: " + crEvaluation.getTotalRisks().toString());// <qtd_riscos>");
+			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Baixo: " + crEvaluation.getResGrade("baixo").toString()); // <pontos_baixo>");
+			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Médio: " + crEvaluation.getResGrade("medio").toString()); //<pontos_medio>");
+			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Alto: " + crEvaluation.getResGrade("alto").toString()); //<pontos_alto>");
+			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Muito Alto: " + crEvaluation.getResGrade("muito_alto").toString()); //<pontos_muito_alto>");
+			this.notificationDialog.addInfo("Nota Final: " + crEvaluation.getFinalGrade().toString()); //<nota_final>");
+			this.notificationDialog.addInfo("Pontos - Rating Baixo: <pontos_baixo>");
+			this.notificationDialog.addInfo("Pontos - Rating Médio: <pontos_medio>");
+			this.notificationDialog.addInfo("Pontos - Rating Alto: <pontos_alto>");
+			this.notificationDialog.addInfo("Pontos - Rating Muito Alto: <pontos_muito_alto>");
+			this.notificationDialog.addInfo("Classificação do Risco: " + riskClass); //<classificacao_do_risco>");
 		
-		//Confirmation Dialog
-		//IPage page = this.environment.getBreadcrumbStack().peek().getPage();
-		//String[] arr = new String[1];
-		//IBLDialogModel dialogModel = this.environment.getDialogManager().createConfirmationDialog(this.requestContext, "okcancel", "TESTE2", arr);
-		//this.environment.getBreadcrumbStack().peek().addDialog(dialogModel).getDialog().setStatusFromNewToRunning();
-		
-		//Testes para criação de Janela Pop Up
-		//DialogRequest dialogReq = new DialogRequest("custom_cr_evaluation");
-		//IDialogRequest dialogReq = this.environment.getBreadcrumbStack().peek().getFlow().getDialogRequest();
-		//IBLDialogModel dialogModel1 = this.environment.getDialogManager().createDynamicDialog(this.requestContext, dialogReq);
-		//this.environment.getBreadcrumbStack().peek().addDialog(dialogModel1);//.getDialog().setStatusFromNewToRunning();
-		
-		this.notificationDialog.addMessage("TESTE");
+		}catch(Exception e){
+			this.notificationDialog.addError(e.getMessage());
+			//this.notificationDialog.addMessage(e.getMessage());
+		}
 		
 	}
 

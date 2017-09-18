@@ -16,6 +16,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
@@ -24,7 +25,12 @@ public class CustomCorpRiskHierarchy {
 	
 	private static List<IAppObj> riskList = new ArrayList<IAppObj>();
 	private static IAppObjFacade riskFacade;
-
+	
+	private Integer totalRisks = new Integer(0);
+	private Integer finalGrade = new Integer(0);
+	private Map<String,Integer> resGrade = new HashMap<String, Integer>();
+	private Map<String,Integer> ptsGrade = new HashMap<String, Integer>();
+	
 	public CustomCorpRiskHierarchy(IAppObj corpRiskObj, IUserContext userCtx, ITransaction defaultTransaction) throws CustomCorpRiskException{
 		// TODO Auto-generated constructor stub
 		try{
@@ -35,51 +41,57 @@ public class CustomCorpRiskHierarchy {
 		}
 	}
 	
-	public String calculateResidualCR(){
+	public String calculateResidualCR() throws CustomCorpRiskException{
 		String residual = "";
-		int totalRisks = 0;
+		/*int totalRisks = 0;
 		int finalGrade = 0;
 		Map<String,Integer> resGrade = new HashMap<String, Integer>();
-		Map<String,Integer> ptsGrade = new HashMap<String, Integer>();
+		Map<String,Integer> ptsGrade = new HashMap<String, Integer>();*/
 		Map<String, Integer[]> distGrade = new HashMap<String, Integer[]>();
 		Map<String,Integer> heightGrade = this.getHeightScale();
 		
-		resGrade.put("baixo", new Integer(0));
-		resGrade.put("medio", new Integer(0));
-		resGrade.put("alto", new Integer(0));
-		resGrade.put("muito_alto", new Integer(0));
+		this.resGrade.put("baixo", new Integer(0));
+		this.resGrade.put("medio", new Integer(0));
+		this.resGrade.put("alto", new Integer(0));
+		this.resGrade.put("muito_alto", new Integer(0));
 		
 		for(IAppObj riskObj : riskList){
 			//System.out.println(riskObj.toString());
-			totalRisks += 1;
-			String resClass = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).getRawValue();
+			this.totalRisks += 1;
+			//String resClass = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).getRawValue();
+			String resClass = this.getResidualFinal(riskObj);
+			
+			if(null == resClass){
+				throw new CustomCorpRiskException("Risco de Processo \"" + riskObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue() + "\" sem nota residual");
+			}
+			
 			if(resClass.equalsIgnoreCase("Baixo")){
-				resGrade.replace("baixo", Math.incrementExact(1));
+				this.resGrade.replace("baixo", Math.incrementExact(1));
 			}
 			if(resClass.equalsIgnoreCase("Médio")){
-				resGrade.replace("medio", Math.incrementExact(1));
+				this.resGrade.replace("medio", Math.incrementExact(1));
 			}
 			if(resClass.equalsIgnoreCase("Alto")){
-				resGrade.replace("alto", Math.incrementExact(1));
+				this.resGrade.replace("alto", Math.incrementExact(1));
 			}
 			if(resClass.equalsIgnoreCase("Muito Alto")){
-				resGrade.replace("muito_alto", Math.incrementExact(1));
+				this.resGrade.replace("muito_alto", Math.incrementExact(1));
 			}
 		}
 		
-		ptsGrade.put("baixo", (resGrade.get("baixo") * heightGrade.get("pBaixo")));
-		ptsGrade.put("medio", (resGrade.get("medio") * heightGrade.get("pMedio")));
-		ptsGrade.put("alto", (resGrade.get("alto") * heightGrade.get("pAlto")));
-		ptsGrade.put("muito_alto", (resGrade.get("muito_alto") * heightGrade.get("pMAlto")));
+		this.ptsGrade.put("baixo", (resGrade.get("baixo") * heightGrade.get("pBaixo")));
+		this.ptsGrade.put("medio", (resGrade.get("medio") * heightGrade.get("pMedio")));
+		this.ptsGrade.put("alto", (resGrade.get("alto") * heightGrade.get("pAlto")));
+		this.ptsGrade.put("muito_alto", (resGrade.get("muito_alto") * heightGrade.get("pMAlto")));
 		
 		Iterator it = ptsGrade.entrySet().iterator();
 		while(it.hasNext()){
 			Map.Entry<String,Integer> mapEntry = (Map.Entry<String, Integer>)it.next();
-			finalGrade += mapEntry.getValue();
+			this.finalGrade += mapEntry.getValue();
 		}
 		
-		distGrade = this.computeDistGrade(totalRisks, heightGrade);
-		residual = this.getResidualCR(finalGrade, distGrade);		
+		distGrade = this.computeDistGrade(this.totalRisks, heightGrade);
+		residual = this.getResidualCR(this.finalGrade, distGrade);		
 		
 		return residual;
 	}
@@ -227,6 +239,47 @@ public class CustomCorpRiskHierarchy {
 		}
 		
 		return retCorprisk;
-	} 
+	}
+	
+	public Integer getTotalRisks(){
+		return this.totalRisks;
+	}
+	
+	public Integer getFinalGrade(){
+		return this.finalGrade;
+	}
+	
+	public Integer getResGrade(String rate){
+		return this.resGrade.get(rate);
+	}
+	
+	public Integer getPtsGrade(String rate){
+		return this.ptsGrade.get(rate);
+	}
+	
+	private String getResidualFinal(IAppObj riskObj) throws CustomCorpRiskException{
+			
+		String residualFinal = "";
+		String riskName = riskObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue();
+		String riscoPotencial = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).getRawValue();
+		String riskClassFinal = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).getRawValue();
+		
+		if(riskClassFinal != null){
+			CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, riskClassFinal);
+			residualCalc.calculateResidualFinal();
+			residualFinal = residualCalc.getResidualFinal();
+		}else{
+			String class1line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).getRawValue();
+			String class2line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
+			String class3line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
+			CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, class1line, class2line, class3line);
+			residualCalc.calculateClassFinal();
+			residualCalc.calculateResidualFinal();
+			residualFinal = residualCalc.getResidualFinal();
+		}
+		
+		return residualFinal;
+		
+	}
 	
 }
