@@ -2,9 +2,14 @@ package com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands;
 
 import java.util.Map;
 
+import javax.swing.text.html.HTML;
+
+import org.w3c.dom.html.HTMLAnchorElement;
+
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseCacheActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.support.breadcrumb.IHTMLPage;
+import com.idsscheer.webapps.arcm.ui.web.html.HTMLAnchor;
 
 public class CustomCREvaluation extends BaseCacheActionCommand{
 	
@@ -13,7 +18,7 @@ public class CustomCREvaluation extends BaseCacheActionCommand{
 		// TODO Auto-generated method stub
 		
 		try{
-		
+			StringBuilder strBuilder = new StringBuilder();
 			CustomCorpRiskHierarchy crEvaluation = new CustomCorpRiskHierarchy(this.formModel.getAppObj(), this.getFullGrantUserContext(), this.getDefaultTransaction());
 			String riskClass = crEvaluation.calculateResidualCR();
 			if(null == riskClass || riskClass.equals("")){
