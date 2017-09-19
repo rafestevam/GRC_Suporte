@@ -22,6 +22,7 @@
         <viewObject id="VO_Risk" objectType="RISK" isMainViewObject="false">
         	<viewColumn id="r_id" attributeType="risk_id" isSelectColumn="true"/>
         	<viewColumn id="r_name" attributeType="name" isSelectColumn="true"/>
+        	<viewColumn id="r_description" attributeType="description" isSelectColumn="true" />
         	<viewColumn id="r_residual" attributeType="ra_residualfinal" isSelectColumn="true" />
         </viewObject>
         <viewObject objectType="CONTROL" id="VO_Control">
