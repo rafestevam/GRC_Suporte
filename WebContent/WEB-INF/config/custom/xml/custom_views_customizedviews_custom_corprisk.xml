@@ -16,6 +16,8 @@
             <viewColumn id="rc_csttype" attributeType="rc_csttype" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_potencial" attributeType="classpot" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_residual" attributeType="residual" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_description" attributeType="description" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_residual_risk" attributeType="residual" isSortable="true" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_Risk" objectType="RISK" isMainViewObject="false">
         	<viewColumn id="r_id" attributeType="risk_id" isSelectColumn="true"/>
@@ -27,9 +29,19 @@
         	<viewColumn id="c_name" attributeType="name" isSelectColumn="true" />
         	<viewColumn id="c_status" attributeType="custom_status_control" isSelectColumn="true" />
         </viewObject>
+        <viewObject objectType="HIERARCHY" id="VO_Process">
+        	<viewColumn id="p_id" attributeType="obj_id" isSelectColumn="true" />
+        	<viewColumn id="p_name" attributeType="name" isSelectColumn="true" />
+        </viewObject>
+        <viewObject objectType="USERGROUP" id="VO_Riskowner">
+        	<viewColumn id="u_id" attributeType="obj_id" isSelectColumn="true" />
+        	<viewColumn id="u_name" attributeType="name" isSelectColumn="true" />
+        </viewObject>
         <link firstViewObject="VO_corprisk_categ" linktype.id="46" secondViewObject="VO_hierarchy" joinType="LEFT"/>
         <link firstViewObject="VO_Risk" linktype.id="3162" secondViewObject="VO_hierarchy" joinType="INNER"/>
-        <link linktype.id="4" firstViewObject="VO_Risk" secondViewObject="VO_Control" joinType="INNER"/>
+        <link firstViewObject="VO_Risk" linktype.id="4" secondViewObject="VO_Control" joinType="INNER"/>
+        <link firstViewObject="VO_Risk" linktype.id="47" secondViewObject="VO_Process" joinType="INNER" />
+        <link firstViewObject="VO_Risk" linktype.id="3160" secondViewObject="VO_Riskowner" joinType="INNER" />
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="rc_csttype" compareType="EQ" value="12"/>
