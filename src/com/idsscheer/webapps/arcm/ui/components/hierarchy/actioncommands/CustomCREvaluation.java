@@ -27,11 +27,11 @@ public class CustomCREvaluation extends BaseCacheActionCommand{
 			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Médio: " + crEvaluation.getResGrade("medio").toString()); //<pontos_medio>");
 			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Alto: " + crEvaluation.getResGrade("alto").toString()); //<pontos_alto>");
 			this.notificationDialog.addInfo("Qtd. Riscos Processo - Rating Muito Alto: " + crEvaluation.getResGrade("muito_alto").toString()); //<pontos_muito_alto>");
+			this.notificationDialog.addInfo("Pontos - Rating Baixo: " + crEvaluation.getPtsGrade("baixo").toString()); //<pontos_baixo>");
+			this.notificationDialog.addInfo("Pontos - Rating Médio: " + crEvaluation.getPtsGrade("medio").toString()); //<pontos_medio>");
+			this.notificationDialog.addInfo("Pontos - Rating Alto: " + crEvaluation.getPtsGrade("alto").toString()); //<pontos_alto>");
+			this.notificationDialog.addInfo("Pontos - Rating Muito Alto: " + crEvaluation.getPtsGrade("muito_alto").toString()); //<pontos_muito_alto>");
 			this.notificationDialog.addInfo("Nota Final: " + crEvaluation.getFinalGrade().toString()); //<nota_final>");
-			this.notificationDialog.addInfo("Pontos - Rating Baixo: <pontos_baixo>");
-			this.notificationDialog.addInfo("Pontos - Rating Médio: <pontos_medio>");
-			this.notificationDialog.addInfo("Pontos - Rating Alto: <pontos_alto>");
-			this.notificationDialog.addInfo("Pontos - Rating Muito Alto: <pontos_muito_alto>");
 			this.notificationDialog.addInfo("Classificação do Risco: " + riskClass); //<classificacao_do_risco>");
 		
 		}catch(Exception e){

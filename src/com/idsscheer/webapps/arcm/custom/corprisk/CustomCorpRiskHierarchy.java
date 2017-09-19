@@ -66,16 +66,16 @@ public class CustomCorpRiskHierarchy {
 			}
 			
 			if(resClass.equalsIgnoreCase("Baixo")){
-				this.resGrade.replace("baixo", Math.incrementExact(1));
+				this.resGrade.replace("baixo", Math.incrementExact(0));
 			}
 			if(resClass.equalsIgnoreCase("Médio")){
-				this.resGrade.replace("medio", Math.incrementExact(1));
+				this.resGrade.replace("medio", Math.incrementExact(0));
 			}
 			if(resClass.equalsIgnoreCase("Alto")){
-				this.resGrade.replace("alto", Math.incrementExact(1));
+				this.resGrade.replace("alto", Math.incrementExact(0));
 			}
 			if(resClass.equalsIgnoreCase("Muito Alto")){
-				this.resGrade.replace("muito_alto", Math.incrementExact(1));
+				this.resGrade.replace("muito_alto", Math.incrementExact(0));
 			}
 		}
 		

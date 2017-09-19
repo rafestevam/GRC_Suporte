@@ -1,22 +1,41 @@
-package com.idsscheer.webapps.arcm.ui.components.riskmanagement.control.object;
+package com.idsscheer.webapps.arcm.ui.components.hierarchy.control.object;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.drools.rule.TypeDeclaration.Role;
+
+import com.idsscheer.webapps.arcm.bl.authorization.rights.runtime.userrole.IUserRole;
+import com.idsscheer.webapps.arcm.bl.authorization.rights.runtime.userrole.UserRoleFacade;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.form.IRoleSelectionModel;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUsergroupAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.common.constants.metadata.ButtonTypesCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations.USERROLE_LEVEL;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations.USERROLE_TYPE;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
-import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
-import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IUsergroupAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IUserprofileAttributeType;
+import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
+import com.idsscheer.webapps.arcm.config.metadata.button.IButtonType;
+import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.form.IPage;
 import com.idsscheer.webapps.arcm.config.metadata.form.IRowgroup;
+import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IEnumAttributeType;
 import com.idsscheer.webapps.arcm.config.metadata.uicommon.IRow;
 import com.idsscheer.webapps.arcm.ui.framework.controls.object.Form;
 
@@ -35,6 +54,41 @@ public class CustomHierarchyForm extends Form {
 		List<String> jsScripts = new ArrayList<String>();
 		jsScripts.add("custom_corprisk");
 		this.renderJavaScriptRef(jsScripts);
+	}
+	
+	@Override
+	protected void renderButtons(List<IButtonType> activeButtonTypes) {
+		// TODO Auto-generated method stub
+		//IUserAppObj userObj = this.environment.getUserContext().getUser();
+		
+		IAppObj riskManagerGrp = this.loadRiskManagerGrp();
+		IEnumerationItem role = ARCMCollections.extractSingleEntry(riskManagerGrp.getAttribute(IUsergroupAttributeType.ATTR_ROLE).getRawValue(), true);
+		
+		if(!this.form.getRoleSelectionModel().getSelectedRole().getId().equalsIgnoreCase(role.getId()))
+			activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_CR_EVALUATION);
+		
+		if(this.form.getRoleSelectionModel().getSelectedRole().getId().equalsIgnoreCase(role.getId()))
+			activeButtonTypes.add(ButtonTypesCustom.CUSTOM_CR_EVALUATION);
+
+		super.renderButtons(activeButtonTypes);
+		
+	}
+	
+	private IAppObj loadRiskManagerGrp(){
+		
+		IAppObj objReturn = null;
+		
+		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(this.environment.getUserContext(), ObjectType.USERGROUP);
+		IAppObjQuery query = facade.createQuery();
+		
+		query.addRestriction(QueryRestriction.eq(IUsergroupAttributeType.ATTR_ROLE, USERROLE_TYPE.RISKMANAGER));
+		query.addRestriction(QueryRestriction.eq(IUsergroupAttributeType.ATTR_ROLELEVEL, USERROLE_LEVEL.OBJECT));
+		
+		IAppObjIterator it = query.getResultIterator();
+		while(it.hasNext()){
+			objReturn = it.next();
+		}
+		return objReturn;
 	}
 	
 	@Override

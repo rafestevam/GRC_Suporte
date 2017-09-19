@@ -5,7 +5,7 @@
 		
 		<!-- Inicio REO - 18.08.2017 - Riscos Corporativos -->
 		<controls>
-			<control name="customhierarchyform" clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.control.object.CustomHierarchyForm" />
+			<control name="customhierarchyform" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.control.object.CustomHierarchyForm" />
 		</controls>
 		<!-- Fim REO - 18.08.2017 - Riscos Corporativos -->
 	
