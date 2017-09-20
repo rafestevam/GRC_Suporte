@@ -98,7 +98,7 @@ public class CustomCorpRiskHierarchy {
 		return residual;
 	}
 	
-	/*private String getResidualCR(int finalGrade, Map<String,Integer[]> distGrade){ //
+	/*private String getResidualCR(int finalGrade, Map<String,Integer[]> distGrade){ //TESTE
 		String residual = "";
 		
 		if(this.getClassification(distGrade.get("baixo"), finalGrade, "baixo"))
