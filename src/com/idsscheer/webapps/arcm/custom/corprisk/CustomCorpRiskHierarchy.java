@@ -47,7 +47,7 @@ public class CustomCorpRiskHierarchy {
 		int finalGrade = 0;
 		Map<String,Integer> resGrade = new HashMap<String, Integer>();
 		Map<String,Integer> ptsGrade = new HashMap<String, Integer>();*/
-		Map<String, Integer[]> distGrade = new HashMap<String, Integer[]>();
+		//Map<String, Integer[]> distGrade = new HashMap<String, Integer[]>();
 		Map<String,Integer> heightGrade = this.getHeightScale();
 		
 		this.resGrade.put("baixo", new Integer(0));
@@ -90,13 +90,15 @@ public class CustomCorpRiskHierarchy {
 			this.finalGrade += mapEntry.getValue();
 		}
 		
-		distGrade = this.computeDistGrade(this.totalRisks, heightGrade);
-		residual = this.getResidualCR(this.finalGrade, distGrade);		
+		/*distGrade = this.computeDistGrade(this.totalRisks, heightGrade);
+		residual = this.getResidualCR(this.finalGrade, distGrade);*/
+		
+		residual = this.getResidualCRSimply(finalGrade, heightGrade);
 		
 		return residual;
 	}
 	
-	private String getResidualCR(int finalGrade, Map<String,Integer[]> distGrade){
+	/*private String getResidualCR(int finalGrade, Map<String,Integer[]> distGrade){
 		String residual = "";
 		
 		if(this.getClassification(distGrade.get("baixo"), finalGrade, "baixo"))
@@ -194,6 +196,32 @@ public class CustomCorpRiskHierarchy {
 		mapRet.put("muito_alto", arrMAlto);
 		
 		return mapRet;
+	}*/
+	
+	private String getResidualCRSimply(int finalGrade, Map<String, Integer> heightGrade){
+		String residual = "";
+		int limitBaixo = totalRisks * heightGrade.get("pBaixo");
+		int limitMedio = totalRisks * heightGrade.get("pMedio");
+		int limitAlto = totalRisks * heightGrade.get("pAlto");
+		int limitMAlto = totalRisks * heightGrade.get("pMAlto");
+		
+		if(finalGrade <= limitBaixo){
+			residual = "Baixo";
+		}else{
+			if(finalGrade <= limitMedio){
+				residual = "Médio";
+			}else{
+				if(finalGrade <= limitAlto){
+					residual = "Alto";
+				}else{
+					if(finalGrade <= limitMAlto){
+						residual = "Muito Alto";
+					}
+				}
+			}
+		}
+		
+		return residual;
 	}
 	
 	private Map<String, Integer> getHeightScale(){
