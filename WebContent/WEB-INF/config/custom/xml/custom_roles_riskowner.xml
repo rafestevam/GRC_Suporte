@@ -10,7 +10,7 @@
 			<system component.idref="view.mashzone.url.builder"/>
 			<object right.idref="r----" objectType.id="HIERARCHY"/>
 			<object right.idref="r----" objectType.id="USERGROUP"/>
-			<object right.idref="rw---" objectType.id="RISK" />
+			<object right.idref="r----" objectType.id="RISK" />
 			<object right.idref="r----" objectType.id="CONTROL" />
 			<object right.idref="r----" objectType.id="TESTDEFINITION" />
 			<object right.idref="r----" objectType.id="TESTCASE" />
