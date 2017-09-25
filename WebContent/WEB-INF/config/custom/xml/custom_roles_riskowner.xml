@@ -11,7 +11,7 @@
 			<object right.idref="r----" objectType.id="HIERARCHY"/>
 			<object right.idref="r----" objectType.id="USERGROUP"/>
 			<object right.idref="r----" objectType.id="RISK" />
-			<object right.idref="r----" objectType.id="CONTROL" />
+			<object right.idref="rw---" objectType.id="CONTROL" />
 			<object right.idref="r----" objectType.id="TESTDEFINITION" />
 			<object right.idref="r----" objectType.id="TESTCASE" />
 			<object right.idref="rwc--" objectType.id="RISKASSESSMENT">

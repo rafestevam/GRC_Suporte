@@ -19,7 +19,7 @@
 	            <assignRole role.idref="riskreviewer"           level="O"/>
 	            <assignRole role.idref="riskauditor"            level="XC"/>
 	            <assignRole role.idref="controlmanager"         level="XCO"/>
-	            <assignRole role.idref="controlexecutionowner"  level="CO"/>
+	            <assignRole role.idref="controlexecutionowner"  level="O"/>
 	            <assignRole role.idref="groupusermanager"       level="XC"/>
 	            <assignRole role.idref="deficiencymanager_l1"   level="XC"/>
 	            <assignRole role.idref="deficiencymanager_l2"   level="XC"/>
@@ -71,7 +71,7 @@
 	            <assignRole role.idref="riskreviewer"           level="O" />
 	            <assignRole role.idref="riskauditor"            level="C"/>
 	            <assignRole role.idref="controlmanager"         level="CO"/>
-	            <assignRole role.idref="controlexecutionowner"  level="CO"/>
+	            <assignRole role.idref="controlexecutionowner"  level="O"/>
 	            <assignRole role.idref="groupusermanager"       level="C"/>
 	            <assignRole role.idref="deficiencymanager_l1"   level="C"/>
 	            <assignRole role.idref="deficiencymanager_l2"   level="C"/>
@@ -156,6 +156,7 @@
 	            <assignRole role.idref="policyauditor"          level="XCO"/>
 	            <assignRole role.idref="subscriptionmanager"    level="C"/>
 			</roleHierarchy>
+			
 		</roleHierarchies>	
 	
 	</roles>

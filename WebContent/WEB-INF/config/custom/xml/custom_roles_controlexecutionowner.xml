@@ -2,7 +2,7 @@
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 	<roles>
 	
-		<role id="controlexecutionowner" level="CO" licensedComponentIds="rm tm" userLicenses="operate">
+		<role id="controlexecutionowner" level="O" licensedComponentIds="rm cm tm" userLicenses="operate">
 	        <system component.idref="view.control"/>
 	        <system component.idref="view.controlexecutiontask"/>
 	        <system component.idref="view.owner.controlexecution"/>
@@ -12,9 +12,17 @@
 	        <object right.idref="rw---" objectType.id="HIERARCHY"/>
 			<!-- Fim REO 01.09.2017 - Riscos Corporativos -->
 	        <object right.idref="r----" objectType.id="USERGROUP"/>
-	        <object right.idref="rw---" objectType.id="CONTROL"/>
+	        <!-- Inicio REO 25.09.2017 -  -->
+<!-- 	        <object right.idref="rw" objectType.id="CONTROL"/> -->
+			<object right.idref="rw---" objectType.id="CONTROL">
+				<relation right.idref="ar" listAttrType.id="manager_group"/>
+				<relation right.idref="ar" listAttrType.id="testdefinitions"/>
+            	<relation right.idref="ar" listAttrType.id="controlexecutiontasks"/>
+			</object>
+			<!-- Fim REO 25.09.2017 -  -->
 	        <object right.idref="r----" objectType.id="CONTROLEXECUTIONTASK"/>
 	        <object right.idref="rw-du" objectType.id="CONTROLEXECUTION">
+	        	<action actionRight.idref="extend"/><!-- REO 25.09.2017 - -->
 	            <relation right.idref="ar" listAttrType.id="execution_documents"/>
 	        </object>
 	        <object right.idref="rw---" objectType.id="RISK" />
