@@ -91,6 +91,7 @@
         <!-- Inicio GAP GRC98 -->
         <enumAttrType id="custom_controlexecstatus" defaultValue="1" enumeration="custom_controlexecstatus" />
         <!-- Fim GAP GRC98 -->
+     
     </objectType>
         
 </custom>

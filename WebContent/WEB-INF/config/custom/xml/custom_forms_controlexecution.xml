@@ -23,7 +23,7 @@
 <!-- DMM - 2017/07/17 - change in form to include Control ID		-->
                 <row id="control_id">
                     <element attribute.idref="control_id"/>
-                </row>                
+                </row> 
                 <row id="control">
                     <element attribute.idref="control"/>
                 </row>

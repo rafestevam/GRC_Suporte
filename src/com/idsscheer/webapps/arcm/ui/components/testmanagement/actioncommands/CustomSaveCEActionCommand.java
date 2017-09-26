@@ -6,38 +6,26 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.apache.openejb.terracotta.quartz.wrappers.JobFacade;
 
+import com.aris.arcm.bl.report.service.UserContextHelper;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.config.RoleConfigFacade;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.runtime.accesscontrol.AccessRightController;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.runtime.accesscontrol.standard.UsergroupAccessControl;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.runtime.userrole.UserRoleFacade;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.support.RoleUtility;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.support.UserRoleUtility;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
-import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
-import com.idsscheer.webapps.arcm.bl.exception.ObjectLockException;
-import com.idsscheer.webapps.arcm.bl.exception.ObjectNotUniqueException;
-import com.idsscheer.webapps.arcm.bl.exception.RightException;
-import com.idsscheer.webapps.arcm.bl.framework.jobs.BaseJob;
 import com.idsscheer.webapps.arcm.bl.framework.jobs.JobHelper;
-import com.idsscheer.webapps.arcm.bl.models.form.IRoleSelectionModel;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
-import com.idsscheer.webapps.arcm.bl.navigation.stack.IBreadcrumb;
-import com.idsscheer.webapps.arcm.bl.navigation.stack.IFormBreadcrumb;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
@@ -47,18 +35,15 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchy
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
-import com.idsscheer.webapps.arcm.common.util.StringUtility;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
-import com.idsscheer.webapps.arcm.config.metadata.rights.roles.IRole;
-import com.idsscheer.webapps.arcm.config.metadata.rights.roles.Role;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
+import com.idsscheer.webapps.arcm.dl.framework.viewhandler.JobInformationViewHandler;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
-import com.idsscheer.webapps.arcm.ui.framework.common.UIEnvironmentManager;
 
 public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	
@@ -76,6 +61,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	private String ceControlExec = "";
 	private double countInef = 0;
 	private long cetObjectId = 0;
+	private IUserContext jobCtx;
 
 	protected void afterExecute(){
 		
@@ -381,7 +367,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 		try{
 			
-			IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+			//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK);
 			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
 			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
 			riskFacade.allocateWriteLock(riskOVID);
@@ -674,7 +661,10 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	
 	private void controlClassification(List<IAppObj> controlList) throws Exception{
 		
-		IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
+		//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
+		
+		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
+		
 		IOVID ovid = null;
 		try{
 			
@@ -1017,7 +1007,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	private void affectCorpRisk(IAppObj risk) throws Exception{
 		
 		try{
-			IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
+			//IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
+			IAppObjFacade crFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.HIERARCHY);
 			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
 			for(IAppObj corpRisk : corpRiskList){
 				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
@@ -1039,9 +1030,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	}
 	
 	private void addUserRights() throws Exception{
-		
-		
-		
+		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
+        this.jobCtx = jobEnv.getUserContext();
 	}
 
 }
