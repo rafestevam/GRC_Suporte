@@ -130,6 +130,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					this.control3line = riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
 				
 				if(this.ceControlExec.equals("3")){
+					this.addUserRights();
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
@@ -1033,6 +1034,12 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		}catch(Exception e){
 			throw e;
 		}
+		
+		
+	}
+	
+	private void addUserRights() throws Exception{
+		
 		
 		
 	}
