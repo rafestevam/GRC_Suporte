@@ -1062,14 +1062,16 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			
 			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
 			for(IAppObj corpRisk : corpRiskList){
-				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
-					crFacade.allocateLock(corpRisk.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
-					CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, getFullGrantUserContext(), this.getDefaultTransaction());
-					String ret = crHierarchy.calculateResidualCR();
-					if(ret != null || (!ret.equals(""))){
-						corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(ret);
-						crFacade.save(corpRisk, this.getDefaultTransaction(), true);
-						crFacade.releaseLock(corpRisk.getVersionData().getHeadOVID());
+				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue() != null){
+					if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
+						crFacade.allocateLock(corpRisk.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+						CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, getFullGrantUserContext(), this.getDefaultTransaction());
+						String ret = crHierarchy.calculateResidualCR();
+						if(ret != null || (!ret.equals(""))){
+							corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(ret);
+							crFacade.save(corpRisk, this.getDefaultTransaction(), true);
+							crFacade.releaseLock(corpRisk.getVersionData().getHeadOVID());
+						}
 					}
 				}
 			}
