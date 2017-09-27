@@ -61,7 +61,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	private String ceControlExec = "";
 	private double countInef = 0;
 	private long cetObjectId = 0;
-	private IUserContext jobCtx;
+	private IUserContext jobCtx; //REO+ 27.09.2017 - EV113345
 
 	protected void afterExecute(){
 		
@@ -116,7 +116,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					this.control3line = riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
 				
 				if(this.ceControlExec.equals("3")){
-					this.addUserRights();
+					this.addUserRights(); //REO+ 27.09.2017 - EV113345
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
@@ -367,8 +367,11 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 		try{
 			
+			//Inicio REO - 27.09.2017 - EV113345
 			//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
 			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK);
+			//Fim REO - 27.09.2017 - EV113345
+			
 			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
 			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
 			riskFacade.allocateWriteLock(riskOVID);
@@ -661,9 +664,10 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	
 	private void controlClassification(List<IAppObj> controlList) throws Exception{
 		
+		//Inicio REO - 27.09.2017 - EV113345
 		//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
-		
 		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
+		//Fim REO - 27.09.2017 - EV113345
 		
 		IOVID ovid = null;
 		try{
@@ -1007,8 +1011,11 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	private void affectCorpRisk(IAppObj risk) throws Exception{
 		
 		try{
+			//Inicio REO - 27.09.2017 - EV113345
 			//IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
 			IAppObjFacade crFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.HIERARCHY);
+			//Fim REO - 27.09.2017 - EV113345
+			
 			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
 			for(IAppObj corpRisk : corpRiskList){
 				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
@@ -1029,9 +1036,11 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 	}
 	
+	//Inicio REO - 27.09.2017 - EV113345
 	private void addUserRights() throws Exception{
 		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
         this.jobCtx = jobEnv.getUserContext();
 	}
+	//Fim REO - 27.09.2017 - EV113345
 
 }

@@ -6,17 +6,11 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
-import org.drools.time.JobContext;
-
-import com.aris.arcm.bl.report.service.UserContextHelper;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.config.RoleConfigFacade;
-import com.idsscheer.webapps.arcm.bl.authorization.rights.runtime.accesscontrol.standard.UserAccessControl;
+import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.exception.RightException;
-import com.idsscheer.webapps.arcm.bl.framework.jobs.JobHandler;
-import com.idsscheer.webapps.arcm.bl.framework.jobs.JobHelper;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
@@ -35,9 +29,14 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 		
 		IUIEnvironment currEnv = this.environment;
 		IAppObj currAppObj = this.formModel.getAppObj();
+		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext()); //REO+ 27.09.2017 - EV113345
 		
 		try{
-			IAppObjFacade rskAppFacade = currEnv.getAppObjFacade(ObjectType.RISK);
+			//Inicio REO - 27.09.2017 - EV113345
+			IUserContext jobCtx = jobEnv.getUserContext();
+			IAppObjFacade rskAppFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
+			//IAppObjFacade rskAppFacade = currEnv.getAppObjFacade(ObjectType.RISK);
+			//Fim REO - 27.09.2017 - EV113345
 			
 			String ra_result = currAppObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).getRawValue();	
 			List<IAppObj> currRskList = currAppObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(this.getFullGrantUserContext());

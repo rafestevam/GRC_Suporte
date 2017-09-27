@@ -9,12 +9,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
@@ -35,6 +37,7 @@ import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
+import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	
@@ -57,6 +60,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	private double countTotal3line = 0;
 	private long tdObjectId = 0;
 	private String riskClass1Line = "";
+	private IUserContext jobCtx; //REO+ 27.09.2017 - EV113345
 
 	protected void addForwardDialog() {
 		this.executeCalculation();
@@ -137,6 +141,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				log.info("****************************************************************************************");
 				//if(ownerStatus.equals("3") || ownerStatus.equals("4"))
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
+					this.addUserRights(); //REO+ 27.09.2017 - EV113345
 					this.controlClassification(currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
@@ -365,8 +370,12 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		
 		try{
 			
-			IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+			//Inicio REO - 27.09.2017 - EV113345
+			//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK);
 			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
+			//Fim REO - 27.09.2017 - EV113345
+			
 			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
 			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
 			
@@ -591,7 +600,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	
 	private void controlClassification(List<IAppObj> controlList) throws Exception{
 		
-		IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
+		//Inicio REO - 27.09.2017 - EV113345
+		//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
+		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
+		//Fim REO - 27.09.2017 - EV113345
+		
 		IOVID ovid = null;
 		try{
 		
@@ -1040,7 +1053,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	private void affectCorpRisk(IAppObj risk) throws Exception{
 		
 		try{
-			IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
+			//Inicio REO - 27.09.2017 - EV113345
+			//IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
+			IAppObjFacade crFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.HIERARCHY);
+			//Fim REO - 27.09.2017 - EV113345
+			
 			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
 			for(IAppObj corpRisk : corpRiskList){
 				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
@@ -1059,6 +1076,13 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		}
 		
 	}
+	
+	//Inicio REO - 27.09.2017 - EV113345
+	private void addUserRights(){
+		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
+		this.jobCtx = jobEnv.getUserContext();
+	}
+	//Fim REO - 27.09.2017 - EV113345
 	
 	
 /*		
