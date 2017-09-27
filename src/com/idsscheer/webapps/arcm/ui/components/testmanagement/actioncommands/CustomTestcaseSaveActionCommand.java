@@ -71,6 +71,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	private void executeCalculation(){
 			
 		try{
+			this.addUserRights(); //REO+ 27.09.2017 - EV113345
 		
 			IAppObj currAppObj = this.formModel.getAppObj();
 			IAppObj currParentCtrlObj = this.parentControl(currAppObj);
@@ -141,7 +142,6 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				log.info("****************************************************************************************");
 				//if(ownerStatus.equals("3") || ownerStatus.equals("4"))
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
-					this.addUserRights(); //REO+ 27.09.2017 - EV113345
 					this.controlClassification(currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
@@ -333,6 +333,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		try{
 		
 			Iterator itQuery = query.getResultIterator();
+			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK); //REO+ 27.09.2017 - EV113345
 			
 			while(itQuery.hasNext()){
 				
@@ -340,7 +341,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				riskID = (Long)viewObj.getRawValue("risk_obj_id");
 				riskVersionNumber = (Long)viewObj.getRawValue("risk_version_number");
 				
-				IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+				
+				//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK); //REO- 27.09.2017 - EV113345
 				IOVID riskOVID = OVIDFactory.getOVID(riskID, riskVersionNumber);
 				IAppObj riskAppObj = riskFacade.load(riskOVID, true);
 				

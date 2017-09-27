@@ -71,6 +71,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			IRoleSelectionModel roleSelModel = ((IFormBreadcrumb)peek).getModel().getRoleSelectionModel();
 			
 			roleSelModel.getDefaultRole();*/
+			this.addUserRights(); //REO+ 27.09.2017 - EV113345
 			
 			IAppObj currAppObj = this.formModel.getAppObj();
 			//IAppObj currParentCtrlObj = this.parentControl(currAppObj);
@@ -116,7 +117,6 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					this.control3line = riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
 				
 				if(this.ceControlExec.equals("3")){
-					this.addUserRights(); //REO+ 27.09.2017 - EV113345
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
@@ -287,6 +287,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		try{
 		
 			Iterator itQuery = query.getResultIterator();
+			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK); //REO+ 27.09.2017 - EV113345
 			
 			while(itQuery.hasNext()){
 				
@@ -295,8 +296,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				riskVersionNumber = (Long)viewObj.getRawValue("risk_version_number");
 				
 			}
-		
-			IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+
+			//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK); //REO- 27.09.2017			
 			IOVID riskOVID = OVIDFactory.getOVID(riskID, riskVersionNumber);
 			riskAppObj = riskFacade.load(riskOVID, true);
 		}catch(Exception e){
