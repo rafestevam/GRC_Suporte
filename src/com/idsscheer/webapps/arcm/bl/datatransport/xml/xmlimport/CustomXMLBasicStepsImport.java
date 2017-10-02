@@ -21,6 +21,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
@@ -463,11 +464,13 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.HIERARCHY);
 		IAppObjQuery query = facade.createQuery();
 		String residual = "";
+		IAppObj lastCorpRisk = null;
+		ITransaction newTransaction = null;
 		
 		try{
 			Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
 			if(corprisk){
-				ITransaction newTransaction = TransactionManager.getInstance().createTransaction();
+				newTransaction = TransactionManager.getInstance().createTransaction();
 				
 				query.addRestriction(QueryRestriction.eq(IHierarchyAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
 				
@@ -477,7 +480,7 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 					
 					IAppObj corpRisk = iterator.next();
 					IOVID corpRiskOVID = corpRisk.getVersionData().getHeadOVID();
-					IAppObj lastCorpRisk = facade.load(corpRiskOVID, true);
+					lastCorpRisk = facade.load(corpRiskOVID, true);
 					
 					CustomCorpRiskHierarchy resCalc = new CustomCorpRiskHierarchy(lastCorpRisk, fullReadCtx, newTransaction);
 					
