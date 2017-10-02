@@ -51,6 +51,7 @@ public class CustomRuleGenerator4ARIS extends XMLImportMigrationRuleGenerator4AR
 		if (smd.getDataLayerObjectType().getName().equalsIgnoreCase(ObjectType.HIERARCHY.getId())){
 			printColumnMap("setCategory", ObjectType.HIERARCHY.getId(), "corprisk", "rc_category");
 			printColumnMap("setType", ObjectType.HIERARCHY.getId(), "corprisk", "rc_csttype");
+			printColumnMap("setResidualResult", ObjectType.HIERARCHY.getId(), "corprisk", "residual");
 		}
 		
 	}

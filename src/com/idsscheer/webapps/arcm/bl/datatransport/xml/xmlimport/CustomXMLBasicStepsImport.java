@@ -9,18 +9,22 @@ import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.datatransport.xml.AAMMLLogger;
 import com.idsscheer.webapps.arcm.bl.datatransport.xml.resources.AAMMLResourceBundle;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
 import com.idsscheer.webapps.arcm.dl.migframe.IMerge;
 import com.idsscheer.webapps.arcm.dl.migframe.IMigrationRecord;
@@ -421,9 +425,9 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		try{
 			
 			if(sourceRec.containsField(columnMap.getSource())){
-				Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
-				//if(corprisk)
-					//targetRec.setString(columnMap.getTarget(), "Risco Corporativo");
+				Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());	
+				if(corprisk)
+					targetRec.setString(columnMap.getTarget(), "Risco Corporativo");
 			}
 			
 		}catch(Exception e){
@@ -450,6 +454,47 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		}catch(Exception e){
 			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
 		}
+	}
+	
+	public void setresidualresult(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		
+		IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.HIERARCHY);
+		IAppObjQuery query = facade.createQuery();
+		String residual = "";
+		
+		try{
+			Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
+			if(corprisk){
+				ITransaction newTransaction = TransactionManager.getInstance().createTransaction();
+				
+				query.addRestriction(QueryRestriction.eq(IHierarchyAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+				
+				IAppObjIterator iterator =  query.getResultIterator();
+				
+				while(iterator.hasNext()){
+					
+					IAppObj corpRisk = iterator.next();
+					IOVID corpRiskOVID = corpRisk.getVersionData().getHeadOVID();
+					IAppObj lastCorpRisk = facade.load(corpRiskOVID, true);
+					
+					CustomCorpRiskHierarchy resCalc = new CustomCorpRiskHierarchy(lastCorpRisk, fullReadCtx, newTransaction);
+					
+					//statusControl = lastRisk.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).getRawValue();
+					residual = resCalc.calculateResidualCR();
+					targetRec.setString(columnMap.getTarget(), residual);
+					
+				}
+			}
+		}catch(Exception e){
+			//throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+			residual = "Não avaliado";
+			targetRec.setString(columnMap.getTarget(), residual);
+		}finally{
+			query.release();
+		}
+		
 	}
 	//Fim REO 04.08.2017 - Riscos Corporativos
 	
