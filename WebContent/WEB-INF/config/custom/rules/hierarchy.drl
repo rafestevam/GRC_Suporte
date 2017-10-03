@@ -323,6 +323,8 @@ rule "set_category_visible[I,V]"
 		set "rc_category" visible
 		set "rc_category" readonly
 		set "type" invisible
+		set "residual" visible
+		set "residual" readonly
 		
 end
 

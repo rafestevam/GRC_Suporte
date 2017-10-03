@@ -7,6 +7,7 @@
         	<viewColumn id="ct_obj_id" attributeType="obj_id" isSelectColumn="true"/>
         	<viewColumn id="ct_name" attributeType="name" isSelectColumn="true" isSortable="false"/>
         	<viewColumn id="ct_version_number" attributeType="version_number" isSelectColumn="true"/>
+        	<viewColumn id="ct_version_active" attributeType="version_active" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_hierarchy" objectType="HIERARCHY" isMainViewObject="false">
             <viewColumn id="rc_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
@@ -46,6 +47,7 @@
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="rc_csttype" compareType="EQ" value="12"/>
+                <condition column.id="ct_version_active" compareType="EQ" value="true"/>
 <!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
             </compoundCondition>
         </conditions>
