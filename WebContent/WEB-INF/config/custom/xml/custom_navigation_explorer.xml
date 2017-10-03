@@ -501,11 +501,13 @@
         <nav.data.grid dataGrid.idref="control">
             <nav.access>
                 <nav.access.privilege componentPrivilegeIDs="view.control"/>
+                <nav.access.role roleIDs="controlmanager"/><!-- REO+ 29.09.2017 - EV113345 -->
             </nav.access>
         </nav.data.grid>
         <nav.data.grid dataGrid.idref="controlexecutiontask">
             <nav.access>
                 <nav.access.privilege componentPrivilegeIDs="view.controlexecutiontask"/>
+                <nav.access.role roleIDs="controlmanager"/><!-- REO+ 29.09.2017 - EV113345 -->
             </nav.access>
         </nav.data.grid>
         <nav.data.grid dataGrid.idref="controlexecution" propertyKey="list.controlexecution.DBI">
