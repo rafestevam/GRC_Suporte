@@ -468,26 +468,27 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		ITransaction newTransaction = null;
 		
 		try{
-			Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
-			if(corprisk){
-				newTransaction = TransactionManager.getInstance().createTransaction();
-				
-				query.addRestriction(QueryRestriction.eq(IHierarchyAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
-				
-				IAppObjIterator iterator =  query.getResultIterator();
-				
-				while(iterator.hasNext()){
+			if(sourceRec.containsField(columnMap.getSource())){
+				Boolean corprisk = (Boolean)sourceRec.getField(columnMap.getSource());
+				if(corprisk){
+					newTransaction = TransactionManager.getInstance().createTransaction();
 					
-					IAppObj corpRisk = iterator.next();
-					IOVID corpRiskOVID = corpRisk.getVersionData().getHeadOVID();
-					lastCorpRisk = facade.load(corpRiskOVID, true);
+					query.addRestriction(QueryRestriction.eq(IHierarchyAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
 					
-					CustomCorpRiskHierarchy resCalc = new CustomCorpRiskHierarchy(lastCorpRisk, fullReadCtx, newTransaction);
+					IAppObjIterator iterator =  query.getResultIterator();
 					
-					//statusControl = lastRisk.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).getRawValue();
-					residual = resCalc.calculateResidualCR();
-					targetRec.setString(columnMap.getTarget(), residual);
-					
+					while(iterator.hasNext()){
+						
+						IAppObj corpRisk = iterator.next();
+						IOVID corpRiskOVID = corpRisk.getVersionData().getHeadOVID();
+						lastCorpRisk = facade.load(corpRiskOVID, true);
+						
+						CustomCorpRiskHierarchy resCalc = new CustomCorpRiskHierarchy(lastCorpRisk, fullReadCtx, newTransaction);
+						
+						residual = resCalc.calculateResidualCR();
+						targetRec.setString(columnMap.getTarget(), residual);
+						
+					}
 				}
 			}
 		}catch(Exception e){
