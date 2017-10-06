@@ -184,7 +184,9 @@
         </commandchain>        
 
         <commandchain id="delete">
-            <command id="checkIssueDeletionPossible"/>
+        	<!-- Inicio REO 06.10.2017 - EV115930 - GRC não está permitindo a eliminação de Plano de Ação -->
+        	<command id="customCheckIssueDeletionPossible"/>
+<!--             <command id="checkIssueDeletionPossible"/> -->
             <command id="checkSignOffLockForDeletion" />
             <command id="issueDeactivateDependentTestcase" />
         </commandchain>
