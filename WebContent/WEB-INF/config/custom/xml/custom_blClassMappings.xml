@@ -13,11 +13,18 @@
 	    -->
 	    
 	    <mappingType name="Command">
+	    	<!-- ISSUE -->
 	    	<mapping name="customUpdateStatus"      clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateIssueStatus"/>
 	    	<mapping name="customUpdCreatorStatus"  clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateCreatorStatus"/>
 	    	<mapping name="customUpdOwnerStatus"    clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateOwnerStatus"/>
 	    	<mapping name="customUpdReviewerStatus" clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateReviewerStatus"/>
 	    	<mapping name="customCreateIssue"       clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomCreateIssueCommand"/>
+	    	
+	    	<!-- Inicio REO 06.10.2017 - EV115930 - GRC não está permitindo a eliminação de Plano de Ação -->
+	    	<mapping name="customCheckIssueDeletionPossible" clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomCheckIssueDeletionPossibleCommand"/>
+	    	<!-- Fim REO 06.10.2017 - EV115930 - GRC não está permitindo a eliminação de Plano de Ação -->
+	    	
+	    	<!-- TEST DEFINITION -->
 	    	<mapping name="testdefinitionFindLinkedControlAndRisks" clsName="com.idsscheer.webapps.arcm.bl.component.testmanagement.commands.job.generator.CustomTestdefinitionFindLinkedControlAndRisksCommand" />
 <!-- 	    	<mapping name="customSaveDependentObjects"     clsName="com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands.CustomSaveDependentObjectsCommand" /> -->
 	    </mappingType>
