@@ -387,6 +387,359 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		}
 	}
 	
+	//Inicio REO 13.10.2017 - EV115914
+	public void setfinal1line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			Double ra_result = new Double(0);
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setDouble(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setfinal2line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			Double ra_result = new Double(0);
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL2LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setDouble(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setfinal3line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			Double ra_result = new Double(0);
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setDouble(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setinef1line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			Double ra_result = new Double(0);
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setDouble(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setinef2line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			Double ra_result = new Double(0);
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setDouble(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setinef3line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			Double ra_result = new Double(0);
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setDouble(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setresidual1line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			String ra_result = "";
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setString(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setresidual2line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			String ra_result = "";
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setString(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setresidual3line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			String ra_result = "";
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setString(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	public void setresidualfinal(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		try{
+			
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.RISK);
+			IAppObjQuery query = facade.createQuery();
+			String ra_result = "";
+			
+			query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj risk = iterator.next();
+				IOVID riskOVID = risk.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(riskOVID, true);
+				
+				ra_result = lastRisk.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).getRawValue();
+				
+			}
+			query.release();
+			
+			//facade.load(paramIOVID, paramBoolean)
+			
+			//String ra_result = sourceRec.getString("ra_result");
+			targetRec.setString(columnMap.getSource(), ra_result);
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}finally{
+			//query
+		}
+	}
+	//Fim REO 13.10.2017 - EV115914
+	
 	public void setstatuscontrol(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
 			throws MigrationException {
 		

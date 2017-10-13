@@ -40,6 +40,18 @@ public class CustomRuleGenerator4ARIS extends XMLImportMigrationRuleGenerator4AR
 			printColumnMap("setRAControl2Line", ObjectType.RISK.getId(), "ra_control2line", "ra_control2line");
 			printColumnMap("setRAControl3Line", ObjectType.RISK.getId(), "ra_control3line", "ra_control3line");
 			printColumnMap("setRAControlFinal", ObjectType.RISK.getId(), "ra_controlfinal", "ra_controlfinal");
+			//Inicio REO - 13.10.2017 - EV115914
+			printColumnMap("setFinal1line", ObjectType.RISK.getId(), "ra_final1line", "ra_final1line");
+			printColumnMap("setFinal2line", ObjectType.RISK.getId(), "ra_final2line", "ra_final2line");
+			printColumnMap("setFinal3line", ObjectType.RISK.getId(), "ra_final3line", "ra_final3line");
+			printColumnMap("setInef1line", ObjectType.RISK.getId(), "ra_inef1line", "ra_inef1line");
+			printColumnMap("setInef2line", ObjectType.RISK.getId(), "ra_inef2line", "ra_inef2line");
+			printColumnMap("setInef3line", ObjectType.RISK.getId(), "ra_inef3line", "ra_inef3line");
+			printColumnMap("setResidual1line", ObjectType.RISK.getId(), "ra_residual1line", "ra_residual1line");
+			printColumnMap("setResidual2line", ObjectType.RISK.getId(), "ra_residual2line", "ra_residual2line");
+			printColumnMap("setResidual3line", ObjectType.RISK.getId(), "ra_residual3line", "ra_residual3line");
+			printColumnMap("setResidualfinal", ObjectType.RISK.getId(), "ra_residualfinal", "ra_residualfinal");
+			//Fim REO - 13.10.2017 - EV115914
 		}
 		
 		if (smd.getDataLayerObjectType().getName().equalsIgnoreCase(ObjectType.CONTROL.getId())){
