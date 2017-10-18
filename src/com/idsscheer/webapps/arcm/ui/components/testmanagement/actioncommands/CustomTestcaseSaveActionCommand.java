@@ -580,6 +580,12 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			log.info("Classificacao Ctrl Final: " + riskClassFinal);
 			log.info("Amb Controle Final Calculado...");*/
 			
+			String riskResidual2Line = this.riskResidualFinal(this.riscoPotencial, riskClass2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
+			
+			String riskResidual3Line = this.riskResidualFinal(this.riscoPotencial, riskClass3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line);
+			
 			log.info("Calculando Residual Final");
 			String riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);

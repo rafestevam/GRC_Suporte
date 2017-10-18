@@ -365,6 +365,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			count1line += 1;*/
 		
 		String riskResidualFinal = "";
+		String riskResidual1Line = "";
 		
 		try{
 			
@@ -500,6 +501,9 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			log.info("Risco Potencial: " + this.riscoPotencial);
 			
 			if(!this.riscoPotencial.equals("Nao Avaliado")){
+				riskResidual1Line = this.riskResidualFinal(this.riscoPotencial, riskClass1line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			}
