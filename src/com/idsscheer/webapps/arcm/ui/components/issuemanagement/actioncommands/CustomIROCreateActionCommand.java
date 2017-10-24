@@ -7,7 +7,7 @@ public class CustomIROCreateActionCommand extends IssueRelevantObjectCreateActio
 		// TODO Auto-generated method stub
 		super.execute();
 		
-		super.issueRelevantObjects.removeAll(issueRelevantObjects);
+		//super.issueRelevantObjects.removeAll(issueRelevantObjects);
 		
 	}
 
