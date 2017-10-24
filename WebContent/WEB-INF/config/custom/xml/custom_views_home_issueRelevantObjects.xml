@@ -8,7 +8,7 @@
             <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="name" attributeType="object_name" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="objectId" attributeType="object_id" isSelectColumn="true" isSortable="true"/>
-            <viewColumn id="version" attributeType="object_version_number" isSelectColumn="true" isSortable="true"/>
+            <viewColumn id="version" attributeType="object_version_number" isSelectColumn="true" isSortable="true" function="MAX"/>
             <viewColumn id="object_objtype" attributeType="object_objtype" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="client_sign" attributeType="object_clientSign" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="clientSigns" attributeType="object_clientSigns" isSelectColumn="true" isSortable="true"/>
