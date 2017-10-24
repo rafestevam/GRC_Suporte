@@ -54,6 +54,10 @@
     	        <actionCommand commandId="create"		 	  clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueCreateActionCommand"/><!-- REO 17.10.2017 - EV115903 -->					
 		    </commandSet>
 		    
+		    <commandSet name="issuerelevantobject">
+				<actionCommand commandId="create" clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIROCreateActionCommand"/>
+			</commandSet>
+		    
 		    <!-- Inicio REO - 12.09.2017 - Riscos Corporativos -->
 		    <commandSet name="hierarchy">
 		    	<actionCommand commandId="customcrvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCREvaluation"/>
