@@ -133,6 +133,16 @@
             <nav.access.component licensedComponentIDs="im"/>
         </nav.access>
         <!-- for all users -->
+        
+        <!-- Inicio REO 24.10.2017 - EV115903 - Link para 'Meus Objetos Relevantes' -->
+        <nav.data.grid dataGrid.idref="MyIssueRelevantObjects">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="im"/>
+                <nav.access.privilege relatedObjectTypeID="ISSUE" objectPrivilege="CREATE"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- Fim REO 24.10.2017 - EV115903 - Link para 'Meus Objetos Relevantes' -->
+        
         <nav.data.grid dataGrid.idref="MyCreatedOpenIssues2">
             <nav.access>
                 <nav.access.privilege objectPrivilege="CREATE"/>
