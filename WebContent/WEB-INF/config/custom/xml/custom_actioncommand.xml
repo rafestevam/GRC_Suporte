@@ -59,6 +59,12 @@
 		    	<actionCommand commandId="customcrvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCREvaluation"/>
 		    </commandSet>
 		    <!-- Fim REO - 12.09.2017 - Riscos Corporativos -->
+		    
+		    <!-- Inicio REO 25.10.2017 - EV115928 -->
+		    <commandSet name="issuerelevantobject">
+            	<actionCommand commandId="delete"		 	clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIRODeleteActionCommand"/>
+			</commandSet>
+		    <!-- Fim REO 25.10.2017 - EV115928 -->
 		        
 		</objectTypeCommands>
 		
