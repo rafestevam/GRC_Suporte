@@ -25,10 +25,11 @@ public class CustomRiskCacheCommand extends RiskassessmentCacheActionCommand {
 	protected void assumeData(String[] p_excludeParameters){
 		//this.changeRAClass();
 		super.assumeData(p_excludeParameters);
+		this.changeRAClass();
 		
-		IRiskassessmentFormModel model = (IRiskassessmentFormModel)this.formModel;
+		//IRiskassessmentFormModel model = (IRiskassessmentFormModel)this.formModel;
 		
-		String selectedImpactTypeID = this.requestContext.getParameter("__selectedImpactTypeID");
+		//String selectedImpactTypeID = this.requestContext.getParameter("__selectedImpactTypeID");
 		/*if (!(StringUtility.isEmpty(selectedImpactTypeID)))
 			model.setCurrentImpactType(OVIDFactory.getOVID(selectedImpactTypeID));*/
 	}
