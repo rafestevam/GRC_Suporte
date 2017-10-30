@@ -13,6 +13,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRa_impact
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
+import com.idsscheer.webapps.arcm.common.util.StringUtility;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.actioncommand.ActionCommandId;
@@ -24,10 +25,16 @@ public class CustomRiskCacheCommand extends RiskassessmentCacheActionCommand {
 	protected void assumeData(String[] p_excludeParameters){
 		//this.changeRAClass();
 		super.assumeData(p_excludeParameters);
+		
+		IRiskassessmentFormModel model = (IRiskassessmentFormModel)this.formModel;
+		
+		String selectedImpactTypeID = this.requestContext.getParameter("__selectedImpactTypeID");
+		/*if (!(StringUtility.isEmpty(selectedImpactTypeID)))
+			model.setCurrentImpactType(OVIDFactory.getOVID(selectedImpactTypeID));*/
 	}
 	
 	protected void afterExecute(){
-		this.changeRAClass();		
+		//this.changeRAClass();		
 	}
 	
 	private void changeRAClass(){
