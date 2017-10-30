@@ -1,22 +1,28 @@
 package com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.idsscheer.utils.commands.Command;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.models.form.IFormModel;
 import com.idsscheer.webapps.arcm.bl.models.form.IRiskassessmentFormModel;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IQuotationAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRa_impacttypeAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
 import com.idsscheer.webapps.arcm.common.util.StringUtility;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
-import com.idsscheer.webapps.arcm.config.metadata.actioncommand.ActionCommandId;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.ActionCommandIds;
 import com.idsscheer.webapps.arcm.ui.framework.support.StringUtils;
 
@@ -25,20 +31,70 @@ public class CustomRiskCacheCommand extends RiskassessmentCacheActionCommand {
 	protected void assumeData(String[] p_excludeParameters){
 		//this.changeRAClass();
 		super.assumeData(p_excludeParameters);
-		this.changeRAClass();
 		
-		//IRiskassessmentFormModel model = (IRiskassessmentFormModel)this.formModel;
+		//Inicio REO - 30.10.2017 - EV117469
+		//this.changeRAClass();
 		
-		//String selectedImpactTypeID = this.requestContext.getParameter("__selectedImpactTypeID");
-		/*if (!(StringUtility.isEmpty(selectedImpactTypeID)))
-			model.setCurrentImpactType(OVIDFactory.getOVID(selectedImpactTypeID));*/
+		IRiskassessmentFormModel model = (IRiskassessmentFormModel)this.formModel;
+		IAppObj appObj = this.formModel.getAppObj();
+
+		try{
+		
+			String selectedImpactTypeID = this.requestContext.getParameter("__selectedImpactTypeID");
+			if (!(StringUtility.isEmpty(selectedImpactTypeID))){
+				model.setCurrentImpactType(OVIDFactory.getOVID(selectedImpactTypeID));
+				
+				List<Double> raHeights = this.getRAHeights(appObj);
+				
+				raHeights.sort(new Comparator<Double>(){
+					@Override
+					public int compare(Double ant, Double post) {
+						// TODO Auto-generated method stub
+						return ant < post ? -1 : ant == post ? 0 : 1;
+					}
+				});
+				
+				Double heavy = raHeights.get(raHeights.size() - 1);
+				if(heavy == 1)
+					appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).setRawValue("Baixo");
+				if(heavy == 2)
+					appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).setRawValue("Médio");
+				if(heavy == 3)
+					appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).setRawValue("Alto");
+				if(heavy == 4)
+					appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).setRawValue("Muito Alto");
+				
+				appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_HEIGHT).setRawValue(heavy);
+			}
+		
+		}catch(Exception e){
+			this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, e.getMessage(), new String[] { getStringRepresentation(this.formModel.getAppObj()) });
+		}
+		//Fim REO - 30.10.2017 - EV117469
+		
+	}
+
+	private List<Double> getRAHeights(IAppObj appObj) {
+		List<Double> raHeights = new ArrayList<>();
+		IListAttribute listImpTypeAttr = appObj.getAttribute(IRiskassessmentAttributeType.LIST_IMPACTTYPES);
+		List<IAppObj> listImpType = listImpTypeAttr.getElements(this.getUserContext());
+		for(IAppObj itemImpType : listImpType){
+			IListAttribute raList = itemImpType.getAttribute(IRa_impacttypeAttributeType.LIST_LOSSQUAL);
+			List<IAppObj> raAppList = raList.getElements(this.getUserContext());
+			for (IAppObj raAppItem : raAppList) {
+				//result_assessment = raAppItem.getRawValue(IQuotationAttributeType.ATTR_NAME);
+				raHeights.add(raAppItem.getRawValue(IQuotationAttributeType.ATTR_VALUE));
+			}
+		}
+		
+		return raHeights;
 	}
 	
 	protected void afterExecute(){
 		//this.changeRAClass();		
 	}
 	
-	private void changeRAClass(){
+	/*private void changeRAClass(){
 		
 		try{
 			
@@ -176,5 +232,5 @@ public class CustomRiskCacheCommand extends RiskassessmentCacheActionCommand {
 		return isFilled;
 		
 	}
-
+*/
 }
