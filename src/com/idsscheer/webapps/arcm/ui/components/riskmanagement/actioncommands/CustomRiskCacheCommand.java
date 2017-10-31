@@ -65,6 +65,9 @@ public class CustomRiskCacheCommand extends RiskassessmentCacheActionCommand {
 					appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).setRawValue("Muito Alto");
 				
 				appObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_HEIGHT).setRawValue(heavy);
+				
+				if(appObj.getAttribute(IRiskassessmentAttributeType.ATTR_REMARK).getRawValue().equals(""))
+					appObj.getAttribute(IRiskassessmentAttributeType.ATTR_REMARK).setRawValue("Em avaliação");
 			}
 		
 		}catch(Exception e){
