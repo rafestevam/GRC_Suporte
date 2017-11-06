@@ -6,7 +6,10 @@
         <commandchain id="prepareJob">
             <command id="assignedUsergroupsCheck" />
             <command id="riskActiveHierarchiesCheck" />
-            <command id="dueCheck" />
+            <!-- Inicio REO 06.11.2017 - EV114258 -->
+<!--             <command id="dueCheck" /> -->
+            <command id="customDueCheck" />
+            <!-- Fim REO 06.11.2017 - EV114258 -->
             <command id="riskassessmentGenerate" />
         </commandchain>
 
