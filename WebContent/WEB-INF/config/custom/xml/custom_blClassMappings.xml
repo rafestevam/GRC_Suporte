@@ -27,6 +27,13 @@
 	    	<!-- TEST DEFINITION -->
 	    	<mapping name="testdefinitionFindLinkedControlAndRisks" clsName="com.idsscheer.webapps.arcm.bl.component.testmanagement.commands.job.generator.CustomTestdefinitionFindLinkedControlAndRisksCommand" />
 <!-- 	    	<mapping name="customSaveDependentObjects"     clsName="com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands.CustomSaveDependentObjectsCommand" /> -->
+	    
+	    	<!-- RISK ASSESSMENT -->
+	    	<!-- Inicio REO 06.11.2017 - EV114258 -->
+	    	<mapping name="customDueCheck" clsName="com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands.CustomDueCheckCommand"/>
+	    	<!-- Fim REO 06.11.2017 - EV114258 -->
+	    	
+	    
 	    </mappingType>
 	    
 	    <mappingType name="objectTreeProvider">
