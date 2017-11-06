@@ -43,7 +43,7 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 		
 		try{
 		
-		if(reviewerStatus.equals("completed")){
+		if(reviewerStatus.getId().equals("agreed")){
 			JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
 			IUserContext jobCtx = jobEnv.getUserContext();
 			IAppObjFacade rskAppFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
@@ -52,16 +52,17 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 			List<IAppObj> currRskList = raObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(jobEnv.getUserContext());
 			for (IAppObj riskObj : currRskList) {
 				rskAppFacade.allocateLock(riskObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
-				String riskName = riskObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue();
-				IStringAttribute classFinalAttr = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL);
-				IStringAttribute residualFinalAttr = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL);
+				IAppObj rskUpdAppObj = rskAppFacade.load(riskObj.getVersionData().getHeadOVID(), this.getDefaultTransaction(), true);
+				String riskName = rskUpdAppObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue();
+				IStringAttribute classFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL);
+				IStringAttribute residualFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL);
 				String classFinal = classFinalAttr.isEmpty() ? "" : classFinalAttr.getRawValue();
 				String residualFinal = residualFinalAttr.isEmpty() ? "" : residualFinalAttr.getRawValue();
-				if((!classFinal.equals("")) && (residualFinal.equals(""))){
+				if((!classFinal.equals("")) && (!residualFinal.equals(""))){
 					CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, classFinal);
 					residualCalc.calculateResidualFinal();
-					riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(residualCalc.getResidualFinal());
-					rskAppFacade.save(riskObj, getDefaultTransaction(), true);
+					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(residualCalc.getResidualFinal());
+					rskAppFacade.save(rskUpdAppObj, getDefaultTransaction(), true);
 				}
 				rskAppFacade.releaseLock(riskObj.getVersionData().getHeadOVID());
 			}
