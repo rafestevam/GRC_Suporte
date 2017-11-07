@@ -124,8 +124,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			
 			for(int i = 0; i < riskAppList.size(); i++){
 				
-				IAppObj riskParentObj = riskAppList.get(i);
-			
+				//Inicio REO 07.11.2017 - Ajuste de dados para Mashzone (EV118286)
+				IAppObj riskParentObj = this.environment.getAppObjFacade(ObjectType.RISK).load(riskAppList.get(i).getVersionData().getHeadOVID(), true);
+				//IAppObj riskParentObj = riskAppList.get(i);
+				//Fim REO 07.11.2017 - Ajuste de dados para Mashzone (EV118286)
+				
 				if(riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).isEmpty()){
 					this.riscoPotencial = "Nao Avaliado";
 				}else{

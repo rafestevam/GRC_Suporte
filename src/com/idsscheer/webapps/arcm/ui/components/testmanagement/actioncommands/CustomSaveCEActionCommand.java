@@ -96,7 +96,13 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 			//
 			//IAppObj riskParentObj = this.getRiskFromControl(currParentCtrlObj);
-			IAppObj riskParentObj = this.getRiskFromControl(parentControlObjId);
+			
+			//Inicio REO 07.11.2017 - Ajuste de dados para Mashzone (EV118286)
+			//IAppObj riskParentObj = this.getRiskFromControl(parentControlObjId);
+			IAppObj bRiskParentObj = this.getRiskFromControl(parentControlObjId);
+			IAppObj riskParentObj = this.environment.getAppObjFacade(ObjectType.RISK).load(bRiskParentObj.getVersionData().getHeadOVID(), true);
+			//Fim REO 07.11.2017 - Ajuste de dados para Mashzone (EV118286)
+			
 			//List<IAppObj>riskParentList = this.getRisksFromControl();
 			
 			//for(int i = 0; i < riskParentList.size(); i++){
