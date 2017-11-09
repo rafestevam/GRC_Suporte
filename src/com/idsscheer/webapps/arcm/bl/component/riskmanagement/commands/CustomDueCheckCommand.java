@@ -30,6 +30,7 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 	
 	@Override
 	protected boolean isDue(IAppObj appObj, CommandContext cc) {
+		
 		// TODO Auto-generated method stub
 		if(super.isDue(appObj, cc)){
 			
@@ -54,7 +55,6 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 		Calendar riskEndDate = new GregorianCalendar();
 		riskEndDate.setTime(riskObj.getAttribute(IRiskAttributeType.ATTR_STARTDATE).getRawValue());
 		riskEndDate.add(Calendar.YEAR, 1);
-		
 		
 		try {
 			long raID = getRiskAssessment(riskObj, cc, jobCtx);
