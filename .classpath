@@ -14,7 +14,7 @@
 	<classpathentry kind="lib" path="C:/ARCM/Installed/SoftwareAG/ARIS9.8/server/bin/work/work_arcm_s/base/webapps/arcm/WEB-INF/lib/aopalliance-1.0.jar"/>
 	<classpathentry kind="lib" path="C:/ARCM/Installed/SoftwareAG/ARIS9.8/server/bin/work/work_arcm_s/base/webapps/arcm/WEB-INF/lib/arcm_common_config-98.6.0.jar"/>
 	<classpathentry kind="lib" path="C:/ARCM/Installed/SoftwareAG/ARIS9.8/server/bin/work/work_arcm_s/base/webapps/arcm/WEB-INF/lib/arcm_core_api-98.6.0.jar"/>
-	<classpathentry kind="lib" path="C:/ARCM/Installed/SoftwareAG/ARIS9.8/server/bin/work/work_arcm_s/base/webapps/arcm/WEB-INF/lib/arcm_core-98.6.0.jar" sourcepath="C:/ARCM/dist/arcm-dist-98.6.0.zip">
+	<classpathentry kind="lib" path="C:/ARCM/Installed/SoftwareAG/ARIS9.8/server/bin/work/work_arcm_s/base/webapps/arcm/WEB-INF/lib/arcm_core-98.6.0.jar" sourcepath="C:/ARCM/dist/arcm-sources-9.8.6.0.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/C:/ARCM/dist/arcm-docs-9.8.6.0.zip!/"/>
 		</attributes>

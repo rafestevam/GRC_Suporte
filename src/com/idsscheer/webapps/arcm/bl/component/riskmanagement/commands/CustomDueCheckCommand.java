@@ -43,6 +43,8 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 			
 		}
 		return super.isDue(appObj, cc);
+		
+		// Teste Tomazzi
 	}
 	
 	private boolean getAssessment4Risk(IAppObj riskObj, CommandContext cc){
