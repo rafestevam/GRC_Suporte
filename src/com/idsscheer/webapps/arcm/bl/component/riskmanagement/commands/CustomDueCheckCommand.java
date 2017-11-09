@@ -1,5 +1,7 @@
 package com.idsscheer.webapps.arcm.bl.component.riskmanagement.commands;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -16,6 +18,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeType;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
@@ -46,6 +49,12 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 		boolean bReturn = false;
 		
 		IUserContext jobCtx = getJobContext(cc);
+		Calendar riskStartDate = new GregorianCalendar();
+		riskStartDate.setTime(riskObj.getAttribute(IRiskAttributeType.ATTR_STARTDATE).getRawValue());
+		Calendar riskEndDate = new GregorianCalendar();
+		riskEndDate.setTime(riskObj.getAttribute(IRiskAttributeType.ATTR_STARTDATE).getRawValue());
+		riskEndDate.add(Calendar.YEAR, 1);
+		
 		
 		try {
 			long raID = getRiskAssessment(riskObj, cc, jobCtx);
@@ -57,10 +66,17 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 			IEnumAttribute statusAttr = raObj.getAttribute(IRiskassessmentAttributeType.ATTR_OWNER_STATUS);
 			IEnumerationItem status = ARCMCollections.extractSingleEntry(statusAttr.getRawValue(), true);
 			
-			if(!status.getId().equals("new")){
-				bReturn = true;
+			Calendar raEndDate = new GregorianCalendar();
+			raEndDate.setTime(raObj.getAttribute(IRiskassessmentAttributeType.ATTR_PLANNEDENDDATE).getRawValue());
+			
+			if((raEndDate.after(riskStartDate)) && (raEndDate.before(riskEndDate)))  {
+				if(!status.getId().equals("new")){
+					bReturn = true;
+				}else{
+					bReturn = false;
+				}
 			}else{
-				bReturn = false;
+				bReturn = true;
 			}
 			
 		} catch (Exception e) {
