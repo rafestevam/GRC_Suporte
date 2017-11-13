@@ -37,9 +37,8 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 			
 			boolean hasAssessment = false;
 			
-			if(appObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue().equals("RP Financeiro 1.1")){
-				int i = 1;
-			}
+
+
 			
 			IAppObj riskObj = this.getLastRiskVersion(appObj, cc);
 			
