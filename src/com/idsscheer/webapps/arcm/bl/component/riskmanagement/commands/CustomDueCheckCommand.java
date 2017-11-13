@@ -11,6 +11,7 @@ import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.component.common.command.job.DueCheckCommand;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.framework.command.CommandContext;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -35,16 +36,37 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 		if(super.isDue(appObj, cc)){
 			
 			boolean hasAssessment = false;
-			List<IAppObj> riskList = appObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(cc.getChainContext().getUserContext());
+			
+			if(appObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue().equals("RP Financeiro 1.1")){
+				int i = 1;
+			}
+			
+			IAppObj riskObj = this.getLastRiskVersion(appObj, cc);
+			
+			hasAssessment = this.getAssessment4Risk(riskObj, cc);
+			/*List<IAppObj> riskList = appObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(cc.getChainContext().getUserContext());
 			for (IAppObj riskObj : riskList) {
 				hasAssessment = this.getAssessment4Risk(riskObj, cc);
-			}
+			}*/
 			return hasAssessment;
 			
 		}
 		return super.isDue(appObj, cc);
 		
-		// Teste Tomazzi
+	}
+
+	private IAppObj getLastRiskVersion(IAppObj appObj, CommandContext cc) {
+		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(cc.getChainContext().getUserContext(), ObjectType.RISK);
+		try {
+			IOVID riskOVID = appObj.getVersionHistory().get(appObj.getVersionHistory().size() - 1).getOVID();
+			//IAppObj riskObj = facade.load(appObj.getVersionData().getHeadOVID(), true);//
+			IAppObj riskObj = facade.load(riskOVID, true);
+			return riskObj;
+		} catch (RightException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	private boolean getAssessment4Risk(IAppObj riskObj, CommandContext cc){
@@ -64,13 +86,15 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISKASSESSMENT);
 			IOVID raOVID = OVIDFactory.getOVID(raID);
 			IAppObj raObj = facade.load(raOVID, true);
-			
+			if(raObj == null)
+				return true;
+			//
 			IEnumAttribute statusAttr = raObj.getAttribute(IRiskassessmentAttributeType.ATTR_OWNER_STATUS);
 			IEnumerationItem status = ARCMCollections.extractSingleEntry(statusAttr.getRawValue(), true);
 			
 			Calendar raEndDate = new GregorianCalendar();
 			raEndDate.setTime(raObj.getAttribute(IRiskassessmentAttributeType.ATTR_PLANNEDENDDATE).getRawValue());
-			
+				
 			if((raEndDate.after(riskStartDate)) && (raEndDate.before(riskEndDate)))  {
 				if(!status.getId().equals("new")){
 					bReturn = true;
