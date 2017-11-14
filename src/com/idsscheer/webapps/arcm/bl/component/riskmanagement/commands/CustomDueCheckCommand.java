@@ -56,6 +56,9 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 		try {
 			IOVID riskOVID = appObj.getVersionHistory().get(appObj.getVersionHistory().size() - 1).getOVID();
 			IAppObj riskObj = facade.load(riskOVID, true);
+			facade.releaseLock(riskOVID);
+			facade.releaseLock(riskObj);
+			facade.releaseLock(appObj);
 			return riskObj;
 		} catch (RightException e) {
 			// TODO Auto-generated catch block
@@ -100,6 +103,9 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 			}else{
 				bReturn = true;
 			}
+			facade.releaseLock(raOVID);
+			facade.releaseLock(raObj);
+			facade.releaseLock(riskObj);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
