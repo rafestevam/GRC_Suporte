@@ -32,26 +32,31 @@ public class CustomDueCheckCommand extends DueCheckCommand {
 	@Override
 	protected boolean isDue(IAppObj appObj, CommandContext cc) {
 		
+		boolean hasAssessment = false;
+		
 		// TODO Auto-generated method stub
-		if(super.isDue(appObj, cc)){
-			
-			boolean hasAssessment = false;
-			
-			if(appObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue().equals("RP Financeiro 1.1")){
-				int i = 1;
-			}
-			
-			IAppObj riskObj = this.getLastRiskVersion(appObj, cc);
-			
-			hasAssessment = this.getAssessment4Risk(riskObj, cc);
-			/*List<IAppObj> riskList = appObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(cc.getChainContext().getUserContext());
-			for (IAppObj riskObj : riskList) {
+		if(cc.getCommandXMLParameter("object_type").equals("riskassessment")){
+			if(super.isDue(appObj, cc)){
+				
+				/*if(appObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue().equals("RP Financeiro 1.1")){
+					int i = 1;
+				}*/
+				
+				IAppObj riskObj = this.getLastRiskVersion(appObj, cc);
+				
 				hasAssessment = this.getAssessment4Risk(riskObj, cc);
-			}*/
-			return hasAssessment;
-			
+				/*List<IAppObj> riskList = appObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(cc.getChainContext().getUserContext());
+				for (IAppObj riskObj : riskList) {
+					hasAssessment = this.getAssessment4Risk(riskObj, cc);
+				}*/
+				//return hasAssessment;
+				
+			}
+		}else{
+			hasAssessment = super.isDue(appObj, cc);
 		}
-		return super.isDue(appObj, cc);
+		
+		return hasAssessment;
 		
 	}
 

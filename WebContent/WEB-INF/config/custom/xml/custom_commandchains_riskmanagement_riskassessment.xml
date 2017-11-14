@@ -8,7 +8,9 @@
             <command id="riskActiveHierarchiesCheck" />
             <!-- Inicio REO 06.11.2017 - EV114258 -->
 <!--             <command id="dueCheck" /> -->
-            <command id="customDueCheck" />
+            <command id="customDueCheck">
+            	<parameter name="object_type" value="riskassessment"/>
+            </command>
             <!-- Fim REO 06.11.2017 - EV114258 -->
             <command id="riskassessmentGenerate" />
         </commandchain>
