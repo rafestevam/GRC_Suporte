@@ -32,6 +32,7 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.workflow.IStateMetadata;
+import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomUpdateIssueStatus implements ICommand {
 
@@ -76,6 +77,11 @@ public class CustomUpdateIssueStatus implements ICommand {
 		//Instancia do Objeto de Plano de Ação Corrente
 		IAppObj issueAppObj = cc.getChainContext().getTriggeringAppObj();
 		IUserContext userCtx = cc.getChainContext().getUserContext();
+		
+		//Inicio REO 21.11.2017 - EV121389
+		IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
+		//Fim REO 21.11.2017 - EV121389
+		
 //		IUIEnvironment currEnv = 
 		
 		IEnumAttribute issueTypeAttr = issueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
@@ -155,7 +161,12 @@ public class CustomUpdateIssueStatus implements ICommand {
 			}
 				
 			if(lock){
-				iroFacade = FacadeFactory.getInstance().getAppObjFacade(cc.getChainContext().getUserContext(), iroUpdApp.getObjectType());
+				
+				//Inicio REO - 21.11.2017
+				//iroFacade = FacadeFactory.getInstance().getAppObjFacade(cc.getChainContext().getUserContext(), iroUpdApp.getObjectType());
+				iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroUpdApp.getObjectType());
+				//Fim REO - 21.11.2017
+				
 				iroFacade.allocateWriteLock(iroUpdApp.getVersionData().getOVID());
 				IEnumAttribute iroTypeAttr = iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
 				IEnumerationItem iroTypeItem = ARCMCollections.extractSingleEntry(iroTypeAttr.getRawValue(), true);
