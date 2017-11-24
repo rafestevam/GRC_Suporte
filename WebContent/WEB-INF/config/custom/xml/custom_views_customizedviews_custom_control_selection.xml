@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 <!-- Inicio REO 24.11.2017 - EV109172 -->
-	<view id="custom_control_selection" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+	<view id="custom_control_selection" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomAuditControlSelectionViewHandler">
 		<viewObject id="VO_EV109172_control" objectType="CONTROL" isMainViewObject="true">
 			<viewColumn id="client_sign" attributeType="client_sign" isSelectColumn="true"/>
             <viewColumn id="ct_id" attributeType="obj_id" isSelectColumn="true"/>
