@@ -106,10 +106,12 @@
                 </row>
                 <row id="control">
                     <element attribute.idref="control">
-<!--                     <parameter name="selectionList" value="custom_control_sel"/> -->
-	                    <parameter name="selectionList" value="AUTO"/>
-	                    <button.remove location="row" button.idref="RELATION_OPEN"/>
-	                    <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    	<!-- Inicio REO 24.11.2017 - EV109172 -->
+                    	<parameter name="selectionList" value="custom_control_sel"/>
+<!-- 	                    <parameter name="selectionList" value="AUTO"/> -->
+<!-- 	                    <button.remove location="row" button.idref="RELATION_OPEN"/> -->
+<!-- 	                    <button.remove location="toolbar" button.idref="RELATION_OPEN"/> -->
+	                    <!-- Fim REO 24.11.2017 - EV109172 -->
                     </element>
                 </row>
                 <!-- End of Customizations of GAU01 -->
