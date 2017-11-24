@@ -11,12 +11,14 @@ import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 
 	@Override
-	public void handleView(QueryDefinition paramQueryDefinition1, List<IRightsFilterCriteria> paramList,
-			List<IFilterCriteria> paramList1, IDataLayerObject paramIDataLayerObject,
-			QueryDefinition paramQueryDefinition2) throws BusViewException {
+	public void handleView(QueryDefinition query, List<IRightsFilterCriteria> rightsFilters,
+			List<IFilterCriteria> filters, IDataLayerObject currentObject,
+			QueryDefinition parentQuery) throws BusViewException {
 		// TODO Auto-generated method stub
 		
-		Long userID = null;
+		for(IFilterCriteria filter : query.getFilters()){
+			//query.getFilters().remove(filter);
+		}
 
 	}
 

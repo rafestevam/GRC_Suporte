@@ -3,15 +3,13 @@
 <!-- Inicio REO 24.11.2017 - EV109172 -->
 	<view id="custom_control_selection" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomAuditControlSelectionViewHandler">
 		<viewObject id="VO_EV109172_control" objectType="CONTROL" isMainViewObject="true">
-			<viewColumn id="client_sign" attributeType="client_sign" isSelectColumn="true"/>
             <viewColumn id="ct_id" attributeType="obj_id" isSelectColumn="true"/>
             <viewColumn id="ct_name" attributeType="name" isSelectColumn="true"/>
             <viewColumn id="ct_deactivated" attributeType="deactivated" isSelectColumn="true"/>
 		</viewObject>
 		<conditions>
 			<compoundCondition conditionConnect="AND">
-				<condition column.id="client_sign" compareType="EQ" />
-				<condition column.id="ct_deactivated" compareType="EQ" />
+				<condition column.id="ct_deactivated" compareType="EQ" value="false"/>
 			</compoundCondition>
 		</conditions>
 	</view>
