@@ -106,9 +106,10 @@
                 </row>
                 <row id="control">
                     <element attribute.idref="control">
-                        <parameter name="selectionList" value="AUTO"/>
-                        <button.remove location="row" button.idref="RELATION_OPEN"/>
-                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+<!--                     <parameter name="selectionList" value="custom_control_sel"/> -->
+	                    <parameter name="selectionList" value="AUTO"/>
+	                    <button.remove location="row" button.idref="RELATION_OPEN"/>
+	                    <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
                     </element>
                 </row>
                 <!-- End of Customizations of GAU01 -->
