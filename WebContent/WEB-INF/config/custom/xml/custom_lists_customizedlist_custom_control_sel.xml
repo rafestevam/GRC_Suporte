@@ -14,10 +14,10 @@
           listType="selection"
           relatedObjectType.idref="CONTROL"
           useCheckBoxes="false">
-		<simpleFilterRow>
-			<simpleFilter filterRow.idref="ct_id"/>
-			<simpleFilter filterRow.idref="ct_name"/>
-		</simpleFilterRow>
+<!-- 		<simpleFilterRow> -->
+<!-- 			<simpleFilter filterRow.idref="ct_id"/> -->
+<!-- 			<simpleFilter filterRow.idref="ct_name"/> -->
+<!-- 		</simpleFilterRow> -->
 		<listHeaderRow>
 			<listHeader column="LC_Corprisk_0" propertyKey="tableheader.controlsel.id"    width="20%"/>
 			<listHeader column="LC_Corprisk_1" propertyKey="tableheader.controlsel.name"  width="80%"/>
