@@ -22,7 +22,7 @@
 			<listHeader column="LC_Corprisk_0" propertyKey="tableheader.controlsel.id"    width="20%"/>
 			<listHeader column="LC_Corprisk_1" propertyKey="tableheader.controlsel.name"  width="80%"/>
 		</listHeaderRow>
-		<column id="LC_Corprisk_0" align="left" dataReference.idref="ct_id" />
+		<column id="LC_Corprisk_0" align="left" dataReference.idref="ct_ctid" />
 		<column id="LC_Corprisk_1" align="left" dataReference.idref="ct_name" template="openObject" />
 		<listButtons/>
 		<rowButtons>
