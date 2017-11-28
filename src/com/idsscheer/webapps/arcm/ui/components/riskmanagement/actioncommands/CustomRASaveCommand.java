@@ -81,33 +81,43 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 		IAppObj currAppObj = this.formModel.getAppObj();
 		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext()); //REO+ 27.09.2017 - EV113345
 		
-		try{
-			//Inicio REO - 27.09.2017 - EV113345
-			IUserContext jobCtx = jobEnv.getUserContext();
-			IAppObjFacade rskAppFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
-			//IAppObjFacade rskAppFacade = currEnv.getAppObjFacade(ObjectType.RISK);
-			//Fim REO - 27.09.2017 - EV113345
-			
-			String ra_result = currAppObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).getRawValue();	
-			List<IAppObj> currRskList = currAppObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(this.getFullGrantUserContext());
-			Iterator<IAppObj> currRskIterator = currRskList.iterator();
-			
-			while(currRskIterator.hasNext()){
-				IAppObj riskAppObj = currRskIterator.next();
-				IOVID riskOVID = riskAppObj.getVersionData().getHeadOVID();
-				
-				rskAppFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
-				IAppObj rskUpdAppObj = this.updatePotencialRisk(riskOVID, rskAppFacade, ra_result);
-												
-				rskAppFacade.save(rskUpdAppObj, this.getDefaultTransaction(), true);
-				rskAppFacade.releaseLock(riskOVID);
-			}
-
-		}catch(Exception e){
-			this.log.error(e, (Throwable)e);
-			this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, e.getMessage(), new String[] { getStringRepresentation(this.formModel.getAppObj()) });
-		}
+		// Início FCT - EV121384 - 28.11.2017
+		// Apenas quando a avaliação do risco estiver com o 
+		// status em avaliação que o risco potencial deve ser alterado
+		// no artefato de risco.
+		IEnumAttribute raReviewerStatus = currAppObj.getAttribute(IRiskassessmentAttributeType.ATTR_REVIEWER_STATUS);
+		IEnumerationItem enumReviewerStatus = ARCMCollections.extractSingleEntry(raReviewerStatus.getRawValue(), true);
 		
+		// Salva no risco apenas se o status de revisor está aceito. 
+		if (enumReviewerStatus.getId().equals("agreed")) {
+			try{
+				//Inicio REO - 27.09.2017 - EV113345
+				IUserContext jobCtx = jobEnv.getUserContext();
+				IAppObjFacade rskAppFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
+				//IAppObjFacade rskAppFacade = currEnv.getAppObjFacade(ObjectType.RISK);
+				//Fim REO - 27.09.2017 - EV113345
+				
+				String ra_result = currAppObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).getRawValue();	
+				List<IAppObj> currRskList = currAppObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(this.getFullGrantUserContext());
+				Iterator<IAppObj> currRskIterator = currRskList.iterator();
+				
+				while(currRskIterator.hasNext()){
+					IAppObj riskAppObj = currRskIterator.next();
+					IOVID riskOVID = riskAppObj.getVersionData().getHeadOVID();
+					
+					rskAppFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
+					IAppObj rskUpdAppObj = this.updatePotencialRisk(riskOVID, rskAppFacade, ra_result);
+													
+					rskAppFacade.save(rskUpdAppObj, this.getDefaultTransaction(), true);
+					rskAppFacade.releaseLock(riskOVID);
+				}
+
+			}catch(Exception e){
+				this.log.error(e, (Throwable)e);
+				this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, e.getMessage(), new String[] { getStringRepresentation(this.formModel.getAppObj()) });
+			}	
+		}
+				
 	}
 	
 	//Obter Risco Potencial a partir da Avaliação de Risco
