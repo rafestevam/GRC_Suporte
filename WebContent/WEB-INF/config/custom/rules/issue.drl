@@ -1075,6 +1075,28 @@ rule "custom_set_plannedenddate_status_actionplan[I,V]"
 end
 # Fim REO 14.08.2017 - Evento EV108435
 
+# Inicio REO 30.11.2017 - Evento EV121389
+rule "custom_set_plannedenddate_status_issue[I,V]"
+
+	salience 70
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "please_select"
+	
+	then
+#		set "plannedenddate" not_mandatory
+#		set "plannedenddate" readonly
+		set "custom_is_creator_status" to value "new"
+
+end
+# Fim REO 30.11.2017 - Evento EV121389
+
 #rule "custom_set_action_type_mandatory[I,V]"
 #	
 #	salience 70
