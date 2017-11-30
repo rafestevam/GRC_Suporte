@@ -1,5 +1,6 @@
 package com.idsscheer.webapps.arcm.dl.framework.viewhandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.myfaces.shared.util.LocaleUtils;
@@ -11,13 +12,10 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAuditsteptemplateAttributeType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAudittemplateAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAudittemplateAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
-import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IAttributeType;
 import com.idsscheer.webapps.arcm.dl.framework.BusException;
-import com.idsscheer.webapps.arcm.dl.framework.BusObjectException;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
@@ -33,6 +31,8 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 			List<IFilterCriteria> filters, IDataLayerObject currentObject,
 			QueryDefinition parentQuery) throws BusViewException {
 		
+		List<Integer> ctrlIDList = new ArrayList();
+		
 		// TODO Auto-generated method stub
 		try {
 			IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
@@ -47,7 +47,8 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 						
 						for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
 							System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
-							filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+							ctrlIDList.add((int)ctrlAppObj.getObjectId());
+							//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
 						}
 						
 					}
@@ -56,11 +57,8 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 				
 			}
 			
-			//System.out.println(facade.toString());
-			
-			for(IFilterCriteria filter : query.getFilters()){
-				//query.getFilters().remove(filter);
-			}
+			if(ctrlIDList.size() > 0)
+				filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.IN, ctrlIDList));
 			
 		} catch (RightException | BusException e) {
 			// TODO Auto-generated catch block
