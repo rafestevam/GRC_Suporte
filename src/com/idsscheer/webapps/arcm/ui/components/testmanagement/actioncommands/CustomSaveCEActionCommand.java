@@ -132,7 +132,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			
 			
 		}catch(CustomCorpRiskException e1){
-			this.environment.getDialogManager().getNotificationDialog().addInfo(e1.getMessage());
+			//this.environment.getDialogManager().getNotificationDialog().addInfo(e1.getMessage());
 		}catch(Exception e){
 			//this.environment.getDialogManager().createSilentForwardDialog("ERRO", e.getMessage());
 			this.environment.getDialogManager().getNotificationDialog().addInfo(e.getMessage());
