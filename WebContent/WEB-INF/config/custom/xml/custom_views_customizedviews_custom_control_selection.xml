@@ -7,10 +7,12 @@
             <viewColumn id="ct_ctid" attributeType="control_id" isSelectColumn="true"/>
             <viewColumn id="ct_name" attributeType="name" isSelectColumn="true"/>
             <viewColumn id="ct_deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="version_active" attributeType="version_active" isSelectColumn="true" />
 		</viewObject>
 		<conditions>
 			<compoundCondition conditionConnect="AND">
 				<condition column.id="ct_deactivated" compareType="EQ" value="false"/>
+				<condition column.id="version_active" compareType="EQ" value="true"/>
 			</compoundCondition>
 		</conditions>
 	</view>
