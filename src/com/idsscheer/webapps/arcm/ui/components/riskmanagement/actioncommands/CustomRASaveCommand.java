@@ -58,12 +58,34 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				IStringAttribute residualFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL);
 				String classFinal = classFinalAttr.isEmpty() ? "" : classFinalAttr.getRawValue();
 				String residualFinal = residualFinalAttr.isEmpty() ? "" : residualFinalAttr.getRawValue();
-				if((!classFinal.equals("")) && (!residualFinal.equals(""))){
+				
+				//Inicio Alteracao - REO 18.12.2017 - EV126430
+				/*if((!classFinal.equals("")) && (!residualFinal.equals(""))){
 					CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, classFinal);
 					residualCalc.calculateResidualFinal();
 					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(residualCalc.getResidualFinal());
 					rskAppFacade.save(rskUpdAppObj, getDefaultTransaction(), true);
-				}
+				}else{*/
+				IStringAttribute ctrl1Line = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE);
+				IStringAttribute ctrl2Line = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE);
+				IStringAttribute ctrl3Line = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE);
+				
+				String class1Line = ctrl1Line.isEmpty() ? "" : ctrl1Line.getRawValue();
+				String class2Line = ctrl2Line.isEmpty() ? "" : ctrl2Line.getRawValue();
+				String class3Line = ctrl3Line.isEmpty() ? "" : ctrl3Line.getRawValue();
+				
+				//if((!class1Line.equals("")) || (!class2Line.equals("")) || (!class3Line.equals(""))){
+				CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, class1Line, class2Line, class3Line);
+				residualCalc.calculateResidualFinal();
+				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidual1Line());
+				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidual2Line());
+				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidual3Line());
+				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidualFinal());
+				rskAppFacade.save(rskUpdAppObj, getDefaultTransaction(), true);
+				//}	
+				//}
+				//Fim Alteracao - REO 18.12.2017 - EV126430
+				
 				rskAppFacade.releaseLock(riskObj.getVersionData().getHeadOVID());
 			}
 		}
