@@ -35,6 +35,7 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
@@ -151,13 +152,13 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				}
 			
 			}
-			
-			
+		
+		}catch(CustomCorpRiskException e1){
+			//this.environment.getDialogManager().getNotificationDialog().addInfo(e1.getMessage());
 		}catch(Exception e){
 			//this.environment.getDialogManager().createSilentForwardDialog("ERRO", e.getMessage());
 			this.environment.getDialogManager().getNotificationDialog().addInfo(e.getMessage());
 		}
-		
 		
 	}
 	
