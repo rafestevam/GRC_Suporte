@@ -2,7 +2,7 @@ package com.idsscheer.webapps.arcm.custom.corprisk;
 
 public class CustomProcRiskResidualCalc {
 	
-	private String riskClass1Line;
+	private String riskClass1line;
 	private String riskClass2line;
 	private String riskClass3line;
 	private String riskClassFinal;
@@ -13,11 +13,12 @@ public class CustomProcRiskResidualCalc {
 
 	public CustomProcRiskResidualCalc(String riskName, String riscoPotencial, String riskClass1Line, String riskClass2line, String riskClass3line) {
 		// TODO Auto-generated constructor stub
-		this.riskClass1Line = riskClass1Line;
+		this.riskClass1line = riskClass1Line;
 		this.riskClass2line = riskClass2line;
 		this.riskClass3line = riskClass3line;
 		this.riscoPotencial = riscoPotencial;
 		this.riskName = riskName;
+		this.riskClassFinal = ""; //REO+ 18.12.2017 - EV126430
 	}
 	
 	public CustomProcRiskResidualCalc(String riskName, String riscoPotencial, String riskClassFinal) {
@@ -34,7 +35,7 @@ public class CustomProcRiskResidualCalc {
 		}
 		
 		try{
-			if(this.riskClass1Line.equals("")){
+			if(this.riskClass1line.equals("")){
 				if((!this.riskClass2line.equals("")) && (this.riskClass3line.equals(""))){
 					this.riskClassFinal = this.riskFinalClassification("", this.riskClass2line, "");
 				}else{
@@ -46,12 +47,12 @@ public class CustomProcRiskResidualCalc {
 				}
 			}else{
 				if((!this.riskClass2line.equals("")) && (this.riskClass3line.equals(""))){
-					this.riskClassFinal = this.riskFinalClassification(this.riskClass1Line, this.riskClass2line, "");
+					this.riskClassFinal = this.riskFinalClassification(this.riskClass1line, this.riskClass2line, "");
 				}else{
 					if((this.riskClass2line.equals("")) && (!this.riskClass3line.equals(""))){
-						this.riskClassFinal = this.riskFinalClassification(this.riskClass1Line, "", this.riskClass3line);
+						this.riskClassFinal = this.riskFinalClassification(this.riskClass1line, "", this.riskClass3line);
 					}else{
-						this.riskClassFinal = this.riskFinalClassification(this.riskClass1Line, this.riskClass2line, this.riskClass3line);
+						this.riskClassFinal = this.riskFinalClassification(this.riskClass1line, this.riskClass2line, this.riskClass3line);
 					}
 				}
 			}
@@ -64,11 +65,27 @@ public class CustomProcRiskResidualCalc {
 		if(null == this.riscoPotencial){
 			throw new CustomCorpRiskException("O risco de processo \"" + this.riskName + "\" não está avaliado!");
 		}
+		if(this.riskClassFinal == "")
+			this.calculateClassFinal();
+		
 		this.riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, this.riskClassFinal);
 	}
 	
 	public String getResidualFinal(){
-		return this.riskResidualFinal;
+		//return this.riskResidualFinal;
+		return this.riskResidualFinal(this.riscoPotencial, this.riskClassFinal);
+	}
+	
+	public String getResidual1Line(){
+		return this.riskResidualFinal(this.riscoPotencial, this.riskClass1line);
+	}
+	
+	public String getResidual2Line(){
+		return this.riskResidualFinal(this.riscoPotencial, this.riskClass2line);
+	}
+	
+	public String getResidual3Line(){
+		return this.riskResidualFinal(this.riscoPotencial, this.riskClass3line);
 	}
 	
 	private String riskFinalClassification(String risk1line, String risk2line, String risk3line) throws Exception{
@@ -144,59 +161,62 @@ public class CustomProcRiskResidualCalc {
 		
 	}
 	
-	private String riskResidualFinal(String riskPotencial, String riskControlFinal){
+	private String riskResidualFinal(String riskPotencial, String riskControlEnv){
 		
 		String riskResidualReturn = "";
 		
 		if(riskPotencial.equals("Nao Avaliado"))
 			return "Não Avaliado";
+		
+		if(riskControlEnv.equals(""))
+			return "Não Avaliado";
 			
-		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Muito Alto"))
+		if(riskPotencial.equals("Muito Alto") && riskControlEnv.equals("Muito Alto"))
 			riskResidualReturn = "Muito Alto";
 		
-		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Alto"))
+		if(riskPotencial.equals("Muito Alto") && riskControlEnv.equals("Alto"))
 			riskResidualReturn = "Muito Alto";
 		
-		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Médio"))
+		if(riskPotencial.equals("Muito Alto") && riskControlEnv.equals("Médio"))
 			riskResidualReturn = "Alto";
 		
-		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Baixo"))
+		if(riskPotencial.equals("Muito Alto") && riskControlEnv.equals("Baixo"))
 			riskResidualReturn = "Médio";
 		
-		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Muito Alto"))
+		if(riskPotencial.equals("Alto") && riskControlEnv.equals("Muito Alto"))
 			riskResidualReturn = "Alto";
 		
-		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Alto"))
+		if(riskPotencial.equals("Alto") && riskControlEnv.equals("Alto"))
 			riskResidualReturn = "Alto";
 		
-		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Médio"))
+		if(riskPotencial.equals("Alto") && riskControlEnv.equals("Médio"))
 			riskResidualReturn = "Médio";
 		
-		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Baixo"))
+		if(riskPotencial.equals("Alto") && riskControlEnv.equals("Baixo"))
 			riskResidualReturn = "Médio";
 		
-		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Muito Alto"))
+		if(riskPotencial.equals("Médio") && riskControlEnv.equals("Muito Alto"))
 			riskResidualReturn = "Médio";
 		
-		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Alto"))
+		if(riskPotencial.equals("Médio") && riskControlEnv.equals("Alto"))
 			riskResidualReturn = "Médio";
 		
-		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Médio"))
+		if(riskPotencial.equals("Médio") && riskControlEnv.equals("Médio"))
 			riskResidualReturn = "Médio";
 		
-		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Baixo"))
+		if(riskPotencial.equals("Médio") && riskControlEnv.equals("Baixo"))
 			riskResidualReturn = "Baixo";
 		
-		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Muito Alto"))
+		if(riskPotencial.equals("Baixo") && riskControlEnv.equals("Muito Alto"))
 			riskResidualReturn = "Baixo";
 		
-		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Alto"))
+		if(riskPotencial.equals("Baixo") && riskControlEnv.equals("Alto"))
 			riskResidualReturn = "Baixo";
 		
-		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Médio"))
+		if(riskPotencial.equals("Baixo") && riskControlEnv.equals("Médio"))
 			riskResidualReturn = "Baixo";
 		
-		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Baixo"))
+		if(riskPotencial.equals("Baixo") && riskControlEnv.equals("Baixo"))
 			riskResidualReturn = "Baixo";
 		
 		return riskResidualReturn;
