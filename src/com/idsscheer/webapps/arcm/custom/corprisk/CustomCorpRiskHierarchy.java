@@ -43,6 +43,10 @@ public class CustomCorpRiskHierarchy {
 	
 	public String calculateResidualCR() throws CustomCorpRiskException{
 		String residual = "";
+		int intBaixo = 0;
+		int intMedio = 0;
+		int intAlto = 0;
+		int intMAlto = 0;
 		/*int totalRisks = 0;
 		int finalGrade = 0;
 		Map<String,Integer> resGrade = new HashMap<String, Integer>();
@@ -66,16 +70,20 @@ public class CustomCorpRiskHierarchy {
 			}
 			
 			if(resClass.equalsIgnoreCase("Baixo")){
-				this.resGrade.replace("baixo", Math.incrementExact(0));
+				intBaixo += 1;
+				this.resGrade.replace("baixo", intBaixo);
 			}
 			if(resClass.equalsIgnoreCase("Médio")){
-				this.resGrade.replace("medio", Math.incrementExact(0));
+				intMedio += 1;
+				this.resGrade.replace("medio", intMedio);
 			}
 			if(resClass.equalsIgnoreCase("Alto")){
-				this.resGrade.replace("alto", Math.incrementExact(0));
+				intAlto += 1;
+				this.resGrade.replace("alto", intAlto);
 			}
 			if(resClass.equalsIgnoreCase("Muito Alto")){
-				this.resGrade.replace("muito_alto", Math.incrementExact(0));
+				intMAlto += 1;
+				this.resGrade.replace("muito_alto", intMAlto);
 			}
 		}
 		

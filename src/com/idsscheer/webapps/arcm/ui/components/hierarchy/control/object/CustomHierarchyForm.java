@@ -61,14 +61,20 @@ public class CustomHierarchyForm extends Form {
 		// TODO Auto-generated method stub
 		//IUserAppObj userObj = this.environment.getUserContext().getUser();
 		
-		IAppObj riskManagerGrp = this.loadRiskManagerGrp();
-		IEnumerationItem role = ARCMCollections.extractSingleEntry(riskManagerGrp.getAttribute(IUsergroupAttributeType.ATTR_ROLE).getRawValue(), true);
+		//IAppObj riskManagerGrp = this.loadRiskManagerGrp();
+		//IEnumerationItem role = ARCMCollections.extractSingleEntry(riskManagerGrp.getAttribute(IUsergroupAttributeType.ATTR_ROLE).getRawValue(), true);
 		
-		if(!this.form.getRoleSelectionModel().getSelectedRole().getId().equalsIgnoreCase(role.getId()))
+		if(this.form.getUserContext().getUserRights().hasRole(USERROLE_TYPE.RISKMANAGER)){
+			activeButtonTypes.add(ButtonTypesCustom.CUSTOM_CR_EVALUATION);
+		}else{
+			activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_CR_EVALUATION);
+		}
+		
+		/*if(!this.form.getRoleSelectionModel().getSelectedRole().getId().equalsIgnoreCase(role.getId()))
 			activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_CR_EVALUATION);
 		
 		if(this.form.getRoleSelectionModel().getSelectedRole().getId().equalsIgnoreCase(role.getId()))
-			activeButtonTypes.add(ButtonTypesCustom.CUSTOM_CR_EVALUATION);
+			activeButtonTypes.add(ButtonTypesCustom.CUSTOM_CR_EVALUATION);*/
 
 		super.renderButtons(activeButtonTypes);
 		
