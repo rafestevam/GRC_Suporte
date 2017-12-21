@@ -3,6 +3,7 @@ package com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
@@ -26,6 +27,9 @@ public class CustomCREvaluation extends BaseCacheActionCommand{
 				riskClass = "Não Classificado";
 			}
 			
+			IStringAttribute residualAttr = riskCorpObj.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL);
+			String currRiskClass = residualAttr.isEmpty() ? "" : residualAttr.getRawValue();
+			
 			this.notificationDialog.setHeaderMessageKey("message.corp_risk_evaluation.DBI");
 	
 			this.notificationDialog.addInfo("Quantidade de Riscos Processo: " + crEvaluation.getTotalRisks().toString());// <qtd_riscos>");
@@ -40,7 +44,7 @@ public class CustomCREvaluation extends BaseCacheActionCommand{
 			this.notificationDialog.addInfo("Nota Final: " + crEvaluation.getFinalGrade().toString()); //<nota_final>");
 			this.notificationDialog.addInfo("Classificação do Risco: " + riskClass); //<classificacao_do_risco>");
 			
-			if(riskCorpObj.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).isEmpty()){
+			if(riskCorpObj.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).isEmpty() || (!riskClass.equals(currRiskClass))){
 				IUserContext jobCtx = this.getJobUserContext();
 				IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.HIERARCHY);
 				facade.allocateLock(riskCorpObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
