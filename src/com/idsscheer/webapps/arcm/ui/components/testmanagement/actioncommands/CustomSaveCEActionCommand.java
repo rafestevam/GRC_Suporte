@@ -382,7 +382,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			
 			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
 			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
-			riskFacade.allocateWriteLock(riskOVID);
+			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
+			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
 			
 			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
 		
