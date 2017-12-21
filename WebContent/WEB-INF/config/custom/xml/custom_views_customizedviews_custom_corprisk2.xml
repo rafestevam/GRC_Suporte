@@ -15,12 +15,13 @@
             <viewColumn id="rc_csttype" attributeType="rc_csttype" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_potencial" attributeType="classpot" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_residual" attributeType="residual" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
         </viewObject>
         <link firstViewObject="VO_corprisk_categ" linktype.id="46" secondViewObject="VO_hierarchy" joinType="LEFT"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="rc_csttype" compareType="EQ" value="12"/>
-<!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
             </compoundCondition>
         </conditions>
     </view>
