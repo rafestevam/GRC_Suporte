@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
-    <view id="control2testaction" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
-        <viewObject id="VO_control2testaction_testcase" objectType="TESTCASE" isMainViewObject="true">
+    <view id="risk2testaction" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomRisk2TestActionHandler">
+        <viewObject id="VO_risk2testaction_testcase" objectType="TESTCASE" isMainViewObject="true">
             <viewColumn id="client_sign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="client_id" attributeType="client_objid" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="plannedstartdate" attributeType="plannedstartdate" isSortable="true" isSelectColumn="true"/>
@@ -15,62 +15,57 @@
             <viewColumn id="reviewer_status" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="measure" attributeType="measure" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="remark" attributeType="remark" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="ta_version_active" attributeType="version_active" isSortable="true"/>
-            <viewColumn id="ta_deactivated" attributeType="deactivated" isSortable="true"/>
+            <viewColumn id="version_active" attributeType="version_active" isSortable="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSortable="true"/>
             <viewColumn id="walkthrough_name" attributeType="walkthroughName" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="walkthrough_counter" attributeType="walkthroughCounter" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="controlstartdate" attributeType="controlstartdate" isSortable="true"/>
             <viewColumn id="controlenddate" attributeType="controlenddate" isSortable="true"/>
         </viewObject>
-        <viewObject id="VO_control2testaction_test_user" objectType="USER">
+        <viewObject id="VO_risk2testaction_test_user" objectType="USER">
             <viewColumn id="userid" attributeType="obj_id" isSelectColumn="true"/>
             <viewColumn id="username" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="user_version_active" attributeType="version_active" isSortable="true"/>
             <viewColumn id="user_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-        <viewObject id="VO_control2testaction_test_substitute" objectType="USER">
+        <viewObject id="VO_risk2testaction_test_substitute" objectType="USER">
             <viewColumn id="substitute" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="substitute_version_active" attributeType="version_active" isSortable="true"/>
             <viewColumn id="substitute_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-        <viewObject id="VO_control2testaction_control" objectType="CONTROL">
-            <viewColumn id="control_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="control_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="control_ctrl_id" attributeType="control_id" isSortable="true" isSelectColumn="true"/>
-        </viewObject>
-        <viewObject id="VO_control2testaction_process_hierarchy" objectType="HIERARCHY">
-            <viewColumn id="function_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="function_version_active" attributeType="version_active" isSortable="true"/>
-        </viewObject>
-        <viewObject id="VO_control2testaction_risk" objectType="RISK">
+        <viewObject id="VO_risk2testaction_risk" objectType="RISK">
             <viewColumn id="risk_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="risk_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-        <viewObject id="VO_control2testaction_tester_group" objectType="USERGROUP">
+        <viewObject id="VO_risk2testaction_process_hierarchy" objectType="HIERARCHY">
+            <viewColumn id="function_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="function_version_active" attributeType="version_active" isSortable="true"/>
+        </viewObject>
+        <viewObject id="VO_risk2testaction_financial_hierarchy" objectType="HIERARCHY">
+            <viewColumn id="financial_statement_name" attributeType="name"/>
+        </viewObject>
+        <viewObject id="VO_risk2testaction_tester_group" objectType="USERGROUP">
             <viewColumn id="tester_group_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="tester_group_id" attributeType="obj_id"/>
+            <viewColumn id="tester_group_id" attributeType="obj_id" isSelectColumn="true"/>
             <viewColumn id="tester_group_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-        <link linktype.id="12" firstViewObject="VO_control2testaction_testcase" secondViewObject="VO_control2testaction_test_user" joinType="LEFT"/>
-        <link linktype.id="16" firstViewObject="VO_control2testaction_testcase" secondViewObject="VO_control2testaction_control"/>
-        <link linktype.id="54" firstViewObject="VO_control2testaction_testcase" secondViewObject="VO_control2testaction_process_hierarchy" joinType="LEFT"/>
-        <link linktype.id="19" firstViewObject="VO_control2testaction_testcase" secondViewObject="VO_control2testaction_risk"/>
-        <link linktype.id="57" firstViewObject="VO_control2testaction_testcase" secondViewObject="VO_control2testaction_tester_group"/>
-        <link linktype.id="3110" firstViewObject="VO_control2testaction_testcase" secondViewObject="VO_control2testaction_test_substitute" joinType="LEFT"/>
+        <link linktype.id="12" firstViewObject="VO_risk2testaction_testcase" secondViewObject="VO_risk2testaction_test_user" joinType="LEFT"/>
+        <link linktype.id="19" firstViewObject="VO_risk2testaction_testcase" secondViewObject="VO_risk2testaction_risk"/>
+        <link linktype.id="54" firstViewObject="VO_risk2testaction_testcase" secondViewObject="VO_risk2testaction_process_hierarchy" joinType="LEFT"/>
+        <link linktype.id="75" firstViewObject="VO_risk2testaction_testcase" secondViewObject="VO_risk2testaction_financial_hierarchy" joinType="LEFT"/>
+        <link linktype.id="57" firstViewObject="VO_risk2testaction_testcase" secondViewObject="VO_risk2testaction_tester_group"/>
+        <link linktype.id="3110" firstViewObject="VO_risk2testaction_testcase" secondViewObject="VO_risk2testaction_test_substitute" joinType="LEFT"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
-            	<!-- Inicio DMM 20.12.2017 - EV126618 : Alteração do filtro de busca de controles (de OBJ_ID para CONTROL_ID -->
-<!--                 <condition column.id="control_obj_id" compareType="EQ" currentObjectType.id="CONTROL" currentAttributeType.id="obj_id"/> -->
-				<condition column.id="control_ctrl_id" compareType="EQ" currentObjectType.id="CONTROL" currentAttributeType.id="control_id"/>
-				<!-- Inicio DMM 20.12.2017 - EV126618 -->
+<!--                 <condition column.id="risk_obj_id" compareType="EQ" currentObjectType.id="RISK" currentAttributeType.id="obj_id"/> -->
                 <condition column.id="plannedstartdate" compareType="LE"/>
                 <condition column.id="plannedenddate" compareType="GE"/>
                 <condition column.id="type" compareType="IN"/>
                 <condition column.id="owner_status" compareType="IN"/>
                 <condition column.id="controlstartdate" compareType="LE"/>
                 <condition column.id="controlenddate" compareType="GE"/>
-                <condition column.id="ta_version_active" compareType="EQ" value="true"/>
-                <condition column.id="ta_deactivated" compareType="EQ" value="false"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
                 <compoundCondition conditionConnect="OR">
                     <condition column.id="user_version_active" compareType="EQ" value="true"/>
                     <condition column.id="user_version_active" compareType="ISNULL"/>
