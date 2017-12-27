@@ -1,7 +1,6 @@
 package com.idsscheer.webapps.arcm.custom.corprisk;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +13,7 @@ import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
@@ -305,9 +305,15 @@ public class CustomCorpRiskHierarchy {
 			residualCalc.calculateResidualFinal();
 			residualFinal = residualCalc.getResidualFinal();
 		}else{
-			String class1line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).getRawValue();
-			String class2line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
-			String class3line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
+			IStringAttribute control1line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE);
+			String class1line = control1line.isEmpty() ? "" : riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).getRawValue();
+			
+			IStringAttribute control2line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE);
+			String class2line = control2line.isEmpty() ? "" : riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
+			
+			IStringAttribute control3line = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE);
+			String class3line = control3line.isEmpty() ? "" : riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
+			
 			CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, class1line, class2line, class3line);
 			residualCalc.calculateClassFinal();
 			residualCalc.calculateResidualFinal();
