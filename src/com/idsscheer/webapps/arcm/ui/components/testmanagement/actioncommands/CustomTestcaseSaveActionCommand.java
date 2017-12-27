@@ -182,7 +182,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		filterMap.put("tc_id", ceObjId);
 		long controlID = 0;
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "custom_TestCase2Control", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "custom_TestCase2Control", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -292,7 +292,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		filterMap.put("control_obj_id", controlObjID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "customcontrol2risk", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "customcontrol2risk", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -331,7 +331,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		filterMap.put("control_id", controlID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "customcontrol2risk", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "customcontrol2risk", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -736,7 +736,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		filterMap.put("tdef_id", testDefObjID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "custom_TestDef2TestCase", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/* this.getFullGrantUserContext() */, "custom_TestDef2TestCase", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -790,7 +790,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		filterMap.put("control_id", controlID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "custom_control2testdef", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "custom_control2testdef", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{

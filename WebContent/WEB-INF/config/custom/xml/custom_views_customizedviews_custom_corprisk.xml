@@ -19,6 +19,7 @@
             <viewColumn id="rc_residual" attributeType="residual" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_description" attributeType="description" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="rc_residual_risk" attributeType="residual" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_Risk" objectType="RISK" isMainViewObject="false">
         	<viewColumn id="r_id" attributeType="risk_id" isSelectColumn="true"/>
@@ -50,7 +51,7 @@
                 <condition column.id="rc_csttype" compareType="EQ" value="12"/>
                 <condition column.id="ct_version_active" compareType="EQ" value="true"/>
                 <condition column.id="r_version_active" compareType="EQ" value="true"/>
-<!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
             </compoundCondition>
         </conditions>
     </view>

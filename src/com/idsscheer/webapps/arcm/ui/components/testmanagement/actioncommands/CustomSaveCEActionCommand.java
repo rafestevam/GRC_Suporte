@@ -160,7 +160,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		filterMap.put("ce_id", ceObjId);
 		long controlID = 0;
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "custom_CE2Control", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "custom_CE2Control", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -287,7 +287,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		filterMap.put("control_obj_id", controlObjID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "customcontrol2risk", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "customcontrol2risk", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -327,7 +327,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		//filterMap.put("control_obj_id", controlObjID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "customcontrol2risk", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "customcontrol2risk", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{
@@ -629,7 +629,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		Map filterMap = new HashMap();
 		filterMap.put("cetask_id", cetObjID);
 		
-		IViewQuery query = QueryFactory.createQuery(this.getFullGrantUserContext(), "custom_CET2CE", filterMap, null,
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "custom_CET2CE", filterMap, null,
 				true, this.getDefaultTransaction());
 		
 		try{

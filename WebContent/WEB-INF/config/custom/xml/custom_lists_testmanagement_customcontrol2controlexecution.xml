@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+    <list id="customcontrol2controlexecution"
+          view.idref="customcontrol2controlexecution"
+          filter.idref="controlexecution"
+          idColumn.idref="obj_id"
+          defaultOrderColumn.idref="obj_id"
+          frame="tabcontent"
+          srcDataType.idref="CONTROL"
+          relatedObjectType.idref="CONTROLEXECUTION">
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="obj_id"/>
+            <simpleFilter filterRow.idref="client_sign"/>
+        </simpleFilterRow>
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="owner_status"/>
+            <simpleFilter filterRow.idref="due_status"/>
+        </simpleFilterRow>
+        <listHeaderRow>
+            <listHeader column="id" propertyKey="tableheader.id" rowSpan="2" width="10%"/>
+            <listHeader column="owner_group" propertyKey="tableheader.controlexecution.owner_group" rowSpan="2" width="30%"/>
+            <listHeader propertyKey="tableheader.controlexecution.documented_period" colSpan="2" align="center" width="30%"/>
+            <listHeader column="owner_status" propertyKey="tableheader.controlexecution.owner_status" rowSpan="2" width="10%"/>
+            <listHeader column="anomaly_rate" propertyKey="tableheader.controlexecution.anomaly_rate" rowSpan="2" width="10%"/>
+            <listHeader column="completion_rate" propertyKey="tableheader.controlexecution.completion_rate" rowSpan="2" width="10%"/>
+        </listHeaderRow>
+        <listHeaderRow>
+            <listHeader column="plannedstartdate" propertyKey="tableheader.controlexecution.startdate" align="center" width="15%"/>
+            <listHeader column="plannedenddate" propertyKey="tableheader.controlexecution.enddate" align="center" width="15%"/>
+        </listHeaderRow>
+        <column id="id" dataReference.idref="obj_id" template="openObject">
+            <parameter name="idColumn" value="obj_id"/>
+        </column>
+        <column id="owner_group" dataReference.idref="ownergroup_name"/>
+        <!-- subcolums of documented_period column-->
+        <column id="plannedstartdate" dataReference.idref="plannedstartdate" align="center"/>
+        <column id="plannedenddate" dataReference.idref="plannedenddate" align="center"/>
+        <column id="owner_status" dataReference.idref="owner_status"/>
+        <column id="anomaly_rate" dataReference.idref="anomaly_rate"/>
+        <column id="completion_rate" dataReference.idref="completion_rate"/>
+        <listButtons>
+            <buttonReference button.idref="LIST_OPEN"/>
+            <buttonReference button.idref="LIST_DELETE"/>
+            <buttonReference button.idref="FIELDSELECT"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+            <buttonReference button.idref="EXCEL_REPORT"/>
+        </listButtons>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+            <buttonReference button.idref="LISTROW_DELETE"/>
+        </rowButtons>
+    </list>
+
+
+</custom>

@@ -1,15 +1,16 @@
 package com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands;
 
-import java.util.Map;
-
-import javax.swing.text.html.HTML;
-
-import org.w3c.dom.html.HTMLAnchorElement;
-
+import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseCacheActionCommand;
-import com.idsscheer.webapps.arcm.ui.framework.support.breadcrumb.IHTMLPage;
-import com.idsscheer.webapps.arcm.ui.web.html.HTMLAnchor;
+import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomCREvaluation extends BaseCacheActionCommand{
 	
@@ -19,11 +20,15 @@ public class CustomCREvaluation extends BaseCacheActionCommand{
 		
 		try{
 			StringBuilder strBuilder = new StringBuilder();
-			CustomCorpRiskHierarchy crEvaluation = new CustomCorpRiskHierarchy(this.formModel.getAppObj(), this.getFullGrantUserContext(), this.getDefaultTransaction());
+			IAppObj riskCorpObj = this.formModel.getAppObj();
+			CustomCorpRiskHierarchy crEvaluation = new CustomCorpRiskHierarchy(riskCorpObj, this.getFullGrantUserContext(), this.getDefaultTransaction());
 			String riskClass = crEvaluation.calculateResidualCR();
 			if(null == riskClass || riskClass.equals("")){
 				riskClass = "Não Classificado";
 			}
+			
+			IStringAttribute residualAttr = riskCorpObj.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL);
+			String currRiskClass = residualAttr.isEmpty() ? "" : residualAttr.getRawValue();
 			
 			this.notificationDialog.setHeaderMessageKey("message.corp_risk_evaluation.DBI");
 	
@@ -38,12 +43,27 @@ public class CustomCREvaluation extends BaseCacheActionCommand{
 			this.notificationDialog.addInfo("Pontos - Rating Muito Alto: " + crEvaluation.getPtsGrade("muito_alto").toString()); //<pontos_muito_alto>");
 			this.notificationDialog.addInfo("Nota Final: " + crEvaluation.getFinalGrade().toString()); //<nota_final>");
 			this.notificationDialog.addInfo("Classificação do Risco: " + riskClass); //<classificacao_do_risco>");
+			
+			if(riskCorpObj.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).isEmpty() || (!riskClass.equals(currRiskClass))){
+				IUserContext jobCtx = this.getJobUserContext();
+				IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.HIERARCHY);
+				facade.allocateLock(riskCorpObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+				IAppObj riskCorpUpd = facade.load(riskCorpObj.getVersionData().getHeadOVID(), true);
+				riskCorpUpd.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(riskClass);
+				facade.save(riskCorpUpd, this.getDefaultTransaction(), true);
+				facade.releaseLock(riskCorpObj.getVersionData().getHeadOVID());
+			}
 		
 		}catch(Exception e){
 			this.notificationDialog.addError(e.getMessage());
 			//this.notificationDialog.addMessage(e.getMessage());
 		}
 		
+	}
+
+	private IUserContext getJobUserContext() {
+		// TODO Auto-generated method stub
+		return new JobUIEnvironment(this.getFullGrantUserContext()).getUserContext();
 	}
 
 }
