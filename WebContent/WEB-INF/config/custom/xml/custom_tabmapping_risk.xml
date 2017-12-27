@@ -14,7 +14,7 @@
 			<tSubTab id="controls" propertyKey="tab.controls.DBI"  action="list.do?__commandId=init&amp;__listName=risk2control" objectType="CONTROL"/>
 			<tSubTab id="testdefinition" propertyKey="tab.testdefinitions.DBI"  action="list.do?__commandId=init&amp;__listName=risk2testdefinition" objectType="TESTDEFINITION"/>
 			<tSubTab id="testcase" propertyKey="tab.testactions.DBI"  action="list.do?__commandId=init&amp;__listName=risk2testaction" objectType="TESTCASE"/>
-			<tSubTab id="controlexecution" propertyKey="tab.controlexecutions.DBI"  action="list.do?__commandId=init&amp;__listName=customcontrol2controlexecution" objectType="CONTROLEXECUTION"/>
+<!-- 			<tSubTab id="controlexecution" propertyKey="tab.controlexecutions.DBI"  action="list.do?__commandId=init&amp;__listName=customcontrol2controlexecution" objectType="CONTROLEXECUTION"/> -->
             <tSubTab id="policies" propertyKey="tab.policies.DBI"  action="list.do?__commandId=init&amp;__listName=risk2policies" objectType="POLICY" />
             <tSubTab id="surveys" propertyKey="tab.surveys.DBI"  action="list.do?__commandId=init&amp;__listName=risk2surveys" objectType="SURVEY" roles="riskmanager,riskowner,riskreviewer" licensedComponentId="sm"/>
             <tSubTab id="questionnaires" propertyKey="tab.questionnaires.DBI"  action="list.do?__commandId=init&amp;__listName=risk2questionnaires" objectType="QUESTIONNAIRE" roles="riskmanager,riskowner,riskreviewer" licensedComponentId="sm"/>
