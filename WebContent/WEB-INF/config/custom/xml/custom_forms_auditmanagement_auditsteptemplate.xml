@@ -85,8 +85,11 @@
 
                 <row id="area">
                     <element attribute.idref="area">
-                        <parameter name="selectionList" value="AUTO:ignoreRoleRestriction=true"/>
-                        <button.remove button.idref="RELATION_OPEN" location="toolbar"/>
+                    <!-- Início FCT 22.12.2017 - EV109172 - Área -->
+                    	<parameter name="selectionList" value="custom_area_sel"/>
+<!--                         <parameter name="selectionList" value="AUTO:ignoreRoleRestriction=true"/> -->
+<!--                         <button.remove button.idref="RELATION_OPEN" location="toolbar"/> -->
+					<!-- Fim FCT 22.12.2017 - EV109172 - Área -->
                         <button.add button.idref="RELATION_POPUP" location="row"/>
                     </element>
                 </row>
