@@ -19,7 +19,7 @@
 			<compoundCondition conditionConnect="AND">
 				<condition column.id="area_deactivated" compareType="EQ" value="false"/>
 				<condition column.id="version_active" compareType="EQ" value="true"/>
-				<condition column.id="type" compareType="EQ" value="4"/>
+				<condition column.id="type" compareType="EQ" value="3"/>
 			</compoundCondition>
 		</conditions>
 	</view>
