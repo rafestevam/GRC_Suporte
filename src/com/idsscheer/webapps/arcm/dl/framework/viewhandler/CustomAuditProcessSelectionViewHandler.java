@@ -31,7 +31,7 @@ public class CustomAuditProcessSelectionViewHandler implements IViewHandler {
 			List<IFilterCriteria> filters, IDataLayerObject currentObject,
 			QueryDefinition parentQuery) throws BusViewException {
 		
-		List<Integer> areaIDList = new ArrayList();
+		List<Integer> processIDList = new ArrayList();
 		
 		// TODO Auto-generated method stub
 		try {
@@ -45,10 +45,10 @@ public class CustomAuditProcessSelectionViewHandler implements IViewHandler {
 					
 					for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
 						
-						for(IAppObj areaAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_ORGUNIT).getElements(userCtx)){
-							System.out.println(areaAppObj.getAttribute(IHierarchyAttributeType.ATTR_NAME).getRawValue());
-							areaIDList.add((int)areaAppObj.getObjectId());
-							//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, areaAppObj.getObjectId()));
+						for(IAppObj processAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(userCtx)){
+							System.out.println(processAppObj.getAttribute(IHierarchyAttributeType.ATTR_NAME).getRawValue());
+							processIDList.add((int)processAppObj.getObjectId());
+							//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, processAppObj.getObjectId()));
 						}
 						
 					}
@@ -57,8 +57,8 @@ public class CustomAuditProcessSelectionViewHandler implements IViewHandler {
 				
 			}
 			
-			if(areaIDList.size() > 0)
-				filters.add(new SimpleFilterCriteria("area_id", DataLayerComparator.IN, areaIDList));
+			if(processIDList.size() > 0)
+				filters.add(new SimpleFilterCriteria("process_id", DataLayerComparator.IN, processIDList));
 			
 		} catch (RightException | BusException e) {
 			// TODO Auto-generated catch block

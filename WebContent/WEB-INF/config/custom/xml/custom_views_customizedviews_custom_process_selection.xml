@@ -14,12 +14,14 @@
             <viewColumn id="process_deactivated" attributeType="deactivated" isSelectColumn="true"/>
             <viewColumn id="version_active" attributeType="version_active" isSelectColumn="true" />
             <viewColumn id="type" attributeType="type" isSelectColumn="true" />
+            <viewColumn id="process_isroot" attributeType="isroot" isSelectColumn="true" />
 		</viewObject>
 		<conditions>
 			<compoundCondition conditionConnect="AND">
 				<condition column.id="process_deactivated" compareType="EQ" value="false"/>
 				<condition column.id="version_active" compareType="EQ" value="true"/>
 				<condition column.id="type" compareType="EQ" value="4"/>
+				<condition column.id="process_isroot" compareType="EQ" value="false"/>
 			</compoundCondition>
 		</conditions>
 	</view>
