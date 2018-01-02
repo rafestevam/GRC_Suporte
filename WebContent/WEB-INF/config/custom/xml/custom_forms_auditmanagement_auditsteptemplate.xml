@@ -95,9 +95,12 @@
                 </row>
                 <row id="process">
                     <element attribute.idref="process">
-                        <parameter name="selectionList" value="AUTO"/>
-                        <button.remove location="row" button.idref="RELATION_OPEN"/>
-                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    <!-- Inicio REO 28.12.2017 - EV109172 -->
+                    	<parameter name="selectionList" value="custom_process_sel"/>
+                    <!-- Inicio REO 28.12.2017 - EV109172 -->
+<!--                         <parameter name="selectionList" value="AUTO"/> -->
+<!--                         <button.remove location="row" button.idref="RELATION_OPEN"/> -->
+<!--                         <button.remove location="toolbar" button.idref="RELATION_OPEN"/> -->
                     </element>
                 </row>
                 <row id="subprocess">

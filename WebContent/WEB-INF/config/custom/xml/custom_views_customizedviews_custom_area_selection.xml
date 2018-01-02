@@ -14,13 +14,15 @@
             <viewColumn id="area_deactivated" attributeType="deactivated" isSelectColumn="true"/>
             <viewColumn id="version_active" attributeType="version_active" isSelectColumn="true" />
             <viewColumn id="type" attributeType="type" isSelectColumn="true" />
+            <viewColumn id="area_isroot" attributeType="isroot" isSelectColumn="true" />
 		</viewObject>
 		<conditions>
 			<compoundCondition conditionConnect="AND">
 				<condition column.id="area_deactivated" compareType="EQ" value="false"/>
 				<condition column.id="version_active" compareType="EQ" value="true"/>
 				<!-- type 3 significa área (Unidade organizacional) -->
-				<condition column.id="type" compareType="EQ" value="3"/> 
+				<condition column.id="type" compareType="EQ" value="3"/>
+				<condition column.id="area_isroot" compareType="EQ" value="false"/>
 			</compoundCondition>
 		</conditions>
 	</view>
