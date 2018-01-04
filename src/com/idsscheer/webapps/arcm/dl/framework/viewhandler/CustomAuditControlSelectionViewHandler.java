@@ -12,6 +12,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAuditsteptemplateAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAuditsteptemplateAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAudittemplateAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
@@ -41,22 +42,52 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 				IAppObj astAppObj = facade.load(currentObject.getHeadObjId(), true);
 				
 				List<IAppObj> atAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeType.LIST_AUDITTEMPLATE).getElements(userCtx);
+				
+				// EV109172 - ATV3 - Lista com os processos
+				// selecionados para a ficha de auditoria.
+				List<IAppObj> astProcessList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_PROCESS).getElements(userCtx);
+				
 				for (IAppObj atAppObj : atAppList) {
 					
-					for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
-						
-						for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
-							System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
-							ctrlIDList.add((int)ctrlAppObj.getObjectId());
-							//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+						for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
+							// EV109172 - ATV3 - Só faz filtro recursivo de processos caso
+							// houver processos na ficha de auditoria (Audit Step Template).
+							if (astProcessList.size() > 0) {
+								for (IAppObj astProcessObj : astProcessList) {
+									for(IAppObj riskProcessAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(userCtx)){									
+										if (astProcessObj.equals(riskProcessAppObj)) {
+											for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+												System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
+												ctrlIDList.add((int)ctrlAppObj.getObjectId());
+												//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+											}	
+										}
+									}								
+								}
+							} else {
+								for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+									System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
+									ctrlIDList.add((int)ctrlAppObj.getObjectId());
+									//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+								}								
+							}
+
 						}
 						
 					}
 					
+//					for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
+//						
+//						for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+//							System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
+//							ctrlIDList.add((int)ctrlAppObj.getObjectId());
+//							//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+//						}
+//						
+//					}
+					
 				}
 				
-			}
-			
 			if(ctrlIDList.size() > 0)
 				filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.IN, ctrlIDList));
 			
@@ -65,9 +96,6 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 			e.printStackTrace();
 		}
 		
-		
-		
-
 	}
 
 }
