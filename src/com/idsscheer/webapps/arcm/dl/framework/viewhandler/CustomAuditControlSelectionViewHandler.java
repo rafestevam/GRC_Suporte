@@ -10,11 +10,13 @@ import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IControlExecutionTaskAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAuditsteptemplateAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAuditsteptemplateAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAudittemplateAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.dl.framework.BusException;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
@@ -46,29 +48,62 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 				// EV109172 - ATV3 - Lista com os processos
 				// selecionados para a ficha de auditoria.
 				List<IAppObj> astProcessList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_PROCESS).getElements(userCtx);
+				List<IAppObj> astAreaAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_AREA).getElements(userCtx);
 				
 				for (IAppObj atAppObj : atAppList) {
 					
 						for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
+							
 							// EV109172 - ATV3 - Só faz filtro recursivo de processos caso
 							// houver processos na ficha de auditoria (Audit Step Template).
 							if (astProcessList.size() > 0) {
+								
 								for (IAppObj astProcessObj : astProcessList) {
-									for(IAppObj riskProcessAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(userCtx)){									
+									
+									for(IAppObj riskProcessAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(userCtx)){
+										
 										if (astProcessObj.equals(riskProcessAppObj)) {
 											for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
-												System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
-												ctrlIDList.add((int)ctrlAppObj.getObjectId());
-												//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+												if (astAreaAppList.size() > 0) {
+													for (IAppObj cetAppObj : ctrlAppObj.getAttribute(IControlAttributeTypeCustom.LIST_CONTROLEXECUTIONTASKS).getElements(userCtx)) {
+														
+														for (IAppObj orgUnitAppObj : cetAppObj.getAttribute(IControlExecutionTaskAppObj.LIST_AFFECTED_ORGUNIT).getElements(userCtx)) {
+															
+															for (IAppObj astAreaAppObj : astAreaAppList) {
+																if (astAreaAppObj.equals(orgUnitAppObj)) {
+																	ctrlIDList.add((int)ctrlAppObj.getObjectId());
+																}
+															}
+															
+														}
+													}
+												} else {
+													ctrlIDList.add((int)ctrlAppObj.getObjectId());	
+												}
 											}	
 										}
 									}								
 								}
 							} else {
 								for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
-									System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
-									ctrlIDList.add((int)ctrlAppObj.getObjectId());
-									//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
+									
+									if (astAreaAppList.size() > 0) {
+										for (IAppObj cetAppObj : ctrlAppObj.getAttribute(IControlAttributeTypeCustom.LIST_CONTROLEXECUTIONTASKS).getElements(userCtx)) {
+											
+											for (IAppObj orgUnitAppObj : cetAppObj.getAttribute(IControlExecutionTaskAppObj.LIST_AFFECTED_ORGUNIT).getElements(userCtx)) {
+												
+												for (IAppObj astAreaAppObj : astAreaAppList) {
+													if (astAreaAppObj.equals(orgUnitAppObj)) {
+														ctrlIDList.add((int)ctrlAppObj.getObjectId());
+													}
+												}
+												
+											}
+										}
+									} else {
+										ctrlIDList.add((int)ctrlAppObj.getObjectId());
+									}
+										
 								}								
 							}
 

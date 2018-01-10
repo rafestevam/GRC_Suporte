@@ -6,5 +6,8 @@ public interface IAuditsteptemplateAttributeTypeCustom extends IAuditsteptemplat
 	
 	public static final String STR_PROCESS = "process";
 	public static final IListAttributeType LIST_PROCESS = (IListAttributeType)MetadataConstantsUtil.create(OBJECT_TYPE, STR_PROCESS);
+	
+	public static final String STR_AREA = "area";
+	public static final IListAttributeType LIST_AREA = (IListAttributeType)MetadataConstantsUtil.create(OBJECT_TYPE, STR_AREA);
 
 }
