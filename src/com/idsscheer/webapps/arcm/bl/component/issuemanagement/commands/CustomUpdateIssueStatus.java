@@ -32,6 +32,7 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.workflow.IStateMetadata;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomUpdateIssueStatus implements ICommand {
@@ -82,6 +83,9 @@ public class CustomUpdateIssueStatus implements ICommand {
 		IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
 		//Fim REO 21.11.2017 - EV121389
 		
+		//Inicio REO 10.01.2018 - EV127908
+		//IUserContext jobCtx = 
+		
 //		IUIEnvironment currEnv = 
 		
 		IEnumAttribute issueTypeAttr = issueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
@@ -129,7 +133,11 @@ public class CustomUpdateIssueStatus implements ICommand {
 		//this.getWorkflowStatus(issueAppObj);
 		
 		
-		List<IAppObj> iroList = issueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(userCtx);
+		//Inicio REO EV127908 - 11.01.2017
+		//List<IAppObj> iroList = issueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(userCtx);
+		List<IAppObj> iroList = issueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(jobCtx);
+		//Fim REOO EV127908 - 11.01.2017
+		
 		log.info(this.getClass().getName(), "iroList length: " + String.valueOf(iroList.size()));
 		if(iroList == null || iroList.isEmpty()){
 			log.info(this.getClass().getName(), "Lista iroList vazia");
@@ -168,6 +176,7 @@ public class CustomUpdateIssueStatus implements ICommand {
 				//Fim REO - 21.11.2017
 				
 				iroFacade.allocateWriteLock(iroUpdApp.getVersionData().getOVID());
+				//iroFacade.allocateLock(iroUpdApp.getVersionData().getOVID(), LockType.FORCEWRITE);
 				IEnumAttribute iroTypeAttr = iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
 				IEnumerationItem iroTypeItem = ARCMCollections.extractSingleEntry(iroTypeAttr.getRawValue(), true);
 				if(!iroTypeItem.getId().equals("issue"))
