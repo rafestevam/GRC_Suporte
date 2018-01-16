@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+<!-- Início FCT 11.01.2018 - EV109172 -->	
+	<list id="custom_subprocess_sel"
+          view.idref="custom_subprocess_selection"
+          filter.idref="custom_subprocess_sel_filter"
+          idColumn.idref="subprocess_id"
+          defaultOrderColumn.idref="subprocess_id"
+          nameColumn.idref="subprocess_name"
+          destAttributeType.idref="subprocess"
+          destDataType.idref="AUDITSTEPTEMPLATE"
+          frame="popup"
+          listType="selection"
+          relatedObjectType.idref="HIERARCHY"
+          useCheckBoxes="false">
+<!-- 		<simpleFilterRow> -->
+<!-- 			<simpleFilter filterRow.idref="process_id"/> -->
+<!-- 			<simpleFilter filterRow.idref="process_name"/> -->
+<!-- 		</simpleFilterRow> -->
+		<listHeaderRow>
+			<listHeader column="LC_Corprisk_0" propertyKey="tableheader.subprocesssel.id"    width="20%"/>
+			<listHeader column="LC_Corprisk_1" propertyKey="tableheader.subprocesssel.name"  width="80%"/>
+		</listHeaderRow>
+		<column id="LC_Corprisk_0" align="left" dataReference.idref="subprocess_processid" />
+		<column id="LC_Corprisk_1" align="left" dataReference.idref="subprocess_name" template="openObject" />
+		<listButtons/>
+		<rowButtons>
+            <buttonReference button.idref="LISTROW_ATTACH_DEST"/>
+		</rowButtons>
+	</list>
+<!-- Fim FCT 11.01.2018 - EV109172 -->	
+
+</custom>
