@@ -17,6 +17,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAuditstep
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IAudittemplateAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.dl.framework.BusException;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
@@ -43,84 +44,66 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 			if(currentObject.getObjMetaData().getObjectType().getId().equalsIgnoreCase("AUDITSTEPTEMPLATE")){
 				IAppObj astAppObj = facade.load(currentObject.getHeadObjId(), true);
 				
+				// Audit Template List.
 				List<IAppObj> atAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeType.LIST_AUDITTEMPLATE).getElements(userCtx);
-				
-				// EV109172 - ATV3 - Lista com os processos
-				// selecionados para a ficha de auditoria.
-				List<IAppObj> astProcessList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_PROCESS).getElements(userCtx);
+				// Area List dentro desta ficha de auditoria.
 				List<IAppObj> astAreaAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_AREA).getElements(userCtx);
+				// Process List dentro desta ficha de auditoria.
+				List<IAppObj> astProcessAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_PROCESS).getElements(userCtx);
+				// Process List dentro desta ficha de auditoria.
+				List<IAppObj> astSubprocessAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeTypeCustom.LIST_SUBPROCESS).getElements(userCtx);
 				
 				for (IAppObj atAppObj : atAppList) {
 					
 						for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
-							
-							// EV109172 - ATV3 - Só faz filtro recursivo de processos caso
-							// houver processos na ficha de auditoria (Audit Step Template).
-							if (astProcessList.size() > 0) {
-								
-								for (IAppObj astProcessObj : astProcessList) {
-									
+
+							if (astSubprocessAppList.size() > 0) {
+								for (IAppObj astSubprocessObj : astSubprocessAppList) {
 									for(IAppObj riskProcessAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(userCtx)){
-										
-										if (astProcessObj.equals(riskProcessAppObj)) {
-											for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
-												if (astAreaAppList.size() > 0) {
-													for (IAppObj cetAppObj : ctrlAppObj.getAttribute(IControlAttributeTypeCustom.LIST_CONTROLEXECUTIONTASKS).getElements(userCtx)) {
-														
-														for (IAppObj orgUnitAppObj : cetAppObj.getAttribute(IControlExecutionTaskAppObj.LIST_AFFECTED_ORGUNIT).getElements(userCtx)) {
-															
-															for (IAppObj astAreaAppObj : astAreaAppList) {
-																if (astAreaAppObj.equals(orgUnitAppObj)) {
-																	ctrlIDList.add((int)ctrlAppObj.getObjectId());
-																}
-															}
-															
-														}
-													}
-												} else {
-													ctrlIDList.add((int)ctrlAppObj.getObjectId());	
-												}
-											}	
+										for(IAppObj subProcessAppObj : riskProcessAppObj.getAttribute(IHierarchyAttributeTypeCustom.LIST_CHILDREN).getElements(userCtx)){	
+											if (subProcessAppObj.equals(astSubprocessObj)) {
+												for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+													ctrlIDList.add((int)ctrlAppObj.getObjectId());
+												}	
+											}
 										}
 									}								
 								}
 							} else {
-								for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
-									
+								// EV109172 - ATV3 - Só faz filtro recursivo de processos caso
+								// houver processos na ficha de auditoria (Audit Step Template).
+								if (astProcessAppList.size() > 0) {
+									for (IAppObj astProcessObj : astProcessAppList) {
+										for(IAppObj riskProcessAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(userCtx)){
+											if (astProcessObj.equals(riskProcessAppObj)) {
+												for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+													ctrlIDList.add((int)ctrlAppObj.getObjectId());
+												}	
+											}
+										}								
+									}
+								} else {
 									if (astAreaAppList.size() > 0) {
-										for (IAppObj cetAppObj : ctrlAppObj.getAttribute(IControlAttributeTypeCustom.LIST_CONTROLEXECUTIONTASKS).getElements(userCtx)) {
-											
-											for (IAppObj orgUnitAppObj : cetAppObj.getAttribute(IControlExecutionTaskAppObj.LIST_AFFECTED_ORGUNIT).getElements(userCtx)) {
-												
-												for (IAppObj astAreaAppObj : astAreaAppList) {
-													if (astAreaAppObj.equals(orgUnitAppObj)) {
-														ctrlIDList.add((int)ctrlAppObj.getObjectId());
+										for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+											for (IAppObj cetAppObj : ctrlAppObj.getAttribute(IControlAttributeTypeCustom.LIST_CONTROLEXECUTIONTASKS).getElements(userCtx)) {
+												for (IAppObj orgUnitAppObj : cetAppObj.getAttribute(IControlExecutionTaskAppObj.LIST_AFFECTED_ORGUNIT).getElements(userCtx)) {
+													for (IAppObj astAreaAppObj : astAreaAppList) {
+														if (astAreaAppObj.equals(orgUnitAppObj)) {
+															ctrlIDList.add((int)ctrlAppObj.getObjectId());
+														}
 													}
 												}
-												
 											}
 										}
 									} else {
-										ctrlIDList.add((int)ctrlAppObj.getObjectId());
+										for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
+											ctrlIDList.add((int)ctrlAppObj.getObjectId());
+										}
 									}
-										
-								}								
-							}
-
+								}
+							}							
 						}
-						
 					}
-					
-//					for(IAppObj riskAppObj : atAppObj.getAttribute(IAudittemplateAttributeTypeCustom.LIST_RISK).getElements(userCtx)){
-//						
-//						for(IAppObj ctrlAppObj : riskAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userCtx)){
-//							System.out.println(ctrlAppObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue());
-//							ctrlIDList.add((int)ctrlAppObj.getObjectId());
-//							//filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.EQUAL, ctrlAppObj.getObjectId()));
-//						}
-//						
-//					}
-					
 				}
 				
 			if(ctrlIDList.size() > 0)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+<!-- Início FCT 22.12.2017 - EV109172 -->
+<!-- Filtro utilizado pela lista custom_lists_customizedlist_custom_subprocess_sel.xml    -->
+<!-- Os dados dessa lista são provenientes da VIEW custom_views_customizedviews_custom_subprocess_selection.xml  -->
+	<filter id="custom_subprocess_sel_filter" dataSource.idref="custom_subprocess_selection">
+        <filterRow id="subprocess_id">
+            <filterElement dataReference.idref="subprocess_id"  />
+        </filterRow>
+        <filterRow id="subprocess_name">
+            <filterElement dataReference.idref="subprocess_name"  />
+        </filterRow>
+    </filter>	
+<!-- Fim FCT 22.12.2017 - EV109172 -->
+    
+</custom>

@@ -105,9 +105,10 @@
                 </row>
                 <row id="subprocess">
                     <element attribute.idref="subprocess">
-                        <parameter name="selectionList" value="AUTO"/>
-                        <button.remove location="row" button.idref="RELATION_OPEN"/>
-                        <button.remove location="toolbar" button.idref="RELATION_OPEN"/>
+                    <parameter name="selectionList" value="custom_subprocess_sel"/>
+<!--                         <parameter name="selectionList" value="AUTO"/> -->
+<!--                         <button.remove location="row" button.idref="RELATION_OPEN"/> -->
+<!--                         <button.remove location="toolbar" button.idref="RELATION_OPEN"/> -->
                     </element>
                 </row>
                 <row id="control">
