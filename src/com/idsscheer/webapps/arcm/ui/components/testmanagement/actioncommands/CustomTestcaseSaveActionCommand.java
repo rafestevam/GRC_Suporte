@@ -1070,13 +1070,25 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			IAppObjFacade crFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.HIERARCHY);
 			//Fim REO - 27.09.2017 - EV113345
 			
-			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(getFullGrantUserContext());
+			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(this.jobCtx);
 			for(IAppObj corpRisk : corpRiskList){
+				
+				if(corpRisk.getVersionData().isDeleted())
+					continue;
+				
 				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue() != null){
 					if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
 						crFacade.allocateLock(corpRisk.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
-						CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, getFullGrantUserContext(), this.getDefaultTransaction());
-						String ret = crHierarchy.calculateResidualCR();
+						CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, this.jobCtx, this.getDefaultTransaction());
+						//Inicio REO - 17.01.2018 - EV124200
+						//String ret = crHierarchy.calculateResidualCR();
+						String ret = "";
+						try{
+							ret = crHierarchy.calculateResidualCR();
+						}catch(CustomCorpRiskException ex){
+							continue;
+						}
+						//Fim REO - 17.01.2018 - EV124200
 						if(ret != null || (!ret.equals(""))){
 							corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(ret);
 							crFacade.save(corpRisk, this.getDefaultTransaction(), true);
