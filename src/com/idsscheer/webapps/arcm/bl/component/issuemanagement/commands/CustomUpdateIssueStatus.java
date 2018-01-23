@@ -164,7 +164,7 @@ public class CustomUpdateIssueStatus implements ICommand {
 				log.info(this.getClass().getName(), "lock: " + String.valueOf(lock));				
 			}*/
 			iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroAppObj.getObjectType());
-			IAppObj iroUpdApp = iroFacade.load(iroAppObj.getVersionData().getHeadOVID(), true);
+			IAppObj iroUpdApp = iroFacade.load(iroAppObj.getVersionData().getHeadOVID(), false);
 			iroFacade.allocateLock(iroAppObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 			lock = true;
 			//Fim - REO 19.01.2018 - EV127908
@@ -232,7 +232,7 @@ public class CustomUpdateIssueStatus implements ICommand {
 					
 				}
 				
-				iroFacade.save(iroUpdApp, cc.getChainContext().getTransaction(), true);
+				iroFacade.save(iroUpdApp, cc.getChainContext().getTransaction(), false);
 				log.info(this.getClass().getName(), "Apontamento Salvo");
 				
 				//Inicio - REO 19.01.2018 - EV127908
