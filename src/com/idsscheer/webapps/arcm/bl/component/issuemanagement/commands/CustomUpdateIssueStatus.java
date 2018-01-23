@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.aris.arcm.transfer.parser.dynamic.WorkflowHelper;
 import com.idsscheer.batchserver.logging.Logger;
+import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
@@ -80,7 +81,8 @@ public class CustomUpdateIssueStatus implements ICommand {
 		IUserContext userCtx = cc.getChainContext().getUserContext();
 		
 		//Inicio REO 21.11.2017 - EV121389
-		IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
+		//IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
+		IUserContext jobCtx = new JobUIEnvironment(ContextFactory.createFullGrantUserContext(userCtx)).getUserContext();
 		//Fim REO 21.11.2017 - EV121389
 		
 		IEnumAttribute issueTypeAttr = issueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
@@ -172,6 +174,7 @@ public class CustomUpdateIssueStatus implements ICommand {
 			if(lock){
 				
 				//Inicio - REO 19.01.2018 - EV127908
+				iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroUpdApp.getObjectType());
 				/*//Inicio REO - 21.11.2017
 				//iroFacade = FacadeFactory.getInstance().getAppObjFacade(cc.getChainContext().getUserContext(), iroUpdApp.getObjectType());
 				iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroUpdApp.getObjectType());
