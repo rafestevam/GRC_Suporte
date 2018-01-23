@@ -15,6 +15,7 @@ import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.exception.BLException;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
 import com.idsscheer.webapps.arcm.bl.framework.command.CommandContext;
 import com.idsscheer.webapps.arcm.bl.framework.command.CommandResult;
 import com.idsscheer.webapps.arcm.bl.framework.command.ICommand;
@@ -35,6 +36,8 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.workflow.IStateMetadata;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
+import com.idsscheer.webapps.arcm.ui.framework.common.UIEnvironmentManager;
+import com.idsscheer.webapps.arcm.ui.framework.dialog.IDialogManager;
 
 public class CustomUpdateIssueStatus implements ICommand {
 
@@ -235,10 +238,9 @@ public class CustomUpdateIssueStatus implements ICommand {
 					
 				}
 				
-				iroFacade.save(iroUpdApp, cc.getChainContext().getTransaction(), false);
-				log.info(this.getClass().getName(), "Apontamento Salvo");
-				
 				//Inicio - REO 19.01.2018 - EV127908
+				iroFacade.save(iroUpdApp, cc.getChainContext().getTransaction(), true);
+				log.info(this.getClass().getName(), "Apontamento salvo");
 				//iroFacade.releaseLock(iroUpdApp.getVersionData().getOVID());
 				iroFacade.releaseLock(iroAppObj.getVersionData().getHeadOVID());
 				//cc.getChainContext().releaseWriteLock(iroUpdApp);
