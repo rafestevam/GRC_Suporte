@@ -1,7 +1,6 @@
 package com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
@@ -17,7 +17,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IDateAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
-import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
@@ -25,6 +25,8 @@ import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
+import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	
@@ -51,8 +53,11 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		List<IAppObj> iroElements = iroList.getElements(this.getUserContext());
 		//Iterator<IAppObj> iroIterator = iroElements.iterator();
 		
-		
-		IAppObjFacade issueFacade = this.environment.getAppObjFacade(ObjectType.ISSUE);
+		//Inicio - REO 23.01.2018 - EV127908
+		//IAppObjFacade issueFacade = this.environment.getAppObjFacade(ObjectType.ISSUE);
+		IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
+		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.ISSUE);
+		//Fim - REO 23.01.2018 - EV127908
 		
 		Map filterMap = new HashMap();
 		
@@ -77,8 +82,10 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 					
 						continue;
 					
-
-					issueFacade.allocateWriteLock(iroOVID);
+					//Inicio - REO 23.01.2018 - EV127908
+					//issueFacade.allocateWriteLock(iroOVID);
+					issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
+					//Fim - REO 23.01.2018 - EV127908
 					
 					Long version = currIssueAppObj.getAttribute(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER).getRawValue();
 					

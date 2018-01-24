@@ -10,10 +10,12 @@ import java.util.Map;
 
 import com.aris.arcm.transfer.parser.dynamic.WorkflowHelper;
 import com.idsscheer.batchserver.logging.Logger;
+import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.exception.BLException;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
 import com.idsscheer.webapps.arcm.bl.framework.command.CommandContext;
 import com.idsscheer.webapps.arcm.bl.framework.command.CommandResult;
 import com.idsscheer.webapps.arcm.bl.framework.command.ICommand;
@@ -32,7 +34,10 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.workflow.IStateMetadata;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
+import com.idsscheer.webapps.arcm.ui.framework.common.UIEnvironmentManager;
+import com.idsscheer.webapps.arcm.ui.framework.dialog.IDialogManager;
 
 public class CustomUpdateIssueStatus implements ICommand {
 
@@ -69,7 +74,7 @@ public class CustomUpdateIssueStatus implements ICommand {
 		IEnumerationItem reviewerStatus = null;
 		
 		boolean lock = true;
-		IAppObj iroUpdApp = null;
+		//IAppObj iroUpdApp = null;
 		IAppObjFacade iroFacade = null;
 		
 		Map filterMap = new HashMap();
@@ -79,10 +84,9 @@ public class CustomUpdateIssueStatus implements ICommand {
 		IUserContext userCtx = cc.getChainContext().getUserContext();
 		
 		//Inicio REO 21.11.2017 - EV121389
-		IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
+		//IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
+		IUserContext jobCtx = new JobUIEnvironment(ContextFactory.createFullGrantUserContext(userCtx)).getUserContext();
 		//Fim REO 21.11.2017 - EV121389
-		
-//		IUIEnvironment currEnv = 
 		
 		IEnumAttribute issueTypeAttr = issueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
 		IEnumerationItem issueTypeItem = ARCMCollections.extractSingleEntry(issueTypeAttr.getRawValue(), true);
@@ -129,7 +133,11 @@ public class CustomUpdateIssueStatus implements ICommand {
 		//this.getWorkflowStatus(issueAppObj);
 		
 		
-		List<IAppObj> iroList = issueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(userCtx);
+		//Inicio REO EV127908 - 11.01.2017
+		//List<IAppObj> iroList = issueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(userCtx);
+		List<IAppObj> iroList = issueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(jobCtx);
+		//Fim REOO EV127908 - 11.01.2017
+		
 		log.info(this.getClass().getName(), "iroList length: " + String.valueOf(iroList.size()));
 		if(iroList == null || iroList.isEmpty()){
 			log.info(this.getClass().getName(), "Lista iroList vazia");
@@ -144,7 +152,8 @@ public class CustomUpdateIssueStatus implements ICommand {
 			if(!iroAppObj.getObjectType().getId().equals(ObjectType.ISSUE.getId()))
 				continue;
 			
-			log.info(this.getClass().getName(), "Objeto щ Head Version? " + String.valueOf(iroAppObj.getVersionData().isHeadRevision()));
+			//Inicio - REO 19.01.2018 - EV127908
+			/*log.info(this.getClass().getName(), "Objeto щ Head Version? " + String.valueOf(iroAppObj.getVersionData().isHeadRevision()));
 			if(iroAppObj.getVersionData().isHeadRevision()){
 				iroUpdApp = iroAppObj;
 				//lock = cc.getChainContext().allocateWriteLock(iroUpdApp);
@@ -158,17 +167,31 @@ public class CustomUpdateIssueStatus implements ICommand {
 				lock = cc.getChainContext().allocateWriteLock(iroUpdApp);
 				log.info(this.getClass().getName(), "iroUpdApp: " + iroUpdApp.toString());
 				log.info(this.getClass().getName(), "lock: " + String.valueOf(lock));				
-			}
+			}*/
+			iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroAppObj.getObjectType());
+			IAppObj iroUpdApp = iroFacade.load(iroAppObj.getVersionData().getHeadOVID(), false);
+			iroFacade.allocateLock(iroAppObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+			lock = true;
+			//Fim - REO 19.01.2018 - EV127908
 				
 			if(lock){
 				
-				//Inicio REO - 21.11.2017
+				//Inicio - REO 19.01.2018 - EV127908
+				iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroUpdApp.getObjectType());
+				/*//Inicio REO - 21.11.2017
 				//iroFacade = FacadeFactory.getInstance().getAppObjFacade(cc.getChainContext().getUserContext(), iroUpdApp.getObjectType());
 				iroFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, iroUpdApp.getObjectType());
 				//Fim REO - 21.11.2017
+				 */
+				//Fim - REO 19.01.2018 - EV127908
 				
-				iroFacade.allocateWriteLock(iroUpdApp.getVersionData().getOVID());
-				IEnumAttribute iroTypeAttr = iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+				//Inicio - REO 19.01.2018 - EV127908
+				//iroFacade.allocateWriteLock(iroUpdApp.getVersionData().getOVID());
+				//iroFacade.allocateLock(iroUpdApp.getVersionData().getOVID(), LockType.FORCEWRITE);
+				//IEnumAttribute iroTypeAttr = iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+				IEnumAttribute iroTypeAttr = iroUpdApp.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+				//Fim - REO 19.01.2018 - EV127908
+				
 				IEnumerationItem iroTypeItem = ARCMCollections.extractSingleEntry(iroTypeAttr.getRawValue(), true);
 				if(!iroTypeItem.getId().equals("issue"))
 					continue;
@@ -215,13 +238,14 @@ public class CustomUpdateIssueStatus implements ICommand {
 					
 				}
 				
+				//Inicio - REO 19.01.2018 - EV127908
 				iroFacade.save(iroUpdApp, cc.getChainContext().getTransaction(), true);
-				log.info(this.getClass().getName(), "Apontamento Salvo");
-				
-				iroFacade.releaseLock(iroUpdApp.getVersionData().getOVID());
-				cc.getChainContext().releaseWriteLock(iroUpdApp);
+				log.info(this.getClass().getName(), "Apontamento salvo");
+				//iroFacade.releaseLock(iroUpdApp.getVersionData().getOVID());
+				iroFacade.releaseLock(iroAppObj.getVersionData().getHeadOVID());
+				//cc.getChainContext().releaseWriteLock(iroUpdApp);
 				log.info(this.getClass().getName(), "Lock Apontamento Liberado");
-				
+				//Fim - REO 19.01.2018 - EV127908
 				
 /*				
 				 * Se Status do Criador do Plano de Aчуo щ:
