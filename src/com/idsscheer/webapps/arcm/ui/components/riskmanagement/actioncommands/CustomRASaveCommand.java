@@ -57,7 +57,13 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				IStringAttribute classFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL);
 				IStringAttribute residualFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL);
 				String classFinal = classFinalAttr.isEmpty() ? "" : classFinalAttr.getRawValue();
-				String residualFinal = residualFinalAttr.isEmpty() ? "" : residualFinalAttr.getRawValue();
+				// FCT - 26/01/2018 
+				// Por padrão o risco residual final deve ser igual ao risco potencial
+				// quando não há ambiente de controle avaliado.
+//				String residualFinal = residualFinalAttr.isEmpty() ? "" : residualFinalAttr.getRawValue();
+				String residualFinal = residualFinalAttr.isEmpty() ? 
+						riscoPotencial : 
+								residualFinalAttr.getRawValue(); 
 				
 				//Inicio Alteracao - REO 18.12.2017 - EV126430
 				/*if((!classFinal.equals("")) && (!residualFinal.equals(""))){
@@ -78,9 +84,15 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				CustomProcRiskResidualCalc residualCalc = new CustomProcRiskResidualCalc(riskName, riscoPotencial, class1Line, class2Line, class3Line);
 				residualCalc.calculateResidualFinal();
 				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidual1Line());
-				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidual2Line());
-				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidual3Line());
-				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(residualCalc.getResidualFinal());
+				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(residualCalc.getResidual2Line());
+				rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(residualCalc.getResidual3Line());
+				
+				if (residualCalc.getResidualFinal() == "") {
+					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riscoPotencial);
+				} else {
+					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(residualCalc.getResidualFinal());	
+				}
+				
 				rskAppFacade.save(rskUpdAppObj, getDefaultTransaction(), true);
 				//}	
 				//}
