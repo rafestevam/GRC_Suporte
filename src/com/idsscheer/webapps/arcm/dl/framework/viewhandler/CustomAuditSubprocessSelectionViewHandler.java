@@ -93,17 +93,20 @@ public class CustomAuditSubprocessSelectionViewHandler implements IViewHandler {
 				}
 			}
 			
-			if(subprocessListID.size() > 0)
+			if(subprocessListID.size() > 0) {
 				filters.add(new SimpleFilterCriteria("subprocess_id", DataLayerComparator.IN, subprocessListID));
+			} else {
+				// Subprocesso Dummy para não aparecer nenhum subprocesso na lista. 
+				subprocessListID.add(999999);  
+				filters.add(new SimpleFilterCriteria("subprocess_id", DataLayerComparator.IN, subprocessListID));
+			}
+				
 			
 		} catch (RightException | BusException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
-		
-
 	}
 
 }
