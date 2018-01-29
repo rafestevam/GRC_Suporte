@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
  
-  <view id="ReportIssues" view.parameter="DISTINCT">
+  <view id="ReportIssues" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomIssues3ViewHandler">
         <viewObject id="VO_ReportIssues_ISSUE" objectType="ISSUE" isMainViewObject="true">
             <viewColumn id="creator_id" attributeType="creator_user_id"/>
             <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true" isGrouped="true"/>
@@ -26,6 +26,7 @@
 						<viewColumn id="cst_plandtini" attributeType="cst_plandtini" isSelectColumn="true" isGrouped="true"/>
 						<viewColumn id="cst_aging_plan" attributeType="cst_aging_plan" isSelectColumn="true" isGrouped="true"/> 
 						<viewColumn id="cst_aging_pend" attributeType="cst_aging_pend" isSelectColumn="true" isGrouped="true"/>
+			<viewColumn id="version_number" attributeType="version_number" isSelectColumn="true" isSortable="true" isGrouped="true"/>
             
         </viewObject>
         <viewObject id="VO_ReportIssues_CREATOR" objectType="USER">

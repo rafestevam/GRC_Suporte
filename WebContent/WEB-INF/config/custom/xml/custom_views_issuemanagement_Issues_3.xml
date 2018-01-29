@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
    
- <!-- <view id="Issues3" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CreatedIssuesViewHandler" relevantForMashzoneIntegration="true"> -->
- <view id="Issues3" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+ <view id="Issues3" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomIssues3ViewHandler" relevantForMashzoneIntegration="true">
+<!--  <view id="Issues3" view.parameter="DISTINCT" relevantForMashzoneIntegration="true"> -->
         <viewObject id="VO_Issues_ISSUE" objectType="ISSUE" isMainViewObject="true">
             <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="action_type" attributeType="action_type" isSelectColumn="true" isSortable="true"/>
@@ -32,6 +32,8 @@
             <viewColumn id="custom_ap_reviewer_status" attributeType="custom_ap_reviewer_status" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="custom_is_reviewer_status" attributeType="custom_is_reviewer_status" isSelectColumn="true" isSortable="true"/>
             
+            <viewColumn id="version_number" attributeType="version_number" isSelectColumn="true" isSortable="true"/>
+            
         </viewObject>
         <viewObject id="VO_Issues_CREATOR" objectType="USER">
              <viewColumn id="creator_name" attributeType="name" isSelectColumn="true"/> 
@@ -59,7 +61,7 @@
         <link linktype.id="3103" firstViewObject="VO_Issues_ISSUE" secondViewObject="VO_Issues_CREATOR"/> 
         <conditions>
             <compoundCondition conditionConnect="AND">
-                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
                 <condition column.id="version_active" compareType="EQ" value="true"/>
                 <condition column.id="IssueID" compareType="EQ"/>
                 <condition column.id="name" compareType="LIKE"/>
