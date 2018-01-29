@@ -32,6 +32,8 @@
             <viewColumn id="custom_ap_reviewer_status" attributeType="custom_ap_reviewer_status" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="custom_is_reviewer_status" attributeType="custom_is_reviewer_status" isSelectColumn="true" isSortable="true"/>
             
+            <viewColumn id="version_number" attributeType="version_number" isSelectColumn="true" isSortable="true"/>
+            
         </viewObject>
         <viewObject id="VO_Issues_CREATOR" objectType="USER">
              <viewColumn id="creator_name" attributeType="name" isSelectColumn="true"/> 
