@@ -59,7 +59,7 @@ rule "define all standard attributes editable [I,V]"
 		set "name"                editable
 		set "testdefinitions"     editable
 		set "controlexecutiontasks"     editable
-		set "custom_status_control"     readonly
+#		set "custom_status_control"     readonly
 
 end
 
@@ -116,7 +116,11 @@ rule "custom_userroles_readonly[I,V]"
 		set "name"                readonly
 		set "testdefinitions"     readonly
 		set "controlexecutiontasks"     readonly
-		set "custom_status_control"     readonly
+#		set "custom_status_control"     readonly
+		set "custom_st_1line"     readonly
+		set "custom_st_2line"     readonly
+		set "custom_st_3line"     readonly
+		set "custom_st_final"     readonly
 
 end
 
@@ -142,6 +146,10 @@ rule "custom_userroles_readonly_man[I,V]"
 		set "control_frequency"             readonly
 		set "control_execution"             readonly
 		set "control_effect"                readonly
-		set "custom_status_control"         readonly
+#		set "custom_status_control"         readonly
+		set "custom_st_1line"     readonly
+		set "custom_st_2line"     readonly
+		set "custom_st_3line"     readonly
+		set "custom_st_final"     readonly
 
 end
