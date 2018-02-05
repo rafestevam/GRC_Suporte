@@ -33,9 +33,9 @@
         
         
         <!-- Atributo para Arrasto do Status de Controle -->
-<!--         <stringAttrType id="custom_status_control" maxCharCount="80" isMassEditable="false" /> -->
+        <stringAttrType id="custom_status_control" maxCharCount="80" isMassEditable="false" />
 		<stringAttrType id="custom_st_1line" maxCharCount="80" isMassEditable="false" />
-		<stringAttrType id="custom_st_3line" maxCharCount="80" isMassEditable="false" />
+		<stringAttrType id="custom_st_2line" maxCharCount="80" isMassEditable="false" />
 		<stringAttrType id="custom_st_3line" maxCharCount="80" isMassEditable="false" />
 		<stringAttrType id="custom_st_final" maxCharCount="80" isMassEditable="false" />
 		<!-- EV133332 - Fim REO - 05.02.2018 -->
