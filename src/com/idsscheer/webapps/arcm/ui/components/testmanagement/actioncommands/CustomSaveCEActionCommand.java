@@ -22,6 +22,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
@@ -696,12 +697,14 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				if(this.currStatus.equals("ineffective")){
 					//Inicio REO - 07.02.2018 - EV133332 
 					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
-					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("ineficaz");
+					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("inefetivo");
+					this.setFinalControlStatus(controlUpdObj, "inefetivo");
 					//Fim REO - 07.02.2018 - EV133332
 				}else{
 					//Inicio REO - 07.02.2018 - EV133332
 					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
-					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("eficaz");
+					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("efetivo");
+					this.setFinalControlStatus(controlUpdObj, "efetivo");
 					//Fim REO - 07.02.2018 - EV133332
 				}
 				
@@ -717,6 +720,17 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			throw e;
 		}
 		
+	}
+
+	private void setFinalControlStatus(IAppObj controlUpdObj, String classification) {
+		IStringAttribute stFinalAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+		if(stFinalAttr.isEmpty()){
+			stFinalAttr.setRawValue(classification);
+		}else{
+			if(stFinalAttr.getRawValue().equals("efetivo")){
+				stFinalAttr.setRawValue(classification);
+			}
+		}
 	}
 	
 	private String riskClassification(double riskVuln){
