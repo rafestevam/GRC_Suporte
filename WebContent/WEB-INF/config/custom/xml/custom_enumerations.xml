@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
-    
+    <!-- Teste de enhacement -->
     <!-- Inicio GAP GRC29 -->
     <!-- Redefinição das categorias de risco -->
     <enum id="categderisco" isMultiple="false" type="Number">
@@ -318,19 +318,19 @@
     </enum>	
 
 	<!-- GRC 100 -->
-	<enum id="custom_jobs" isMultiple="false" itemClass="JobEnumerationItem" type="Number">
+<!-- 	<enum id="custom_jobs" isMultiple="false" itemClass="JobEnumerationItem" type="Number"> -->
         <!-- GRC 100 -->
-		<enumitem id="updateIssuesJob" value="1">
-            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssuePendingUpdateJob"/>
-        </enumitem>
+<!-- 		<enumitem id="updateIssuesJob" value="1"> -->
+<!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssuePendingUpdateJob"/> -->
+<!--         </enumitem> -->
         <!-- GRC 100 -->
         
         <!-- GRC 82 -->
-		<enumitem id="updateIssueSLAUpdateJob" value="2">
-            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/>
-        </enumitem>
+<!-- 		<enumitem id="updateIssueSLAUpdateJob" value="2"> -->
+<!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/> -->
+<!--         </enumitem> -->
         <!-- GRC 82 -->
-    </enum>
+<!--     </enum> -->
 	<!-- GRC 100 -->
 
 <!-- Inicio GRC100 -->
@@ -410,31 +410,35 @@
         </enumitem>
         
         <!-- GRC 100 -->
-		<enumitem id="updateIssuesJob" value="1">
+		<enumitem id="updateIssuesJob" value="53">
             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssuePendingUpdateJob"/>
         </enumitem>
         <!-- GRC 100 -->
         
-        <!-- GRC 82 -->
-		<enumitem id="updateIssueSLAUpdateJob" value="2">
-            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/>
+        <enumitem id="IssueOverdueJob" value="55">
+            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueOverdueJob"/>
         </enumitem>
+        
+        <!-- GRC 82 -->
+<!-- 		<enumitem id="updateIssueSLAUpdateJob" value="54"> -->
+<!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/> -->
+<!--         </enumitem> -->
         <!-- GRC 82 -->
         
         <!-- GAU25 -->
-        <enumitem id="IssueAgingReplanJob" value="50">
-            <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueAgingReplanJob"/>
-        </enumitem>
-        <!-- GAU25 -->
+<!--         <enumitem id="IssueAgingReplanJob" value="50"> -->
+<!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueAgingReplanJob"/> -->
+<!--         </enumitem> -->
+		<!--  GAU25 -->
         
         <!-- GRC14 -->
-        <enumitem id="RADelayMailJob" value="51">
-        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.RADelayMailJob"/>
-        </enumitem>
+<!--         <enumitem id="RADelayMailJob" value="51"> -->
+<!--         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.RADelayMailJob"/> -->
+<!--         </enumitem> -->
         
-        <enumitem id="CEDelayMailJob" value="52">
-        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CEDelayMailJob"/>
-        </enumitem>
+<!--         <enumitem id="CEDelayMailJob" value="52"> -->
+<!--         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CEDelayMailJob"/> -->
+<!--         </enumitem> -->
         <!-- /GRC14 -->
         
     </enum>
