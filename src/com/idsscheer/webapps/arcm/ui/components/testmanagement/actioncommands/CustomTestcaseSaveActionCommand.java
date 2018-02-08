@@ -647,11 +647,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				}else{
 					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
 					if(this.origemTeste.equals("1linhadefesa")){
-						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
+						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("efetivo");
 						this.setFinalControlStatus(controlUpdObj, "efetivo");
 					}
 					if(this.origemTeste.equals("2linhadefesa")){
-						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("inefetivo");
+						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("efetivo");
 						this.setFinalControlStatus(controlUpdObj, "efetivo");
 					}
 				}
