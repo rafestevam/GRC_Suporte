@@ -16,6 +16,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
@@ -35,6 +36,7 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IEnumAttributeType;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
@@ -146,7 +148,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				log.info("****************************************************************************************");
 				//if(ownerStatus.equals("3") || ownerStatus.equals("4"))
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
-					this.controlClassification(currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext()));
+					List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext());
+					this.controlClassification(controlList);
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
 				}
@@ -632,9 +635,25 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				//REO 08.08.2017 - EV108028
 				//if(this.fernanda.equals("ineffective")){ 
 				if(this.fernanda.equals("noneffective")){
-					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
+					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
+					if(this.origemTeste.equals("1linhadefesa")){
+						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
+						this.setFinalControlStatus(controlUpdObj, "inefetivo");
+					}
+					if(this.origemTeste.equals("2linhadefesa")){
+						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("inefetivo");
+						this.setFinalControlStatus(controlUpdObj, "inefetivo");
+					}
 				}else{
-					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
+					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
+					if(this.origemTeste.equals("1linhadefesa")){
+						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
+						this.setFinalControlStatus(controlUpdObj, "efetivo");
+					}
+					if(this.origemTeste.equals("2linhadefesa")){
+						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("inefetivo");
+						this.setFinalControlStatus(controlUpdObj, "efetivo");
+					}
 				}
 				
 				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
@@ -658,6 +677,17 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		
 		return origTest.getId();
 		
+	}
+	
+	private void setFinalControlStatus(IAppObj controlUpdObj, String classification) {
+		IStringAttribute stFinalAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+		if(stFinalAttr.isEmpty()){
+			stFinalAttr.setRawValue(classification);
+		}else{
+			if(stFinalAttr.getRawValue().equals("efetivo")){
+				stFinalAttr.setRawValue(classification);
+			}
+		}
 	}
 	
 	private List<IAppObj> getTestCaseFromTestDef(IAppObj testDefObj) throws Exception{
