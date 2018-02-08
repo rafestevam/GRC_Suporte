@@ -56,10 +56,30 @@
                 <row id="control_effect">
                     <element attribute.idref="control_effect"/>
                 </row>
-                <row id="custom_status_control">
-                	<element attribute.idref="custom_status_control" />
-                </row>
+                <!-- EV133332 - Inicio REO - 05.02.2017 -->
+<!--                 <row id="custom_status_control"> -->
+<!--                 	<element attribute.idref="custom_status_control" /> -->
+<!--                 </row> -->
+				<!-- EV133332 - Fim REO - 05.02.2017 -->
             </rowGroup>
+            
+            <!-- EV133332 - Inicio REO - 05.02.2017 -->
+            <rowGroup id="statuscontrol.1">
+            	<row id="custom_st_1line">
+            		<element attribute.idref="custom_st_1line"/>
+            	</row>
+            	<row id="custom_st_2line">
+            		<element attribute.idref="custom_st_2line"/>
+            	</row>
+            	<row id="custom_st_3line">
+            		<element attribute.idref="custom_st_3line"/>
+            	</row>
+            	<row id="custom_st_final">
+            		<element attribute.idref="custom_st_final"/>
+            	</row>
+            </rowGroup>
+            <!-- EV133332 - Fim REO - 05.02.2017 -->
+            
         </page>
     </form>
     

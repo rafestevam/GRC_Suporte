@@ -694,9 +694,15 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				controlFacade.allocateLock(controlOVID, LockType.TYPEDFORCEWRITE);
 				
 				if(this.currStatus.equals("ineffective")){
-					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
+					//Inicio REO - 07.02.2018 - EV133332 
+					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
+					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("ineficaz");
+					//Fim REO - 07.02.2018 - EV133332
 				}else{
-					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
+					//Inicio REO - 07.02.2018 - EV133332
+					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
+					controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("eficaz");
+					//Fim REO - 07.02.2018 - EV133332
 				}
 				
 				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);

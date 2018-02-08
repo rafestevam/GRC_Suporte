@@ -93,6 +93,7 @@ rule "control_export_relevant_editable_[I,V]"
 	then
 		set "control_export_relevant" invisible
 		set "control_effect"          invisible
+		set "custom_status_control"     invisible
 end
 
 rule "custom_userroles_readonly[I,V]"
@@ -117,6 +118,10 @@ rule "custom_userroles_readonly[I,V]"
 		set "testdefinitions"     readonly
 		set "controlexecutiontasks"     readonly
 		set "custom_status_control"     readonly
+		set "custom_st_1line"     readonly
+		set "custom_st_2line"     readonly
+		set "custom_st_3line"     readonly
+		set "custom_st_final"     readonly
 
 end
 
@@ -143,5 +148,9 @@ rule "custom_userroles_readonly_man[I,V]"
 		set "control_execution"             readonly
 		set "control_effect"                readonly
 		set "custom_status_control"         readonly
+		set "custom_st_1line"     readonly
+		set "custom_st_2line"     readonly
+		set "custom_st_3line"     readonly
+		set "custom_st_final"     readonly
 
 end
