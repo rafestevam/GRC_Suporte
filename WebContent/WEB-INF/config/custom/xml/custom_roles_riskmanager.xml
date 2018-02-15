@@ -16,10 +16,20 @@
 		<system component.idref="view.losses" />
 		<system component.idref="view.mashzone.url.builder"/>
 		<system component.idref="view.home.dashboards"/>
-		<object right.idref="r----" objectType.id="HIERARCHY"/>
+		<object right.idref="rwcdu" objectType.id="HIERARCHY">
+<!-- 			<action actionRight.idref="export.objects"/> -->
+<!-- 			<action actionRight.idref="extend"/> -->
+<!-- 			<action actionRight.idref="reset"/> -->
+<!-- 			<relation right.idref="ar" listAttrType.id="auditor"/> -->
+<!-- 			<relation right.idref="ar" listAttrType.id="tester"/> -->
+<!-- 			<relation right.idref="ar" listAttrType.id="so_owner"/> -->
+<!-- 			<relation right.idref="ar" listAttrType.id="children"/> -->
+		</object>
 		<object right.idref="r----" objectType.id="USERGROUP"/>
 		<object right.idref="rwcdu" objectType.id="RISK">
             <action actionRight.idref="export.objects"/>
+            <action actionRight.idref="extend"/>
+			<action actionRight.idref="reset"/>
 			<relation right.idref="ar" listAttrType.id="controls"/>
 			<relation right.idref="ar" listAttrType.id="finaccount"/>
 			<relation right.idref="ar" listAttrType.id="process"/>

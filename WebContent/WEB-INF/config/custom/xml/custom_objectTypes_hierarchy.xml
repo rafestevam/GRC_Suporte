@@ -65,6 +65,7 @@
         <enumAttrType id="rc_csttype" enumeration="custom_hierarchy_type" defaultValue="1"/>
         <textAttrType id="conseq" isMassEditable="true"/>
         <textAttrType id="justif"/>
+<!--         <listAttrType id="risks" linkType="3162" objectType.idref="RISK" /> -->
         <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
         
         <index id="I_HIERARCHY_1" type="normal">

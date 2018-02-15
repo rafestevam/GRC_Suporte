@@ -106,13 +106,16 @@ public class IssueOverdueJob extends BaseJob {
 					if (actualDate.after(issuePlannedDate)) {
 
 						logger.info(this.getClass().getName(), "Is overdue.");
+						logger.info(this.getClass().getName(), "Current State: " + 
+								iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME));
+						
 						if (!iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
 								.equals(Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE))) {
 							iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
 									.setRawValue(Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE));
+							facade.save(iroUpdObj, this.getInternalTransaction(), true);
 						}
-						facade.save(iroUpdObj, this.getInternalTransaction(), true);
-
+						
 					}
 				}
 
