@@ -52,6 +52,7 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
 
 @CanBeScheduled
@@ -86,7 +87,9 @@ public class IssueOverdueJob extends BaseJob {
 
 			try {
 
+				facade.allocateLock(iroOVID, LockType.FORCEWRITE);
 				IAppObj iroUpdObj = facade.load(iroOVID, true);
+				
 				logger.info(this.getClass().getName(), "created UpdObj - " + String.valueOf(iroUpdObj.getObjectId()));
 				Date actualDate = new Date();
 
@@ -98,6 +101,12 @@ public class IssueOverdueJob extends BaseJob {
 
 				Date issuePlannedDate = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE)
 						.getRawValue();
+				
+				IEnumAttribute stateTimeAttr = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME);
+				IEnumerationItem stateTime = ARCMCollections.extractSingleEntry(stateTimeAttr.getRawValue(), true);
+				
+				/*if(iroUpdObj.getObjectId() == 169560)
+					System.out.println("teste");*/
 
 				if (issuePlannedDate == null) {
 					logger.info(this.getClass().getName(), "created issue date is null");
@@ -106,13 +115,24 @@ public class IssueOverdueJob extends BaseJob {
 					if (actualDate.after(issuePlannedDate)) {
 
 						logger.info(this.getClass().getName(), "Is overdue.");
-						if (!iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
-								.equals(Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE))) {
+						/*if (!iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
+								.equals(Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE)))*/
+						if(!stateTime.getId().equals("overdue")) {
 							iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
 									.setRawValue(Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE));
+							facade.save(iroUpdObj, this.getInternalTransaction(), true);
 						}
-						facade.save(iroUpdObj, this.getInternalTransaction(), true);
+						
 
+					} else {
+						logger.info(this.getClass().getName(), "Is not overdue.");
+						/*if (iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
+								.equals(Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE)))*/ 
+						if(stateTime.getId().equals("overdue")){
+							iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME)
+									.setRawValue(Collections.singletonList(Enumerations.ISSUESTATETIME.ON_TIME));
+							facade.save(iroUpdObj, this.getInternalTransaction(), true);
+						}
 					}
 				}
 
