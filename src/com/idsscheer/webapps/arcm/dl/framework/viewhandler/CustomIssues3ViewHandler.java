@@ -2,10 +2,6 @@ package com.idsscheer.webapps.arcm.dl.framework.viewhandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,19 +21,18 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IQueryRestriction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
-import com.idsscheer.webapps.arcm.config.metadata.objecttypes.ITextAttributeType;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
+import com.idsscheer.webapps.arcm.dl.framework.IDataLayerTransaction;
 import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
-import com.idsscheer.webapps.arcm.dl.framework.IQueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.IQueryObjectDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
 import com.idsscheer.webapps.arcm.ndl.IFilterFactory;
 import com.idsscheer.webapps.arcm.ndl.PersistenceAPI;
+import com.idsscheer.webapps.arcm.ndl.PersistenceException;
 
 public class CustomIssues3ViewHandler implements IViewHandler {
 
@@ -93,14 +88,28 @@ public class CustomIssues3ViewHandler implements IViewHandler {
 			IQueryExpression restr1 = QueryRestriction.eq(IIssueAttributeType.BASE_ATTR_VERSION_ACTIVE, true);
 			appQuery.addRestriction(restr1);
 		}
+		
+		IDataLayerTransaction transaction;
+		try {
+			transaction = PersistenceAPI.getTransactionFactory().createTransaction();
+		} catch (PersistenceException e1) {
+			// TODO Auto-generated catch block
+			throw new RuntimeException(e1);
+		}
 
 		IAppObjIterator iterator = appQuery.getResultIterator();
 		while (iterator.hasNext()) {
 			IAppObj issueObj = iterator.next();
-			Integer obj_id = (int) issueObj.getObjectId();
-			Integer version_number = Integer.valueOf(
-					issueObj.getAttribute(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER).getRawValue().intValue());
-			resultMap.put(obj_id, version_number);
+			try {
+				Long maxVersionNumber = PersistenceAPI.getPersistenceManager().getMaxVersionNumber(issueObj.getVersionData().getOVID(), transaction);
+				Integer obj_id = (int) issueObj.getObjectId();
+/*				Integer version_number = Integer.valueOf(
+						issueObj.getAttribute(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER).getRawValue().intValue());*/
+				resultMap.put(obj_id, maxVersionNumber.intValue());
+			} catch (PersistenceException e) {
+				// TODO Auto-generated catch block
+				throw new RuntimeException(e);
+			}
 		}
 		appQuery.release();
 
