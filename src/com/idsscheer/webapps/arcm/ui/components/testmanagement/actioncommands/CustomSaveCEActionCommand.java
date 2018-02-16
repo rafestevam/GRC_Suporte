@@ -390,7 +390,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
 			
-			count1line = ()
+			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
+			countTotal = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal);
 			
@@ -411,9 +412,9 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				if(controlObj.getVersionData().isDeleted())
 					continue;
 				
-				IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
-				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
-				controlFacade.allocateWriteLock(controlOVID);
+				//IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
+				//IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
+				//controlFacade.allocateWriteLock(controlOVID);
 				
 				//Date ceDate = null;
 				log.info("==================================================");
@@ -432,16 +433,16 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 						log.info("Data EC: " + String.valueOf(ceObj.getVersionData().getCreateDate().getTime()));
 						
 						if(ceObj.getGuid().equals(this.formModel.getAppObj().getGuid())){
-							if(this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS).equals("3")){
-								//countTotal += 1;
-								log.info("Status EC: COMPLETED");
-								if(this.currStatus.equals("ineffective")){
-									count1line += 1;
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
-								}else{
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
-								}
-							}
+							//if(this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS).equals("3")){
+							//	//countTotal += 1;
+							//	log.info("Status EC: COMPLETED");
+							//	if(this.currStatus.equals("ineffective")){
+							//		count1line += 1;
+							//		controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
+							//	}else{
+							//		controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
+							//	}
+							//}
 						}else{
 							IEnumAttribute ownerStatusAttr = ceObj.getAttribute(IControlexecutionAttributeType.ATTR_OWNER_STATUS);
 							IEnumerationItem ownerStatus = ARCMCollections.extractSingleEntry(ownerStatusAttr.getRawValue(), true);
@@ -465,8 +466,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					}
 					
 				}
-				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
-				controlFacade.releaseLock(controlOVID);
+				//controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
+				//controlFacade.releaseLock(controlOVID);
 				
 			}
 			count1line = count1line + this.countInef;
@@ -482,13 +483,13 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			log.info("Ponderação: " + String.valueOf(risk1line));
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
 			
-			String riskClass2line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
-			if(riskClass2line == null)
-				riskClass2line = "";
-				
-			String riskClass3line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
-			if(riskClass3line == null)
-				riskClass3line = "";
+			//String riskClass2line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
+			//if(riskClass2line == null)
+			//	riskClass2line = "";
+			//	
+			//String riskClass3line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
+			//if(riskClass3line == null)
+			//	riskClass3line = "";
 			
 			//String riskClassFinal = this.riskFinalClassification(riskClass1line, riskClass2line, riskClass3line);
 			//String riskClassFinal = riskClass1line;
