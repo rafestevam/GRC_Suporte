@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<!-- filter.idref="cst_filter_corprisk" -->
+	
+<!-- Inicio REO 26.07.2017 - Risco Corporativo -->	
+	<list id="cst_list_corprisk"
+          view.idref="cst_view_corprisk2"
+          filter.idref="cst_filter_corprisk"
+          idColumn.idref="id"
+          defaultOrderColumn.idref="rc_rcid"
+          allowMarkAsIssueRelevant="true"
+          relatedObjectType.idref="HIERARCHY"
+          propertyKey="list.cst_list_corprisk.DBI">
+<!-- 		<simpleFilterRow> -->
+<!-- 			<simpleFilter filterRow.idref="rc_name"/> -->
+<!-- 			<simpleFilter filterRow.idref="rc_client"/> -->
+<!-- 		</simpleFilterRow> -->
+		<listHeaderRow>
+			<listHeader column="LC_Corprisk_0" propertyKey="tableheader.corprisk.client"    width="8%"/>
+			<listHeader column="LC_Corprisk_1" propertyKey="tableheader.corprisk.id"        width="15%"/>
+			<listHeader column="LC_Corprisk_2" propertyKey="tableheader.corprisk.name"      width="32%"/>
+			<listHeader column="LC_Corprisk_3" propertyKey="tableheader.corprisk.categ"     width="15%"/>
+			<listHeader column="LC_Corprisk_4" propertyKey="tableheader.corprisk.potencial" width="15%"/>
+			<listHeader column="LC_Corprisk_5" propertyKey="tableheader.corprisk.residual"  width="15%"/>
+		</listHeaderRow>
+		<column id="LC_Corprisk_0" align="center" dataReference.idref="rc_client" />
+		<column id="LC_Corprisk_1" align="left" dataReference.idref="rc_rcid" template="openObject">
+			<parameter name="idColumn" value="id" />
+		</column>
+		<column id="LC_Corprisk_2" align="left" dataReference.idref="rc_name" />
+		<column id="LC_Corprisk_3" align="left" dataReference.idref="ct_name" />
+		<column id="LC_Corprisk_4" align="center" dataReference.idref="rc_potencial" />
+		<column id="LC_Corprisk_5" align="center" dataReference.idref="rc_residual" />
+		<listButtons>
+			<buttonReference button.idref="LIST_OPEN"/>
+<!--             <buttonReference button.idref="PDF_REPORT"/> -->
+<!--             <buttonReference button.idref="EXCEL_REPORT"/> -->
+		</listButtons>
+		<rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+		</rowButtons>
+	</list>
+<!-- Fim REO 26.07.2017 - Risco Corporativo -->	
+
+</custom>
