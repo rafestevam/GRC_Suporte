@@ -1,20 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
-
-	
-<!-- Inicio REO 26.07.2017 - Risco Corporativo -->	
-	<list id="cst_list_corprisk"
-          view.idref="cst_view_corprisk2"
-          filter.idref="cst_filter_corprisk"
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">	
+	<list id="cst_list_corprisk_rel"
+          view.idref="cst_view_corprisk_rel"
+          filter.idref="cst_filter_corprisk_rel"
           idColumn.idref="id"
           defaultOrderColumn.idref="rc_rcid"
           allowMarkAsIssueRelevant="true"
           relatedObjectType.idref="HIERARCHY"
           propertyKey="list.cst_list_corprisk.DBI">
-<!-- 		<simpleFilterRow> -->
-<!-- 			<simpleFilter filterRow.idref="rc_name"/> -->
-<!-- 			<simpleFilter filterRow.idref="rc_client"/> -->
-<!-- 		</simpleFilterRow> -->
 		<listHeaderRow>
 			<listHeader column="LC_Corprisk_0" propertyKey="tableheader.corprisk.client"    width="8%"/>
 			<listHeader column="LC_Corprisk_1" propertyKey="tableheader.corprisk.id"        width="15%"/>
@@ -33,13 +26,9 @@
 		<column id="LC_Corprisk_5" align="center" dataReference.idref="rc_residual" />
 		<listButtons>
 			<buttonReference button.idref="LIST_OPEN"/>
-<!--             <buttonReference button.idref="PDF_REPORT"/> -->
-<!--             <buttonReference button.idref="EXCEL_REPORT"/> -->
 		</listButtons>
 		<rowButtons>
             <buttonReference button.idref="RELATION_POPUP"/>
 		</rowButtons>
 	</list>
-<!-- Fim REO 26.07.2017 - Risco Corporativo -->	
-
 </custom>

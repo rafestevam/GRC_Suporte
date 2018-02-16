@@ -257,11 +257,20 @@
         <nav.data.grid dataGrid.idref="cst_list_corprisk">
             <nav.access>
                 <nav.access.component licensedComponentIDs="rm"/>
-<!--                 <nav.access.role roleIDs="riskmanager, riskauditor"/> -->
 				<nav.access.role roleIDs="riskmanager, riskauditor"/>
             </nav.access>
         </nav.data.grid>
         <!-- Fim REO 27.06.2017 -->
+        
+        <!-- Início FCT 16.02.2018 -->
+        <!-- EV131841 -  -->
+        <nav.data.grid dataGrid.idref="cst_list_corprisk_rel">
+            <nav.access>
+                <nav.access.component licensedComponentIDs="rm"/>
+				<nav.access.role roleIDs="riskmanager, riskauditor"/>
+            </nav.access>
+        </nav.data.grid>
+        <!-- Fim REO FCT 16.02.2018 -->
         
         <!-- for many roles... -->
         <nav.data.grid dataGrid.idref="risk">
