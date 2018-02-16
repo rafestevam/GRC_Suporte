@@ -7,42 +7,33 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import com.aris.arcm.bl.report.service.UserContextHelper;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
-import com.idsscheer.webapps.arcm.bl.framework.jobs.JobHelper;
-import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
-import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
-import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
-import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
-import com.idsscheer.webapps.arcm.custom.procrisk.ResidualRiskCalculation;
-import com.idsscheer.webapps.arcm.dl.framework.viewhandler.JobInformationViewHandler;
+import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
+import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
@@ -387,16 +378,34 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
 			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
 			
-			IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL); //Inicio Exclusao - REO - 14.02.2018 - EV1333332
+			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL); //Inicio Exclusao - REO - 14.02.2018 - EV1333332
 		
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
-			/*ResidualRiskCalculation riskCalc = new ResidualRiskCalculation(controlList, this.getDefaultTransaction(), this.requestContext, this.formModel.getAppObj().getGuid());
 			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskCalc.calculateResidual1Line());*/
+			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+			
+			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
+			
+			count1line = ()
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal);
+			
+			if(!this.riscoPotencial.equals("Nao Avaliado")){
+				riskResidual1Line = this.riskResidualFinal(this.riscoPotencial, riskClass1line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				
+				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+			}
+			//Fim Inclusão - REO - 14.02.2018 - EV1333332			
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332
 			//Alteração da logica do calculo de Risco Residual
-			for(IAppObj controlObj : controlList){
+			/*for(IAppObj controlObj : controlList){
 				
 				//REO 17.08.2017 - EV108436
 				if(controlObj.getVersionData().isDeleted())
@@ -521,7 +530,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
-			}
+			}*/
 			//Fim Exclusao - REO - 14.02.2018 - EV1333332
 			
 			riskFacade.save(riskUpdObj, this.getDefaultTransaction(), true);
@@ -533,6 +542,33 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		}
 		
 	}
+
+	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception {
+		Object objReturn = null;
+		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
+		
+		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
+		while(iterator.hasNext()){
+			
+			Entry<String, String> entry = iterator.next();
+			
+			if(entry.getKey().equals("classification") && valueType.equals("classification"))
+				objReturn = (String)entry.getValue();
+			
+			if(entry.getKey().equals("rate") && valueType.equals("rate"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("total") && valueType.equals("total"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+		}
+		return objReturn;
+	}
+	
+	
 	
 	private List<IAppObj> getCtrlExecFromCET(IAppObj cetObj) throws Exception{
 		
