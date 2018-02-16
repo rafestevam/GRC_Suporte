@@ -263,7 +263,7 @@
         <!-- Fim REO 27.06.2017 -->
         
         <!-- Início FCT 16.02.2018 -->
-        <!-- EV131841 -  -->
+        <!-- EV132664 - Desenvolver relatório no GRC  -->
         <nav.data.grid dataGrid.idref="cst_list_corprisk_rel">
             <nav.access>
                 <nav.access.component licensedComponentIDs="rm"/>
