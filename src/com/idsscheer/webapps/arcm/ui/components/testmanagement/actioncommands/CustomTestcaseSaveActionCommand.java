@@ -394,13 +394,13 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getFullGrantUserContext());
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+			//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
 			
 			//Fim Inclusão - REO - 14.02.2018 - EV1333332
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332
 			//Alteração da logica do calculo de Risco Residual
-			/*for(IAppObj controlObj : controlList){
+			for(IAppObj controlObj : controlList){
 				
 				//REO 17.08.2017 - EV108436
 				if(controlObj.getVersionData().isDeleted())
@@ -606,7 +606,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			String riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			log.info("Classificacao Res Final: " + riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).getRawValue());
-			log.info("Residual Final Calculado...");*/
+			log.info("Residual Final Calculado...");
 			//Fim Exclusao - REO - 14.02.2018 - EV1333332
 			
 			log.info("Salvando Risco");
