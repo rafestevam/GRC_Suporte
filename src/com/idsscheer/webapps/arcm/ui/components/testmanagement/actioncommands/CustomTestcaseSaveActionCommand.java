@@ -39,6 +39,7 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IEnumAttributeType;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
+import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
@@ -391,6 +392,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
 		
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getFullGrantUserContext());
+			
+			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+			
+			//Fim Inclusão - REO - 14.02.2018 - EV1333332
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332
 			//Alteração da logica do calculo de Risco Residual
