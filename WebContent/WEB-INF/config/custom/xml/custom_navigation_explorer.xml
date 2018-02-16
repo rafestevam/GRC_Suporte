@@ -264,12 +264,12 @@
         
         <!-- Início FCT 16.02.2018 -->
         <!-- EV132664 - Desenvolver relatório no GRC  -->
-        <nav.data.grid dataGrid.idref="cst_list_corprisk_rel">
-            <nav.access>
-                <nav.access.component licensedComponentIDs="rm"/>
-				<nav.access.role roleIDs="riskmanager, riskauditor"/>
-            </nav.access>
-        </nav.data.grid>
+<!--         <nav.data.grid dataGrid.idref="cst_list_corprisk_rel"> -->
+<!--             <nav.access> -->
+<!--                 <nav.access.component licensedComponentIDs="rm"/> -->
+<!-- 				<nav.access.role roleIDs="riskmanager, riskauditor"/> -->
+<!--             </nav.access> -->
+<!--         </nav.data.grid> -->
         <!-- Fim REO FCT 16.02.2018 -->
         
         <!-- for many roles... -->
