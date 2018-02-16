@@ -387,16 +387,16 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
 			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
 			
-			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
+			IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL); //Inicio Exclusao - REO - 14.02.2018 - EV1333332
 		
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
-			ResidualRiskCalculation riskCalc = new ResidualRiskCalculation(controlList, this.getDefaultTransaction(), this.requestContext, this.formModel.getAppObj().getGuid());
+			/*ResidualRiskCalculation riskCalc = new ResidualRiskCalculation(controlList, this.getDefaultTransaction(), this.requestContext, this.formModel.getAppObj().getGuid());
 			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskCalc.calculateResidual1Line());
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskCalc.calculateResidual1Line());*/
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332
 			//Alteração da logica do calculo de Risco Residual
-			/*for(IAppObj controlObj : controlList){
+			for(IAppObj controlObj : controlList){
 				
 				//REO 17.08.2017 - EV108436
 				if(controlObj.getVersionData().isDeleted())
@@ -521,7 +521,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
-			}*/
+			}
 			//Fim Exclusao - REO - 14.02.2018 - EV1333332
 			
 			riskFacade.save(riskUpdObj, this.getDefaultTransaction(), true);

@@ -51,6 +51,7 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
 
 @CanBeScheduled
@@ -83,6 +84,7 @@ public class IssuePendingUpdateJob extends BaseJob {
 
 			try {
 				
+				facade.allocateLock(iroOVID, LockType.FORCEWRITE);
 				IAppObj iroUpdObj = facade.load(iroOVID, true);
 				logger.info(this.getClass().getName(), "created UpdObj - " + String.valueOf(iroUpdObj.getObjectId()));
 				Date actualDate = new Date();

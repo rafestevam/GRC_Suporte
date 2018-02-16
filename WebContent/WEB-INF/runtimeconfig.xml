@@ -405,6 +405,18 @@
             <!-- please do not edit -->
             <parameter name="clientbased" value="false"/>
         </parameterList>
+        
+        
+        <parameterList name="IssueOverdueJob">
+            <parameter name="jobitem" value="IssueOverdueJob" />
+            <parameter name="startScheduler" value="true"/>
+            <parameter name="executionTime" value="0 53 19 ? * SUN-SAT"/>
+            <parameter name="clientexcludinglist" value=""/>
+            <!-- please do not edit -->
+            <parameter name="className" value="IssueOverdueJob"/>
+            <!-- please do not edit -->
+            <parameter name="clientbased" value="false"/>
+        </parameterList>
 
         <!-- Administration SyncJob -->
         <parameterList name="umcSyncJob">

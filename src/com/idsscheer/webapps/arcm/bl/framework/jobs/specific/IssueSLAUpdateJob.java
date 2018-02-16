@@ -29,6 +29,7 @@ import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 @CanBeScheduled
 public class IssueSLAUpdateJob extends BaseJob {
@@ -74,7 +75,8 @@ public class IssueSLAUpdateJob extends BaseJob {
 				IAppObj iroUpdObj = facade.load(iroOVID, true);
 				this.displayLog("iroUpdObj - " + iroUpdObj.toString());
 				
-				facade.allocateWriteLock(iroUpdObj.getVersionData().getHeadOVID());
+				facade.allocateLock(iroOVID, LockType.FORCEWRITE);
+				//facade.allocateWriteLock(iroUpdObj.getVersionData().getHeadOVID());
 				this.displayLog("facade.allocateWriteLock(iroUpdObj.getVersionData().getHeadOVID())");
 				
 				IEnumAttribute issueActionTypeList = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
