@@ -1147,7 +1147,7 @@
             <viewColumn id="ra_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
 <!--             <viewColumn id="assessment_version_active" attributeType="version_active" mashzoneRelevant="false"/> -->
             <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
-            <viewColumn id="ra_version" attributeType="version" mashzoneRelevant="false"/>
+            <viewColumn id="ra_version" attributeType="version_number" mashzoneRelevant="false"/>
             <viewColumn id="ra_change_date" attributeType="change_date" mashzoneRelevant="false"/>
         </viewObject>
         <viewObject id="VO_ra2risk_risk" objectType="RISK">
