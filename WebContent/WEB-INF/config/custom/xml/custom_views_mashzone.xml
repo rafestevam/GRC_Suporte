@@ -109,10 +109,10 @@
             <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
-	    <viewColumn id="r_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
-	    <viewColumn id="r_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/>            
-            <viewColumn id="r_ra_result" attributeType="ra_result" mashzoneRelevant="true" isSelectColumn="true"/>
-            
+    		<viewColumn id="r_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
+    		<viewColumn id="r_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/>            
+          		<viewColumn id="r_ra_result" attributeType="ra_result" mashzoneRelevant="true" isSelectColumn="true"/>
+           
             <viewColumn id="r_ra_control1line" attributeType="ra_control1line" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="r_ra_control2line" attributeType="ra_control2line" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="r_ra_control3line" attributeType="ra_control3line" mashzoneRelevant="true" isSelectColumn="true"/>
@@ -123,7 +123,7 @@
             <viewColumn id="r_ra_residual3line" attributeType="ra_residual3line" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="r_ra_residualfinal" attributeType="ra_residualfinal" mashzoneRelevant="true" isSelectColumn="true"/>
 
-	    <viewColumn id="r_ra_inef1line" attributeType="ra_inef1line" mashzoneRelevant="true" isSelectColumn="true"/>
+    		<viewColumn id="r_ra_inef1line" attributeType="ra_inef1line" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="r_ra_final1line" attributeType="ra_final1line" mashzoneRelevant="true" isSelectColumn="true"/>
 
             <viewColumn id="r_ra_inef2line" attributeType="ra_inef2line" mashzoneRelevant="true" isSelectColumn="true"/>
@@ -132,6 +132,9 @@
             <viewColumn id="r_ra_inef3line" attributeType="ra_inef3line" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="r_ra_final3line" attributeType="ra_final3line" mashzoneRelevant="true" isSelectColumn="true"/>
             
+            <!-- EV132664 - Relatório Risco Corporativo -->
+            <viewColumn id="r_description" attributeType="description" mashzoneRelevant="true" isSelectColumn="true"/>
+           
             <!-- Customizing for Mashzone -->            
 
         </viewObject>
@@ -308,6 +311,8 @@
 	    	<viewColumn id="c_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/>            
             <viewColumn id="c_control_type" attributeType="control_type" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="c_control_execution" attributeType="control_execution" mashzoneRelevant="true" isSelectColumn="true"/>
+            <!-- EV132664 - Relatório Risco Corporativo -->
+            <viewColumn id="c_control_objective" attributeType="control_objective" mashzoneRelevant="true" isSelectColumn="true"/>
             <!-- Customizing for Mashzone -->
 
         </viewObject>
@@ -1130,6 +1135,36 @@
         <conditions>
             <compoundCondition conditionConnect="AND">
                 <condition column.id="assessment_version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+    <!-- EV132664 - Relatório Risco Corporativo -->
+    <view id="ra2risk2" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_ra2risk_assessment" objectType="RISKASSESSMENT" isMainViewObject="true">
+            <viewColumn id="ra_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ra_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+<!--             <viewColumn id="assessment_version_active" attributeType="version_active" mashzoneRelevant="false"/> -->
+            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <viewColumn id="ra_version" attributeType="version" mashzoneRelevant="false"/>
+            <viewColumn id="ra_change_date" attributeType="change_date" mashzoneRelevant="false"/>
+        </viewObject>
+        <viewObject id="VO_ra2risk_risk" objectType="RISK">
+            <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="r_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="r_imp" attributeType="impact" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="r_prob" attributeType="probability" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+<!--         <viewObject id="VO_ra2risk_owner" objectType="USERGROUP"> -->
+<!--             <viewColumn id="r_mgr_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/> -->
+<!--             <viewColumn id="r_mgr" attributeType="name" isSortable="true" isSelectColumn="true"/> -->
+<!--         </viewObject> -->
+        <link linktype.id="3166" firstViewObject="VO_ra2risk_assessment" secondViewObject="VO_ra2risk_risk"/>
+<!--         <link linktype.id="52" firstViewObject="VO_ra2risk_risk" secondViewObject="VO_ra2risk_owner" joinType="LEFT"/> -->
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+<!--                 <condition column.id="assessment_version_active" compareType="EQ" value="true"/> -->
                 <condition column.id="deactivated" compareType="EQ" value="false"/>
             </compoundCondition>
         </conditions>
