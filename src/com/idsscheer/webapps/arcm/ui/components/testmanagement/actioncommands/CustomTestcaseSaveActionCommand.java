@@ -691,11 +691,20 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	
 	private void setFinalControlStatus(IAppObj controlUpdObj, String classification) {
 		IStringAttribute stFinalAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+		IStringAttribute st1LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
+		IStringAttribute st2LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
+		IStringAttribute st3LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
 		if(stFinalAttr.isEmpty()){
 			stFinalAttr.setRawValue(classification);
 		}else{
 			if(stFinalAttr.getRawValue().equals("efetivo")){
 				stFinalAttr.setRawValue(classification);
+			}else{
+				if( (st1LineAttr.isEmpty() || st1LineAttr.getRawValue().equals("efetivo")) && 
+					(st2LineAttr.isEmpty() || st2LineAttr.getRawValue().equals("efetivo")) &&
+					(st3LineAttr.isEmpty() || st3LineAttr.getRawValue().equals("efetivo"))){
+					stFinalAttr.setRawValue(classification);
+				}
 			}
 		}
 	}
