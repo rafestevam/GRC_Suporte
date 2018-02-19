@@ -16,6 +16,11 @@
             <!-- Inicio REO - 24.08.2017 - Riscos Corporativos -->
             <viewColumn id="h_corprisk" attributeType="corprisk" isSortable="true" isSelectColumn="true"/>
             <!-- Fim REO - 24.08.2017 - Riscos Corporativos -->
+            
+            <!-- EV132664 - Inclusão de MacroProcesso
+                 para relatório gerencial de Risco Corporativo -->
+            <viewColumn id="h_model_name" attributeType="model_name" isSortable="true" isSelectColumn="true"/>
+            
         </viewObject>
         <link linktype.id="47,48,3162,3163,3164" firstViewObject="VO_customrisk2hierarchies_risk" secondViewObject="VO_customrisk2hierarchies_hierarchy" joinType="LEFT"/>
         <conditions>
