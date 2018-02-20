@@ -153,7 +153,7 @@
         <link linktype.id="52" firstViewObject="VO_riskdata_risk" secondViewObject="VO_riskdata_riskManager" joinType="LEFT"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
-                <condition column.id="deactivated" compareType="EQ" value="false"/>
+                <condition column.id="deactivated" compareType="EQ"/>
             </compoundCondition>
         </conditions>
     </view>
