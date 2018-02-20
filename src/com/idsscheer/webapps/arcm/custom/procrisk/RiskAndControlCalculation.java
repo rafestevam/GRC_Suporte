@@ -29,22 +29,22 @@ public class RiskAndControlCalculation {
 			
 			if(defLine.equals(DefLineEnum.LINE_1)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
-				if(status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
 					countInef += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_2)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
-				if(status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
 					countInef += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_3)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
-				if(status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
 					countInef += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_F)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
-				if(status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
 					countInef += 1;
 			}
 			
