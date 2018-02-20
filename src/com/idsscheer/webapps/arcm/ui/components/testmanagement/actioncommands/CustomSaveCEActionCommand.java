@@ -7,24 +7,19 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import com.aris.arcm.bl.report.service.UserContextHelper;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
-import com.idsscheer.webapps.arcm.bl.framework.jobs.JobHelper;
-import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
-import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
@@ -41,8 +36,8 @@ import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
-import com.idsscheer.webapps.arcm.custom.procrisk.ResidualRiskCalculation;
-import com.idsscheer.webapps.arcm.dl.framework.viewhandler.JobInformationViewHandler;
+import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
+import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
@@ -390,9 +385,28 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL); //Inicio Exclusao - REO - 14.02.2018 - EV1333332
 		
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
-			/*ResidualRiskCalculation riskCalc = new ResidualRiskCalculation(controlList, this.getDefaultTransaction(), this.requestContext, this.formModel.getAppObj().getGuid());
 			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskCalc.calculateResidual1Line());*/
+			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
+			/*RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+			
+			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
+			
+			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
+			countTotal = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal);
+			
+			if(!this.riscoPotencial.equals("Nao Avaliado")){
+				riskResidual1Line = this.riskResidualFinal(this.riscoPotencial, riskClass1line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				
+				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+			}*/
+			//Fim Inclusão - REO - 14.02.2018 - EV1333332			
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332
 			//Alteração da logica do calculo de Risco Residual
@@ -402,9 +416,9 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				if(controlObj.getVersionData().isDeleted())
 					continue;
 				
-				IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
-				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
-				controlFacade.allocateWriteLock(controlOVID);
+				//IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
+				//IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
+				//controlFacade.allocateWriteLock(controlOVID);
 				
 				//Date ceDate = null;
 				log.info("==================================================");
@@ -423,16 +437,16 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 						log.info("Data EC: " + String.valueOf(ceObj.getVersionData().getCreateDate().getTime()));
 						
 						if(ceObj.getGuid().equals(this.formModel.getAppObj().getGuid())){
-							if(this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS).equals("3")){
-								//countTotal += 1;
-								log.info("Status EC: COMPLETED");
-								if(this.currStatus.equals("ineffective")){
-									count1line += 1;
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
-								}else{
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
-								}
-							}
+							//if(this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS).equals("3")){
+							//	//countTotal += 1;
+							//	log.info("Status EC: COMPLETED");
+							//	if(this.currStatus.equals("ineffective")){
+							//		count1line += 1;
+							//		controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
+							//	}else{
+							//		controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("eficaz");
+							//	}
+							//}
 						}else{
 							IEnumAttribute ownerStatusAttr = ceObj.getAttribute(IControlexecutionAttributeType.ATTR_OWNER_STATUS);
 							IEnumerationItem ownerStatus = ARCMCollections.extractSingleEntry(ownerStatusAttr.getRawValue(), true);
@@ -456,8 +470,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					}
 					
 				}
-				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
-				controlFacade.releaseLock(controlOVID);
+				//controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
+				//controlFacade.releaseLock(controlOVID);
 				
 			}
 			count1line = count1line + this.countInef;
@@ -473,13 +487,13 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			log.info("Ponderação: " + String.valueOf(risk1line));
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
 			
-			String riskClass2line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
-			if(riskClass2line == null)
-				riskClass2line = "";
-				
-			String riskClass3line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
-			if(riskClass3line == null)
-				riskClass3line = "";
+			//String riskClass2line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).getRawValue();
+			//if(riskClass2line == null)
+			//	riskClass2line = "";
+			//	
+			//String riskClass3line = riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).getRawValue();
+			//if(riskClass3line == null)
+			//	riskClass3line = "";
 			
 			//String riskClassFinal = this.riskFinalClassification(riskClass1line, riskClass2line, riskClass3line);
 			//String riskClassFinal = riskClass1line;
@@ -533,6 +547,33 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		}
 		
 	}
+
+	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception {
+		Object objReturn = null;
+		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
+		
+		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
+		while(iterator.hasNext()){
+			
+			Entry<String, String> entry = iterator.next();
+			
+			if(entry.getKey().equals("classification") && valueType.equals("classification"))
+				objReturn = (String)entry.getValue();
+			
+			if(entry.getKey().equals("rate") && valueType.equals("rate"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("total") && valueType.equals("total"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+		}
+		return objReturn;
+	}
+	
+	
 	
 	private List<IAppObj> getCtrlExecFromCET(IAppObj cetObj) throws Exception{
 		
@@ -732,11 +773,20 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 
 	private void setFinalControlStatus(IAppObj controlUpdObj, String classification) {
 		IStringAttribute stFinalAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+		IStringAttribute st1LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
+		IStringAttribute st2LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
+		IStringAttribute st3LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
 		if(stFinalAttr.isEmpty()){
 			stFinalAttr.setRawValue(classification);
 		}else{
 			if(stFinalAttr.getRawValue().equals("efetivo")){
 				stFinalAttr.setRawValue(classification);
+			}else{
+				if( (st1LineAttr.isEmpty() || st1LineAttr.getRawValue().equals("efetivo")) && 
+					(st2LineAttr.isEmpty() || st2LineAttr.getRawValue().equals("efetivo")) &&
+					(st3LineAttr.isEmpty() || st3LineAttr.getRawValue().equals("efetivo"))){
+					stFinalAttr.setRawValue(classification);
+				}
 			}
 		}
 	}
