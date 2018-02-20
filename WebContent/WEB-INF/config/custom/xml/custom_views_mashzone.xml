@@ -414,6 +414,56 @@
             </compoundCondition>
         </conditions>
     </view>
+    
+    <view id="testdefdata2" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_testdefdata_testdef" objectType="TESTDEFINITION" isMainViewObject="true">
+            <viewColumn id="td_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_nature" attributeType="test_nature"/>
+            <viewColumn id="td_test_type" attributeType="testtype"/>
+            <viewColumn id="td_frq" attributeType="frequency" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_dur" attributeType="duration" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_start" attributeType="startdate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_end" attributeType="enddate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_ctrlp" attributeType="control_period" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_offset" attributeType="control_period_offset" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_followup" attributeType="isfollowup" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="testdef_version_active" attributeType="version_active" mashzoneRelevant="false"/>
+            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            
+            <!-- Customizing for Mashzone -->
+            
+            <viewColumn id="td_origemteste" attributeType="origemteste" mashzoneRelevant="false" isSelectColumn="true"/>
+            
+            <!-- Customizing for Mashzone -->
+
+        </viewObject>
+        <viewObject id="VO_testdefdata_tester" objectType="USERGROUP">
+            <viewColumn id="td_tester_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_tester" attributeType="name" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_testdefdata_reviewer" objectType="USERGROUP">
+            <viewColumn id="td_rev_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="td_rev" attributeType="name" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_testdefdata_orgunit" objectType="HIERARCHY">
+            <viewColumn id="td_org" attributeType="name"/>
+        </viewObject>
+        <viewObject id="VO_testdefdata_control" objectType="CONTROL">
+            <viewColumn id="c_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <link linktype.id="3" firstViewObject="VO_testdefdata_testdef" secondViewObject="VO_testdefdata_tester"/>
+        <link linktype.id="53" firstViewObject="VO_testdefdata_testdef" secondViewObject="VO_testdefdata_reviewer"/>
+        <link linktype.id="49" firstViewObject="VO_testdefdata_testdef" secondViewObject="VO_testdefdata_orgunit" joinType="LEFT"/>
+        <link linktype.id="15" firstViewObject="VO_testdefdata_testdef" secondViewObject="VO_testdefdata_control" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="testdef_version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
+            </compoundCondition>
+        </conditions>
+    </view>
 
     <view id="testdef2nature" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
         <viewObject id="VO_testdef2nature_testdef" objectType="TESTDEFINITION" isMainViewObject="true">
