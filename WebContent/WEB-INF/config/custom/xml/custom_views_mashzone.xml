@@ -434,7 +434,7 @@
             
             <!-- Customizing for Mashzone -->
             
-            <viewColumn id="td_origemteste" attributeType="origemteste" mashzoneRelevant="false" isSelectColumn="true"/>
+            <viewColumn id="td_origemteste" attributeType="origemteste" mashzoneRelevant="true" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
 
