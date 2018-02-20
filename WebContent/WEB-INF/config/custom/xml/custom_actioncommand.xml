@@ -17,6 +17,9 @@
 			<!-- Inicio REO - 12.09.2017 - Riscos Corporativos -->
 			<commandId id="customcrvalidation" description="Avaliação de Calculo do Risco Residual - RC" />
 			<!-- Fim REO - 12.09.2017 - Riscos Corporativos -->
+			<!-- Inicio REO - 20.02.2017 - EV133332 -->
+			<commandId id="customprvalidation" description="Avaliação de Calculo do Risco Residual - Riscos Processos" />
+			<!-- Fim REO - 20.02.2017 - EV133332 -->
 		</commandIds>
 		
 		
@@ -24,6 +27,7 @@
 			<commandSet name="risk">
 				<actionCommand commandId="customrisksave" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomRiskSaveCommand" /> <!-- GAP GRC39 -->
 				<actionCommand commandId="customcachersk" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomCacheRsk" /> <!-- GAP GRC39 -->
+				<actionCommand commandId="customcrvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomPREvaluation"/><!-- EV133332 -->
 			</commandSet>
 			
 			<commandSet name="riskassessment">
