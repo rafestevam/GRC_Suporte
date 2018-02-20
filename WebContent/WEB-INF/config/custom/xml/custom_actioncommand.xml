@@ -27,7 +27,7 @@
 			<commandSet name="risk">
 				<actionCommand commandId="customrisksave" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomRiskSaveCommand" /> <!-- GAP GRC39 -->
 				<actionCommand commandId="customcachersk" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomCacheRsk" /> <!-- GAP GRC39 -->
-				<actionCommand commandId="customcrvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomPREvaluation"/><!-- EV133332 -->
+				<actionCommand commandId="customprvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomPREvaluation"/><!-- EV133332 -->
 			</commandSet>
 			
 			<commandSet name="riskassessment">
