@@ -14,6 +14,9 @@
             <buttonReference button.idref="OBJECT_RISKASSESSMENT_CREATE"/>
             <buttonReference button.idref="GOTO_CONNECT"/>
             <buttonReference button.idref="PDF_REPORT"/>
+            <!-- Inicio REO 20.02.2018 - EV133332 -->
+            <buttonReference button.idref="CST_PR_VALIDATION"/>
+            <!-- Fim REO 20.02.2018 - EV133332 -->
         </formButtons>
         <page id="risk" licensedComponentIds="tm,rm,il,in">
             <rowGroup id="risk.1">
