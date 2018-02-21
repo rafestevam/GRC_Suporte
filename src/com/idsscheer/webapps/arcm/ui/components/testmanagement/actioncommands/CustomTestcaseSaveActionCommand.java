@@ -149,7 +149,12 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				log.info("****************************************************************************************");
 				//if(ownerStatus.equals("3") || ownerStatus.equals("4"))
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
-					List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext());
+					
+					//Inicio REO 21.02.2018 - EV133332
+					//List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext());
+					List<IAppObj> controlList = riskParentObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
+					//Fim REO 21.02.2018 - EV133332
+					
 					this.controlClassification(controlList);
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
