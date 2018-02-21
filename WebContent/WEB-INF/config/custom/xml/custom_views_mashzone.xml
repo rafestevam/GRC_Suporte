@@ -692,6 +692,7 @@
             <viewColumn id="tc_ctrl_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="c_coso" attributeType="control_type"/>
             <viewColumn id="c_exec" attributeType="control_execution"/>
+            <viewColumn id="c_ctrl_id" attributeType="control_id" isSortable="true" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_testcasedata_testdef" objectType="TESTDEFINITION">
             <viewColumn id="tc_testdef" attributeType="name" isSortable="true" isSelectColumn="true"/>
@@ -720,8 +721,8 @@
         <link linktype.id="54" firstViewObject="VO_testcasedata_testcase" secondViewObject="VO_testcasedata_process" joinType="LEFT"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
-                <condition column.id="testcase_version_active" compareType="EQ" value="true"/>
-                <condition column.id="deactivated" compareType="EQ" />
+<!--                 <condition column.id="testcase_version_active" compareType="EQ" value="true"/> -->
+<!--                 <condition column.id="deactivated" compareType="EQ" /> -->
             </compoundCondition>
         </conditions>
     </view>
@@ -2710,35 +2711,18 @@
             <viewColumn id="ce_owner_status" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="ce_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
     		<viewColumn id="ce_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/>
-<!--             <viewColumn id="due_status" attributeType="due_status" isSortable="true" isSelectColumn="true"/> -->
-<!--             <viewColumn id="anomaly_rate" attributeType="anomaly_rate" isSelectColumn="true"/> -->
-<!--             <viewColumn id="completion_rate" attributeType="completion_rate" isSelectColumn="true"/> -->
-<!--             <viewColumn id="activities" attributeType="activities" isSelectColumn="true"/> -->
-<!--             <viewColumn id="selectivity" attributeType="selectivity"/> -->
-<!--             <viewColumn id="result_format" attributeType="result_format"/> -->
-<!--             <viewColumn id="deactivated" attributeType="deactivated"/> -->
-<!--             <viewColumn id="plannedstartdate" attributeType="plannedstartdate" isSelectColumn="true"/> -->
-<!--             <viewColumn id="plannedenddate" attributeType="plannedenddate" isSelectColumn="true"/> -->
-<!--             <viewColumn id="execution_date" attributeType="execution_date" isSortable="true" isSelectColumn="true"/> -->
-            <!-- cloned date attributes to support date-range filter -->
-<!--             <viewColumn id="plannedstartdate_clone" attributeType="plannedstartdate" mashzoneRelevant="false"/> -->
-<!--             <viewColumn id="plannedenddate_clone" attributeType="plannedenddate" mashzoneRelevant="false"/> -->
-<!--             <viewColumn id="execution_date_clone" attributeType="execution_date" mashzoneRelevant="false"/> -->
-            
+            <viewColumn id="ce_change_user" attributeType="change_user_id" isSortable="true" isSelectColumn="true"/>
+        
             <!-- Customizing for Mashzone -->
-            
             <viewColumn id="ce_controlexecstatus" attributeType="custom_controlexecstatus" mashzoneRelevant="true" isSelectColumn="true"/>
-            
             <!-- Customizing for Mashzone -->
+            
         </viewObject>
         <viewObject id="VO_cet_control" objectType="CONTROL">
             <viewColumn id="control_objId" attributeType="obj_id" isSelectColumn="true"/>
             <viewColumn id="control_name" attributeType="name" isSelectColumn="true"/>
+            <viewColumn id="c_ctrl_id" attributeType="control_id" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-<!--         <viewObject id="VO_cet_task" objectType="CONTROLEXECUTIONTASK"> -->
-<!--             <viewColumn id="ce_task_objId" attributeType="obj_id" isSelectColumn="true"/> -->
-<!--             <viewColumn id="ce_task_name" attributeType="name" isSelectColumn="true"/> -->
-<!--         </viewObject> -->
         <viewObject id="VO_cet_usergroup" objectType="USERGROUP">
             <viewColumn id="ownergroup_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="ownergroup_version_active" attributeType="version_active" mashzoneRelevant="false"/>
@@ -2749,38 +2733,17 @@
         </viewObject>
         <link linktype.id="6064" firstViewObject="VO_cet_control" secondViewObject="VO_cet_obj"/>
         <link linktype.id="6056" firstViewObject="VO_cet_obj" secondViewObject="VO_cet_usergroup"/>
-<!--         <link linktype.id="6055" firstViewObject="VO_cet_obj" secondViewObject="VO_cet_task"/> -->
         <link linktype.id="6057" firstViewObject="VO_cet_obj" secondViewObject="VO_cet_owner" joinType="LEFT"/>
-        <conditions>
-            <!-- arbitrary attributes -->
-            <compoundCondition conditionConnect="AND">
-                <!-- main object attributes -->
-<!--                 <condition column.id="client_sign" compareType="LIKE"/> -->
-<!--                 <condition column.id="obj_id" compareType="EQ"/> -->
-<!--                 <condition column.id="owner_status" compareType="EQ"/> -->
-<!--                 <condition column.id="due_status" compareType="EQ"/> -->
-<!--                 <condition column.id="version_active" compareType="EQ" value="true"/> -->
-<!--                 <condition column.id="activities" compareType="LIKE"/> -->
-<!--                 <condition column.id="selectivity" compareType="LIKE"/> -->
-<!--                 <condition column.id="result_format" compareType="LIKE"/> -->
-<!--                 <condition column.id="deactivated" compareType="EQ"/> -->
-<!--                 <condition column.id="execution_date" compareType="EQ"/> -->
-                <!-- date range -->
-<!--                 <condition column.id="plannedstartdate" compareType="GE"/> -->
-<!--                 <condition column.id="plannedenddate" compareType="LE"/> -->
-                <!-- attributes of the other objects -->
-<!--                 <condition column.id="control_name" compareType="LIKE"/> -->
-<!--                 <condition column.id="ce_task_name" compareType="LIKE"/> -->
-<!--                 <condition column.id="ownergroup_name" compareType="LIKE"/> -->
-<!--                 <condition column.id="ownergroup_version_active" compareType="EQ" value="true"/> -->
-<!--                 <condition column.id="owner_name" compareType="LIKE"/> -->
-                <!-- "owner" might not be set yet -->
-<!--                 <compoundCondition conditionConnect="OR"> -->
-<!--                     <condition column.id="owner_deactivated" compareType="EQ" value="false"/> -->
-<!--                     <condition column.id="owner_deactivated" compareType="ISNULL"/> -->
-<!--                 </compoundCondition> -->
-            </compoundCondition>
-        </conditions>
+    </view>
+
+	<!-- EV132664 - Desenvolver relatório no GRC  -->
+    <view id="customusers" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="USER" objectType="USER" isMainViewObject="true">
+            <viewColumn id="userid" attributeType="userid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="userid" attributeType="userid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+        </viewObject>
     </view>
 
 </custom>
