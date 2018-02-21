@@ -666,6 +666,7 @@
             <viewColumn id="testcase_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
 		    <viewColumn id="testcase_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/> 
 			<viewColumn id="tc_predecessor_otoid" attributeType="predecessor" mashzoneRelevant="true" isSelectColumn="true"/>
+			<viewColumn id="tc_origemteste" attributeType="origemteste" mashzoneRelevant="true" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
         </viewObject>
