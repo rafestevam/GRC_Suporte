@@ -2740,7 +2740,7 @@
     <view id="customusers" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
         <viewObject id="USER" objectType="USER" isMainViewObject="true">
             <viewColumn id="userid" attributeType="userid" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="userid" attributeType="userid" isSortable="true" isSelectColumn="true"/>
+<!--             <viewColumn id="username" attributeType="userid" isSortable="true" isSelectColumn="true"/> -->
             <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="version_active" attributeType="version_active"/>
         </viewObject>

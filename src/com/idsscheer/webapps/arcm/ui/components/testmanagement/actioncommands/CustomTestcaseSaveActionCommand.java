@@ -674,7 +674,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
 				controlFacade.releaseLock(controlOVID);
 				
-				break;
+				//break;
 				
 			}
 		
