@@ -1331,6 +1331,7 @@
             <viewColumn id="is_related_tc" attributeType="relatedTestcaseID" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="issue_version_active" attributeType="version_active" mashzoneRelevant="false"/>
             <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <viewColumn id="is_description" attributeType="description" mashzoneRelevant="true"/>
             
             <!-- Customizing for Mashzone -->
 
