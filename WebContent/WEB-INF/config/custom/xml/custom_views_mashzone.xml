@@ -1316,50 +1316,51 @@
         </conditions>
     </view>
 
-<!-- View to display all versions of the issues -->
+	<!-- View to display all versions of the issues -->
     <view id="issuedata2" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
         <viewObject id="VO_issuedata_issue" objectType="ISSUE" isMainViewObject="true">
-            <viewColumn id="is_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_prio" attributeType="priority" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_cat" attributeType="category" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_rem_date" attributeType="plannedenddate" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_own_stat" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_rev_stat" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_due_stat" attributeType="stateTime" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_created_by_tc" attributeType="created_by_testcase" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="is_related_tc" attributeType="relatedTestcaseID" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="issue_version_active" attributeType="version_active" mashzoneRelevant="false"/>
-            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
-            <viewColumn id="is_description" attributeType="description" mashzoneRelevant="true"/>
+	        <viewColumn id="is_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_prio" attributeType="priority" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_cat" attributeType="category" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_rem_date" attributeType="plannedenddate" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_own_stat" attributeType="owner_status" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_rev_stat" attributeType="reviewer_status" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_due_stat" attributeType="stateTime" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_created_by_tc" attributeType="created_by_testcase" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="is_related_tc" attributeType="relatedTestcaseID" isSortable="true" isSelectColumn="true"/>
+	        <viewColumn id="issue_version_active" attributeType="version_active" mashzoneRelevant="false"/>
+	        <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+	        <viewColumn id="is_description" attributeType="description" isSortable="true" isSelectColumn="true" mashzoneRelevant="true"/>
             
-            <!-- Customizing for Mashzone -->
+        	<!-- Customizing for Mashzone -->
 
-	    <viewColumn id="is_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
-	    <viewColumn id="is_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/>            
-	    <viewColumn id="is_acting_front" attributeType="acting_front" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_action_type" attributeType="action_type" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true"/>            
+		    <viewColumn id="is_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true"/>            
+		    <viewColumn id="is_acting_front" attributeType="acting_front" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_action_type" attributeType="action_type" mashzoneRelevant="true" isSelectColumn="true"/>
             
-	    <viewColumn id="is_issue_date" attributeType="issue_date" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_issuesource" attributeType="issuesource" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_issue_year" attributeType="issue_year" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_recurrent" attributeType="recurrent" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_issue_date" attributeType="issue_date" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_issuesource" attributeType="issuesource" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_issue_year" attributeType="issue_year" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_recurrent" attributeType="recurrent" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="is_replanned" attributeType="replanned" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="is_ra_residualfinal" attributeType="ra_residualfinal" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_ra_result" attributeType="ra_result" mashzoneRelevant="true" isSelectColumn="true"/>
+	    	<viewColumn id="is_ra_result" attributeType="ra_result" mashzoneRelevant="true" isSelectColumn="true"/>
 
-	    <viewColumn id="is_creator_status" attributeType="custom_is_creator_status" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_owner_status" attributeType="custom_is_owner_status" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_reviewer_status" attributeType="custom_is_reviewer_status" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_creator_status" attributeType="custom_is_creator_status" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_owner_status" attributeType="custom_is_owner_status" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_reviewer_status" attributeType="custom_is_reviewer_status" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="ap_creator_status" attributeType="custom_ap_creator_status" mashzoneRelevant="true" isSelectColumn="true"/>
             <viewColumn id="ap_owner_status" attributeType="custom_ap_owner_status" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="ap_reviewer_status" attributeType="custom_ap_reviewer_status" mashzoneRelevant="true" isSelectColumn="true"/>
+	    	<viewColumn id="ap_reviewer_status" attributeType="custom_ap_reviewer_status" mashzoneRelevant="true" isSelectColumn="true"/>
 
-	    <viewColumn id="is_cst_modelname" attributeType="cst_modelname" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <viewColumn id="is_cst_process" attributeType="cst_process" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <!-- Inicio REO 04.09.2017 - Riscos Corporativos -->
-	    <viewColumn id="is_cst_actiontype" attributeType="action_type" mashzoneRelevant="true" isSelectColumn="true"/>
-	    <!-- Final REO 04.09.2017 - Riscos Corporativos -->
+		    <viewColumn id="is_cst_modelname" attributeType="cst_modelname" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <viewColumn id="is_cst_process" attributeType="cst_process" mashzoneRelevant="true" isSelectColumn="true"/>
+		    
+		    <!-- Inicio REO 04.09.2017 - Riscos Corporativos -->
+		    <viewColumn id="is_cst_actiontype" attributeType="action_type" mashzoneRelevant="true" isSelectColumn="true"/>
+		    <!-- Final REO 04.09.2017 - Riscos Corporativos -->
             
             <!-- Customizing for Mashzone -->
             
@@ -1373,7 +1374,10 @@
         </viewObject>
         <viewObject id="VO_issuedata_owner" objectType="USER">
             <viewColumn id="is_own_id" attributeType="obj_id" mashzoneRelevant="false"/>
-            <viewColumn id="is_own" attributeType="name"/>
+            <!-- Início FCT 23.02.2018 - EV132664 - Relatório Riscos Corporativos -->
+<!--             <viewColumn id="is_own" attributeType="name" mashzoneRelevant="true"/> -->
+            <viewColumn id="is_own" attributeType="name" isSortable="true" isSelectColumn="true" mashzoneRelevant="true"/>
+            <!-- Fim FCT 23.02.2018 - EV132664 - Relatório Riscos Corporativos -->
         </viewObject>
         <viewObject id="VO_issuedata_reviewer" objectType="USER">
             <viewColumn id="is_rev_id" attributeType="obj_id" mashzoneRelevant="false"/>
@@ -1389,7 +1393,6 @@
         <link linktype.id="3102" firstViewObject="VO_issuedata_issue" secondViewObject="VO_issuedata_iro" joinType="LEFT"/>
         <conditions>
             <compoundCondition conditionConnect="AND">
-<!--                 <condition column.id="issue_version_active" compareType="EQ" value="true"/> -->
                 <condition column.id="deactivated" compareType="EQ" value="false"/>
             </compoundCondition>
         </conditions>
