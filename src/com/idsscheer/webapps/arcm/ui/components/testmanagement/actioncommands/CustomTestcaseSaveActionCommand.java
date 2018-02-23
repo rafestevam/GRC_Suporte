@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -39,6 +40,7 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IEnumAttributeType;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
+import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
 import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
@@ -383,6 +385,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		double cntInef2Line = 0;
 		double cntInef3Line = 0;
 		
+		String riskResidualFinal2 = "";
+		String riskResidual2Line = "";
+		String riskResidualFinal3 = "";
+		String riskResidual3Line = "";
+		
 		try{
 			
 			//Inicio REO - 27.09.2017 - EV113345
@@ -399,13 +406,55 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getFullGrantUserContext());
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
-			//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+			if (this.origemTeste.equals("1linhadefesa")){
+				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countTotal2line);
+				
+				String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+				String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
+				
+				cntInef2Line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
+				cntTotal2Line = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(cntInef2Line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL2LINE).setRawValue(cntTotal2Line);
+				
+				if(!this.riscoPotencial.equals("Nao Avaliado")){
+					riskResidual2Line = this.riskResidualFinal(this.riscoPotencial, riskClass2line);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual2Line);
+					
+					riskResidualFinal2 = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal2);
+				}
+			}
 			
+			if (this.origemTeste.equals("2linhadefesa")){
+				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef3line, this.countTotal3line);
+				
+				String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+				String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
+				
+				cntInef3Line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
+				cntTotal3Line = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(cntInef3Line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(cntTotal3Line);
+				
+				if(!this.riscoPotencial.equals("Nao Avaliado")){
+					riskResidual3Line = this.riskResidualFinal(this.riscoPotencial, riskClass3line);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line);
+					
+					riskResidualFinal3 = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal3);
+				}
+				
+			}
 			//Fim Inclusão - REO - 14.02.2018 - EV1333332
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332
 			//Alteração da logica do calculo de Risco Residual
-			for(IAppObj controlObj : controlList){
+			/*for(IAppObj controlObj : controlList){
 				
 				//REO 17.08.2017 - EV108436
 				if(controlObj.getVersionData().isDeleted())
@@ -611,7 +660,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			String riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			log.info("Classificacao Res Final: " + riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).getRawValue());
-			log.info("Residual Final Calculado...");
+			log.info("Residual Final Calculado...");*/
 			//Fim Exclusao - REO - 14.02.2018 - EV1333332
 			
 			log.info("Salvando Risco");
@@ -628,6 +677,31 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		
 	}
 	
+	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception  {
+		Object objReturn = null;
+		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
+		
+		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
+		while(iterator.hasNext()){
+			
+			Entry<String, String> entry = iterator.next();
+			
+			if(entry.getKey().equals("classification") && valueType.equals("classification"))
+				objReturn = (String)entry.getValue();
+			
+			if(entry.getKey().equals("rate") && valueType.equals("rate"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("total") && valueType.equals("total"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+		}
+		return objReturn;
+	}
+
 	private void controlClassification(List<IAppObj> controlList) throws Exception{
 		
 		//Inicio REO - 27.09.2017 - EV113345

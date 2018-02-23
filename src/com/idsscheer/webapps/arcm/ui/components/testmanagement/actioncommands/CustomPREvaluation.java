@@ -29,7 +29,7 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 		
 		IAppObj riskObj = this.formModel.getAppObj();
 		List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
-		RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, new Double(0), new Double(0));
+		RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
 		
 		this.notificationDialog.setHeaderMessageKey("message.corp_risk_evaluation.DBI");
 		

@@ -11,17 +11,30 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAt
 public class RiskAndControlCalculation {
 
 	private List<IAppObj> controlList;
+	private double countInef;
+	private double countTotal;
 
 	public RiskAndControlCalculation(List<IAppObj> controlList) {
 		this.controlList = controlList;
+		this.countInef = 0;
+		this.countTotal = 0;
+	}
+	
+	public RiskAndControlCalculation(List<IAppObj> controlList, double countInef, double countTotal) {
+		this.controlList = controlList;
+		this.countInef = countInef;
+		this.countTotal = countTotal;
 	}
 	
 	public Map<String, String> calculateControlRate(DefLineEnum defLine) {
 		
 		Map<String, String> returnMap = new HashMap<String, String>();
-		double countInef = 0;
-	    double countTotal = 0;
 	    double riskVuln = 0;
+	    double countInef = 0;
+	    double countTotal = 0;
+	    
+	    countInef += this.countInef;
+	    countTotal += this.countTotal;
 		
 		for(IAppObj controlObj : controlList){
 			
