@@ -26,15 +26,24 @@ public class CustomRiskForm extends Form {
 	
 	@Override
 	protected void renderButtons(List<IButtonType> activeButtonTypes) {
-		activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_PR_VALIDATION);	
+		activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_PR_VALIDATION);
+		super.renderButtons(activeButtonTypes);
+	}
+	
+	@Override
+	protected void renderJavaScriptIncludes() {
+		
+		List<String> jsScripts = new ArrayList<String>();
+		jsScripts.add("custom_corprisk_eval");
+		this.renderJavaScriptRef(jsScripts);
+		
+		super.renderJavaScriptIncludes();
 	}
 	
 	@Override
 	protected void renderPage(IPage page) {
 		
-		List<String> jsScripts = new ArrayList<String>();
-		jsScripts.add("custom_corprisk_eval");
-		this.renderJavaScriptRef(jsScripts);
+		super.renderPage(page);
 		
 		IAppObj riskObj = this.form.getAppObj();
 		List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.environment.getUserContext());
@@ -81,7 +90,7 @@ public class CustomRiskForm extends Form {
 								.append("<td colspan=\"2\" class=\"ATTR_VALUE_WIDTH NO_BORDER NO_MARGIN NO_PADDING CONTENT_ATTR_DATA_READ\">")
 								.append("<table class=\"ATTR_DATA_TABLE NO_BORDER NO_MARGIN NO_PADDING\">")
 								.append("<tbody><tr class=\"\"><td class=\"TEXTFIELD_READ\">")
-								.append("<a href=\"#\">Avaliação de Risco Residual</a>")
+								.append("<a href=\"#\" id=\"cst_residual_eval\">Avaliação de Risco Residual</a>")
 								.append("</td></tr></tbody></table>").append("</td>")
 								.append("</tr>");
 						}
