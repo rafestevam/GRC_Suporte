@@ -28,7 +28,6 @@
         <button id="LISTROW_CSTDETACHCR" defaultFunction="aam_listcommand('detach','[id]','_parent')"/>
     </buttonDefinition>
     
-    
     <!-- Inicio REO - 12.09.2017 - Riscos Corporativos -->
     <buttonDefinition id="customCRValidation" image="/iconlib/icons/content/evaluation.png">
     	<button id="CST_CR_VALIDATION" defaultFunction="aam_objectcommand('customcrvalidation', null, null, '_parent')" />
@@ -38,6 +37,16 @@
     <!-- Inicio REO - 20.02.2017 - EV133332 -->
     <buttonDefinition id="customPRValidation" image="/iconlib/icons/content/evaluation.png">
     	<button id="CST_PR_VALIDATION" defaultFunction="aam_objectcommand('customprvalidation', null, null, '_parent')"/>
+    </buttonDefinition>
+    
+    <buttonDefinition id="customCRAttach" image="iconlib/icons/add_anchor_link_16.png" requireLock="true">
+    	<button id="CST_CR_REVATTACH" defaultFunction="aam_listcommand('customcrattach', null, '_parent')" />
+    	<button id="CST_CR_REVATTACHROW" defaultFunction="aam_listcommand('customcrattach', '[id]', '_parent')" />
+    </buttonDefinition>
+    
+    <buttonDefinition id="customCRDetach" image="iconlib/icons/detach_anchor_link_16.png" requireLock="true">
+    	<button id="CST_CR_REVDETACH" defaultFunction="aam_listcommand('customcrdetach', null, '_parent')" />
+    	<button id="CST_CR_REVDETACHROW" defaultFunction="aam_listcommand('customcrdetach', '[id]', '_parent')" />
     </buttonDefinition>
  	<!-- Fim REO - 20.02.2017 - EV133332 -->
  

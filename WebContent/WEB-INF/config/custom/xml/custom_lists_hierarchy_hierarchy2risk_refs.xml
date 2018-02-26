@@ -42,10 +42,12 @@
 		<column id="LC_hierarchy2risk_refs_1_2" dataReference.idref="description" />
 		<listButtons>
 			<buttonReference button.idref="LIST_ATTACH_DEST" function="aam_initlist('riskcategory2risk_rev_sel')"/>
-			<buttonReference button.idref="LIST_REVERSE_DETACH" />
+<!-- 			<buttonReference button.idref="LIST_REVERSE_DETACH" /> -->
+			<buttonReference button.idref="CST_CR_REVDETACH" />
 		</listButtons>
 		<rowButtons>
-			<buttonReference button.idref="LISTROW_REVERSE_DETACH"/>
+<!-- 			<buttonReference button.idref="LISTROW_REVERSE_DETACH"/> -->
+			<buttonReference button.idref="CST_CR_REVDETACHROW"/>
 		</rowButtons>
 	</list>
 

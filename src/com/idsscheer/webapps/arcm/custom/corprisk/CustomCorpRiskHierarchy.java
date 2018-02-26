@@ -264,7 +264,10 @@ public class CustomCorpRiskHierarchy {
 				IOVID riskOVID = OVIDFactory.getOVID(riskID, riskVersionNumber);
 				IAppObj riskAppObj = riskFacade.load(riskOVID, defaultTransaction, true);
 				
-				retCorprisk.add(riskAppObj);
+				IOVID headOVID = riskAppObj.getVersionData().getHeadOVID();
+				IAppObj riskObj = riskFacade.load(headOVID, defaultTransaction, true);
+				
+				retCorprisk.add(riskObj);
 			}
 			
 		}catch(Exception e){

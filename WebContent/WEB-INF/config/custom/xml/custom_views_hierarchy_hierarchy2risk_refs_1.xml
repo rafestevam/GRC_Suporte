@@ -3,7 +3,7 @@
 	xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
 	<!-- Risks, which are assigned to a hierarchy over master data -->
-	<view id="hierarchy2risk_refs_1" view.parameter="DISTINCT">
+	<view id="hierarchy2risk_refs_1" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
 		<viewObject id="VO_hierarchy2risk_refs_1_Orgunit"
 			objectType="HIERARCHY">
 			<viewColumn id="id_orgH" attributeType="obj_id" />
