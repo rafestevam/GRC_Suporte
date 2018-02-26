@@ -134,6 +134,8 @@
             
             <!-- EV132664 - Relatório Risco Corporativo -->
             <viewColumn id="r_description" attributeType="description" mashzoneRelevant="true" isSelectColumn="true"/>
+            <viewColumn id="r_cause" attributeType="cause" mashzoneRelevant="true" isSelectColumn="true"/>
+            <viewColumn id="r_consequence" attributeType="consequence" mashzoneRelevant="true" isSelectColumn="true"/>
            
             <!-- Customizing for Mashzone -->            
 
