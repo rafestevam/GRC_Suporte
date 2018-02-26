@@ -62,6 +62,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	final Logger log = Logger.getLogger(CustomTestcaseSaveActionCommand.class.getName());
 	private double countInef2line = 0;
 	private double countInef3line = 0;
+	private double countEf2line = 0;
+	private double countEf3line = 0;
 	private double countTotal2line = 0;
 	private double countTotal3line = 0;
 	private long tdObjectId = 0;
@@ -98,8 +100,13 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			if(this.origemTeste.equals("2linhadefesa"))
 				this.countTotal3line += 1;
 			
-			if(ownerStatus.getId().equals("effective"))
+			if(ownerStatus.getId().equals("effective")){
 				this.fernanda = "effective";
+				if(this.origemTeste.equals("1linhadefesa"))
+					this.countEf2line += 1;
+				if(this.origemTeste.equals("2linhadefesa"))
+					this.countEf3line += 1;
+			}
 			
 			if(ownerStatus.getId().equals("noneffective")){
 				this.fernanda = "noneffective";
@@ -407,7 +414,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 			if (this.origemTeste.equals("1linhadefesa")){
-				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countTotal2line);
+				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countEf2line, this.countTotal2line);
 				
 				String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
 				String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
@@ -429,7 +436,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			}
 			
 			if (this.origemTeste.equals("2linhadefesa")){
-				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef3line, this.countTotal3line);
+				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef3line, this.countEf3line, this.countTotal3line);
 				
 				String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
 				String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);

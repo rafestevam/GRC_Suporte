@@ -57,6 +57,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	final Logger log = Logger.getLogger(CustomSaveCEActionCommand.class.getName());
 	private String ceControlExec = "";
 	private double countInef = 0;
+	private double countEf = 0;
 	private long cetObjectId = 0;
 	private IUserContext jobCtx; //REO+ 27.09.2017 - EV113345
 
@@ -76,8 +77,10 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			String ceStatus = this.requestContext.getParameter(IControlexecutionAttributeTypeCustom.STR_CUSTOMCTRLEXECSTATUS);
 			this.ceControlExec = this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS);
 			
-			if(ceStatus.equals("1"))
+			if(ceStatus.equals("1")){
 				this.currStatus = "effective";
+				this.countEf += 1;
+			}
 			
 			if(ceStatus.equals("2")){
 				this.currStatus = "ineffective";
@@ -387,7 +390,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, new Double(1).doubleValue());
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, this.countEf, new Double(1).doubleValue());
 			
 			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
 			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);

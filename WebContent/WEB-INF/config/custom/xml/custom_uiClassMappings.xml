@@ -3,12 +3,16 @@
 
 	<uiClassMapping>
 		
-		<!-- Inicio REO - 18.08.2017 - Riscos Corporativos -->
 		<controls>
+			<!-- Inicio REO - 18.08.2017 - Riscos Corporativos -->
 			<control name="customhierarchyform" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.control.object.CustomHierarchyForm" />
+			<!-- Fim REO - 18.08.2017 - Riscos Corporativos -->
+			
+			<!-- Inicio REO - 26.02.2018 - EV133332 -->
+			<control name="customriskform" clsName="com.idsscheer.webapps.arcm.ui.components.risk.control.object.CustomRiskForm" />
+			<!-- Fim REO - 26.02.2018 - EV133332 -->
 		</controls>
-		<!-- Fim REO - 18.08.2017 - Riscos Corporativos -->
-	
+		
 	</uiClassMapping>
 
 </custom>

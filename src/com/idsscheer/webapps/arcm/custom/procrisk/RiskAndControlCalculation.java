@@ -13,16 +13,20 @@ public class RiskAndControlCalculation {
 	private List<IAppObj> controlList;
 	private double countInef;
 	private double countTotal;
+	private double countEf;
 
 	public RiskAndControlCalculation(List<IAppObj> controlList) {
 		this.controlList = controlList;
 		this.countInef = 0;
 		this.countTotal = 0;
+		this.countEf = 0;
+
 	}
 	
-	public RiskAndControlCalculation(List<IAppObj> controlList, double countInef, double countTotal) {
+	public RiskAndControlCalculation(List<IAppObj> controlList, double countInef, double countEf, double countTotal) {
 		this.controlList = controlList;
 		this.countInef = countInef;
+		this.countEf = countEf;
 		this.countTotal = countTotal;
 	}
 	
@@ -31,10 +35,12 @@ public class RiskAndControlCalculation {
 		Map<String, String> returnMap = new HashMap<String, String>();
 	    double riskVuln = 0;
 	    double countInef = 0;
+	    double countEf = 0;
 	    double countTotal = 0;
 	    
 	    countInef += this.countInef;
 	    countTotal += this.countTotal;
+	    countEf += this.countEf;
 		
 		for(IAppObj controlObj : controlList){
 			
@@ -42,23 +48,31 @@ public class RiskAndControlCalculation {
 			
 			if(defLine.equals(DefLineEnum.LINE_1)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+					countEf += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_2)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+					countEf += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_3)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+					countEf += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_F)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("ineffective"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+					countEf += 1;
 			}
 			
 		}
@@ -69,6 +83,7 @@ public class RiskAndControlCalculation {
 		returnMap.put("rate", String.valueOf(riskVuln));
 		returnMap.put("total", String.valueOf(countTotal));
 		returnMap.put("ineffective", String.valueOf(countInef));
+		returnMap.put("effective", String.valueOf(countEf));
 		
 		return returnMap;
 		

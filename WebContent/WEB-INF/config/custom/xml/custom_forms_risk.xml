@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
-    <form id="FORM_RISK">
+    <form id="FORM_RISK" controlName="customriskform">
         <logToolbarButtons>
             <buttonReference button.idref="ARIS_REPORT"/>
         </logToolbarButtons>
@@ -188,6 +188,7 @@
                         <parameter name="selectionList" value="AUTO"/>
                     </element>
                 </row>
+                <row id="cst_residual_eval" />
             </rowGroup>
             
             <!-- GRC29 : Exclusão de atributos desnecessários -->

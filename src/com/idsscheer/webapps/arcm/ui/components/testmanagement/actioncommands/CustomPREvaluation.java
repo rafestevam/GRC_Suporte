@@ -20,6 +20,7 @@ import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseCacheActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 public class CustomPREvaluation extends BaseCacheActionCommand{
 	
@@ -37,24 +38,28 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 		
 		//Resultados - 1ª Linha
 		this.notificationDialog.addInfo("Controles Inefetivos - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1)));
+		this.notificationDialog.addInfo("Controles Efetivos - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_1)));
 		this.notificationDialog.addInfo("Controles Totais - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1)));
 		this.notificationDialog.addInfo("Ponderação - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_1)));
 		this.notificationDialog.addInfo("Classificação - 1ª Linha: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1));
 		
 		//Resultados - 2ª Linha
 		this.notificationDialog.addInfo("Controles Inefetivos - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2)));
+		this.notificationDialog.addInfo("Controles Efetivos - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_2)));
 		this.notificationDialog.addInfo("Controles Totais - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2)));
 		this.notificationDialog.addInfo("Ponderação - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_2)));
 		this.notificationDialog.addInfo("Classificação - 2ª Linha: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2));
 		
 		//Resultados - 3ª Linha
 		this.notificationDialog.addInfo("Controles Inefetivos - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3)));
+		this.notificationDialog.addInfo("Controles Efetivos - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_3)));
 		this.notificationDialog.addInfo("Controles Totais - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3)));
 		this.notificationDialog.addInfo("Ponderação - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_3)));
 		this.notificationDialog.addInfo("Classificação - 3ª Linha: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3));
 		
 		//Resultados - Final
 		this.notificationDialog.addInfo("Controles Inefetivos - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_F)));
+		this.notificationDialog.addInfo("Controles Efetivos - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_F)));
 		this.notificationDialog.addInfo("Controles Totais - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_F)));
 		this.notificationDialog.addInfo("Ponderação - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_F)));
 		this.notificationDialog.addInfo("Classificação - Final: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F));
@@ -85,6 +90,9 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 				objReturn = (Double)Double.valueOf(entry.getValue());
 			
 			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("effective") && valueType.equals("effective"))
 				objReturn = (Double)Double.valueOf(entry.getValue());
 			
 		}

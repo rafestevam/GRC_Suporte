@@ -5,5 +5,6 @@ import com.idsscheer.webapps.arcm.config.metadata.button.IButtonType;
 public interface ButtonTypesCustom extends ButtonTypes {
 	
 	public static final IButtonType CUSTOM_CR_EVALUATION = ButtonTypeConstantsUtil.create("customCRValidation");
+	public static final IButtonType CUSTOM_PR_VALIDATION = ButtonTypeConstantsUtil.create("customPRValidation");
 
 }
