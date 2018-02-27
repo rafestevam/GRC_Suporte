@@ -46,10 +46,16 @@
 		<column id="LC_1_4" dataReference.idref="description" />
         <listButtons>
             <buttonReference button.idref="BACK" function="aam_initlist('hierarchy2risk_refs','tabcontent')"/>
-            <buttonReference button.idref="LIST_REVERSE_ATTACH"/>
+            <!-- Inicio Alteração - REO - 27.02.2018 - EV133332 -->
+<!--             <buttonReference button.idref="LIST_REVERSE_ATTACH"/> -->
+			<buttonReference button.idref="CST_CR_REVATTACH" />
+			<!-- Fim Alteração - REO - 27.02.2018 - EV133332 -->
         </listButtons>
         <rowButtons>
-            <buttonReference button.idref="LISTROW_REVERSE_ATTACH"/>
+        	<!-- Inicio Alteração - REO - 27.02.2018 - EV133332 -->
+<!--             <buttonReference button.idref="LISTROW_REVERSE_ATTACH"/> -->
+			<buttonReference button.idref="CST_CR_REVATTACHROW"/>
+			<!-- Fim Alteração - REO - 27.02.2018 - EV133332 -->
         </rowButtons>
     </list>
 

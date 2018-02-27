@@ -82,8 +82,10 @@
 			
 			<!-- Inicio REO - 26.02.2018 - EV133332 -->
 			<commandSet name="hierarchy2risk_refs">
-		    	<actionCommand commandId="customcrattach" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCRAttach"/>
 		    	<actionCommand commandId="customcrdetach" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCRDetach"/>
+		    </commandSet>
+		    <commandSet name="riskcategory2risk_rev_sel">
+		    	<actionCommand commandId="customcrattach" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCRAttach"/>
 		    </commandSet>
 		    <!-- Fim REO - 26.02.2018 - EV133332 -->
 			

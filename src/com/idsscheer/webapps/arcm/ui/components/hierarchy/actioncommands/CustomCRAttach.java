@@ -17,9 +17,11 @@ public class CustomCRAttach extends BaseReverseAttachmentActionCommand {
 	
 	@Override
 	protected void execute() {
-		
 		super.execute();
-		
+	}
+	
+	@Override
+	protected void afterExecute() {
 		IUserContext jobCtx = this.getJobContext();
 		
 		try{
@@ -37,7 +39,6 @@ public class CustomCRAttach extends BaseReverseAttachmentActionCommand {
 		}catch(Exception e){
 			this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, e.getMessage(), "");
 		}
-
 	}
 
 	private IUserContext getJobContext() {

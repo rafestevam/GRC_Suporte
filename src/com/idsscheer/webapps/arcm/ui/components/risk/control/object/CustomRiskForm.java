@@ -1,20 +1,12 @@
 package com.idsscheer.webapps.arcm.ui.components.risk.control.object;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ButtonTypesCustom;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations.USERROLE_TYPE;
 import com.idsscheer.webapps.arcm.config.metadata.button.IButtonType;
 import com.idsscheer.webapps.arcm.config.metadata.form.IPage;
-import com.idsscheer.webapps.arcm.config.metadata.form.IRowgroup;
-import com.idsscheer.webapps.arcm.config.metadata.uicommon.IRow;
-import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
-import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.ui.framework.controls.object.Form;
 
 public class CustomRiskForm extends Form {
@@ -26,18 +18,12 @@ public class CustomRiskForm extends Form {
 	
 	@Override
 	protected void renderButtons(List<IButtonType> activeButtonTypes) {
-		activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_PR_VALIDATION);
+		if (this.form.getUserContext().getUserRights().hasRole(USERROLE_TYPE.RISKMANAGER)){
+			activeButtonTypes.add(ButtonTypesCustom.CUSTOM_PR_VALIDATION);
+		}else{
+			activeButtonTypes.remove(ButtonTypesCustom.CUSTOM_PR_VALIDATION);
+		}
 		super.renderButtons(activeButtonTypes);
-	}
-	
-	@Override
-	protected void renderJavaScriptIncludes() {
-		
-		List<String> jsScripts = new ArrayList<String>();
-		jsScripts.add("custom_corprisk_eval");
-		this.renderJavaScriptRef(jsScripts);
-		
-		super.renderJavaScriptIncludes();
 	}
 	
 	@Override
@@ -45,7 +31,7 @@ public class CustomRiskForm extends Form {
 		
 		super.renderPage(page);
 		
-		IAppObj riskObj = this.form.getAppObj();
+		/*IAppObj riskObj = this.form.getAppObj();
 		List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.environment.getUserContext());
 		RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
 		
@@ -101,11 +87,11 @@ public class CustomRiskForm extends Form {
 			}
 			
 			this.buffer.append("<input type=\"hidden\" value=\"" + sb.toString() + "\" id=\"cst_residual_eval\">");		
-		}
+		}*/
 		
 	}
 	
-	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) {
+	/*private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) {
 		Object objReturn = null;
 		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
 		
@@ -131,7 +117,7 @@ public class CustomRiskForm extends Form {
 			
 		}
 		return objReturn;
-	}
+	}*/
 
 
 }
