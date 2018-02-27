@@ -419,6 +419,12 @@
             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueOverdueJob"/>
         </enumitem>
         
+        <!-- Inicio REO - 27.02.2018 - EV133332 -->
+        <enumitem id="CorpRiskFixingJob" value="52">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CorpRiskFixingJob"/>
+        </enumitem>
+        <!-- Fim REO - 27.02.2018 - EV133332 -->
+        
         <!-- GRC 82 -->
 <!-- 		<enumitem id="updateIssueSLAUpdateJob" value="54"> -->
 <!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/> -->
@@ -436,7 +442,7 @@
 <!--         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.RADelayMailJob"/> -->
 <!--         </enumitem> -->
         
-<!--         <enumitem id="CEDelayMailJob" value="52"> -->
+<!--         <enumitem id="CEDelayMailJob" value="54"> -->
 <!--         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.CEDelayMailJob"/> -->
 <!--         </enumitem> -->
         <!-- /GRC14 -->

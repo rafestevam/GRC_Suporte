@@ -396,8 +396,8 @@
         <!-- JobListCleaningJob: removes job history entries -->
         <parameterList name="jobListCleaningJob">
             <parameter name="jobitem" value="jobListCleaningJob" />
-            <parameter name="startScheduler" value="false"/>
-            <parameter name="executionTime" value="0 02 07 ? * SUN-SAT"/>
+            <parameter name="startScheduler" value="true"/>
+            <parameter name="executionTime" value="0 10 15 ? * SUN-SAT"/>
             <!-- comma separated client-signs of clients that should be excluded -->
             <parameter name="clientexcludinglist" value=""/>
             <!-- please do not edit -->
@@ -407,13 +407,25 @@
         </parameterList>
         
         
-        <parameterList name="IssueOverdueJob">
-            <parameter name="jobitem" value="IssueOverdueJob" />
+<!--         <parameterList name="IssueOverdueJob"> -->
+<!--             <parameter name="jobitem" value="IssueOverdueJob" /> -->
+<!--             <parameter name="startScheduler" value="true"/> -->
+<!--             <parameter name="executionTime" value="0 30 15 ? * SUN-SAT"/> -->
+<!--             <parameter name="clientexcludinglist" value=""/> -->
+            <!-- please do not edit -->
+<!--             <parameter name="className" value="IssueOverdueJob"/> -->
+            <!-- please do not edit -->
+<!--             <parameter name="clientbased" value="false"/> -->
+<!--         </parameterList> -->
+        
+        <!-- EV133332 - Corp Risk Fixing Job -->
+        <parameterList name="CorpRiskFixingJob">
+            <parameter name="jobitem" value="CorpRiskFixingJob" />
             <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 53 19 ? * SUN-SAT"/>
+            <parameter name="executionTime" value="0 10 16 ? * SUN-SAT"/>
             <parameter name="clientexcludinglist" value=""/>
             <!-- please do not edit -->
-            <parameter name="className" value="IssueOverdueJob"/>
+            <parameter name="className" value="CorpRiskFixingJob"/>
             <!-- please do not edit -->
             <parameter name="clientbased" value="false"/>
         </parameterList>
@@ -438,7 +450,7 @@
         <parameterList name="CEDelayMailJob">
         	<parameter name="jobitem" value="CEDelayMailJob"/>
         	<parameter name="startScheduler" value="true"/>
-        	<parameter name="executionTime" value="0 36 15 ? * SUN-SAT"/>
+        	<parameter name="executionTime" value="0 42 15 ? * SUN-SAT"/>
         	<parameter name="clientexcludinglist" value="" />
         	<parameter name="className" value="CEDelayMailJob" />
         	<parameter name="clientbased" value="false"/>
