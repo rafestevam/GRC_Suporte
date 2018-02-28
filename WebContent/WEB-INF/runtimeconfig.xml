@@ -419,13 +419,25 @@
 <!--         </parameterList> -->
         
         <!-- EV133332 - Corp Risk Fixing Job -->
-        <parameterList name="CorpRiskFixingJob">
-            <parameter name="jobitem" value="CorpRiskFixingJob" />
+<!--         <parameterList name="CorpRiskFixingJob"> -->
+<!--             <parameter name="jobitem" value="CorpRiskFixingJob" /> -->
+<!--             <parameter name="startScheduler" value="true"/> -->
+<!--             <parameter name="executionTime" value="0 59 14 ? * SUN-SAT"/> -->
+<!--             <parameter name="clientexcludinglist" value=""/> -->
+            <!-- please do not edit -->
+<!--             <parameter name="className" value="CorpRiskFixingJob"/> -->
+            <!-- please do not edit -->
+<!--             <parameter name="clientbased" value="false"/> -->
+<!--         </parameterList> -->
+        
+        <!-- EV133332 - Adjust Control 1st Line Effectiveness Job -->
+        <parameterList name="AdjustControl1Line">
+            <parameter name="jobitem" value="AdjustControl1Line" />
             <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 10 16 ? * SUN-SAT"/>
+            <parameter name="executionTime" value="0 00 15 ? * SUN-SAT"/>
             <parameter name="clientexcludinglist" value=""/>
             <!-- please do not edit -->
-            <parameter name="className" value="CorpRiskFixingJob"/>
+            <parameter name="className" value="AdjustControl1Line"/>
             <!-- please do not edit -->
             <parameter name="clientbased" value="false"/>
         </parameterList>
