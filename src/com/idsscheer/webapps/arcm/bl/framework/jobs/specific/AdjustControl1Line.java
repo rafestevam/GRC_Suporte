@@ -19,7 +19,6 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
-import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations.JOBENDSTATE;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
@@ -36,9 +35,9 @@ import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.J
 @CanBeScheduled
 public class AdjustControl1Line extends BaseJob {
 
-	//private static final long serialVersionUID = 1L;
-	//public static final String JOB_NAME_KEY = "enumeration.jobs.AdjustControl1Line.DBI";
-	public static final String JOB_NAME_KEY = "TESTE_1";
+	private static final long serialVersionUID = 1L;
+	public static final String JOB_NAME_KEY = "enumeration.jobs.AdjustControl1Line.DBI";
+	//public static final String JOB_NAME_KEY = "TESTE_1";
 
 	public AdjustControl1Line(IOVID executingUserOvid, Locale executingUserLocale) {
 		super(executingUserOvid, executingUserLocale);
@@ -184,7 +183,7 @@ public class AdjustControl1Line extends BaseJob {
 	@Override
 	public IEnumerationItem getJobType() {
 		// TODO Auto-generated method stub
-		return EnumerationsCustom.JOBS.MONITORJOB;
+		return EnumerationsCustom.JOBS.JOBLISTCLEANINGJOB;
 	}
 
 }

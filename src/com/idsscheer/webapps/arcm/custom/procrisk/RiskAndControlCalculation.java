@@ -44,7 +44,7 @@ public class RiskAndControlCalculation {
 		
 		for(IAppObj controlObj : controlList){
 			
-			countTotal += 1;
+			//countTotal += 1;
 			
 			if(defLine.equals(DefLineEnum.LINE_1)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
@@ -75,9 +75,15 @@ public class RiskAndControlCalculation {
 					countEf += 1;
 			}
 			
+			countTotal += 1;
+			
 		}
 		
-		riskVuln = (countInef / countTotal);
+		try{
+			riskVuln = (countInef / countTotal);
+		}catch(Exception e){
+			throw e;
+		}
 		
 		returnMap.put("classification", this.riskClassification(riskVuln));
 		returnMap.put("rate", String.valueOf(riskVuln));

@@ -160,8 +160,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
 					
 					//Inicio REO 21.02.2018 - EV133332
-					//List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getUserContext());
-					List<IAppObj> controlList = riskParentObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
+					List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext());
+					//List<IAppObj> controlList = riskParentObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
 					//Fim REO 21.02.2018 - EV133332
 					
 					this.controlClassification(controlList);
@@ -414,7 +414,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 			if (this.origemTeste.equals("1linhadefesa")){
-				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countEf2line, this.countTotal2line);
+				//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countEf2line, this.countTotal2line);
+				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
 				
 				String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
 				String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
@@ -716,17 +717,35 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
 		//Fim REO - 27.09.2017 - EV113345
 		
+		List<IAppObj> controlUpdList = new ArrayList<>();
+		IAppObjQuery query = controlFacade.createQuery();
+		for (IAppObj controlObj : controlList) {
+			
+			query.addRestriction(
+					QueryRestriction.eq(
+							IControlAttributeTypeCustom.ATTR_CONTROL_ID, 
+							controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue()));
+			
+			IAppObjIterator iterator = query.getResultIterator();
+			while(iterator.hasNext()){
+				IAppObj controlUpd = iterator.next();
+				if(!controlUpd.getVersionData().isDeleted())
+					controlUpdList.add(controlUpd);
+			}
+		}
+		
 		IOVID ovid = null;
 		try{
 		
-			Iterator itControl = controlList.iterator();
+			//Iterator itControl = controlList.iterator();
+			Iterator itControl = controlUpdList.iterator();
 			while(itControl.hasNext()){
 				
 				IAppObj controlObj = (IAppObj)itControl.next();
 				IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
 				ovid = controlOVID;
 				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
-				controlFacade.allocateLock(controlOVID, LockType.FORCEWRITE);
+				controlFacade.allocateLock(controlOVID, LockType.TYPEDFORCEWRITE);
 				
 				//REO 08.08.2017 - EV108028
 				//if(this.fernanda.equals("ineffective")){ 

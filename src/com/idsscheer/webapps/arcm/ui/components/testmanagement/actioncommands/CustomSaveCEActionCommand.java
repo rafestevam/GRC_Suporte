@@ -390,7 +390,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, this.countEf, new Double(1).doubleValue());
+			//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, this.countEf, new Double(1).doubleValue());
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
 			
 			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
 			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
