@@ -428,7 +428,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				
 				if(!this.riscoPotencial.equals("Nao Avaliado")){
 					riskResidual2Line = this.riskResidualFinal(this.riscoPotencial, riskClass2line);
-					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual2Line);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
 					
 					riskResidualFinal2 = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal2);
