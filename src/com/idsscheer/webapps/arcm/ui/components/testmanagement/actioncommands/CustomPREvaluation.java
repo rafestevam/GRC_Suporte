@@ -32,7 +32,7 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 		
 		IAppObj riskObj = this.formModel.getAppObj();
 		List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
-		RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+		RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
 		
 		this.notificationDialog.setHeaderMessageKey("message.corp_risk_evaluation.DBI");
 		
@@ -42,28 +42,28 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 		this.notificationDialog.addInfo("Controles Inefetivos - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1)));
 		//this.notificationDialog.addInfo("Controles Efetivos - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_1)));
 		this.notificationDialog.addInfo("Controles Totais - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1)));
-		this.notificationDialog.addInfo("Ponderação - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_1)));
+		this.notificationDialog.addInfo("Ponderação - 1ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_1)) + "%");
 		this.notificationDialog.addInfo("Classificação - 1ª Linha: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1));
 		
 		//Resultados - 2ª Linha
 		this.notificationDialog.addInfo("Controles Inefetivos - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2)));
 		//this.notificationDialog.addInfo("Controles Efetivos - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_2)));
 		this.notificationDialog.addInfo("Controles Totais - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2)));
-		this.notificationDialog.addInfo("Ponderação - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_2)));
+		this.notificationDialog.addInfo("Ponderação - 2ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_2)) + "%");
 		this.notificationDialog.addInfo("Classificação - 2ª Linha: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2));
 		
 		//Resultados - 3ª Linha
 		this.notificationDialog.addInfo("Controles Inefetivos - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3)));
 		//this.notificationDialog.addInfo("Controles Efetivos - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_3)));
 		this.notificationDialog.addInfo("Controles Totais - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3)));
-		this.notificationDialog.addInfo("Ponderação - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_3)));
+		this.notificationDialog.addInfo("Ponderação - 3ª Linha: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_3)) + "%");
 		this.notificationDialog.addInfo("Classificação - 3ª Linha: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3));
 		
 		//Resultados - Final
 		this.notificationDialog.addInfo("Controles Inefetivos - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_F)));
 		//this.notificationDialog.addInfo("Controles Efetivos - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "effective", DefLineEnum.LINE_F)));
 		this.notificationDialog.addInfo("Controles Totais - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_F)));
-		this.notificationDialog.addInfo("Ponderação - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_F)));
+		this.notificationDialog.addInfo("Ponderação - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_F)) + "%");
 		this.notificationDialog.addInfo("Classificação - Final: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F));
 		
 		}catch(Exception e){

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.annotation.Obsolete;
+
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -18,7 +20,7 @@ public class RiskAndControlCalculation {
 	private double countEf;
 	private IAppObjFacade facade;
 	private ITransaction transaction;
-
+	
 	public RiskAndControlCalculation(List<IAppObj> controlList) {
 		this.controlList = controlList;
 		this.countInef = 0;
@@ -57,7 +59,9 @@ public class RiskAndControlCalculation {
 		
 		for(IAppObj controlObjIt : controlList){
 			
-			IAppObj controlObj = facade.load(controlObjIt.getVersionData().getHeadOVID(), this.transaction, true);
+			IAppObj controlObj = null;
+			
+			controlObj = facade.load(controlObjIt.getVersionData().getHeadOVID(), this.transaction, true);
 			
 			//countTotal += 1;
 			
@@ -101,7 +105,7 @@ public class RiskAndControlCalculation {
 		}
 		
 		returnMap.put("classification", this.riskClassification(riskVuln));
-		returnMap.put("rate", String.valueOf(riskVuln));
+		returnMap.put("rate", String.valueOf((riskVuln * 100)));
 		returnMap.put("total", String.valueOf(countTotal));
 		returnMap.put("ineffective", String.valueOf(countInef));
 		returnMap.put("effective", String.valueOf(countEf));
