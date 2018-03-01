@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 
@@ -14,9 +16,20 @@ public class RiskAndControlCalculation {
 	private double countInef;
 	private double countTotal;
 	private double countEf;
+	private IAppObjFacade facade;
+	private ITransaction transaction;
 
 	public RiskAndControlCalculation(List<IAppObj> controlList) {
 		this.controlList = controlList;
+		this.countInef = 0;
+		this.countTotal = 0;
+		this.countEf = 0;
+
+	}
+	public RiskAndControlCalculation(List<IAppObj> controlList, IAppObjFacade facade, ITransaction transaction) {
+		this.controlList = controlList;
+		this.facade = facade;
+		this.transaction = transaction;
 		this.countInef = 0;
 		this.countTotal = 0;
 		this.countEf = 0;
@@ -30,7 +43,7 @@ public class RiskAndControlCalculation {
 		this.countTotal = countTotal;
 	}
 	
-	public Map<String, String> calculateControlRate(DefLineEnum defLine) {
+	public Map<String, String> calculateControlRate(DefLineEnum defLine) throws Exception {
 		
 		Map<String, String> returnMap = new HashMap<String, String>();
 	    double riskVuln = 0;
@@ -42,7 +55,9 @@ public class RiskAndControlCalculation {
 	    countTotal += this.countTotal;
 	    countEf += this.countEf;
 		
-		for(IAppObj controlObj : controlList){
+		for(IAppObj controlObjIt : controlList){
+			
+			IAppObj controlObj = facade.load(controlObjIt.getVersionData().getHeadOVID(), this.transaction, true);
 			
 			//countTotal += 1;
 			

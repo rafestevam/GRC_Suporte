@@ -28,6 +28,8 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 	protected void execute() {
 		// TODO Auto-generated method stub
 		
+		try{
+		
 		IAppObj riskObj = this.formModel.getAppObj();
 		List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
 		RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
@@ -64,6 +66,10 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 		this.notificationDialog.addInfo("Ponderação - Final: " + String.valueOf((Double)this.getMapValues(objCalc, "rate", DefLineEnum.LINE_F)));
 		this.notificationDialog.addInfo("Classificação - Final: " + this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F));
 		
+		}catch(Exception e){
+			this.notificationDialog.addError("Erro ao calcular risco residual");
+		}
+		
 	}
 
 	private IUserContext getJobUserContext() {
@@ -71,7 +77,7 @@ public class CustomPREvaluation extends BaseCacheActionCommand{
 		return new JobUIEnvironment(this.getFullGrantUserContext()).getUserContext();
 	}
 	
-	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) {
+	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception {
 		Object objReturn = null;
 		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
 		

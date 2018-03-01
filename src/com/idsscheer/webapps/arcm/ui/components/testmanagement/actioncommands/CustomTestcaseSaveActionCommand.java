@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
@@ -21,23 +24,21 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribu
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestCaseAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestcaseAttributeType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestdefinitionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestdefinitionAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
-import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IEnumAttributeType;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
@@ -133,6 +134,14 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			//IAppObj riskParentObj = this.getRiskFromControl(currParentCtrlObj);
 			//IAppObj riskParentObj = this.getRiskFromControl(parentControlObjId);
 			
+			//Inicio REO 01.03.2018 - EV133332
+			//Classificação dos controles (e suas duplicações) fora do loop de riscos
+			if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
+				List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext());
+				this.controlClassification(controlList);
+			}
+			//Fim REO 01.03.2018 - EV133332
+			
 			List<IAppObj> riskAppList = this.getRisksFromControl(parentControlId);
 			
 			for(int i = 0; i < riskAppList.size(); i++){
@@ -160,11 +169,11 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
 					
 					//Inicio REO 21.02.2018 - EV133332
-					List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext());
+					//List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext());
 					//List<IAppObj> controlList = riskParentObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
 					//Fim REO 21.02.2018 - EV133332
 					
-					this.controlClassification(controlList);
+					//this.controlClassification(controlList);
 					this.affectResidualRisk(riskParentObj);
 					this.affectCorpRisk(riskParentObj);
 				}
@@ -415,7 +424,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 			if (this.origemTeste.equals("1linhadefesa")){
 				//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countEf2line, this.countTotal2line);
-				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList);
+				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL), this.getDefaultTransaction());
 				
 				String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
 				String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
@@ -717,22 +726,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
 		//Fim REO - 27.09.2017 - EV113345
 		
-		List<IAppObj> controlUpdList = new ArrayList<>();
-		IAppObjQuery query = controlFacade.createQuery();
-		for (IAppObj controlObj : controlList) {
-			
-			query.addRestriction(
-					QueryRestriction.eq(
-							IControlAttributeTypeCustom.ATTR_CONTROL_ID, 
-							controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue()));
-			
-			IAppObjIterator iterator = query.getResultIterator();
-			while(iterator.hasNext()){
-				IAppObj controlUpd = iterator.next();
-				if(!controlUpd.getVersionData().isDeleted())
-					controlUpdList.add(controlUpd);
-			}
-		}
+		List<IAppObj> controlUpdList = getDuplicatedControls(controlList, controlFacade);
 		
 		IOVID ovid = null;
 		try{
@@ -783,6 +777,38 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			throw e;
 		}
 		
+	}
+
+	private List<IAppObj> getDuplicatedControls(List<IAppObj> controlList, IAppObjFacade controlFacade) throws Exception {
+		List<IAppObj> controlUpdList = new ArrayList<>();
+		Set<IAppObj> controlUpdSet = new LinkedHashSet<>();
+		
+		IAppObjQuery query = controlFacade.createQuery();
+		for (IAppObj controlObj : controlList) {
+			
+			query.addRestriction(
+					QueryRestriction.eq(
+							IControlAttributeTypeCustom.ATTR_CONTROL_ID, 
+							controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue()));
+			
+			query.addOrder(QueryOrder.ascending(IControlAttributeType.ATTR_OBJ_ID));
+			query.addOrder(QueryOrder.descending(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
+			
+			IAppObjIterator iterator = query.getResultIterator();
+			while(iterator.hasNext()){
+				IAppObj controlObject = iterator.next();
+				IAppObj controlUpd = controlFacade.load(controlObject.getVersionData().getHeadOVID(), this.getDefaultTransaction(), true);
+				controlUpdSet.add(controlUpd);
+				//if(!controlUpd.getVersionData().isDeleted())
+					//controlUpdList.add(controlUpd);
+			}
+			
+		}
+		query.release();
+		
+		controlUpdList.addAll(controlUpdSet);
+		
+		return controlUpdList;
 	}
 	
 	private String testDefClass(IAppObj tstDefObj){
