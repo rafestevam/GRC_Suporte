@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
-import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
@@ -396,14 +395,28 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	
 	private void affectResidualRisk(IAppObj riskObj) throws Exception{
 		
-		double cntTotal2Line = 0;
+		/*double cntTotal2Line = 0;
 		double cntTotal3Line = 0;
+		double cntTotal1Line = 0;
 		double cntInef2Line = 0;
 		double cntInef3Line = 0;
+		double cntInef1Line = 0;
 		
 		String riskResidualFinal2 = "";
 		String riskResidual2Line = "";
 		String riskResidualFinal3 = "";
+		String riskResidual3Line = "";*/
+		
+		double countTotal1 = 0;
+		double countTotal2 = 0;
+		double countTotal3 = 0;
+		double count1line = 0;
+		double count2line = 0;
+		double count3line = 0;
+		
+		String riskResidualFinal = "";
+		String riskResidual1Line = "";
+		String riskResidual2Line = "";
 		String riskResidual3Line = "";
 		
 		try{
@@ -422,7 +435,48 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getFullGrantUserContext());
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
-			if (this.origemTeste.equals("1linhadefesa")){
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			
+			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
+			
+			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
+			count2line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
+			count3line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
+			countTotal1 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
+			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
+			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
+
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
+			
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
+			
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
+			
+			if(!this.riscoPotencial.equals("Nao Avaliado")){
+				riskResidual1Line = this.riskResidualFinal(this.riscoPotencial, riskClass1line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				
+				riskResidual2Line = this.riskResidualFinal(this.riscoPotencial, riskClass2line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
+				
+				riskResidual3Line = this.riskResidualFinal(this.riscoPotencial, riskClass3line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
+				
+				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+			}
+			
+			/*if (this.origemTeste.equals("1linhadefesa")){
 				//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef2line, this.countEf2line, this.countTotal2line);
 				RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL), this.getDefaultTransaction());
 				
@@ -466,7 +520,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal3);
 				}
 				
-			}
+			}*/
 			//Fim Inclusão - REO - 14.02.2018 - EV1333332
 			
 			//Inicio Exclusao - REO - 14.02.2018 - EV1333332

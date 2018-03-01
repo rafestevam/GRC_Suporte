@@ -17,23 +17,19 @@ import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
-import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
-import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
@@ -362,8 +358,12 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	
 	private void affectResidualRisk(IAppObj riskObj) throws Exception{
 		
-		double countTotal = 0;
+		double countTotal1 = 0;
+		double countTotal2 = 0;
+		double countTotal3 = 0;
 		double count1line = 0;
+		double count2line = 0;
+		double count3line = 0;
 		//SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
 		log.info("Eficacia do Controle Corrente: " + this.currStatus);
@@ -372,6 +372,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 		String riskResidualFinal = "";
 		String riskResidual1Line = "";
+		String riskResidual2Line = "";
+		String riskResidual3Line = "";
 		
 		try{
 			
@@ -394,18 +396,39 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
 			
 			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
 			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
 			
 			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
-			countTotal = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
+			count2line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
+			count3line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
+			countTotal1 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
+			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
+			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
+
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
+			
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
+			
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
 			
 			if(!this.riscoPotencial.equals("Nao Avaliado")){
 				riskResidual1Line = this.riskResidualFinal(this.riscoPotencial, riskClass1line);
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				
+				riskResidual2Line = this.riskResidualFinal(this.riscoPotencial, riskClass2line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
+				
+				riskResidual3Line = this.riskResidualFinal(this.riscoPotencial, riskClass3line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
 				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.annotation.Obsolete;
-
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -52,6 +50,7 @@ public class RiskAndControlCalculation {
 	    double countInef = 0;
 	    double countEf = 0;
 	    double countTotal = 0;
+	    double countNA = 0;
 	    
 	    countInef += this.countInef;
 	    countTotal += this.countTotal;
@@ -73,25 +72,32 @@ public class RiskAndControlCalculation {
 					countEf += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_2)){
-				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
+				IStringAttribute status2LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
+				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("efetivo"))
 					countEf += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_3)){
-				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
+				IStringAttribute status3LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
+				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("efetivo"))
 					countEf += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_F)){
-				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
+				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
+				IStringAttribute status2LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
+				IStringAttribute status3LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
+				IStringAttribute statusFLineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+				if((!statusFLineAttr.isEmpty()) && statusFLineAttr.getRawValue().equals("inefetivo"))
 					countInef += 1;
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+				if((!statusFLineAttr.isEmpty()) && statusFLineAttr.getRawValue().equals("efetivo"))
 					countEf += 1;
+				if(statusFLineAttr.isEmpty())
+					countNA += 1;
+				if(status1LineAttr.isEmpty() && status2LineAttr.isEmpty() && status3LineAttr.isEmpty())
+					countNA += 1;
 			}
 			
 			countTotal += 1;
@@ -104,7 +110,12 @@ public class RiskAndControlCalculation {
 			throw e;
 		}
 		
-		returnMap.put("classification", this.riskClassification(riskVuln));
+		if(countNA == 0){
+			returnMap.put("classification", this.riskClassification(riskVuln));
+		}else{
+			returnMap.put("classification", "");
+		}
+		
 		returnMap.put("rate", String.valueOf((riskVuln * 100)));
 		returnMap.put("total", String.valueOf(countTotal));
 		returnMap.put("ineffective", String.valueOf(countInef));
