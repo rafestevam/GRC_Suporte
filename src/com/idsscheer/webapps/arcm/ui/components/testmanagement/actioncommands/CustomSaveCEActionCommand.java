@@ -1005,6 +1005,9 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Baixo"))
 			riskResidualReturn = "Baixo";
 		
+		if(riskControlFinal.equals("") || riskControlFinal.equals("Não Avaliado"))
+			riskResidualReturn = "Não Avaliado";
+		
 		return riskResidualReturn;
 		
 	}	
