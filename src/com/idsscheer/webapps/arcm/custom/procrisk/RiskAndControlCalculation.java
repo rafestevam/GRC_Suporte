@@ -128,8 +128,8 @@ public class RiskAndControlCalculation {
 		
 		returnMap.put("rate", String.valueOf((riskVuln * 100)));
 		returnMap.put("total", String.valueOf(countTotal));
-		returnMap.put("ineffective", String.valueOf(countInef));
-		returnMap.put("effective", String.valueOf(countEf));
+		returnMap.put("ineffective", String.valueOf(this.countInef));
+		returnMap.put("effective", String.valueOf(this.countEf));
 		
 		this.countInef = 0;
 		this.countEf = 0;
