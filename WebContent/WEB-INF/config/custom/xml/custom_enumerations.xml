@@ -426,6 +426,12 @@
         <enumitem id="AdjustControl1Line" value="56">
         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.AdjustControl1Line"/>
         </enumitem>
+        <enumitem id="AdjustControlOtherLines" value="57">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.AdjustControlOtherLines"/>
+        </enumitem>
+        <enumitem id="AdjustRisks" value="58">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.AdjustRisks"/>
+        </enumitem>
         <!-- Fim REO - 27.02.2018 - EV133332 -->
         
         <!-- GRC 82 -->

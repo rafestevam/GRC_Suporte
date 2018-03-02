@@ -19,6 +19,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
@@ -31,6 +32,7 @@ import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 @CanBeScheduled
 public class AdjustControl1Line extends BaseJob {
@@ -59,7 +61,7 @@ public class AdjustControl1Line extends BaseJob {
 			setBaseObjectsToProcessCount(controlList.size());
 			for (IAppObj controlObj : controlList) {
 				
-				facade.allocateWriteLock(controlObj.getVersionData().getHeadOVID());
+				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
 				
 				List<IAppObj> cetList = controlObj.getAttribute(IControlAttributeType.LIST_CONTROLEXECUTIONTASKS)
@@ -68,6 +70,9 @@ public class AdjustControl1Line extends BaseJob {
 
 					List<IAppObj> ceList = this.getCtrlExecFromCET(cetObj.getObjectId());
 					for (IAppObj ceObj : ceList) {
+						
+						if(ceObj.getVersionData().isDeleted())
+							continue;
 						
 						IEnumAttribute ownerStatusAttr = ceObj.getAttribute(IControlexecutionAttributeType.ATTR_OWNER_STATUS);
 						IEnumerationItem ownerStatus = ARCMCollections.extractSingleEntry(ownerStatusAttr.getRawValue(), true);
@@ -161,7 +166,8 @@ public class AdjustControl1Line extends BaseJob {
 		
 		IAppObjQuery query = facade.createQuery();
 		//query.addRestriction(QueryRestriction.ne(IControlAttributeType.BASE_ATTR_DEACTIVATED, false));
-
+		query.addOrder(QueryOrder.ascending(IControlAttributeType.ATTR_NAME));
+		
 		IAppObjIterator iterator = query.getResultIterator();
 		while (iterator.hasNext()) {
 

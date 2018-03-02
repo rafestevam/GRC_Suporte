@@ -31,6 +31,7 @@ import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 @CanBeScheduled
 public class AdjustControlOtherLines extends BaseJob{
@@ -58,7 +59,7 @@ public class AdjustControlOtherLines extends BaseJob{
 			setBaseObjectsToProcessCount(controlList.size());
 			for (IAppObj controlObj : controlList) {
 				
-				facade.allocateWriteLock(controlObj.getVersionData().getHeadOVID());
+				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
 				
 				List<IAppObj> tstDefList = controlUpdObj.getAttribute(IControlAttributeType.LIST_TESTDEFINITIONS).getElements(userContext);
