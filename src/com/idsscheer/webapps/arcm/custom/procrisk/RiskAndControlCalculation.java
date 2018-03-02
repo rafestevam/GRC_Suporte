@@ -16,6 +16,7 @@ public class RiskAndControlCalculation {
 	private double countInef;
 	private double countTotal;
 	private double countEf;
+	private double countNA;
 	private IAppObjFacade facade;
 	private ITransaction transaction;
 	
@@ -33,6 +34,7 @@ public class RiskAndControlCalculation {
 		this.countInef = 0;
 		this.countTotal = 0;
 		this.countEf = 0;
+		this.countNA = 0;
 
 	}
 	
@@ -50,11 +52,13 @@ public class RiskAndControlCalculation {
 	    double countInef = 0;
 	    double countEf = 0;
 	    double countTotal = 0;
-	    double countNA = 0;
 	    
-	    countInef += this.countInef;
-	    countTotal += this.countTotal;
-	    countEf += this.countEf;
+	    this.countNA = 0;
+	    //double countNA = 0;
+	    
+	    //countInef += this.countInef;
+	    //countTotal += this.countTotal;
+	    //countEf += this.countEf;
 		
 		for(IAppObj controlObjIt : controlList){
 			
@@ -67,23 +71,29 @@ public class RiskAndControlCalculation {
 			if(defLine.equals(DefLineEnum.LINE_1)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
 				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
-					countInef += 1;
+					this.countInef += 1;
 				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
-					countEf += 1;
+					this.countEf += 1;
+				if(status1LineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
+					this.countNA += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_2)){
 				IStringAttribute status2LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
 				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("inefetivo"))
-					countInef += 1;
+					this.countInef += 1;
 				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("efetivo"))
-					countEf += 1;
+					this.countEf += 1;
+				if(status2LineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
+					this.countNA += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_3)){
 				IStringAttribute status3LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
 				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("inefetivo"))
-					countInef += 1;
+					this.countInef += 1;
 				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("efetivo"))
-					countEf += 1;
+					this.countEf += 1;
+				if(status3LineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
+					this.countNA += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_F)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
@@ -91,13 +101,13 @@ public class RiskAndControlCalculation {
 				IStringAttribute status3LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
 				IStringAttribute statusFLineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
 				if((!statusFLineAttr.isEmpty()) && statusFLineAttr.getRawValue().equals("inefetivo"))
-					countInef += 1;
+					this.countInef += 1;
 				if((!statusFLineAttr.isEmpty()) && statusFLineAttr.getRawValue().equals("efetivo"))
-					countEf += 1;
+					this.countEf += 1;
 				if(statusFLineAttr.isEmpty())
-					countNA += 1;
+					this.countNA += 1;
 				if(status1LineAttr.isEmpty() && status2LineAttr.isEmpty() && status3LineAttr.isEmpty())
-					countNA += 1;
+					this.countNA += 1;
 			}
 			
 			countTotal += 1;
@@ -105,12 +115,12 @@ public class RiskAndControlCalculation {
 		}
 		
 		try{
-			riskVuln = (countInef / countTotal);
+			riskVuln = (this.countInef / countTotal);
 		}catch(Exception e){
 			throw e;
 		}
 		
-		if(countNA == 0){
+		if(this.countNA == 0){
 			returnMap.put("classification", this.riskClassification(riskVuln));
 		}else{
 			returnMap.put("classification", "");
@@ -120,6 +130,9 @@ public class RiskAndControlCalculation {
 		returnMap.put("total", String.valueOf(countTotal));
 		returnMap.put("ineffective", String.valueOf(countInef));
 		returnMap.put("effective", String.valueOf(countEf));
+		
+		this.countInef = 0;
+		this.countEf = 0;
 		
 		return returnMap;
 		
