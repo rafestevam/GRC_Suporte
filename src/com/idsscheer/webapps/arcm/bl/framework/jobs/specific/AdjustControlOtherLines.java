@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
@@ -16,9 +18,12 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
@@ -52,14 +57,20 @@ public class AdjustControlOtherLines extends BaseJob{
 	protected void execute() throws JobAbortException, JobWarningException {
 		
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.CONTROL);
-
+		String debug = "";
+		
 		try {
 
 			List<IAppObj> controlList = this.getControlList(facade);
+			//List<IAppObj> controlUpdList = getDuplicatedControls(controlList, facade);
+			
 			setBaseObjectsToProcessCount(controlList.size());
 			for (IAppObj controlObj : controlList) {
 				
-				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+				if(controlObj.getObjectId() == 37824)
+					debug = "X";
+				
+				//facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
 				
 				List<IAppObj> tstDefList = controlUpdObj.getAttribute(IControlAttributeType.LIST_TESTDEFINITIONS).getElements(userContext);
@@ -74,23 +85,35 @@ public class AdjustControlOtherLines extends BaseJob{
 						IEnumerationItem reviewerStatusItem = ARCMCollections.extractSingleEntry(reviewerStatusAttr.getRawValue(), true);
 					
 						if(reviewerStatusItem.getId().equals("accepted")){
-							if(ownerStatusItem.getId().equals("noneffective")){
-								if(this.testDefClass(tstDefObj).equals("1linhadefesa")){
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
+							
+							List<IAppObj> ctBaseList = tstCaseObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(userContext);
+							List<IAppObj> dupControlList = this.getDuplicatedControls(ctBaseList, facade);
+							
+							for (IAppObj dupControlObj : dupControlList) {
+								facade.allocateLock(dupControlObj.getVersionData().getOVID(), LockType.FORCEWRITE);
+								if(ownerStatusItem.getId().equals("noneffective")){
+									if(this.testDefClass(tstDefObj).equals("1linhadefesa")){
+										dupControlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
+										this.setFinalControlStatus(dupControlObj, "inefetivo");
+									}
+									if(this.testDefClass(tstDefObj).equals("2linhadefesa")){
+										dupControlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("inefetivo");
+										this.setFinalControlStatus(dupControlObj, "inefetivo");
+									}
+								}else{
+									if(this.testDefClass(tstDefObj).equals("1linhadefesa")){
+										dupControlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("efetivo");
+										this.setFinalControlStatus(dupControlObj, "efetivo");
+									}
+									if(this.testDefClass(tstDefObj).equals("2linhadefesa")){
+										dupControlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("efetivo");
+										this.setFinalControlStatus(dupControlObj, "efetivo");
+									}
 								}
-								if(this.testDefClass(tstDefObj).equals("2linhadefesa")){
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("inefetivo");
-								}
-							}else{
-								if(this.testDefClass(tstDefObj).equals("1linhadefesa")){
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
-								}
-								if(this.testDefClass(tstDefObj).equals("2linhadefesa")){
-									controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).setRawValue("inefetivo");
-								}
+								facade.save(dupControlObj, getInternalTransaction(), true);
+								increaseEditedObjectsCounter(1);
+								facade.releaseLock(controlObj.getVersionData().getOVID());
 							}
-							facade.save(controlUpdObj, getInternalTransaction(), true);
-							increaseEditedObjectsCounter(1);
 							
 						}
 						
@@ -98,7 +121,7 @@ public class AdjustControlOtherLines extends BaseJob{
 					
 				}
 				
-				facade.releaseLock(controlObj.getVersionData().getHeadOVID());
+				//facade.releaseLock(controlObj.getVersionData().getHeadOVID());
 				increaseProgress();
 
 			}
@@ -106,6 +129,52 @@ public class AdjustControlOtherLines extends BaseJob{
 			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
 			throw new JobAbortException(e.getLocalizedMessage(), JOB_NAME_KEY);
 		}
+	}
+
+	private List<IAppObj> getDuplicatedControls(List<IAppObj> controlList, IAppObjFacade controlFacade) throws Exception {
+		List<IAppObj> controlReturn = new ArrayList<IAppObj>();
+		
+		for (IAppObj controlObj : controlList) {
+		
+			Map filterMap = new HashMap();
+			filterMap.put("control_id", controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue());
+			
+			IViewQuery query = QueryFactory.createQuery(userContext, "control", filterMap, null,
+					true, getInternalTransaction());
+			
+			try{
+			
+				Iterator itQuery = query.getResultIterator();
+				
+				while(itQuery.hasNext()){
+					
+					IViewObj viewObj = (IViewObj)itQuery.next();
+					long controlID = (Long)viewObj.getRawValue("obj_id");
+					long ctVersionNumber = (Long)viewObj.getRawValue("control_version_number");
+					
+					//IAppObjFacade ctFacade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.TESTCASE);
+					IOVID ctOVID = OVIDFactory.getOVID(controlID, ctVersionNumber);
+					IAppObj ctAppObj = controlFacade.load(ctOVID, true);
+					
+					if(ctAppObj != null && !ctAppObj.getVersionData().isDeleted()){
+						if(ctAppObj.getVersionData().isHeadRevision())
+							controlReturn.add(ctAppObj);
+					}
+					
+				}
+			
+			}catch(Exception e){
+				query.release();
+				throw e;
+			}finally{
+				query.release();
+			}
+		
+		}
+		
+		return (List<IAppObj>) controlReturn;
+		
+		
 	}
 
 	private Object testDefClass(IAppObj tstDefObj) {
@@ -182,8 +251,29 @@ public class AdjustControlOtherLines extends BaseJob{
 				controlList.add(controlObj);
 
 		}
+		query.release();
 
 		return controlList;
+	}
+	
+	private void setFinalControlStatus(IAppObj controlUpdObj, String classification) {
+		IStringAttribute stFinalAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+		IStringAttribute st1LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
+		IStringAttribute st2LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
+		IStringAttribute st3LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
+		if(stFinalAttr.isEmpty()){
+			stFinalAttr.setRawValue(classification);
+		}else{
+			if(stFinalAttr.getRawValue().equals("efetivo")){
+				stFinalAttr.setRawValue(classification);
+			}else{
+				if( (st1LineAttr.isEmpty() || st1LineAttr.getRawValue().equals("efetivo")) && 
+					(st2LineAttr.isEmpty() || st2LineAttr.getRawValue().equals("efetivo")) &&
+					(st3LineAttr.isEmpty() || st3LineAttr.getRawValue().equals("efetivo"))){
+					stFinalAttr.setRawValue(classification);
+				}
+			}
+		}
 	}
 
 	@Override

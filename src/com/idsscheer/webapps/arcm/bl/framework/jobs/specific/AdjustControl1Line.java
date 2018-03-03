@@ -16,6 +16,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
@@ -82,8 +83,10 @@ public class AdjustControl1Line extends BaseJob {
 							log.info("Status EC: COMPLETED*");
 							if(statusItem.getId().equals("ineffective")){
 								controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("inefetivo");
+								this.setFinalControlStatus(controlUpdObj, "inefetivo");
 							}else{
 								controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).setRawValue("efetivo");
+								this.setFinalControlStatus(controlUpdObj, "efetivo");
 							}
 							
 							facade.save(controlUpdObj, getInternalTransaction(), true);
@@ -178,6 +181,26 @@ public class AdjustControl1Line extends BaseJob {
 		}
 
 		return controlList;
+	}
+	
+	private void setFinalControlStatus(IAppObj controlUpdObj, String classification) {
+		IStringAttribute stFinalAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL);
+		IStringAttribute st1LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
+		IStringAttribute st2LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
+		IStringAttribute st3LineAttr = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
+		if(stFinalAttr.isEmpty()){
+			stFinalAttr.setRawValue(classification);
+		}else{
+			if(stFinalAttr.getRawValue().equals("efetivo")){
+				stFinalAttr.setRawValue(classification);
+			}else{
+				if( (st1LineAttr.isEmpty() || st1LineAttr.getRawValue().equals("efetivo")) && 
+					(st2LineAttr.isEmpty() || st2LineAttr.getRawValue().equals("efetivo")) &&
+					(st3LineAttr.isEmpty() || st3LineAttr.getRawValue().equals("efetivo"))){
+					stFinalAttr.setRawValue(classification);
+				}
+			}
+		}
 	}
 
 	@Override
