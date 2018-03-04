@@ -72,7 +72,7 @@ public class AdjustRisks extends BaseJob {
 			
 			IAppObj riskObj = iterator.next();
 			
-			facade.allocateLock(riskObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+			facade.allocateLock(riskObj.getVersionData().getOVID(), LockType.FORCEWRITE);
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userContext);
 			
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.CONTROL), getInternalTransaction());
@@ -120,7 +120,7 @@ public class AdjustRisks extends BaseJob {
 			facade.save(riskObj, getInternalTransaction(), true);
 			increaseEditedObjectsCounter(1);
 			
-			facade.releaseLock(riskObj.getVersionData().getHeadOVID());
+			facade.releaseLock(riskObj.getVersionData().getOVID());
 			increaseProgress();
 			
 		}

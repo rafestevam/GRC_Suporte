@@ -431,34 +431,34 @@
 <!--         </parameterList> -->
         
         <!-- EV133332 - Adjust Control 1st Line Effectiveness Job -->
-<!--         <parameterList name="AdjustControl1Line"> -->
-<!--             <parameter name="jobitem" value="AdjustControl1Line" /> -->
-<!--             <parameter name="startScheduler" value="true"/> -->
-<!--             <parameter name="executionTime" value="0 54 17 ? * SUN-SAT"/> -->
-<!--             <parameter name="clientexcludinglist" value=""/> -->
+        <parameterList name="AdjustControl1Line">
+            <parameter name="jobitem" value="AdjustControl1Line" />
+            <parameter name="startScheduler" value="true"/>
+            <parameter name="executionTime" value="0 01 18 ? * SUN-SAT"/>
+            <parameter name="clientexcludinglist" value=""/>
             <!-- please do not edit -->
-<!--             <parameter name="className" value="AdjustControl1Line"/> -->
+            <parameter name="className" value="AdjustControl1Line"/>
             <!-- please do not edit -->
-<!--             <parameter name="clientbased" value="false"/> -->
-<!--         </parameterList> -->
+            <parameter name="clientbased" value="false"/>
+        </parameterList>
         
         <!-- EV133332 - Adjust Control 2nd / 3rd Lines Effectiveness Job  -->
-<!--         <parameterList name="AdjustControlOtherLines"> -->
-<!--             <parameter name="jobitem" value="AdjustControlOtherLines" /> -->
-<!--             <parameter name="startScheduler" value="true"/> -->
-<!--             <parameter name="executionTime" value="0 41 0 ? * SUN-SAT"/> -->
-<!--             <parameter name="clientexcludinglist" value=""/> -->
+        <parameterList name="AdjustControlOtherLines">
+            <parameter name="jobitem" value="AdjustControlOtherLines" />
+            <parameter name="startScheduler" value="true"/>
+            <parameter name="executionTime" value="0 11 18 ? * SUN-SAT"/>
+            <parameter name="clientexcludinglist" value=""/>
             <!-- please do not edit -->
-<!--             <parameter name="className" value="AdjustControlOtherLines"/> -->
+            <parameter name="className" value="AdjustControlOtherLines"/>
             <!-- please do not edit -->
-<!--             <parameter name="clientbased" value="false"/> -->
-<!--         </parameterList> -->
+            <parameter name="clientbased" value="false"/>
+        </parameterList>
         
         <!-- EV133332 - Adjust Risks (Control Environment) Job  -->
         <parameterList name="AdjustRisks">
             <parameter name="jobitem" value="AdjustRisks" />
             <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 49 0 ? * SUN-SAT"/>
+            <parameter name="executionTime" value="0 21 18 ? * SUN-SAT"/>
             <parameter name="clientexcludinglist" value=""/>
             <!-- please do not edit -->
             <parameter name="className" value="AdjustRisks"/>
