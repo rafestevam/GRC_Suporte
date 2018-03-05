@@ -16,6 +16,7 @@
 	        	<action actionRight.idref="transfer.values"/>
 	        	<relation right.idref="ar" listAttrType.id="control"/>
 	            <relation right.idref="ar" listAttrType.id="execution_documents"/>
+	            <relation right.idref="ar" listAttrType.id="documents"/>
 	        </object>
 	    </role>
     	
