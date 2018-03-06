@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
-    <view id="clientdata" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+    <view id="clientdata" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
         <viewObject id="VO_clientdata_client" objectType="CLIENT" isMainViewObject="true">
             <viewColumn id="cl_client" attributeType="sign" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="cl_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
@@ -333,6 +333,48 @@
                 <condition column.id="deactivated" compareType="EQ" value="false"/>
             </compoundCondition>
         </conditions>
+    </view>
+    
+    <view id="controldata3" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomControlData3ViewHandler">
+        <viewObject id="VO_controldata_control" objectType="CONTROL" isMainViewObject="true">
+            <viewColumn id="c_client" attributeType="client_sign" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="c_id" attributeType="obj_id" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="c_ctrl_id" attributeType="control_id" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="c_name" attributeType="name" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+<!--             <viewColumn id="c_key_ctrl" attributeType="key_control" isSortable="true" isSelectColumn="true"/> -->
+<!--             <viewColumn id="c_coso" attributeType="control_type"/> -->
+            <viewColumn id="c_ctrl_frq" attributeType="control_frequency" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="c_exec" attributeType="control_execution"/>
+            <viewColumn id="c_effect" attributeType="control_effect" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+<!--             <viewColumn id="control_version_active" attributeType="version_active" mashzoneRelevant="false"/> -->
+            <viewColumn id="deactivated" attributeType="deactivated"/>
+            
+            <!-- Customizing for Mashzone -->
+<!--             <viewColumn id="c_custom_status_control" attributeType="custom_status_control" mashzoneRelevant="true" isSelectColumn="true" isGrouped="true"/> -->
+	    	<viewColumn id="c_version_number" attributeType="version_number" mashzoneRelevant="true" isSelectColumn="true" isGrouped="true"/>            
+	    	<viewColumn id="c_change_date" attributeType="change_date" mashzoneRelevant="true" isSelectColumn="true" function="MAX"/>            
+            <viewColumn id="c_control_type" attributeType="control_type" mashzoneRelevant="true" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="c_control_execution" attributeType="control_execution" mashzoneRelevant="true" isSelectColumn="true" isGrouped="true"/>
+            <!-- EV132664 - Relatório Risco Corporativo -->
+            <viewColumn id="c_control_objective" attributeType="control_objective" mashzoneRelevant="true" isSelectColumn="true" isGrouped="true"/>
+            <!-- Customizing for Mashzone -->
+
+        </viewObject>
+<!--         <viewObject id="VO_controldata_controlManager" objectType="USERGROUP"> -->
+<!--             <viewColumn id="c_mgr_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/> -->
+<!--             <viewColumn id="c_mgr" attributeType="name" isSortable="true" isSelectColumn="true"/> -->
+<!--         </viewObject> -->
+        <viewObject id="VO_controldata_risk" objectType="RISK">
+            <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+        </viewObject>
+<!--         <link linktype.id="13" firstViewObject="VO_controldata_control" secondViewObject="VO_controldata_controlManager" joinType="LEFT"/> -->
+        <link linktype.id="4" firstViewObject="VO_controldata_control" secondViewObject="VO_controldata_risk" joinType="LEFT"/>
+<!--         <conditions> -->
+            
+<!--                 <condition column.id="control_version_active" compareType="EQ" value="true"/> -->
+<!-- 				<condition column.id="c_change_date" compareType="LE"/> -->
+<!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
+<!--         </conditions> -->
     </view>
 
     <view id="control2coso" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
@@ -2749,6 +2791,7 @@
             <viewColumn id="userid" attributeType="userid" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="user_obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="user_change_date" attributeType="change_date" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="version_active" attributeType="version_active"/>
         </viewObject>
     </view>
