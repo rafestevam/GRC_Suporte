@@ -2,14 +2,18 @@ package com.idsscheer.webapps.arcm.dl.framework.viewhandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.apache.myfaces.shared.util.LocaleUtils;
 
+import com.aris.arcm.ui.framework.support.converter.DateConverter;
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
@@ -23,6 +27,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
@@ -52,27 +57,69 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 
 		IAppObjQuery appQuery = facade.createQuery();
 		
-		appQuery.addOrder(QueryOrder.ascending(IControlAttributeType.ATTR_OBJ_ID));
-		appQuery.addOrder(QueryOrder.ascending(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
-		
 		IQueryRestriction restrAnd = null;
-			for (IFilterCriteria filter : filters) {
-				
-				for (IFilterCriteria filter2 : filter.getFilters()) {
-					appQuery.addRestriction(QueryRestriction.le(IControlAttributeType.BASE_ATTR_CHANGE_DATE, filter2.getValue()));
-				}
-		}
+		
+		Date criteriaDate = Calendar.getInstance().getTime();
+		
+		for (IFilterCriteria filter : filters) {
 			
+			for (IFilterCriteria filter2 : filter.getFilters()) {
+//				appQuery.addRestriction(QueryRestriction.le(IControlAttributeType.BASE_ATTR_CHANGE_DATE, filter2.getValue()));
+				//System.out.println(filter2.getValue());
+				criteriaDate = (Date)filter2.getValue();
+				criteriaDate.setHours(23);
+				criteriaDate.setMinutes(59);
+				criteriaDate.setSeconds(59);
+			}
+		}
+		appQuery.setHeadRevisionsOnly(false);
+//		appQuery.addRestriction(QueryRestriction.eq(IControlAttributeTypeCustom.ATTR_CONTROL_ID, "CO_125"));
+		
+		
+		appQuery.addOrder(QueryOrder.descending(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
+//		appQuery.addOrder(QueryOrder.ascending(IControlAttributeType.BASE_ATTR_OBJ_ID));
+
+			
+//		appQuery.addRestriction(
+//				QueryRestriction.or(
+//						QueryRestriction.eq(IControlAttributeType.BASE_ATTR_VERSION_ACTIVE, true), 
+//						QueryRestriction.eq(IControlAttributeType.BASE_ATTR_VERSION_ACTIVE, false)));
+		
 		IAppObjIterator iteratorQueryResult = appQuery.getResultIterator();
-		LinkedHashMap<Long, Long> hashedMap = new LinkedHashMap();
+		TreeMap<Long, Long> hashedMap = new TreeMap<>();
+		try{
 		while (iteratorQueryResult.hasNext()) {
+//			System.out.println("IAppObj controlObj = iteratorQueryResult.next()");
 			IAppObj controlObj = iteratorQueryResult.next();
-			if(!controlObj.getVersionData().isDeleted())
+			
+//			System.out.println("System.out.println(controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue())");
+			System.out.println(controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue());
+			
+//			System.out.println("long controlDate = controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue().getTime()");
+			long controlDate = controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue().getTime();
+			
+//			System.out.println("if(controlDate > criteriaDate.getTime())");
+			if(controlDate > criteriaDate.getTime())
+				continue;
+			
+//			System.out.println("if(!controlObj.getVersionData().isDeleted())");
+			if(!controlObj.getVersionData().isDeleted()) {
 //				Long maxVersionNumber = PersistenceAPI.getPersistenceManager().getMaxVersionNumber(issueObj.getVersionData().getOVID(), transaction);
 //				Integer obj_id = (int) issueObj.getObjectId();
-				hashedMap.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID), 
-													 controlObj.getRawValue(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
-
+//				if (controlObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID).equals("CO_125")) {
+//					int teste = 0;
+//					teste = teste + 1;
+//				}
+//				System.out.println("if (!hashedMap.containsKey(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID)))");
+				if (!hashedMap.containsKey(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID))) {
+//					System.out.println("hashedMap.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID)");
+					hashedMap.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID), 
+							 controlObj.getRawValue(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
+				}
+			}
+		}
+		}catch(Exception e){
+			throw new RuntimeException(e);
 		}
 
 //		if (null == restrAnd) {
@@ -112,7 +159,7 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 			for (IQueryObjectDefinition def : query.getObjectDefinitions()) {
 				query.markAsRemovable(def);
 			}
-			// filters.clear();
+			 filters.clear();
 
 			// Criando nova query dinamicamente
 			List<IFilterCriteria> filtersAnd = new ArrayList<IFilterCriteria>();
@@ -126,8 +173,17 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 										entry.getValue()) }));
 				filtersAnd.add(criteria);
 			}
-
+			
+//			IFilterCriteria criteria2 = filterFactory
+//					.or(Arrays.asList(new IFilterCriteria[] {
+//							new SimpleFilterCriteria("r_version_active", "r_version_active", DataLayerComparator.EQUAL,
+//									true),
+//							new SimpleFilterCriteria("r_version_active", "r_version_active", DataLayerComparator.EQUAL,
+//									false) }));
+			
+//			query.addFilterCriteria(new SimpleFilterCriteria("deactivated", 0));	
 			query.addFilterCriteria(filterFactory.or(filtersAnd));
+//			query.addFilterCriteria(criteria2);
 
 		}
 		// Fim REO - 29.01.2017 - EV131567
