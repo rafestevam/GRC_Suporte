@@ -344,7 +344,7 @@
             <viewColumn id="c_ctrl_frq" attributeType="control_frequency" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="c_exec" attributeType="control_execution"/>
             <viewColumn id="c_effect" attributeType="control_effect" isSortable="true" isSelectColumn="true"/>
-            <viewColumn id="deactivated" attributeType="deactivated"/>
+            <viewColumn id="c_deactivated" attributeType="deactivated" isSelectColumn="true"/>
             
             <!-- Customizing for Mashzone -->
             <viewColumn id="c_custom_status_control" attributeType="custom_status_control" mashzoneRelevant="true" isSelectColumn="true"/>
@@ -361,8 +361,10 @@
         <viewObject id="VO_controldata_risk" objectType="RISK">
             <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
         </viewObject>
-        <link linktype.id="4" firstViewObject="VO_controldata_control" secondViewObject="VO_controldata_risk" joinType="LEFT" attendVersionizing="false"/>
+        <link linktype.id="4" firstViewObject="VO_controldata_control" secondViewObject="VO_controldata_risk" joinType="LEFT" attendVersionizing="false" attendFixChildVersionizing="false" isParentVersionActive="true"/>
     </view>
+    
+    
    
     <view id="control2coso" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
         <viewObject id="VO_control2coso_control" objectType="CONTROL" isMainViewObject="true">
@@ -2751,6 +2753,7 @@
         
             <!-- Customizing for Mashzone -->
             <viewColumn id="ce_controlexecstatus" attributeType="custom_controlexecstatus" mashzoneRelevant="true" isSelectColumn="true"/>
+            <viewColumn id="ce_deactivated" attributeType="deactivated" mashzoneRelevant="true" isSelectColumn="true"/>
             <!-- Customizing for Mashzone -->
             
         </viewObject>

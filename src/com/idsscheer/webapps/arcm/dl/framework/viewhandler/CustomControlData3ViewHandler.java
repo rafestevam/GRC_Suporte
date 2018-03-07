@@ -49,15 +49,13 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 					throws BusViewException {
 		// TODO Auto-generated method stub
 
-		// Inicio REO - 29.01.2017 - EV131567
+		
 		Map<Integer, Integer> resultMap = new TreeMap<>();
-		// if (currentObject == null) {
+
 		IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROL);
 
 		IAppObjQuery appQuery = facade.createQuery();
-		
-		IQueryRestriction restrAnd = null;
 		
 		Date criteriaDate = Calendar.getInstance().getTime();
 		
@@ -73,6 +71,7 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 			}
 		}
 		appQuery.setHeadRevisionsOnly(false);
+		appQuery.setIncludeDeletedObjects(true);
 //		appQuery.addRestriction(QueryRestriction.eq(IControlAttributeTypeCustom.ATTR_CONTROL_ID, "CO_125"));
 		
 		
@@ -103,7 +102,7 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 				continue;
 			
 //			System.out.println("if(!controlObj.getVersionData().isDeleted())");
-			if(!controlObj.getVersionData().isDeleted()) {
+//			if(!controlObj.getVersionData().isDeleted()) {
 //				Long maxVersionNumber = PersistenceAPI.getPersistenceManager().getMaxVersionNumber(issueObj.getVersionData().getOVID(), transaction);
 //				Integer obj_id = (int) issueObj.getObjectId();
 //				if (controlObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID).equals("CO_125")) {
@@ -116,7 +115,7 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 					hashedMap.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID), 
 							 controlObj.getRawValue(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
 				}
-			}
+//			}
 		}
 		}catch(Exception e){
 			throw new RuntimeException(e);
