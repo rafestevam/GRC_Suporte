@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	<roles>
+	
+		<base licensedComponentIds="im">
+			<system component.idref="view.issue.open"/>
+			<system component.idref="view.issue.review"/>     		
+	        <object right.idref="r----" objectType.id="USER">
+	            <relation right.idref="ar" listAttrType.id="substitutes"/>
+	        </object> 
+	        <object right.idref="r----" objectType.id="NEWSMESSAGE"/>
+	        <object right.idref="rwcdu" objectType.id="ISSUE">
+	            <relation right.idref="ar" listAttrType.id="creator"/>
+	            <relation right.idref="ar" listAttrType.id="owners"/>
+	            <relation right.idref="ar" listAttrType.id="reviewers"/>
+	            <relation right.idref="ar" listAttrType.id="documents"/>
+	            <relation right.idref="ar" listAttrType.id="issueRelevantObjects"/>
+	        </object>
+	        <object right.idref="rwcd-" objectType.id="ISSUERELEVANTOBJECT"/>
+	        <object right.idref="r----" objectType.id="DOCUMENTLINKTYPE"/>
+	        <object right.idref="r----" objectType.id="TASKITEM"/>
+	        <object right.idref="r--d-" objectType.id="INTERNALMESSAGE"/>
+	        <object right.idref="rwc--" objectType.id="DOCUMENT"/>
+	        <object right.idref="rwcd-" objectType.id="REPORT"/>
+			<object right.idref="r----" objectType.id="JOBINFORMATION"/>
+	    </base>
+	
+		<role id="issuemanager" level="XC" licensedComponentIds="im" userLicenses="operate">
+			<system component.idref="view.issues"/>
+			<system component.idref="check.issue"/>
+			<system component.idref="view.monitoring"/>
+			<system component.idref="view.mashzone.url.builder"/>
+	        <system component.idref="view.home.dashboards"/>
+			<object right.idref="r----" objectType.id="USERGROUP"/>
+	        <object right.idref="r----" objectType.id="JOBINFORMATION"/>
+	        <object right.idref="rwcdu" objectType.id="ISSUE">
+	            <relation right.idref="ar" listAttrType.id="creator"/>
+	            <relation right.idref="ar" listAttrType.id="owners"/>
+				<relation right.idref="ar" listAttrType.id="reviewers"/>
+				<relation right.idref="ar" listAttrType.id="documents"/>
+				<relation right.idref="ar" listAttrType.id="issueRelevantObjects"/>
+	        </object>
+	        <object right.idref="r----" objectType.id="DASHBOARDCONNECTION"/>
+	    </role>
+	
+	</roles>
+</custom>

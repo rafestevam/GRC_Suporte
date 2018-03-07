@@ -70,28 +70,40 @@ public class RiskAndControlCalculation {
 			
 			if(defLine.equals(DefLineEnum.LINE_1)){
 				IStringAttribute status1LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE);
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo"))
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("inefetivo")){
 					this.countInef += 1;
-				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo"))
+					this.countNA = 0;
+				}
+				if((!status1LineAttr.isEmpty()) && status1LineAttr.getRawValue().equals("efetivo")){
 					this.countEf += 1;
+					this.countNA = 0;
+				}
 				if(status1LineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
 					this.countNA += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_2)){
 				IStringAttribute status2LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE);
-				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("inefetivo"))
+				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("inefetivo")){
 					this.countInef += 1;
-				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("efetivo"))
+					this.countNA = 0;
+				}
+				if((!status2LineAttr.isEmpty()) && status2LineAttr.getRawValue().equals("efetivo")){
 					this.countEf += 1;
+					this.countNA = 0;
+				}
 				if(status2LineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
 					this.countNA += 1;
 			}
 			if(defLine.equals(DefLineEnum.LINE_3)){
 				IStringAttribute status3LineAttr = controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE);
-				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("inefetivo"))
+				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("inefetivo")){
 					this.countInef += 1;
-				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("efetivo"))
+					this.countNA = 0;
+				}
+				if((!status3LineAttr.isEmpty()) && status3LineAttr.getRawValue().equals("efetivo")){
 					this.countEf += 1;
+					this.countNA = 0;
+				}
 				if(status3LineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
 					this.countNA += 1;
 			}

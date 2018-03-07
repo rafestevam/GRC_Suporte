@@ -718,6 +718,7 @@ rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
 	then
 		set "custom_is_reviewer_status" editable
 		set "custom_is_reviewer_status" mandatory
+		set "reviewers"                 mandatory
 	
 #		set "reviewer_status" editable
 		set "reviewer_remark" editable
@@ -729,9 +730,9 @@ rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
 		set "creator_status"             invisible
 		set "owner_status"               invisible
 		set "reviewer_status"            invisible
-		set "custom_ap_creator_status"   invisible
-		set "custom_ap_owner_status"     invisible
-		set "custom_ap_reviewer_status"  invisible
+#		set "custom_ap_creator_status"   invisible
+#		set "custom_ap_owner_status"     invisible
+#		set "custom_ap_reviewer_status"  invisible
 
 end
 
@@ -1109,3 +1110,36 @@ end
 #		
 #end
 # Fim REO 07.08.2017 - Evento EV107085
+
+rule "custom_set_change_fields_issue[I,V]"
+
+	salience 65
+	no-loop true
+	
+	when
+		user has in_general role "issuemanager"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		
+	then
+		set "name"        editable
+		set "description" editable
+		set "plannedenddate"  editable
+		set "reviewers"   editable
+
+end
+
+rule "custom_set_change_fields_actionplan[I,V]"
+
+	salience 64
+	no-loop true
+	
+	when
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		
+	then
+		set "name"        editable
+		set "description" editable
+		set "plannedenddate"  editable
+		set "reviewers"   editable
+
+end
