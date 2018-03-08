@@ -16,6 +16,7 @@
             <viewColumn id="control_obj_id" attributeType="obj_id"/>
             <viewColumn id="control_version_number" attributeType="version_number" isSelectColumn="true" />
             <viewColumn id="control_id" attributeType="control_id" isSelectColumn="true" />
+            <viewColumn id="control_change_date" attributeType="change_date" isSelectColumn="true"/>
 <!--             <viewColumn id="control_id" attributeType="control_id" isSelectColumn="true"/> -->
 <!--             <viewColumn id="control_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/> -->
         </viewObject>
