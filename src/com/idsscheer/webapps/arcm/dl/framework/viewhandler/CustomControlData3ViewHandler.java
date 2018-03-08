@@ -4,30 +4,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.apache.myfaces.shared.util.LocaleUtils;
 
-import com.aris.arcm.ui.framework.support.converter.DateConverter;
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.ILongAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IQueryRestriction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
+import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
@@ -54,79 +50,105 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 
 		IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROL);
+		IAppObjFacade facadeRisk = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.RISK);
 
-		IAppObjQuery appQuery = facade.createQuery();
+		IAppObjQuery appQueryControl = facade.createQuery();
+		IAppObjQuery appQueryRisk = facadeRisk.createQuery();
 		
 		Date criteriaDate = Calendar.getInstance().getTime();
 		
 		for (IFilterCriteria filter : filters) {
-			
 			for (IFilterCriteria filter2 : filter.getFilters()) {
-//				appQuery.addRestriction(QueryRestriction.le(IControlAttributeType.BASE_ATTR_CHANGE_DATE, filter2.getValue()));
-				//System.out.println(filter2.getValue());
 				criteriaDate = (Date)filter2.getValue();
 				criteriaDate.setHours(23);
 				criteriaDate.setMinutes(59);
 				criteriaDate.setSeconds(59);
+				
+				appQueryControl.addRestriction(QueryRestriction.le(IControlAttributeType.BASE_ATTR_CHANGE_DATE, criteriaDate));
+				appQueryRisk.addRestriction(QueryRestriction.le(IRiskAttributeType.BASE_ATTR_CHANGE_DATE, criteriaDate));
+				//System.out.println(filter2.getValue());
+
 			}
 		}
-		appQuery.setHeadRevisionsOnly(false);
-		appQuery.setIncludeDeletedObjects(true);
-//		appQuery.addRestriction(QueryRestriction.eq(IControlAttributeTypeCustom.ATTR_CONTROL_ID, "CO_125"));
+		
+		appQueryControl.setHeadRevisionsOnly(false);
+		appQueryControl.setIncludeDeletedObjects(true);
+		
+		appQueryRisk.setHeadRevisionsOnly(false);
+		appQueryRisk.setIncludeDeletedObjects(true);
+		appQueryRisk.addRestriction(QueryRestriction.eq(IRiskAttributeType.ATTR_OBJ_ID, 14850));
 		
 		
-		appQuery.addOrder(QueryOrder.descending(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
-//		appQuery.addOrder(QueryOrder.ascending(IControlAttributeType.BASE_ATTR_OBJ_ID));
+		appQueryRisk.addOrder(QueryOrder.descending(IRiskAttributeType.BASE_ATTR_VERSION_NUMBER));
+		appQueryControl.addOrder(QueryOrder.descending(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
 
-			
-//		appQuery.addRestriction(
-//				QueryRestriction.or(
-//						QueryRestriction.eq(IControlAttributeType.BASE_ATTR_VERSION_ACTIVE, true), 
-//						QueryRestriction.eq(IControlAttributeType.BASE_ATTR_VERSION_ACTIVE, false)));
+		IAppObjIterator iteratorQueryResult = appQueryControl.getResultIterator();
+		IAppObjIterator iteratorQueryRiskResult = appQueryRisk.getResultIterator();
 		
-		IAppObjIterator iteratorQueryResult = appQuery.getResultIterator();
-		TreeMap<Long, Long> hashedMap = new TreeMap<>();
+		ArrayList<Long> listFlagRisks = new ArrayList<>();
+		ArrayList<Long> validControls = new ArrayList<>();
+		TreeMap<Long, Long> hashedMapControls = new TreeMap<>();
+		
 		try{
-		while (iteratorQueryResult.hasNext()) {
-//			System.out.println("IAppObj controlObj = iteratorQueryResult.next()");
-			IAppObj controlObj = iteratorQueryResult.next();
-			
-//			System.out.println("System.out.println(controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue())");
-			System.out.println(controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue());
-			
-//			System.out.println("long controlDate = controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue().getTime()");
-			long controlDate = controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue().getTime();
-			
-//			System.out.println("if(controlDate > criteriaDate.getTime())");
-			if(controlDate > criteriaDate.getTime())
-				continue;
-			
-//			System.out.println("if(!controlObj.getVersionData().isDeleted())");
-//			if(!controlObj.getVersionData().isDeleted()) {
-//				Long maxVersionNumber = PersistenceAPI.getPersistenceManager().getMaxVersionNumber(issueObj.getVersionData().getOVID(), transaction);
-//				Integer obj_id = (int) issueObj.getObjectId();
-//				if (controlObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID).equals("CO_125")) {
-//					int teste = 0;
-//					teste = teste + 1;
-//				}
-//				System.out.println("if (!hashedMap.containsKey(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID)))");
-				if (!hashedMap.containsKey(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID))) {
-//					System.out.println("hashedMap.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID)");
-					hashedMap.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID), 
-							 controlObj.getRawValue(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
+			while (iteratorQueryRiskResult.hasNext()) {
+				// Objeto de risco.
+				IAppObj riskObj = iteratorQueryRiskResult.next();
+				
+				// Pega o ID do risco corrente.
+				Long currentRiskID = riskObj.getRawValue(IRiskAttributeType.BASE_ATTR_OBJ_ID);
+				// Pega lista de controles da versão do risco corrente.
+				List<IOVID> controls = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getRawValue();
+				
+				
+				// Verifica se os controles desta versão de risco já foram
+				// contabilizados.
+				if (!listFlagRisks.contains(currentRiskID)) {
+					
+					listFlagRisks.add(currentRiskID);
+					
+					// Cria Iterator da lista de controles deste risco.
+					Iterator<IOVID> currRiskControlsIterator = controls.iterator();
+					while (currRiskControlsIterator.hasNext()) {
+						
+						Long currentControlID = currRiskControlsIterator.next().getId();
+						// Adiciona esse controle na lista de controles válidos.
+						validControls.add(currentControlID);
+					}
 				}
-//			}
-		}
-		}catch(Exception e){
+			}
+		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-
-//		if (null == restrAnd) {
-//			IQueryExpression restr1 = QueryRestriction.eq(IControlAttributeType.BASE_ATTR_VERSION_ACTIVE, true);
-//			appQuery.addRestriction(restr1);
-//		}
+		
+		try{
+			while (iteratorQueryResult.hasNext()) {
+				
+				IAppObj controlObj = iteratorQueryResult.next();
+				
+//				long controlDate = controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue().getTime();
+				
+	//			System.out.println("if(controlDate > criteriaDate.getTime())");
+//				if(controlDate > criteriaDate.getTime())
+//					continue;
+				
+				long controlId = controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID);
+				
+				if (!hashedMapControls.containsKey(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID))) {
+					if (validControls.contains(controlId)) {
+						hashedMapControls.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID), 
+								 controlObj.getRawValue(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
+					}
+				}
+	//			}
+			}
+		} catch(Exception e) {
+			throw new RuntimeException(e);
+		}
+		
+		
 		
 		IDataLayerTransaction transaction;
+		
 		try {
 			transaction = PersistenceAPI.getTransactionFactory().createTransaction();
 		} catch (PersistenceException e1) {
@@ -134,36 +156,20 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 			throw new RuntimeException(e1);
 		}
 
-//		IAppObjIterator iterator = appQuery.getResultIterator();
-//		while (iterator.hasNext()) {
-//			IAppObj controlObj = iterator.next();
-//			try {
-//				Long maxVersionNumber = PersistenceAPI.getPersistenceManager().getMaxVersionNumber(controlObj.getVersionData().getOVID(), transaction);
-//				Integer obj_id = (int) controlObj.getObjectId();
-///*				Integer version_number = Integer.valueOf(
-//						issueObj.getAttribute(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER).getRawValue().intValue());*/
-//				resultMap.put(obj_id, maxVersionNumber.intValue());
-//			} catch (PersistenceException e) {
-//				// TODO Auto-generated catch block
-//				throw new RuntimeException(e);
-//			}
-//		}
-		appQuery.release();
+		appQueryControl.release();
 
-//		printMap(resultMap);
-
-		if (hashedMap.size() > 0) {
+		if (hashedMapControls.size() > 0) {
 
 			// Limpando query original
 			for (IQueryObjectDefinition def : query.getObjectDefinitions()) {
 				query.markAsRemovable(def);
 			}
-			 filters.clear();
+			filters.clear();
 
 			// Criando nova query dinamicamente
 			List<IFilterCriteria> filtersAnd = new ArrayList<IFilterCriteria>();
 			IFilterFactory filterFactory = PersistenceAPI.getFilterFactory();
-			for (Map.Entry<Long, Long> entry : hashedMap.entrySet()) {
+			for (Map.Entry<Long, Long> entry : hashedMapControls.entrySet()) {
 				IFilterCriteria criteria = filterFactory
 						.and(Arrays.asList(new IFilterCriteria[] {
 								new SimpleFilterCriteria("c_id", "c_id", DataLayerComparator.EQUAL,
