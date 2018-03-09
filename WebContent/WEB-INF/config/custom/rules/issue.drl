@@ -1125,6 +1125,8 @@ rule "custom_set_change_fields_issue[I,V]"
 		set "description" editable
 		set "plannedenddate"  editable
 		set "reviewers"   editable
+		set "replanned"   editable
+		set "documents"   editable
 
 end
 
@@ -1141,5 +1143,7 @@ rule "custom_set_change_fields_actionplan[I,V]"
 		set "description" editable
 		set "plannedenddate"  editable
 		set "reviewers"   editable
+		set "replanned"   editable
+		set "documents"   editable		
 
 end
