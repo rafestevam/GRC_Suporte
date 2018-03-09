@@ -364,31 +364,73 @@
         <link linktype.id="4" firstViewObject="VO_controldata_control" secondViewObject="VO_controldata_risk" joinType="LEFT" attendVersionizing="false"/>
     </view>
     
-<!--      <view id="obj2objdata" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" > -->
-<!--         <viewObject id="VO_obj2obj" objectType="OBJ2OBJ" isMainViewObject="true"> -->
-<!--             <viewColumn id="o2o_id" attributeType="id" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_parent_version_number_in" attributeType="parent_version_number_in" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_parent_version_number_out" attributeType="parent_version_number_out" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_child_id" attributeType="child_id" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_child_version_number" attributeType="child_version_number" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_link_type" attributeType="link_type" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_version_active" attributeType="version_active" isSelectColumn="true"/> -->
-<!--             <viewColumn id="o2o_deactivated" attributeType="deactivated" isSelectColumn="true"/> -->
-<!--         </viewObject> -->
-<!--     </view> -->
+    <view id="custom_corpriskdata" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
+     <viewObject id="VO_hierarchy" objectType="HIERARCHY" isMainViewObject="true">
+            <viewColumn id="rc_rcid" attributeType="riskid" isSelectColumn="true"/>
+            <viewColumn id="rc_name" attributeType="name" isSelectColumn="true"/>
+            <viewColumn id="rc_csttype" attributeType="rc_csttype" isSelectColumn="true"/>
+            <viewColumn id="rc_potencial" attributeType="classpot" isSelectColumn="true"/>
+            <viewColumn id="rc_residual" attributeType="residual" isSelectColumn="true"/>
+            <viewColumn id="rc_description" attributeType="description" isSelectColumn="true"/>
+            <viewColumn id="rc_residual_risk" attributeType="residual" isSelectColumn="true"/>
+            <viewColumn id="rc_version_number" attributeType="version_number" isSelectColumn="true"/>
+            <viewColumn id="rc_version_active" attributeType="version_active" isSelectColumn="true"/>
+        	<viewColumn id="rc_change_date" attributeType="change_date" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <conditions>
+        	<condition column.id="rc_csttype" compareType="EQ" value="12"/>
+        </conditions>
+     </view>
+     
+     <view id="custom_corpriskdata2" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
+		<viewObject objectType="HIERARCHY" id="VO_corprisk_categ" isMainViewObject="true">
+        	<viewColumn id="ct_obj_id" attributeType="obj_id" isSelectColumn="true"/>
+        	<viewColumn id="ct_name" attributeType="name" isSelectColumn="true" isSortable="false"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy" objectType="HIERARCHY" isMainViewObject="false">
+            <viewColumn id="rc_rcid" attributeType="riskid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_csttype" attributeType="rc_csttype" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_Risk" objectType="RISK" isMainViewObject="false">
+        	<viewColumn id="r_id" attributeType="risk_id" isSelectColumn="true"/>
+        </viewObject>
+        <link firstViewObject="VO_corprisk_categ" linktype.id="46" secondViewObject="VO_hierarchy" joinType="LEFT"/>
+        <link firstViewObject="VO_Risk" linktype.id="3162" secondViewObject="VO_hierarchy" joinType="INNER"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="rc_csttype" compareType="EQ" value="12"/>
+            </compoundCondition>
+        </conditions>
+    </view>
    
-<!--    <view id="customrisk2controlbasedata" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomRisk2ControlBaseDataViewHandler"> -->
-<!--         <viewObject id="VO_controldata_risk" objectType="RISK" isMainViewObject="true"> -->
-<!--             <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/> -->
-<!--             <viewColumn id="r_version_number" attributeType="obj_id" isSelectColumn="true"/> -->
-<!--             <viewColumn id="r_version_active" attributeType="obj_id" isSelectColumn="true"/> -->
-<!--             <viewColumn id="r_deactivated" attributeType="obj_id" isSelectColumn="true"/> -->
-<!--         </viewObject> -->
-<!--         <viewObject id="VO_controldata_control" objectType="CONTROL"> -->
-<!--             <viewColumn id="c_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/> -->
-<!--         </viewObject> -->
-<!--         <link linktype.id="4" firstViewObject="VO_controldata_risk" secondViewObject="VO_controldata_control" attendVersionizing="false" /> -->
-<!--     </view> -->
+	 <view id="custom_controldataaux" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_controldata_control" objectType="CONTROL" isMainViewObject="true">
+            <viewColumn id="c_id" attributeType="obj_id" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+	    	<viewColumn id="c_version_number" attributeType="version_number" isSelectColumn="true" function="MAX" />
+	    	<viewColumn id="c_change_date" attributeType="change_date" />
+        </viewObject>
+        <conditions>
+<!--         	<compoundCondition conditionConnect="AND"> -->
+<!--         		<condition column.id="c_change_date" compareType="LE" value="2018-03-01" /> -->
+        		<condition column.id="c_change_date" compareType="LE" valueColumn.id="c_change_date" />
+<!--         	</compoundCondition> -->
+        </conditions>
+    </view>
+    
+    <view id="custom_riskdataaux" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_controldata_control" objectType="RISK" isMainViewObject="true">
+            <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true" isGrouped="true"/>
+	    	<viewColumn id="r_version_number" attributeType="version_number" isSelectColumn="true" function="MAX" />            
+	    	<viewColumn id="r_change_date" attributeType="change_date" />
+        </viewObject>
+        <conditions>
+        	<compoundCondition conditionConnect="AND">
+        		<condition column.id="r_change_date" compareType="LE" value="20180301" />
+        		<condition column.id="r_id" compareType="EQ" value="14850" />
+        	</compoundCondition>
+        </conditions>
+    </view>
    
     <view id="control2coso" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
         <viewObject id="VO_control2coso_control" objectType="CONTROL" isMainViewObject="true">
