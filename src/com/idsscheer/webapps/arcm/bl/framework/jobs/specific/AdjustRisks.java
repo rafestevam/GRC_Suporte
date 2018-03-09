@@ -74,6 +74,7 @@ public class AdjustRisks extends BaseJob {
 			
 			facade.allocateLock(riskObj.getVersionData().getOVID(), LockType.FORCEWRITE);
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userContext);
+			String potencial = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).getRawValue();
 			
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.CONTROL), getInternalTransaction());
 			
@@ -114,6 +115,8 @@ public class AdjustRisks extends BaseJob {
 				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
 				
 				riskResidualFinal = this.riskResidualFinal(riscoPotencial, riskClassFinal);
+				if(riskResidualFinal.equals("Não Avaliado"))
+					riskResidualFinal = potencial;
 				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			}
 			

@@ -431,6 +431,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
 				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+				if(riskResidualFinal.equals("Não Avaliado"))
+					riskResidualFinal = this.riscoPotencial;
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			}
 			//Fim Inclusão - REO - 14.02.2018 - EV1333332			

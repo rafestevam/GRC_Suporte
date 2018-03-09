@@ -473,6 +473,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
 				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
+				if(riskResidualFinal.equals("Não Avaliado"))
+					riskResidualFinal = this.riscoPotencial;
 				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			}
 			
