@@ -76,7 +76,7 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 		
 		appQueryRisk.setHeadRevisionsOnly(false);
 		appQueryRisk.setIncludeDeletedObjects(true);
-		appQueryRisk.addRestriction(QueryRestriction.eq(IRiskAttributeType.ATTR_OBJ_ID, 14850));
+//		appQueryRisk.addRestriction(QueryRestriction.eq(IRiskAttributeType.ATTR_OBJ_ID, 14850));
 		
 		
 		appQueryRisk.addOrder(QueryOrder.descending(IRiskAttributeType.BASE_ATTR_VERSION_NUMBER));
