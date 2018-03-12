@@ -410,12 +410,12 @@
 	    	<viewColumn id="c_version_number" attributeType="version_number" isSelectColumn="true" function="MAX" />
 	    	<viewColumn id="c_change_date" attributeType="change_date" />
         </viewObject>
-        <conditions>
+<!--         <conditions> -->
 <!--         	<compoundCondition conditionConnect="AND"> -->
 <!--         		<condition column.id="c_change_date" compareType="LE" value="2018-03-01" /> -->
-        		<condition column.id="c_change_date" compareType="LE" valueColumn.id="c_change_date" />
+<!--         		<condition column.id="c_change_date" compareType="LE" valueColumn.id="c_change_date" /> -->
 <!--         	</compoundCondition> -->
-        </conditions>
+<!--         </conditions> -->
     </view>
     
     <view id="custom_riskdataaux" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
@@ -424,12 +424,12 @@
 	    	<viewColumn id="r_version_number" attributeType="version_number" isSelectColumn="true" function="MAX" />            
 	    	<viewColumn id="r_change_date" attributeType="change_date" />
         </viewObject>
-        <conditions>
-        	<compoundCondition conditionConnect="AND">
-        		<condition column.id="r_change_date" compareType="LE" value="20180301" />
-        		<condition column.id="r_id" compareType="EQ" value="14850" />
-        	</compoundCondition>
-        </conditions>
+<!--         <conditions> -->
+<!--         	<compoundCondition conditionConnect="AND"> -->
+<!--         		<condition column.id="r_change_date" compareType="LE" value="20180301" /> -->
+<!--         		<condition column.id="r_id" compareType="EQ" value="14850" /> -->
+<!--         	</compoundCondition> -->
+<!--         </conditions> -->
     </view>
    
     <view id="control2coso" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
