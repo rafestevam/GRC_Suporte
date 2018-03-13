@@ -90,15 +90,16 @@ public class AdjustControl1Line extends BaseJob {
 							}
 							
 							facade.save(controlUpdObj, getInternalTransaction(), true);
+							facade.releaseLock(controlObj.getVersionData().getHeadOVID());
 							increaseEditedObjectsCounter(1);
 						}
 						
 					}
 					
-					facade.releaseLock(controlObj.getVersionData().getHeadOVID());
-					increaseProgress();
-					
 				}
+				
+				//facade.releaseLock(controlObj.getVersionData().getHeadOVID());
+				increaseProgress();
 				
 			}
 			

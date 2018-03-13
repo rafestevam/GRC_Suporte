@@ -59,10 +59,13 @@ public class AdjustRisks extends BaseJob {
 		double count2line = 0;
 		double count3line = 0;
 		
-		try{
-		
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.RISK);
 		IAppObjQuery query = facade.createQuery();
+		
+		try{
+		
+		//IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.RISK);
+		//IAppObjQuery query = facade.createQuery();
 		query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_VERSION_ACTIVE, true));
 		query.setHeadRevisionsOnly(true);
 		
@@ -131,6 +134,8 @@ public class AdjustRisks extends BaseJob {
 		}catch(Exception e){
 			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
 			throw new JobAbortException(e.getLocalizedMessage(), JOB_NAME_KEY);
+		}finally{
+			query.release();
 		}
 		
 		

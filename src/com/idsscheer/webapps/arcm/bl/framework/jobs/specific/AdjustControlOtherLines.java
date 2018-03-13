@@ -157,8 +157,10 @@ public class AdjustControlOtherLines extends BaseJob{
 					IAppObj ctAppObj = controlFacade.load(ctOVID, true);
 					
 					if(ctAppObj != null && !ctAppObj.getVersionData().isDeleted()){
-						if(ctAppObj.getVersionData().isHeadRevision())
+						if(ctAppObj.getVersionData().isHeadRevision()){
 							controlReturn.add(ctAppObj);
+							controlFacade.releaseLock(ctOVID);
+						}
 					}
 					
 				}
