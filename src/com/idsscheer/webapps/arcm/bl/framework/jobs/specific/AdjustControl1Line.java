@@ -95,11 +95,11 @@ public class AdjustControl1Line extends BaseJob {
 						
 					}
 					
+					facade.releaseLock(controlObj.getVersionData().getHeadOVID());
+					increaseProgress();
+					
 				}
 				
-				facade.releaseLock(controlObj.getVersionData().getHeadOVID());
-				increaseProgress();
-
 			}
 			
 			//setJobEndState(JOBENDSTATE.SUCCESS);
