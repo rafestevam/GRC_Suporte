@@ -6,7 +6,11 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 
+import com.idsscheer.batchserver.administration.BatchServer;
+import com.idsscheer.batchserver.administration.communication.IBatchServerCommunication;
+import com.idsscheer.batchserver.config.BatchServerConfig;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
+import com.idsscheer.webapps.arcm.bl.datatransport.xml.xmlimport.ForceLocksHandler;
 import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -23,13 +27,13 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomProcRiskResidualCalc;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceClient;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.IUIEnvironment;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomRASaveCommand extends BaseSaveActionCommand {
-	
 	
 	//Inicio REO 06.11.2017 - EV118286
 	@Override
@@ -51,8 +55,10 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 			String riscoPotencial = raObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).getRawValue();
 			List<IAppObj> currRskList = raObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(jobEnv.getUserContext());
 			for (IAppObj riskObj : currRskList) {
-				rskAppFacade.allocateLock(riskObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+				
 				IAppObj rskUpdAppObj = rskAppFacade.load(riskObj.getVersionData().getHeadOVID(), this.getDefaultTransaction(), true);
+				rskAppFacade.allocateLock(riskObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+				
 				String riskName = rskUpdAppObj.getAttribute(IRiskAttributeType.ATTR_NAME).getRawValue();
 				IStringAttribute classFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL);
 				IStringAttribute residualFinalAttr = rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL);
@@ -151,6 +157,8 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, e.getMessage(), new String[] { getStringRepresentation(this.formModel.getAppObj()) });
 			}	
 		}
+		
+		this.formModel.releaseLock();
 				
 	}
 	
