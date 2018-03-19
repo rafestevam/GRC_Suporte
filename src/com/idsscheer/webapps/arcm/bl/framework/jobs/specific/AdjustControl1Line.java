@@ -31,8 +31,12 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 @CanBeScheduled
@@ -49,21 +53,34 @@ public class AdjustControl1Line extends BaseJob {
 
 	@Override
 	protected void deallocateResources() {
+		deallocateLocalSources();
+	}
+
+	private void deallocateLocalSources() {
+		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
+		try {
+			for (ILockObject lock : lockService.findLocks()) {
+				lockService.releaseLock(lock.getObjectType(), lock.getLockUserId(), null);
+			}
+		} catch (LockServiceException e) {
+			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
+		}
 	}
 
 	@Override
 	protected void execute() throws JobAbortException, JobWarningException {
 
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.CONTROL);
-
+		IOVID controlOVID = null;
 		try {
 
 			List<IAppObj> controlList = this.getControlList(facade);
 			setBaseObjectsToProcessCount(controlList.size());
 			for (IAppObj controlObj : controlList) {
 				
-				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+				controlOVID = controlObj.getVersionData().getHeadOVID();
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
+				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				
 				List<IAppObj> cetList = controlObj.getAttribute(IControlAttributeType.LIST_CONTROLEXECUTIONTASKS)
 						.getElements(userContext);
@@ -106,6 +123,8 @@ public class AdjustControl1Line extends BaseJob {
 			//setJobEndState(JOBENDSTATE.SUCCESS);
 			
 		} catch (Exception e) {
+			facade.releaseLock(controlOVID);
+			deallocateLocalSources();
 			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
 			throw new JobAbortException(e.getLocalizedMessage(), JOB_NAME_KEY);
 		}
@@ -136,10 +155,19 @@ public class AdjustControl1Line extends BaseJob {
 				// IAppObjFacade ceFacade =
 				// this.environment.getAppObjFacade(ObjectType.CONTROLEXECUTION);
 				IOVID ceOVID = OVIDFactory.getOVID(ceID, ceVersionNumber);
-				IAppObj ceAppObj = ceFacade.load(ceOVID, true);
-
-				if (ceAppObj != null)
-					bufList.add(ceAppObj);
+				
+				try{
+					IAppObj ceAppObj = ceFacade.load(ceOVID, true);
+					ceFacade.allocateLock(ceOVID, LockType.FORCEWRITE);
+					
+					if (ceAppObj != null)
+						bufList.add(ceAppObj);
+					
+					ceFacade.releaseLock(ceOVID);
+				}catch(Exception e){
+					ceFacade.releaseLock(ceOVID);
+					throw e;
+				}
 
 			}
 
@@ -213,7 +241,7 @@ public class AdjustControl1Line extends BaseJob {
 	@Override
 	public IEnumerationItem getJobType() {
 		// TODO Auto-generated method stub
-		return EnumerationsCustom.JOBS.JOBLISTCLEANINGJOB;
+		return EnumerationsCustom.CUSTOM_JOBS.CONTROL_A1L;
 	}
 
 }

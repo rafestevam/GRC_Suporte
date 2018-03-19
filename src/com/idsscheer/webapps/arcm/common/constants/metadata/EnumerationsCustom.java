@@ -80,13 +80,14 @@ public class EnumerationsCustom extends Enumerations {
 	}
 	
 	public static abstract interface CUSTOM_JOBS {
-		public static final EnumerationWrapper ENUM = new EnumerationWrapper("custom_jobs");
+		public static final EnumerationWrapper ENUM = new EnumerationWrapper("jobs");
 		public static final IEnumerationItem ISSUE_PENDING = EnumerationsCustom.lookupEnumerationItem(ENUM, "updateIssuesJob");
 		public static final IEnumerationItem ISSUE_SLA = EnumerationsCustom.lookupEnumerationItem(ENUM, "updateIssueSLAUpdateJob");
 		public static final IEnumerationItem RA_MAIL = EnumerationsCustom.lookupEnumerationItem(ENUM, "RiskassessmentDelayMailJob");
 		public static final IEnumerationItem CR_FIXING = EnumerationsCustom.lookupEnumerationItem(ENUM, "CorpRiskFixingJob");
 		public static final IEnumerationItem CONTROL_A1L = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustControl1Line");
 		public static final IEnumerationItem CONTROL_AOL = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustControlOtherLines");
+		public static final IEnumerationItem CONTROL_RSK = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustRisks");
 	}
 	
 	public static abstract interface CUSTOM_PROGRESS {
