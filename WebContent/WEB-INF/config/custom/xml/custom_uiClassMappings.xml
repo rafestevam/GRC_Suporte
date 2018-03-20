@@ -10,7 +10,13 @@
 			
 			<!-- Inicio REO - 26.02.2018 - EV133332 -->
 			<control name="customriskform" clsName="com.idsscheer.webapps.arcm.ui.components.risk.control.object.CustomRiskForm" />
+			<control name="customraform" clsName="com.idsscheer.webapps.arcm.ui.components.riskassessment.control.object.CustomRiskassessmentForm" />
 			<control name="customissueform" clsName="com.idsscheer.webapps.arcm.ui.components.issue.control.object.CustomIssueForm" />
+			<control name="customcontrolform" clsName="com.idsscheer.webapps.arcm.ui.components.control.control.object.CustomControlForm" />
+			<control name="customceform" clsName="com.idsscheer.webapps.arcm.ui.components.controlexecution.control.object.CustomControlExecutionForm" />
+			<control name="customcetform" clsName="com.idsscheer.webapps.arcm.ui.components.controlexecutiontask.control.object.CustomControlexecutiontaskForm" />
+			<control name="customtestcaseform" clsName="com.idsscheer.webapps.arcm.ui.components.testcase.control.object.CustomTestcaseForm" />
+			<control name="customtestdefform" clsName="com.idsscheer.webapps.arcm.ui.components.testdefinition.control.object.CustomTestdefinitionForm" />
 			<!-- Fim REO - 26.02.2018 - EV133332 -->
 		</controls>
 		

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
-	<form id="FORM_RISKASSESSMENT" controlName="riskassessmentform">
+	<form id="FORM_RISKASSESSMENT" controlName="customraform">
+<!-- 	controlName="riskassessmentform"> -->
         <logToolbarButtons>
             <buttonReference button.idref="ARIS_REPORT"/>
         </logToolbarButtons>

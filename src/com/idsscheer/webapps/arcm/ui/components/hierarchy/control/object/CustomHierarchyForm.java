@@ -37,12 +37,20 @@ import com.idsscheer.webapps.arcm.config.metadata.form.IPage;
 import com.idsscheer.webapps.arcm.config.metadata.form.IRowgroup;
 import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IEnumAttributeType;
 import com.idsscheer.webapps.arcm.config.metadata.uicommon.IRow;
+import com.idsscheer.webapps.arcm.ui.framework.controls.context.IControlContext;
 import com.idsscheer.webapps.arcm.ui.framework.controls.object.Form;
 
 public class CustomHierarchyForm extends Form {
 
 	public CustomHierarchyForm(String p_instanceName, Map<String, String> p_parameters) {
 		super(p_instanceName, p_parameters);
+	}
+	
+	@Override
+	public void init(IControlContext arg0) {
+		// TODO Auto-generated method stub
+		super.init(arg0);
+		this.form.setVersion(this.form.getAppObj().getVersionData().getVersionCount());
 	}
 
 	// Inicio REO - 18.08.2017 - Riscos Corporativos

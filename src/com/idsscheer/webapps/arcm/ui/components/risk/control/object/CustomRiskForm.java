@@ -7,6 +7,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.ButtonTypesCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations.USERROLE_TYPE;
 import com.idsscheer.webapps.arcm.config.metadata.button.IButtonType;
 import com.idsscheer.webapps.arcm.config.metadata.form.IPage;
+import com.idsscheer.webapps.arcm.ui.framework.controls.context.IControlContext;
 import com.idsscheer.webapps.arcm.ui.framework.controls.object.Form;
 
 public class CustomRiskForm extends Form {
@@ -14,6 +15,12 @@ public class CustomRiskForm extends Form {
 	public CustomRiskForm(String p_instanceName, Map<String, String> p_parameters) {
 		super(p_instanceName, p_parameters);
 		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public void init(IControlContext arg0) {
+		super.init(arg0);
+		this.form.setVersion(this.form.getAppObj().getVersionData().getVersionCount());
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
    
-	<form id="FORM_CONTROLEXECUTION">
+	<form id="FORM_CONTROLEXECUTION" controlName="customceform">
         <logToolbarButtons>
             <buttonReference button.idref="ARIS_REPORT"/>
         </logToolbarButtons>

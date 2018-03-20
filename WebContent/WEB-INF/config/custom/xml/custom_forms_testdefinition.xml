@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
     
-<!-- GAP - GRC52 - Inicio -->
-<form id="FORM_TESTDEFINITION">
+	<!-- GAP - GRC52 - Inicio -->
+	<form id="FORM_TESTDEFINITION" controlName="customtestdefform">
         <logToolbarButtons>
             <buttonReference button.idref="ARIS_REPORT"/>
         </logToolbarButtons>
