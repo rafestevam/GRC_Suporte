@@ -1130,20 +1130,20 @@ rule "custom_set_change_fields_issue[I,V]"
 
 end
 
-rule "custom_set_change_fields_actionplan[I,V]"
-
-	salience 64
-	no-loop true
-	
-	when
-		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-		
-	then
-		set "name"        editable
-		set "description" editable
-		set "plannedenddate"  editable
-		set "reviewers"   editable
-		set "replanned"   editable
-		set "documents"   editable		
-
-end
+#rule "custom_set_change_fields_actionplan[I,V]"
+#
+#	salience 64
+#	no-loop true
+#	
+#	when
+#		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+#		
+#	then
+#		set "name"        editable
+#		set "description" editable
+#		set "plannedenddate"  editable
+#		set "reviewers"   editable
+#		set "replanned"   editable
+#		set "documents"   editable		
+#
+#end

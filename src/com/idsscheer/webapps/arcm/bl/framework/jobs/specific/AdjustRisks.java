@@ -10,20 +10,27 @@ import com.idsscheer.webapps.arcm.bl.framework.jobs.BaseJob;
 import com.idsscheer.webapps.arcm.bl.framework.jobs.generic.CanBeScheduled;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.common.constants.LockInfoFlag;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeType;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
 import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 @CanBeScheduled
@@ -40,7 +47,19 @@ public class AdjustRisks extends BaseJob {
 	@Override
 	protected void deallocateResources() {
 		// TODO Auto-generated method stub
-		
+		deallocateLocalSources();
+	}
+
+	private void deallocateLocalSources() {
+		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
+		try {
+			for (ILockObject lock : lockService.findLocks()) {
+				lockService.releaseLock(lock.getLockObjectId(), lock.getLockUserId(), LockInfoFlag.CLEAN, lock.getRemoteClientID());
+				//lockService.releaseLock(lock.getObjectType(), lock.getLockUserId(), null);
+			}
+		} catch (LockServiceException e) {
+			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
+		}
 	}
 
 	@Override
@@ -59,10 +78,13 @@ public class AdjustRisks extends BaseJob {
 		double count2line = 0;
 		double count3line = 0;
 		
-		try{
-		
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.RISK);
 		IAppObjQuery query = facade.createQuery();
+		
+		try{
+		
+		//IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.RISK);
+		//IAppObjQuery query = facade.createQuery();
 		query.addRestriction(QueryRestriction.eq(IRiskAttributeType.BASE_ATTR_VERSION_ACTIVE, true));
 		query.setHeadRevisionsOnly(true);
 		
@@ -73,6 +95,7 @@ public class AdjustRisks extends BaseJob {
 			IAppObj riskObj = iterator.next();
 			
 			facade.allocateLock(riskObj.getVersionData().getOVID(), LockType.FORCEWRITE);
+			
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(userContext);
 			String potencial = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).getRawValue();
 			
@@ -103,7 +126,8 @@ public class AdjustRisks extends BaseJob {
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
 			
-			String riscoPotencial = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).getRawValue();
+			IStringAttribute riscoPotencialAttr = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT);
+			String riscoPotencial = riscoPotencialAttr.isEmpty() ? "" : riscoPotencialAttr.getRawValue();
 			if(!riscoPotencial.equals("Nao Avaliado")){
 				riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
 				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
@@ -129,8 +153,11 @@ public class AdjustRisks extends BaseJob {
 		}
 		
 		}catch(Exception e){
+			deallocateLocalSources();
 			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
 			throw new JobAbortException(e.getLocalizedMessage(), JOB_NAME_KEY);
+		}finally{
+			query.release();
 		}
 		
 		
@@ -227,7 +254,7 @@ public class AdjustRisks extends BaseJob {
 	@Override
 	public IEnumerationItem getJobType() {
 		// TODO Auto-generated method stub
-		return EnumerationsCustom.JOBS.JOBLISTCLEANINGJOB;
+		return EnumerationsCustom.CUSTOM_JOBS.CONTROL_RSK;
 	}
 
 }

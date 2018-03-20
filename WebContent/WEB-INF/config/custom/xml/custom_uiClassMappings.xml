@@ -10,6 +10,7 @@
 			
 			<!-- Inicio REO - 26.02.2018 - EV133332 -->
 			<control name="customriskform" clsName="com.idsscheer.webapps.arcm.ui.components.risk.control.object.CustomRiskForm" />
+			<control name="customissueform" clsName="com.idsscheer.webapps.arcm.ui.components.issue.control.object.CustomIssueForm" />
 			<!-- Fim REO - 26.02.2018 - EV133332 -->
 		</controls>
 		

@@ -124,6 +124,8 @@ public class RiskAndControlCalculation {
 			
 			countTotal += 1;
 			
+			facade.releaseLock(controlObj);
+			
 		}
 		
 		try{
