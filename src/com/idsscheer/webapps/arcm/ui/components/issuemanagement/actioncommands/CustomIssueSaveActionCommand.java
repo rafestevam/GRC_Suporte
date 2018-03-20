@@ -43,6 +43,8 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	//private int count_is_progress = 0;
 	//private int count_is_fup = 0;
 	private long deactivated;
+	
+	private CustomTaskItemActionPlan taskItemActionPlanEngine;
 		
 	private static final boolean DEBUGGER_ON = true;
 	protected void afterExecute(){
@@ -67,7 +69,12 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		 if(issueType.getId().equals("actionplan")){					
 			this.displayLog("Tipo : " + issueType.getId());		
 
-		
+			// 13.03.2018 - FCT - EV131854
+			taskItemActionPlanEngine = 
+					new CustomTaskItemActionPlan(
+							currIssueAppObj, jobCtx, this.getDefaultTransaction(), this.getUserContext().getUser());
+			taskItemActionPlanEngine.createActionPlanTaskItem();
+			
 			try{
 
 				//while(iroIterator.hasNext()){
