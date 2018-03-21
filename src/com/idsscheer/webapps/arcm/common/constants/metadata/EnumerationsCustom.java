@@ -88,6 +88,8 @@ public class EnumerationsCustom extends Enumerations {
 		public static final IEnumerationItem CONTROL_A1L = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustControl1Line");
 		public static final IEnumerationItem CONTROL_AOL = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustControlOtherLines");
 		public static final IEnumerationItem CONTROL_RSK = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustRisks");
+		// EV131854 - Job para readequar taskitens de action plans já existentes.
+		public static final IEnumerationItem ACTIONTASKITEM = EnumerationsCustom.lookupEnumerationItem(ENUM, "ActionPlanTaskItemJob");
 	}
 	
 	public static abstract interface CUSTOM_PROGRESS {
