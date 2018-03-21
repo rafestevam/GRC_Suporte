@@ -2,7 +2,7 @@
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
  
 
-     <view id="IssueOwner2" view.parameter="DISTINCT">
+     <view id="IssueOwner2" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomIssues3ViewHandler">
         <viewObject id="VO_IssueOwner_ISSUE" objectType="ISSUE" isMainViewObject="true">
             <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true"/>
  			<viewColumn id="action_type" attributeType="action_type" isSelectColumn="true" isSortable="true"/>    
@@ -20,6 +20,7 @@
             <viewColumn id="priority" attributeType="priority" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="created_by_testcase" attributeType="created_by_testcase"/>
             <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="version_number" attributeType="version_number" isSelectColumn="true" isSortable="true"/>
             <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_IssueOwner_CREATOR" objectType="USER">
