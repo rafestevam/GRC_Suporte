@@ -434,6 +434,10 @@
         </enumitem>
         <!-- Fim REO - 27.02.2018 - EV133332 -->
         
+        <enumitem id="ActionPlanTaskItemJob" value="59">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.ActionPlanTaskItemJob"/>
+        </enumitem>
+        
         <!-- GRC 82 -->
 <!-- 		<enumitem id="updateIssueSLAUpdateJob" value="54"> -->
 <!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/> -->
