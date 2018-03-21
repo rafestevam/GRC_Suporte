@@ -21,22 +21,34 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribu
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.common.constants.LockInfoFlag;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations;
+import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutiontaskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
+import com.idsscheer.webapps.arcm.config.metadata.enumerations.ColoredEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
 import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	
@@ -56,6 +68,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	private double countEf = 0;
 	private long cetObjectId = 0;
 	private IUserContext jobCtx; //REO+ 27.09.2017 - EV113345
+	private ColoredEnumerationItem ownerStatus;
 
 	protected void afterExecute(){
 		
@@ -71,17 +84,29 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//IAppObj currParentCtrlObj = this.parentControl(currAppObj);
 			long parentControlObjId = this.parentControl(currAppObj.getObjectId());
 			String ceStatus = this.requestContext.getParameter(IControlexecutionAttributeTypeCustom.STR_CUSTOMCTRLEXECSTATUS);
+			String ceOwnerStatus = this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS);
 			this.ceControlExec = this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS);
 			
 			if(ceStatus.equals("1")){
 				this.currStatus = "effective";
 				this.countEf += 1;
+//				customStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.
 			}
 			
 			if(ceStatus.equals("2")){
 				this.currStatus = "ineffective";
 				this.countInef += 1;
 			}
+			
+			if(ceOwnerStatus.equals("1")){
+				ownerStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.COMPLETED;
+			}
+			
+			if(ceOwnerStatus.equals("2")){
+//				ownerStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.;
+			}
+			
+			
 			
 			List<IAppObj> cetList = currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROLEXECUTIONTASK).getElements(getUserContext());
 			for(int i = 0; i < cetList.size(); i++){
@@ -129,11 +154,29 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			
 		}catch(CustomCorpRiskException e1){
 			//this.environment.getDialogManager().getNotificationDialog().addInfo(e1.getMessage());
+			releaseLockedObjects();
 		}catch(Exception e){
 			//this.environment.getDialogManager().createSilentForwardDialog("ERRO", e.getMessage());
+			releaseLockedObjects();
 			this.environment.getDialogManager().getNotificationDialog().addInfo(e.getMessage());
-		}		
+		}
 		
+		
+		releaseLockedObjects();
+		
+	}
+
+	private void releaseLockedObjects() {
+		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
+		try {
+			List<ILockObject> locks = lockService.findLocks();
+			for (ILockObject lock : locks) {
+				lockService.releaseLock(lock.getLockObjectId(), lock.getLockUserId(), LockInfoFlag.CLEAN, lock.getRemoteClientID());				
+			}
+		} catch (LockServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private IAppObj parentControl(IAppObj childAppObj){
@@ -1179,5 +1222,56 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
         this.jobCtx = jobEnv.getUserContext();
 	}
 	//Fim REO - 27.09.2017 - EV113345
+	
+	private void modifyOtherCE(IAppObj ceObj, IAppObj controlObj){
+		// Pega o ID fictício.
+		String controlID = ceObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID);
+		
+		IAppObjFacade ceFacade = 
+				FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROLEXECUTION);
+		
+		IAppObjQuery ceQuery = ceFacade.createQuery();
+		
+		try {
+			ceQuery.
+			addRestriction(
+					QueryRestriction.and(
+							QueryRestriction.eq(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, controlID),
+							QueryRestriction.ne(IControlexecutionAttributeTypeCustom.ATTR_OWNER_STATUS, Enumerations.CONTROLEXECUTION_OWNER_STATUS.COMPLETED),
+							QueryRestriction.ne(IControlexecutionAttributeTypeCustom.ATTR_OBJ_ID, ceObj.getRawValue(IControlexecutionAttributeTypeCustom.ATTR_OBJ_ID))));
+			
+			ceQuery.setHeadRevisionsOnly(true);
+			ceQuery.setIncludeDeletedObjects(false);
+				
+			Iterator iteratorCE = ceQuery.getResultIterator(); 
+			
+			while (iteratorCE.hasNext()) {
+				IAppObj ceAuxObj = (IAppObj) iteratorCE.next();
+				
+				ceFacade.allocateLock(ceAuxObj.getVersionData().getHeadOVID(), 
+						LockType.FORCEWRITE); // DMM + FCT 20.03.2018 - EV126406
+				
+				ceAuxObj.getAttribute(
+						IControlexecutionAttributeTypeCustom.ATTR_CUSTOMCTRLEXECSTATUS).
+							setRawValue(java.util.Collections.singletonList(this.ownerStatus));
+				
+				ceAuxObj.getAttribute(
+						IControlexecutionAttributeTypeCustom.ATTR_OWNER_STATUS).
+							setRawValue(java.util.Collections.singletonList(this.ownerStatus));
+				
+				ceFacade.releaseLock(ceAuxObj);
+			}
+		} catch (Exception e) {
+			log.info(e.getMessage());
+		} finally {
+			
+			ceQuery.release();
+		}
+ 		
+	}
+	
+	
+	
+	
 
 }

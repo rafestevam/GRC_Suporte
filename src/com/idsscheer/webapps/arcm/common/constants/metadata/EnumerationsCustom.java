@@ -103,6 +103,11 @@ public class EnumerationsCustom extends Enumerations {
 		public static final MessageTemplateEnumerationItem RISKOWNER_NOTIFICATION = (MessageTemplateEnumerationItem) EnumerationsCustom.lookupEnumerationItem(ENUM, "riskowner_notification");
 	}
 	
-	
+
+	public static abstract interface CUSTOM_CUSTOMCTRLEXECSTATUS {
+		public static final EnumerationWrapper ENUM = new EnumerationWrapper("custom_controlexecstatus");
+		public static final IEnumerationItem EFFECTIVE = (MessageTemplateEnumerationItem) EnumerationsCustom.lookupEnumerationItem(ENUM, "effective");
+		public static final IEnumerationItem INEFFECTIVE = (MessageTemplateEnumerationItem) EnumerationsCustom.lookupEnumerationItem(ENUM, "ineffective");
+	}
 	
 }
