@@ -29,14 +29,13 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutiontaskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
-import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.ColoredEnumerationItem;
+import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
@@ -48,7 +47,6 @@ import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockse
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Collections;
 
 public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	
@@ -68,7 +66,9 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	private double countEf = 0;
 	private long cetObjectId = 0;
 	private IUserContext jobCtx; //REO+ 27.09.2017 - EV113345
-	private ColoredEnumerationItem ownerStatus;
+	
+	private ColoredEnumerationItem ownerCEStatus;
+	private IEnumerationItem controlExecCEStatus;
 
 	protected void afterExecute(){
 		
@@ -83,30 +83,23 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			IAppObj currAppObj = this.formModel.getAppObj();
 			//IAppObj currParentCtrlObj = this.parentControl(currAppObj);
 			long parentControlObjId = this.parentControl(currAppObj.getObjectId());
+			
 			String ceStatus = this.requestContext.getParameter(IControlexecutionAttributeTypeCustom.STR_CUSTOMCTRLEXECSTATUS);
 			String ceOwnerStatus = this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS);
+			
 			this.ceControlExec = this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS);
 			
 			if(ceStatus.equals("1")){
 				this.currStatus = "effective";
 				this.countEf += 1;
-//				customStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.
-			}
-			
-			if(ceStatus.equals("2")){
+				controlExecCEStatus = EnumerationsCustom.CUSTOM_CUSTOMCTRLEXECSTATUS.EFFECTIVE;
+			} else if(ceStatus.equals("2")){
 				this.currStatus = "ineffective";
 				this.countInef += 1;
-			}
-			
-			if(ceOwnerStatus.equals("1")){
-				ownerStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.COMPLETED;
-			}
-			
-			if(ceOwnerStatus.equals("2")){
-//				ownerStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.;
-			}
-			
-			
+				controlExecCEStatus = EnumerationsCustom.CUSTOM_CUSTOMCTRLEXECSTATUS.INEFFECTIVE;
+			} 
+				
+			setCEOwnerStatus(ceOwnerStatus);
 			
 			List<IAppObj> cetList = currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROLEXECUTIONTASK).getElements(getUserContext());
 			for(int i = 0; i < cetList.size(); i++){
@@ -114,21 +107,23 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				this.cetObjectId = cetObj.getObjectId();
 			}
 			
-		
+			modifyOtherCE(currAppObj);
+			
 			//
 			//IAppObj riskParentObj = this.getRiskFromControl(currParentCtrlObj);
 			
 			//Inicio REO 07.11.2017 - Ajuste de dados para Mashzone (EV118286)
-			//IAppObj riskParentObj = this.getRiskFromControl(parentControlObjId);
+			IAppObj riskParentObj = this.getRiskFromControl(parentControlObjId);
 			IAppObj bRiskParentObj = this.getRiskFromControl(parentControlObjId);
-			IAppObj riskParentObj = this.environment.getAppObjFacade(ObjectType.RISK).load(bRiskParentObj.getVersionData().getHeadOVID(), true);
+			//IAppObj riskParentObj = this.environment.getAppObjFacade(ObjectType.RISK).load(bRiskParentObj.getVersionData().getHeadOVID(), true);
 			//Fim REO 07.11.2017 - Ajuste de dados para Mashzone (EV118286)
 			
-			//List<IAppObj>riskParentList = this.getRisksFromControl();
+			List<IAppObj>riskParentList = this.getRisksFromControl();
 			
-			//for(int i = 0; i < riskParentList.size(); i++){
+//			for(int i = 0; i < riskParentList.size(); i++){
 				
-				//IAppObj riskParentObj = riskParentList.get(i);
+//				IAppObj riskParentObj = riskParentList.get(i);
+			
 			
 				log.info("risk parent obj: " + riskParentObj.toString());
 				if(riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).isEmpty()){
@@ -149,8 +144,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					this.affectCorpRisk(riskParentObj);
 				}
 			
-			//}
-			
+//			}
+				
 			
 		}catch(CustomCorpRiskException e1){
 			//this.environment.getDialogManager().getNotificationDialog().addInfo(e1.getMessage());
@@ -164,6 +159,18 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 		releaseLockedObjects();
 		
+	}
+
+	private void setCEOwnerStatus(String ceOwnerStatus) {
+		if(ceOwnerStatus.equals("1")){
+			ownerCEStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.NEW;
+		} else if(ceOwnerStatus.equals("2")){
+			ownerCEStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.IN_PROGRESS;
+		} else if(ceOwnerStatus.equals("3")){
+			ownerCEStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.COMPLETED;
+		} else if(ceOwnerStatus.equals("4")){
+			ownerCEStatus = Enumerations.CONTROLEXECUTION_OWNER_STATUS.NOT_POSSIBLE;
+		}
 	}
 
 	private void releaseLockedObjects() {
@@ -1223,12 +1230,12 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	}
 	//Fim REO - 27.09.2017 - EV113345
 	
-	private void modifyOtherCE(IAppObj ceObj, IAppObj controlObj){
+	private void modifyOtherCE(IAppObj ceObj) throws Exception{
 		// Pega o ID fictício.
 		String controlID = ceObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID);
 		
 		IAppObjFacade ceFacade = 
-				FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROLEXECUTION);
+				FacadeFactory.getInstance().getAppObjFacade(this.getUserContext(), ObjectType.CONTROLEXECUTION);
 		
 		IAppObjQuery ceQuery = ceFacade.createQuery();
 		
@@ -1248,18 +1255,33 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			while (iteratorCE.hasNext()) {
 				IAppObj ceAuxObj = (IAppObj) iteratorCE.next();
 				
+				long controlAux = this.parentControl(ceAuxObj.getObjectId());
+				IAppObj riskAux = this.getRiskFromControl(controlAux);
+				
 				ceFacade.allocateLock(ceAuxObj.getVersionData().getHeadOVID(), 
 						LockType.FORCEWRITE); // DMM + FCT 20.03.2018 - EV126406
-				
-				ceAuxObj.getAttribute(
-						IControlexecutionAttributeTypeCustom.ATTR_CUSTOMCTRLEXECSTATUS).
-							setRawValue(java.util.Collections.singletonList(this.ownerStatus));
-				
-				ceAuxObj.getAttribute(
-						IControlexecutionAttributeTypeCustom.ATTR_OWNER_STATUS).
-							setRawValue(java.util.Collections.singletonList(this.ownerStatus));
-				
-				ceFacade.releaseLock(ceAuxObj);
+				try {
+					
+					ceAuxObj.getAttribute(
+							IControlexecutionAttributeTypeCustom.ATTR_CUSTOMCTRLEXECSTATUS).
+								setRawValue(java.util.Collections.singletonList(controlExecCEStatus));
+					
+					ceAuxObj.getAttribute(
+							IControlexecutionAttributeTypeCustom.ATTR_OWNER_STATUS).
+								setRawValue(java.util.Collections.singletonList(ownerCEStatus));
+					
+					ceFacade.save(ceAuxObj, this.getDefaultTransaction(), true);
+					
+					this.controlClassification(ceAuxObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
+					this.affectResidualRisk(riskAux);
+					this.affectCorpRisk(riskAux);
+			
+		
+				} catch (Exception e) { 
+					log.info(e.getMessage());
+				} finally {
+					ceFacade.releaseLock(ceAuxObj);
+				}
 			}
 		} catch (Exception e) {
 			log.info(e.getMessage());

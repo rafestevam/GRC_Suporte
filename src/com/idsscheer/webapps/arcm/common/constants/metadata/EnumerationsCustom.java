@@ -106,8 +106,8 @@ public class EnumerationsCustom extends Enumerations {
 
 	public static abstract interface CUSTOM_CUSTOMCTRLEXECSTATUS {
 		public static final EnumerationWrapper ENUM = new EnumerationWrapper("custom_controlexecstatus");
-		public static final IEnumerationItem EFFECTIVE = (MessageTemplateEnumerationItem) EnumerationsCustom.lookupEnumerationItem(ENUM, "effective");
-		public static final IEnumerationItem INEFFECTIVE = (MessageTemplateEnumerationItem) EnumerationsCustom.lookupEnumerationItem(ENUM, "ineffective");
+		public static final IEnumerationItem EFFECTIVE = EnumerationsCustom.lookupEnumerationItem(ENUM, "effective");
+		public static final IEnumerationItem INEFFECTIVE = EnumerationsCustom.lookupEnumerationItem(ENUM, "ineffective");
 	}
 	
 }

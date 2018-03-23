@@ -1,572 +1,589 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <runtimeconfig>
 
-    <!-- configuration of the database -->
-    <section id="datalayer">
-        <!-- database connection settings -->
-        <parameterList name="dbms">
-            <!--using batchupdate for sql statements-->
-            <parameter name="dbms.with.batchupdate" value="false"/>
+	<!-- configuration of the database -->
+	<section id="datalayer">
+		<!-- database connection settings -->
+		<parameterList name="dbms">
+			<!--using batchupdate for sql statements -->
+			<parameter name="dbms.with.batchupdate" value="false" />
 
-            <!-- connection pool parameters -->
-            <parameter name="dbms.connection.pool.initialSize" value="10"/>
-            <parameter name="dbms.connection.pool.maxActive" value="500"/>
-            <parameter name="dbms.connection.pool.maxIdle" value="100"/>
-            <parameter name="dbms.connection.pool.minIdle" value="10"/>
+			<!-- connection pool parameters -->
+			<parameter name="dbms.connection.pool.initialSize" value="10" />
+			<parameter name="dbms.connection.pool.maxActive" value="500" />
+			<parameter name="dbms.connection.pool.maxIdle" value="100" />
+			<parameter name="dbms.connection.pool.minIdle" value="10" />
 
-            <!--if automatic migration should run during server startup set this parameter to true-->
-            <parameter name="dbms.autoStartMigration" value="false"/>
+			<!--if automatic migration should run during server startup set this parameter 
+				to true -->
+			<parameter name="dbms.autoStartMigration" value="false" />
 
-            <!--configuration of the database system, driver, database url, and user with password-->
+			<!--configuration of the database system, driver, database url, and user 
+				with password -->
 
-            <!-- use this configuration part if you are going to run the infrastructure PostGRE database -->
-			<!-- do not forget to use only one configuration and comment all other unused database configurations -->
-            <parameter name="dbms.system" value="infrastructure"/>
+			<!-- use this configuration part if you are going to run the infrastructure 
+				PostGRE database -->
+			<!-- do not forget to use only one configuration and comment all other 
+				unused database configurations -->
+			<parameter name="dbms.system" value="infrastructure" />
 
-            <!--
-			<parameter name="dbms.system" value="postgresql"/>
-            <parameter name="dbms.driver" value="org.postgresql.Driver"/>
-            <parameter name="dbms.url" value="jdbc:postgresql://[server]:[port]/[sid]"/>
-            <parameter name="dbms.user" value="[user]"/>
-            <parameter name="dbms.pwd" value="[password]"/>
-            -->
+			<!-- <parameter name="dbms.system" value="postgresql"/> <parameter name="dbms.driver" 
+				value="org.postgresql.Driver"/> <parameter name="dbms.url" value="jdbc:postgresql://[server]:[port]/[sid]"/> 
+				<parameter name="dbms.user" value="[user]"/> <parameter name="dbms.pwd" value="[password]"/> -->
 
-			<!-- use this configuration part if you are going to run the server on Derby -->
-			<!-- do not forget to use only one configuration and comment all other unused database configurations -->
-            <!--
-            <parameter name="dbms.system" value="derby"/>
-            <parameter name="dbms.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-            <parameter name="dbms.url" value="jdbc:derby:e:\ARCM98\database.derby"/>
-            <parameter name="dbms.user" value="sox"/>
-            <parameter name="dbms.pwd" value="sox"/>
-            -->
-
-			
-            <!-- use this configuration part if you are going to run the server on Oracle -->
-            <!-- do not forget to use only one configuration and comment all other unused database configurations -->
-            <!-- Oracle Driver
-            <parameter name="dbms.system" value="oracle"/>
-            <parameter name="dbms.driver" value="oracle.jdbc.driver.OracleDriver"/>
-            <parameter name="dbms.url" value="jdbc:oracle:thin:@[server]:1521:[sid]"/>
-            <parameter name="dbms.user" value="[user]"/>
-            <parameter name="dbms.pwd" value="[password]"/>
-            -->
-			            
-            <!-- use this configuration part if you are going to run the server on MSSQL -->
-            <!-- do not forget to use only one configuration and comment all other unused database configurations -->
-            <!-- MSSQL Microsoft Driver
-            <parameter name="dbms.system" value="MSSQL"/>
-            <parameter name="dbms.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-            <parameter name="dbms.url" value="jdbc:sqlserver://[server]:1433;DatabaseName=[database]"/>
-            <parameter name="dbms.user" value="[user]"/>
-            <parameter name="dbms.pwd" value="[password]"/>
-            -->
-            
-
-            <!-- idx_tablespace since ARCM 4.0 auto schema generation -->
-            <!-- idx_tablespace is valid for oracle configuration only-->
-            <!-- comment this parameter to create oralce index data at the user default tablespace-->
-            <parameter name="dbms.idx_tablespace" value="ARCMINDEX"/>
-
-        </parameterList>
-
-        <!--configuration of the application layer core-->
-        <parameterList name="applicationlayer">
-            <!--entries per page in a list-->
-            <parameter name="application.view.entriesPerPage" value="20"/>
-            <!-- edit only in consultation of Software AG -->
-            <parameter name="application.batchserver.enable.remoteconnection" value="false"/>
-            <!-- edit only in consultation of Software AG -->
-            <parameter name="application.batchserver.resend.trails" value="5"/>
-        </parameterList>
-
-    </section>
-
-    <section id="batchserver">
-        <parameterList name="server">
-            <parameter name="name" value="master"/>
-            <parameter name="host" value="localhost"/>
-            <parameter name="port" value="4726"/>
-        </parameterList>
-        <parameterList name="EVENTMANAGER_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.batchserver.services.eventmanager.EventManagerMaster" />
-            <parameter name="instanceName" value="eventmanager1" />
-            <parameter name="objectTypes" value="com.idsscheer.webapps.arcm.dl.framework.DataLayerObjectType" />
-        </parameterList>
-        <parameterList name="FILE_SYNCHRONISATION_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.filesyncservice.FileSyncServiceMaster" />
-            <parameter name="instanceName" value="fileSynchroService1" />
-        </parameterList>
-        <parameterList name="JOB_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.ARCMJobManager" />
-            <parameter name="instanceName" value="jobmanager1" />
-            <parameter name="finishedJobListSize" value="10" />
-        </parameterList>
-        <parameterList name="BUDDYLIST_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.batchserver.services.buddylist.BuddyList" />
-        </parameterList>
-        <parameterList name="LOCK_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockService" />
-        </parameterList>
-        <parameterList name="FILE_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.batchserver.services.fileservice.FileService" />
-            <parameter name="instanceName" value="fileService1" />
-        </parameterList>
-        <parameterList name="DOWNLOAD_FILE_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.fileservice.ARCMDownloadFileService" />
-            <parameter name="instanceName" value="downloadfileservice1" />
-        </parameterList>
-        <parameterList name="CONFIG_CHECKSUM_SERVICE">
-            <parameter name="master" value="true" />
-            <parameter name="className" value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.configchecksum.ARCMConfigChecksumService" />
-            <parameter name="instanceName" value="configchecksumservice1" />
-        </parameterList>
-    </section>
-
-    <!--configuration of the application-->
-    <section id="application">
-        <parameterList name="application">
-
-            <!--frequency in seconds to check if a user is already logged in -->
-            <parameter name="keepAliveTime" value="60"/>
-            <!-- seconds -->
-            <parameter name="downloadDir" value="download"/>
-            <parameter name="uploadDir" value="upload"/>
-            <parameter name="uploadBufferSize" value="8192"/>
-
-            <!--The maximum size of a file to be accepted as a file upload.
-                Can be expressed as a number followed by a "K", "M", or "G",
-                which are interpreted to mean kilobytes, megabytes, or gigabytes, respectively -->
-            <parameter name="maxUploadFileSize" value="256M"/>
-
-            <parameter name="isTestSystem" value="true"/>
-            <parameter name="WhistleBlowEmail" value="adminpleaseChangeEmail@example.com"/>
-            <parameter name="WhistleBlowAnonymousSender" value="adminpleaseChangeEmail@example.com"/>
-            <parameter name="showRemainingSessionTime" value="true"/>
-            <parameter name="monitoringRefreshTime" value="5"/>
-
-            <!--
-                handels import in a client of data that are imported by the xmlimport, changed
-                in the arcm and than reimported.
-                (relevant is the aris_change_date attribute)
-
-                true -> when an object date is not equal, arcm objects where overwriten by the import
-                false-> importdata where ignored when the arcm object is younger than the import object
-            -->
-            <parameter name="forceImport" value="true"/>
-
-            <!--
-                       true -> fills attribute with the default value if the attribute is not set from the aris import file
-                       false -> don't use default values in the aris import
-                   -->
-            <parameter name="application.migration.framework.consider.default.values" value="true"/>
-
-            <!--
-                Switch for XMLImport modus : ARIS only
-                true: the ARIS Change Date is used to decide if an object has to be updated
-                false: only if an object is changed, it will be written a new version. To decide that, every attribute
-                  of the object will be checked if the values are the same. If not, the object will be imported.
-            -->
-            <parameter name="useARISChangeDate" value="false"/>
-
-            <!-- specify the the name of the used tenant -->
-            <parameter name="umc.tenant" value="default"/>
-
-            <!--
-                Switch for scheduler: default value is true
-                true: Server will start the scheduler as configured in section scheduler
-                false: Scheduler will be deactivated on this machine
-            -->
-            <parameter name="application.scheduler.startup" value="true"/>
-        </parameterList>
-        <parameterList name="customizing">
-            <!-- switch between rba & cba approach. DO NOT CHANGE in productive system -->
-            <!-- allowed values: rba, cba -->
-            <parameter name="customizing.approach" value="rba" />
-        </parameterList>
-        <!-- parameters for authentication modules (JAAS) -->
-        <parameterList name="JAAS">
-            <!-- context name of the jaas.config file (deployed to "/WEB-INF/config/") -->
-            <parameter name="loginContextName" value="StandardLogin"/>
-        </parameterList>
-        <parameterList name="mashzone-integration">
-            <parameter name="isDashboardIntegrationActive" value="false" />
-            <parameter name="output.max.value.length" value="2000" />
-        </parameterList>
-    </section>
-
-    <!-- configuration of the time triggered jobs -->
-    <section id="scheduler">
-
-        <!-- IMPORTANT: parameter list names must be unique! -->
-        <!-- GeneratorJob for test cases -->
-        <parameterList name="generatorJobTestcases">
-            <!-- the job enum item -->
-            <parameter name="jobitem" value="generatorJob" />
-            <!-- start the scheduler true/false -->
-            <parameter name="startScheduler" value="true"/>
-            <!-- execution time and day of the week -->
-            <parameter name="executionTime" value="0 52 00 ? * SUN-SAT"/>
-            <!-- clients which are ignored during execution -->
-            <parameter name="clientexcludinglist" value=""/>
-            <!-- for which clients the job is executed - if not specified then all clients are used -->
-            <!-- scheduler will start one separate job instance for each client -->
-            <parameter name="clientincludinglist" value=""/>
-            <!-- object type restriction for generic jobs - is ignored (and may be omitted) in case of non-generic jobs -->
-            <parameter name="objecttypes" value="TESTCASE"/>
-        </parameterList>
-
-        <!-- MonitorJob for test cases -->
-        <parameterList name="monitorJobTestcase">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 52 01 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="TESTCASE"/>
-        </parameterList>
-
-        <!-- GeneratorJob for Risk assessments -->
-        <parameterList name="generatorJobRiskAssessment">
-            <parameter name="jobitem" value="generatorJob" />
-            <parameter name="startScheduler" value="true"/>
-<!--             <parameter name="executionTime" value="0 52 02 ? * SUN-SAT"/> -->
-			<parameter name="executionTime" value="0 13 16 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="RISKASSESSMENT"/>
-        </parameterList>
-
-        <!-- MonitorJob for Risk assessments -->
-        <parameterList name="monitorJobRiskAssessment">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 12 02 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="RISKASSESSMENT"/>
-        </parameterList>
-
-        <!-- GeneratorJob for Signoff Processes -->
-        <parameterList name="generatorJobSOProcess">
-            <parameter name="jobitem" value="generatorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 22 02 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="SOPROCESS"/>
-        </parameterList>
+			<!-- use this configuration part if you are going to run the server on 
+				Derby -->
+			<!-- do not forget to use only one configuration and comment all other 
+				unused database configurations -->
+			<!-- <parameter name="dbms.system" value="derby"/> <parameter name="dbms.driver" 
+				value="org.apache.derby.jdbc.EmbeddedDriver"/> <parameter name="dbms.url" 
+				value="jdbc:derby:e:\ARCM98\database.derby"/> <parameter name="dbms.user" 
+				value="sox"/> <parameter name="dbms.pwd" value="sox"/> -->
 
 
+			<!-- use this configuration part if you are going to run the server on 
+				Oracle -->
+			<!-- do not forget to use only one configuration and comment all other 
+				unused database configurations -->
+			<!-- Oracle Driver <parameter name="dbms.system" value="oracle"/> <parameter 
+				name="dbms.driver" value="oracle.jdbc.driver.OracleDriver"/> <parameter name="dbms.url" 
+				value="jdbc:oracle:thin:@[server]:1521:[sid]"/> <parameter name="dbms.user" 
+				value="[user]"/> <parameter name="dbms.pwd" value="[password]"/> -->
 
-        <!-- MonitorJob for Signoff Processes -->
-        <parameterList name="monitorJobSOProcess">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 32 02 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="SOPROCESS"/>
-        </parameterList>
+			<!-- use this configuration part if you are going to run the server on 
+				MSSQL -->
+			<!-- do not forget to use only one configuration and comment all other 
+				unused database configurations -->
+			<!-- MSSQL Microsoft Driver <parameter name="dbms.system" value="MSSQL"/> 
+				<parameter name="dbms.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/> 
+				<parameter name="dbms.url" value="jdbc:sqlserver://[server]:1433;DatabaseName=[database]"/> 
+				<parameter name="dbms.user" value="[user]"/> <parameter name="dbms.pwd" value="[password]"/> -->
 
-        <!-- GeneratorJob for Surveys -->
-        <parameterList name="generatorJobSurvey">
-            <parameter name="jobitem" value="generatorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 42 02 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="SURVEY"/>
-        </parameterList>
 
-        <!-- MonitorJob for Questionnaires -->
-        <parameterList name="monitorJobQuestionnaire">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 52 02 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="QUESTIONNAIRE"/>
-        </parameterList>
+			<!-- idx_tablespace since ARCM 4.0 auto schema generation -->
+			<!-- idx_tablespace is valid for oracle configuration only -->
+			<!-- comment this parameter to create oralce index data at the user default 
+				tablespace -->
+			<parameter name="dbms.idx_tablespace" value="ARCMINDEX" />
 
-        <!-- MonitorJob for Surveys -->
-        <parameterList name="monitorJobSurvey">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 02 03 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="SURVEY"/>
-        </parameterList>
+		</parameterList>
 
-        <!-- MonitorJob for Issues -->
-        <parameterList name="monitorJobIssue">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 12 03 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="ISSUE"/>
-        </parameterList>
+		<!--configuration of the application layer core -->
+		<parameterList name="applicationlayer">
+			<!--entries per page in a list -->
+			<parameter name="application.view.entriesPerPage" value="20" />
+			<!-- edit only in consultation of Software AG -->
+			<parameter name="application.batchserver.enable.remoteconnection"
+				value="false" />
+			<!-- edit only in consultation of Software AG -->
+			<parameter name="application.batchserver.resend.trails"
+				value="5" />
+		</parameterList>
 
-        <!-- GeneratorJob for Audits -->
-        <parameterList name="generatorJobAudit">
-            <parameter name="jobitem" value="generatorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 22 03 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="AUDIT"/>
-        </parameterList>
+	</section>
 
-        <!-- MonitorJob for Audits and Audit steps -->
-        <parameterList name="monitorJobAudit">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 32 03 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="AUDIT,AUDITSTEP"/>
-        </parameterList>
+	<section id="batchserver">
+		<parameterList name="server">
+			<parameter name="name" value="master" />
+			<parameter name="host" value="localhost" />
+			<parameter name="port" value="4726" />
+		</parameterList>
+		<parameterList name="EVENTMANAGER_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.batchserver.services.eventmanager.EventManagerMaster" />
+			<parameter name="instanceName" value="eventmanager1" />
+			<parameter name="objectTypes"
+				value="com.idsscheer.webapps.arcm.dl.framework.DataLayerObjectType" />
+		</parameterList>
+		<parameterList name="FILE_SYNCHRONISATION_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.filesyncservice.FileSyncServiceMaster" />
+			<parameter name="instanceName" value="fileSynchroService1" />
+		</parameterList>
+		<parameterList name="JOB_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.ARCMJobManager" />
+			<parameter name="instanceName" value="jobmanager1" />
+			<parameter name="finishedJobListSize" value="10" />
+		</parameterList>
+		<parameterList name="BUDDYLIST_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.batchserver.services.buddylist.BuddyList" />
+		</parameterList>
+		<parameterList name="LOCK_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockService" />
+		</parameterList>
+		<parameterList name="FILE_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.batchserver.services.fileservice.FileService" />
+			<parameter name="instanceName" value="fileService1" />
+		</parameterList>
+		<parameterList name="DOWNLOAD_FILE_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.fileservice.ARCMDownloadFileService" />
+			<parameter name="instanceName" value="downloadfileservice1" />
+		</parameterList>
+		<parameterList name="CONFIG_CHECKSUM_SERVICE">
+			<parameter name="master" value="true" />
+			<parameter name="className"
+				value="com.idsscheer.webapps.arcm.services.framework.batchserver.services.configchecksum.ARCMConfigChecksumService" />
+			<parameter name="instanceName" value="configchecksumservice1" />
+		</parameterList>
+	</section>
 
-        <!-- GeneratorJob for Policy -->
-        <parameterList name="generatorJobPolicy">
-            <parameter name="jobitem" value="generatorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 42 03 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="POLICY"/>
-        </parameterList>
+	<!--configuration of the application -->
+	<section id="application">
+		<parameterList name="application">
 
-        <!-- MonitorJob for Policy and Policy approvals & Policy confirmations -->
-        <parameterList name="monitorJobPolicy">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 52 03 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="POLICY,POLICYAPPROVAL,POLICYCONFIRMATION"/>
-        </parameterList>
+			<!--frequency in seconds to check if a user is already logged in -->
+			<parameter name="keepAliveTime" value="60" />
+			<!-- seconds -->
+			<parameter name="downloadDir" value="download" />
+			<parameter name="uploadDir" value="upload" />
+			<parameter name="uploadBufferSize" value="8192" />
 
-        <!-- UpdaterJob for Policy-->
-        <parameterList name="updaterJobPolicy">
-            <parameter name="jobitem" value="updaterJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 02 04 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="POLICY"/>
-        </parameterList>
+			<!--The maximum size of a file to be accepted as a file upload. Can be 
+				expressed as a number followed by a "K", "M", or "G", which are interpreted 
+				to mean kilobytes, megabytes, or gigabytes, respectively -->
+			<parameter name="maxUploadFileSize" value="256M" />
 
-        <!-- GeneratorJob for Controlexecution -->
-        <parameterList name="generatorJobControlexecution">
-            <parameter name="jobitem" value="generatorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 42 16 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="CONTROLEXECUTION"/>
-        </parameterList>
+			<parameter name="isTestSystem" value="true" />
+			<parameter name="WhistleBlowEmail" value="adminpleaseChangeEmail@example.com" />
+			<parameter name="WhistleBlowAnonymousSender" value="adminpleaseChangeEmail@example.com" />
+			<parameter name="showRemainingSessionTime" value="true" />
+			<parameter name="monitoringRefreshTime" value="5" />
 
-        <!-- MonitorJob for control execution -->
-        <parameterList name="monitorJobControlExecution">
-            <parameter name="jobitem" value="monitorJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 52 01 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <parameter name="clientincludinglist" value=""/>
-            <parameter name="objecttypes" value="CONTROLEXECUTION"/>
-        </parameterList>
+			<!-- handels import in a client of data that are imported by the xmlimport, 
+				changed in the arcm and than reimported. (relevant is the aris_change_date 
+				attribute) true -> when an object date is not equal, arcm objects where overwriten 
+				by the import false-> importdata where ignored when the arcm object is younger 
+				than the import object -->
+			<parameter name="forceImport" value="true" />
 
-        <!-- CleanJob: clean the directories configured in the cleaning tag -->
-        <parameterList name="cleaningJob">
-            <parameter name="jobitem" value="cleaningJob" />
-            <parameter name="startScheduler" value="false"/>
-            <parameter name="executionTime" value="0 02 01 ? * SUN-SAT"/>
-        </parameterList>
+			<!-- true -> fills attribute with the default value if the attribute is 
+				not set from the aris import file false -> don't use default values in the 
+				aris import -->
+			<parameter name="application.migration.framework.consider.default.values"
+				value="true" />
 
-        <!-- JobListCleaningJob: removes job history entries -->
-        <parameterList name="jobListCleaningJob">
-            <parameter name="jobitem" value="jobListCleaningJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 10 15 ? * SUN-SAT"/>
-            <!-- comma separated client-signs of clients that should be excluded -->
-            <parameter name="clientexcludinglist" value=""/>
-            <!-- please do not edit -->
-            <parameter name="className" value="JobListCleaningJob"/>
-            <!-- please do not edit -->
-            <parameter name="clientbased" value="false"/>
-        </parameterList>
-        
-        
-<!--         <parameterList name="IssueOverdueJob"> -->
-<!--             <parameter name="jobitem" value="IssueOverdueJob" /> -->
-<!--             <parameter name="startScheduler" value="true"/> -->
-<!--             <parameter name="executionTime" value="0 30 15 ? * SUN-SAT"/> -->
-<!--             <parameter name="clientexcludinglist" value=""/> -->
-            <!-- please do not edit -->
-<!--             <parameter name="className" value="IssueOverdueJob"/> -->
-            <!-- please do not edit -->
-<!--             <parameter name="clientbased" value="false"/> -->
-<!--         </parameterList> -->
-        
-        <!-- EV133332 - Corp Risk Fixing Job -->
-<!--         <parameterList name="CorpRiskFixingJob"> -->
-<!--             <parameter name="jobitem" value="CorpRiskFixingJob" /> -->
-<!--             <parameter name="startScheduler" value="true"/> -->
-<!--             <parameter name="executionTime" value="0 59 14 ? * SUN-SAT"/> -->
-<!--             <parameter name="clientexcludinglist" value=""/> -->
-            <!-- please do not edit -->
-<!--             <parameter name="className" value="CorpRiskFixingJob"/> -->
-            <!-- please do not edit -->
-<!--             <parameter name="clientbased" value="false"/> -->
-<!--         </parameterList> -->
-        
-        <!-- EV133332 - Adjust Control 1st Line Effectiveness Job -->
-        <parameterList name="AdjustControl1Line">
-            <parameter name="jobitem" value="AdjustControl1Line" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 13 15 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <!-- please do not edit -->
-            <parameter name="className" value="AdjustControl1Line"/>
-            <!-- please do not edit -->
-            <parameter name="clientbased" value="false"/>
-        </parameterList>
-        
-        <!-- EV133332 - Adjust Control 2nd / 3rd Lines Effectiveness Job  -->
-        <parameterList name="AdjustControlOtherLines">
-            <parameter name="jobitem" value="AdjustControlOtherLines" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 16 15 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <!-- please do not edit -->
-            <parameter name="className" value="AdjustControlOtherLines"/>
-            <!-- please do not edit -->
-            <parameter name="clientbased" value="false"/>
-        </parameterList>
-        
-        <!-- EV133332 - Adjust Risks (Control Environment) Job  -->
-        <parameterList name="AdjustRisks">
-            <parameter name="jobitem" value="AdjustRisks" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 19 15 ? * SUN-SAT"/>
-            <parameter name="clientexcludinglist" value=""/>
-            <!-- please do not edit -->
-            <parameter name="className" value="AdjustRisks"/>
-            <!-- please do not edit -->
-            <parameter name="clientbased" value="false"/>
-        </parameterList>
+			<!-- Switch for XMLImport modus : ARIS only true: the ARIS Change Date 
+				is used to decide if an object has to be updated false: only if an object 
+				is changed, it will be written a new version. To decide that, every attribute 
+				of the object will be checked if the values are the same. If not, the object 
+				will be imported. -->
+			<parameter name="useARISChangeDate" value="false" />
 
-        <!-- Administration SyncJob -->
-        <parameterList name="umcSyncJob">
-            <parameter name="jobitem" value="umcSyncJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 32 00 ? * SUN-SAT"/>
-        </parameterList>
-        
-        <!-- Inicio GAP - GRC14 -->
-        <parameterList name="RADelayMailJob">
-        	<parameter name="jobitem" value="RADelayMailJob"/>
-        	<parameter name="startScheduler" value="true"/>
-        	<parameter name="executionTime" value="0 01 01 ? * SUN-SAT"/>
-        	<parameter name="clientexcludinglist" value="" />
-        	<parameter name="className" value="RADelayMailJob" />
-        	<parameter name="clientbased" value="false"/>
-        </parameterList>
-        
-        <parameterList name="CEDelayMailJob">
-        	<parameter name="jobitem" value="CEDelayMailJob"/>
-        	<parameter name="startScheduler" value="true"/>
-        	<parameter name="executionTime" value="0 42 15 ? * SUN-SAT"/>
-        	<parameter name="clientexcludinglist" value="" />
-        	<parameter name="className" value="CEDelayMailJob" />
-        	<parameter name="clientbased" value="false"/>
-        </parameterList>
-        <!-- Fim GAP - GRC14 -->
-        
-        <!-- GAU025-->
+			<!-- specify the the name of the used tenant -->
+			<parameter name="umc.tenant" value="default" />
+
+			<!-- Switch for scheduler: default value is true true: Server will start 
+				the scheduler as configured in section scheduler false: Scheduler will be 
+				deactivated on this machine -->
+			<parameter name="application.scheduler.startup" value="true" />
+		</parameterList>
+		<parameterList name="customizing">
+			<!-- switch between rba & cba approach. DO NOT CHANGE in productive system -->
+			<!-- allowed values: rba, cba -->
+			<parameter name="customizing.approach" value="rba" />
+		</parameterList>
+		<!-- parameters for authentication modules (JAAS) -->
+		<parameterList name="JAAS">
+			<!-- context name of the jaas.config file (deployed to "/WEB-INF/config/") -->
+			<parameter name="loginContextName" value="StandardLogin" />
+		</parameterList>
+		<parameterList name="mashzone-integration">
+			<parameter name="isDashboardIntegrationActive" value="false" />
+			<parameter name="output.max.value.length" value="2000" />
+		</parameterList>
+	</section>
+
+	<!-- configuration of the time triggered jobs -->
+	<section id="scheduler">
+
+		<!-- IMPORTANT: parameter list names must be unique! -->
+		<!-- GeneratorJob for test cases -->
+		<parameterList name="generatorJobTestcases">
+			<!-- the job enum item -->
+			<parameter name="jobitem" value="generatorJob" />
+			<!-- start the scheduler true/false -->
+			<parameter name="startScheduler" value="true" />
+			<!-- execution time and day of the week -->
+			<parameter name="executionTime" value="0 52 00 ? * SUN-SAT" />
+			<!-- clients which are ignored during execution -->
+			<parameter name="clientexcludinglist" value="" />
+			<!-- for which clients the job is executed - if not specified then all 
+				clients are used -->
+			<!-- scheduler will start one separate job instance for each client -->
+			<parameter name="clientincludinglist" value="" />
+			<!-- object type restriction for generic jobs - is ignored (and may be 
+				omitted) in case of non-generic jobs -->
+			<parameter name="objecttypes" value="TESTCASE" />
+		</parameterList>
+
+		<!-- MonitorJob for test cases -->
+		<parameterList name="monitorJobTestcase">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 52 01 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="TESTCASE" />
+		</parameterList>
+
+		<!-- GeneratorJob for Risk assessments -->
+		<parameterList name="generatorJobRiskAssessment">
+			<parameter name="jobitem" value="generatorJob" />
+			<parameter name="startScheduler" value="true" />
+			<!-- <parameter name="executionTime" value="0 52 02 ? * SUN-SAT"/> -->
+			<parameter name="executionTime" value="0 13 16 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="RISKASSESSMENT" />
+		</parameterList>
+
+		<!-- MonitorJob for Risk assessments -->
+		<parameterList name="monitorJobRiskAssessment">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 12 02 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="RISKASSESSMENT" />
+		</parameterList>
+
+		<!-- GeneratorJob for Signoff Processes -->
+		<parameterList name="generatorJobSOProcess">
+			<parameter name="jobitem" value="generatorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 22 02 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="SOPROCESS" />
+		</parameterList>
+
+
+
+		<!-- MonitorJob for Signoff Processes -->
+		<parameterList name="monitorJobSOProcess">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 32 02 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="SOPROCESS" />
+		</parameterList>
+
+		<!-- GeneratorJob for Surveys -->
+		<parameterList name="generatorJobSurvey">
+			<parameter name="jobitem" value="generatorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 42 02 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="SURVEY" />
+		</parameterList>
+
+		<!-- MonitorJob for Questionnaires -->
+		<parameterList name="monitorJobQuestionnaire">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 52 02 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="QUESTIONNAIRE" />
+		</parameterList>
+
+		<!-- MonitorJob for Surveys -->
+		<parameterList name="monitorJobSurvey">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 02 03 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="SURVEY" />
+		</parameterList>
+
+		<!-- MonitorJob for Issues -->
+		<parameterList name="monitorJobIssue">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 12 03 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="ISSUE" />
+		</parameterList>
+
+		<!-- GeneratorJob for Audits -->
+		<parameterList name="generatorJobAudit">
+			<parameter name="jobitem" value="generatorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 22 03 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="AUDIT" />
+		</parameterList>
+
+		<!-- MonitorJob for Audits and Audit steps -->
+		<parameterList name="monitorJobAudit">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 32 03 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="AUDIT,AUDITSTEP" />
+		</parameterList>
+
+		<!-- GeneratorJob for Policy -->
+		<parameterList name="generatorJobPolicy">
+			<parameter name="jobitem" value="generatorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 42 03 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="POLICY" />
+		</parameterList>
+
+		<!-- MonitorJob for Policy and Policy approvals & Policy confirmations -->
+		<parameterList name="monitorJobPolicy">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 52 03 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="POLICY,POLICYAPPROVAL,POLICYCONFIRMATION" />
+		</parameterList>
+
+		<!-- UpdaterJob for Policy -->
+		<parameterList name="updaterJobPolicy">
+			<parameter name="jobitem" value="updaterJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 02 04 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="POLICY" />
+		</parameterList>
+
+		<!-- GeneratorJob for Controlexecution -->
+		<parameterList name="generatorJobControlexecution">
+			<parameter name="jobitem" value="generatorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 42 16 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="CONTROLEXECUTION" />
+		</parameterList>
+
+		<!-- MonitorJob for control execution -->
+		<parameterList name="monitorJobControlExecution">
+			<parameter name="jobitem" value="monitorJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 52 01 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="clientincludinglist" value="" />
+			<parameter name="objecttypes" value="CONTROLEXECUTION" />
+		</parameterList>
+
+		<!-- CleanJob: clean the directories configured in the cleaning tag -->
+		<parameterList name="cleaningJob">
+			<parameter name="jobitem" value="cleaningJob" />
+			<parameter name="startScheduler" value="false" />
+			<parameter name="executionTime" value="0 02 01 ? * SUN-SAT" />
+		</parameterList>
+
+		<!-- JobListCleaningJob: removes job history entries -->
+		<parameterList name="jobListCleaningJob">
+			<parameter name="jobitem" value="jobListCleaningJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 10 15 ? * SUN-SAT" />
+			<!-- comma separated client-signs of clients that should be excluded -->
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<parameter name="className" value="JobListCleaningJob" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+
+
+		<!-- <parameterList name="IssueOverdueJob"> -->
+		<!-- <parameter name="jobitem" value="IssueOverdueJob" /> -->
+		<!-- <parameter name="startScheduler" value="true"/> -->
+		<!-- <parameter name="executionTime" value="0 30 15 ? * SUN-SAT"/> -->
+		<!-- <parameter name="clientexcludinglist" value=""/> -->
+		<!-- please do not edit -->
+		<!-- <parameter name="className" value="IssueOverdueJob"/> -->
+		<!-- please do not edit -->
+		<!-- <parameter name="clientbased" value="false"/> -->
+		<!-- </parameterList> -->
+
+		<!-- EV133332 - Corp Risk Fixing Job -->
+		<!-- <parameterList name="CorpRiskFixingJob"> -->
+		<!-- <parameter name="jobitem" value="CorpRiskFixingJob" /> -->
+		<!-- <parameter name="startScheduler" value="true"/> -->
+		<!-- <parameter name="executionTime" value="0 59 14 ? * SUN-SAT"/> -->
+		<!-- <parameter name="clientexcludinglist" value=""/> -->
+		<!-- please do not edit -->
+		<!-- <parameter name="className" value="CorpRiskFixingJob"/> -->
+		<!-- please do not edit -->
+		<!-- <parameter name="clientbased" value="false"/> -->
+		<!-- </parameterList> -->
+
+		<parameterList name="ActionPlanTaskItemJob">
+			<parameter name="jobitem" value="ActionPlanTaskItemJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 07 14 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<parameter name="className" value="ActionPlanTaskItemJob" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+
+
+		<!-- EV133332 - Adjust Control 1st Line Effectiveness Job -->
+		<parameterList name="AdjustControl1Line">
+			<parameter name="jobitem" value="AdjustControl1Line" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 13 15 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<parameter name="className" value="AdjustControl1Line" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+
+		<!-- EV133332 - Adjust Control 2nd / 3rd Lines Effectiveness Job -->
+		<parameterList name="AdjustControlOtherLines">
+			<parameter name="jobitem" value="AdjustControlOtherLines" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 16 15 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<parameter name="className" value="AdjustControlOtherLines" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+
+		<!-- EV133332 - Adjust Risks (Control Environment) Job -->
+		<parameterList name="AdjustRisks">
+			<parameter name="jobitem" value="AdjustRisks" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 19 15 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<parameter name="className" value="AdjustRisks" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+
+		<!-- Administration SyncJob -->
+		<parameterList name="umcSyncJob">
+			<parameter name="jobitem" value="umcSyncJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 32 00 ? * SUN-SAT" />
+		</parameterList>
+
+		<!-- Inicio GAP - GRC14 -->
+		<parameterList name="RADelayMailJob">
+			<parameter name="jobitem" value="RADelayMailJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 01 01 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="className" value="RADelayMailJob" />
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+
+		<parameterList name="CEDelayMailJob">
+			<parameter name="jobitem" value="CEDelayMailJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 42 15 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<parameter name="className" value="CEDelayMailJob" />
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+		<!-- Fim GAP - GRC14 -->
+
+		<!-- GAU025 -->
 		<parameterList name="IssueAgingReplanJob">
-            <parameter name="jobitem" value="IssueAgingReplanJob" />
-            <parameter name="startScheduler" value="true"/>
-            <parameter name="executionTime" value="0 01 02 ? * SUN-SAT"/>
-            <!-- comma separated client-signs of clients that should be excluded -->
-            <parameter name="clientexcludinglist" value=""/>
-            <!-- please do not edit -->
-            <!-- <parameter name="className" value="JobListCleaningJob/>" -->
-            <parameter name="className" value="IssueAgingReplanJob"/>
-            <!-- please do not edit -->
-            <parameter name="clientbased" value="false"/>
-        </parameterList>
-		<!-- GAU025-->
-        
-    </section>
+			<parameter name="jobitem" value="IssueAgingReplanJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 01 02 ? * SUN-SAT" />
+			<!-- comma separated client-signs of clients that should be excluded -->
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<!-- <parameter name="className" value="JobListCleaningJob/>" -->
+			<parameter name="className" value="IssueAgingReplanJob" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+		<!-- GAU025 -->
 
-    <!-- configuration of logging -->
-    <section id="logging">
-        <parameterList name="logging">
-            <!--see also log4j.properties-->
-            <parameter name="log.isEnabled" value="true"/>
-            <parameter name="log.toConsole" value="true"/>
-        </parameterList>
-    </section>
+	</section>
 
-    <!-- configuration of smtp mailing -->
-<!--     <section id="mailing"> -->
-<!--         <parameterList name="smtp"> -->
-<!--             <parameter name="smtp.host" value="smtp.mail.yahoo.com"/> -->
-<!--             <parameter name="smtp.account" value="arcmsag@yahoo.com"/> -->
-<!--             <parameter name="smtp.password" value="Exed@2017"/> -->
-<!--             <parameter name="default.sender.address" value="arcmsag@yahoo.com"/> -->
-<!--             <parameter name="mail.debug" value="true"/> -->
-<!--         </parameterList> -->
-<!--     </section> -->
+	<!-- configuration of logging -->
+	<section id="logging">
+		<parameterList name="logging">
+			<!--see also log4j.properties -->
+			<parameter name="log.isEnabled" value="true" />
+			<parameter name="log.toConsole" value="true" />
+		</parameterList>
+	</section>
 
-    <!-- configuration of files needed in ARCM -->
-    <section id="files">
-        <parameterList name="files">
-            <!-- configuration document-management-systems -->
-            <parameter name="linkTypesFile" value="documentlinktypes.xml"/>
-            <parameter name="defaultDesignFolder" value="default"/>
-            <parameter name="migrationRuleFolder" value="migrationRules"/>
-            <parameter name="xmlimportRuleFolder" value="xmlimport"/>
-        </parameterList>
-    </section>
+	<!-- configuration of smtp mailing -->
+	<!-- <section id="mailing"> -->
+	<!-- <parameterList name="smtp"> -->
+	<!-- <parameter name="smtp.host" value="smtp.mail.yahoo.com"/> -->
+	<!-- <parameter name="smtp.account" value="arcmsag@yahoo.com"/> -->
+	<!-- <parameter name="smtp.password" value="Exed@2017"/> -->
+	<!-- <parameter name="default.sender.address" value="arcmsag@yahoo.com"/> -->
+	<!-- <parameter name="mail.debug" value="true"/> -->
+	<!-- </parameterList> -->
+	<!-- </section> -->
 
-    <!-- configuration parameters of the cleaning job -->
-    <section id="cleaning">
-        <parameterList name="archive">       <!--which files must be archived-->
-            <parameter name="sourceDirectory" value="download"/>
-            <!-- comma separated list of source directories -->
-            <parameter name="fileendings" value=".pdf , .log, .txt"/>
-            <!-- comma separated list of file endings -->
-            <parameter name="destinationDirectory" value="c:\archives"/>
-        </parameterList>
-        <parameterList name="deleting">       <!--which files must be deleted -->
-            <parameter name="cleaningDirectory" value="upload , download"/>
-            <!-- comma separated list directories -->
-        </parameterList>
-    </section>
+	<!-- configuration of files needed in ARCM -->
+	<section id="files">
+		<parameterList name="files">
+			<!-- configuration document-management-systems -->
+			<parameter name="linkTypesFile" value="documentlinktypes.xml" />
+			<parameter name="defaultDesignFolder" value="default" />
+			<parameter name="migrationRuleFolder" value="migrationRules" />
+			<parameter name="xmlimportRuleFolder" value="xmlimport" />
+		</parameterList>
+	</section>
 
-    <!-- EDA configuration to connect to the ESB for event processing -->
-    <section id="eventenabling">
-        <parameterList name="provider_1">
-            <parameter name="active" value="false"/>
-            <parameter name="providerUrl" value="[provider URL]"/>
-            <parameter name="eventTypeStoreLocation" value="[event type store path]"/>
-            <parameter name="configurationLocation" value="[configuration path]"/>
-            <parameter name="securityFilePath" value="[security file path]"/>
-            <!-- optional -->
-            <parameter name="useDurableSubscriptions" value="true"/>
-        </parameterList>
-    </section>
+	<!-- configuration parameters of the cleaning job -->
+	<section id="cleaning">
+		<parameterList name="archive">       <!--which files must be archived -->
+			<parameter name="sourceDirectory" value="download" />
+			<!-- comma separated list of source directories -->
+			<parameter name="fileendings" value=".pdf , .log, .txt" />
+			<!-- comma separated list of file endings -->
+			<parameter name="destinationDirectory" value="c:\archives" />
+		</parameterList>
+		<parameterList name="deleting">       <!--which files must be deleted -->
+			<parameter name="cleaningDirectory" value="upload , download" />
+			<!-- comma separated list directories -->
+		</parameterList>
+	</section>
+
+	<!-- EDA configuration to connect to the ESB for event processing -->
+	<section id="eventenabling">
+		<parameterList name="provider_1">
+			<parameter name="active" value="false" />
+			<parameter name="providerUrl" value="[provider URL]" />
+			<parameter name="eventTypeStoreLocation" value="[event type store path]" />
+			<parameter name="configurationLocation" value="[configuration path]" />
+			<parameter name="securityFilePath" value="[security file path]" />
+			<!-- optional -->
+			<parameter name="useDurableSubscriptions" value="true" />
+		</parameterList>
+	</section>
 
 </runtimeconfig>
