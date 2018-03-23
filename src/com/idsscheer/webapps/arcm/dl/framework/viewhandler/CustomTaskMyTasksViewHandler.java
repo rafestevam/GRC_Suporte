@@ -7,20 +7,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.enterprise.inject.New;
+import javax.management.Query;
+
 import org.apache.myfaces.shared.util.LocaleUtils;
 
 import com.aspose.imaging.internal.bc.ce;
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.exception.RightException;
+import com.idsscheer.webapps.arcm.bl.models.filter.order.IOrderAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITaskitemAttributeType;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
@@ -28,6 +35,7 @@ import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
 import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.IOrderCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
@@ -60,7 +68,7 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 		
 		createQueries();
 		
-		setQueryFilter(userCtx);
+		setQuerySettings(userCtx);
 		
 		IAppObjIterator iteratorTaskItem = 
 				queryTaskItem.getResultIterator();
@@ -112,16 +120,26 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 								new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTIN,
 										entry.getKey())})
 						);
-				filtersAnd.add(criteria);
+				query.addFilterCriteria(new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTEQUAL,
+						entry.getKey()));
+//				filtersAnd.add(criteria);
 			}
 			
-			query.addFilterCriteria(filterFactory.or(filtersAnd));
+//			query.addFilterCriteria(filterFactory.or(filtersAnd));
+//			query.addFilterCriteria(new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTEQUAL,
+//					5018));
 
 		}
 		
 	}
 
-	private void setQueryFilter(IUserContext userCtx) {
+	private void setQuerySettings(IUserContext userCtx) {
+		
+		queryTaskItem.addOrder((QueryOrder.descending(ITaskitemAttributeType.BASE_ATTR_CREATE_DATE)));
+		queryTaskItem.addRestriction(
+				QueryRestriction.or(
+						QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.OPEN), 
+						QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.NOT_COMPLETED)));
 		
 //		List<IOVID> userGroupList = userCtx.getUserRelations().getGroupsIDs();
 //		Iterator iterator = userGroupList.iterator();
