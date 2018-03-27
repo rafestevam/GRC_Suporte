@@ -41,6 +41,23 @@
             </compoundCondition>
         </conditions>
     </view>
+    
+<!--     <view id="myTasksControlExecution" view.parameter="DISTINCT"> -->
+<!--         <viewObject id="VO_myTasks_1" objectType ="TASKITEM" isMainViewObject="true" skipRightsConditionForRoleLevels="crossclient client object"> -->
+<!--             <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/> -->
+<!--         </viewObject> -->
+<!--         <conditions> -->
+<!--             <compoundCondition conditionConnect="AND"> -->
+<!--                 <condition column.id="object_id" compareType="EQ"/> -->
+<!--                 <condition column.id="object_id" compareType="EQ"/> -->
+<!--                 <condition column.id="object_objtype" compareType="EQ" value="CONTROLEXECUTION"/> -->
+<!--                 <compoundCondition conditionConnect="OR"> -->
+<!--                     <condition column.id="user_id" compareType="EQ" value="CURRENTUSER"/> -->
+<!--                     <condition column.id="group_id" compareType="IN"/> -->
+<!--                 </compoundCondition> -->
+<!--             </compoundCondition> -->
+<!--         </conditions> -->
+<!--     </view> -->
 
 </custom>
 

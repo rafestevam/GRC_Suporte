@@ -1467,7 +1467,7 @@
         </viewObject>
         <viewObject id="VO_issuedata_creator" objectType="USER">
             <viewColumn id="is_creator_id" attributeType="obj_id" mashzoneRelevant="false"/>
-            <viewColumn id="is_creator" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="is_creator" attributeType="name" isSortable="true" isSelectColumn="true" />
         </viewObject>
         <viewObject id="VO_issuedata_perf_by" objectType="USER">
             <viewColumn id="is_perf_by" attributeType="name" isSortable="true" isSelectColumn="true"/>
@@ -1476,12 +1476,12 @@
             <viewColumn id="is_own_id" attributeType="obj_id" mashzoneRelevant="false"/>
             <!-- Início FCT 23.02.2018 - EV132664 - Relatório Riscos Corporativos -->
 <!--             <viewColumn id="is_own" attributeType="name" mashzoneRelevant="true"/> -->
-            <viewColumn id="is_own" attributeType="name" isSortable="true" isSelectColumn="true" mashzoneRelevant="true"/>
+            <viewColumn id="is_own" attributeType="name" isSortable="true" isSelectColumn="true"/>
             <!-- Fim FCT 23.02.2018 - EV132664 - Relatório Riscos Corporativos -->
         </viewObject>
         <viewObject id="VO_issuedata_reviewer" objectType="USER">
             <viewColumn id="is_rev_id" attributeType="obj_id" mashzoneRelevant="false"/>
-            <viewColumn id="is_rev" attributeType="name"/>
+            <viewColumn id="is_rev" attributeType="name" isSelectColumn="true"/>
         </viewObject>
         <viewObject id="VO_issuedata_iro" objectType="OBJECT">
             <viewColumn id="iro_client" attributeType="client_sign" mashzoneRelevant="false"/>
