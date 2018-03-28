@@ -9,25 +9,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.apache.myfaces.shared.util.LocaleUtils;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
+import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
+import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
+import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
-import com.idsscheer.webapps.arcm.dl.framework.IDataLayerTransaction;
 import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.IQueryObjectDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
@@ -35,170 +37,236 @@ import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
 import com.idsscheer.webapps.arcm.ndl.IFilterFactory;
 import com.idsscheer.webapps.arcm.ndl.PersistenceAPI;
-import com.idsscheer.webapps.arcm.ndl.PersistenceException;
 
 public class CustomControlData3ViewHandler implements IViewHandler {
 
+	private ArrayList<Long> validControls = new ArrayList<>();
+	private TreeMap<Long, Long> hashedMapControls = new TreeMap<>();
+	
+	private IAppObjFacade facadeRisk;
+	
+	private IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
+	private ITransaction defaultTransaction = TransactionManager.getInstance().getReadOnlyTransaction();
+
+	final Logger log = Logger.getLogger(CustomControlData3ViewHandler.class.getName());
+	
 	@Override
 	public void handleView(QueryDefinition query, List<IRightsFilterCriteria> rightsFilter,
 			List<IFilterCriteria> filters, IDataLayerObject currentObject, QueryDefinition parentQuery)
 					throws BusViewException {
 		// TODO Auto-generated method stub
 
+		// Preenche os facades que serão utilizados.
+		getFacades();
 		
-		Map<Integer, Integer> resultMap = new TreeMap<>();
+		// Pega a data informada no atributo C_CHANGE_DATE da query "controldata3". Data é informada 
+		// através de variáveis GET/HTTP
+		// Exemplo: ...&qattr=C_CHANGE_DATE,LT~2018-03-28
+		Date criteriaDate = setDateFilter(filters);
 
-		IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
-		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROL);
-		IAppObjFacade facadeRisk = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.RISK);
+		// Cria List com o filtro de data passada como parâmetro.
+		List<IFilterCriteria> listCriteriaFilterRisk = getListRisksFilter(criteriaDate);
 
-		IAppObjQuery appQueryControl = facade.createQuery();
-		IAppObjQuery appQueryRisk = facadeRisk.createQuery();
-		
-		Date criteriaDate = Calendar.getInstance().getTime();
-		
-		for (IFilterCriteria filter : filters) {
-			for (IFilterCriteria filter2 : filter.getFilters()) {
-				criteriaDate = (Date)filter2.getValue();
-				criteriaDate.setHours(23);
-				criteriaDate.setMinutes(59);
-				criteriaDate.setSeconds(59);
-				
-				appQueryControl.addRestriction(QueryRestriction.le(IControlAttributeType.BASE_ATTR_CHANGE_DATE, criteriaDate));
-				appQueryRisk.addRestriction(QueryRestriction.le(IRiskAttributeType.BASE_ATTR_CHANGE_DATE, criteriaDate));
-				//System.out.println(filter2.getValue());
+		// Cria VIEW com base em VIEW auxiliar custom_riskdataaux.
+		IViewQuery queryRisks = setQueryRisksFilter(listCriteriaFilterRisk);
 
-			}
-		}
-		
-		appQueryControl.setHeadRevisionsOnly(false);
-		appQueryControl.setIncludeDeletedObjects(true);
-		
-		appQueryRisk.setHeadRevisionsOnly(false);
-		appQueryRisk.setIncludeDeletedObjects(true);
-//		appQueryRisk.addRestriction(QueryRestriction.eq(IRiskAttributeType.ATTR_OBJ_ID, 14850));
-		
-		
-		appQueryRisk.addOrder(QueryOrder.descending(IRiskAttributeType.BASE_ATTR_VERSION_NUMBER));
-		appQueryControl.addOrder(QueryOrder.descending(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
-
-		IAppObjIterator iteratorQueryResult = appQueryControl.getResultIterator();
-		IAppObjIterator iteratorQueryRiskResult = appQueryRisk.getResultIterator();
-		
-		ArrayList<Long> listFlagRisks = new ArrayList<>();
-		ArrayList<Long> validControls = new ArrayList<>();
-		TreeMap<Long, Long> hashedMapControls = new TreeMap<>();
-		
-		try{
-			while (iteratorQueryRiskResult.hasNext()) {
-				// Objeto de risco.
-				IAppObj riskObj = iteratorQueryRiskResult.next();
-				
-				// Pega o ID do risco corrente.
-				Long currentRiskID = riskObj.getRawValue(IRiskAttributeType.BASE_ATTR_OBJ_ID);
-				// Pega lista de controles da versão do risco corrente.
-				List<IOVID> controls = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getRawValue();
-				
-				
-				// Verifica se os controles desta versão de risco já foram
-				// contabilizados.
-				if (!listFlagRisks.contains(currentRiskID)) {
-					
-					listFlagRisks.add(currentRiskID);
-					
-					// Cria Iterator da lista de controles deste risco.
-					Iterator<IOVID> currRiskControlsIterator = controls.iterator();
-					while (currRiskControlsIterator.hasNext()) {
-						
-						Long currentControlID = currRiskControlsIterator.next().getId();
-						// Adiciona esse controle na lista de controles válidos.
-						validControls.add(currentControlID);
-					}
-				}
-			}
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-		
-		try{
-			while (iteratorQueryResult.hasNext()) {
-				
-				IAppObj controlObj = iteratorQueryResult.next();
-				
-//				long controlDate = controlObj.getAttribute(IControlAttributeType.BASE_ATTR_CHANGE_DATE).getRawValue().getTime();
-				
-	//			System.out.println("if(controlDate > criteriaDate.getTime())");
-//				if(controlDate > criteriaDate.getTime())
-//					continue;
-				
-				long controlId = controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID);
-				
-				if (!hashedMapControls.containsKey(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID))) {
-					if (validControls.contains(controlId)) {
-						hashedMapControls.put(controlObj.getRawValue(IControlAttributeType.BASE_ATTR_OBJ_ID), 
-								 controlObj.getRawValue(IControlAttributeType.BASE_ATTR_VERSION_NUMBER));
-					}
-				}
-	//			}
-			}
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
-		
-		
-		
-		IDataLayerTransaction transaction;
-		
 		try {
-			transaction = PersistenceAPI.getTransactionFactory().createTransaction();
-		} catch (PersistenceException e1) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException(e1);
+			
+			// Loop nas versões de risco para determinar quais 
+			// controles e versões eram válidos naquele risco
+			// na data informada.
+			fillValidControls2RiskList(queryRisks);
+
+		} catch (Exception e) {
+			queryRisks.release();
+			log.info(e.getMessage());
+		} finally {
+			queryRisks.release();
 		}
 
-		appQueryControl.release();
+		// Filtro para VIEW auxiliar de controle custom_controldataaux.
+		List<IFilterCriteria> listCriteriaFilterControl = getListControlFilter(criteriaDate);
 
-		if (hashedMapControls.size() > 0) {
+		IViewQuery queryControls = setQueryControlFilter(listCriteriaFilterControl);
 
-			// Limpando query original
-			for (IQueryObjectDefinition def : query.getObjectDefinitions()) {
-				query.markAsRemovable(def);
-			}
-			filters.clear();
+		try {
 
-			// Criando nova query dinamicamente
-			List<IFilterCriteria> filtersAnd = new ArrayList<IFilterCriteria>();
-			IFilterFactory filterFactory = PersistenceAPI.getFilterFactory();
-			for (Map.Entry<Long, Long> entry : hashedMapControls.entrySet()) {
-				IFilterCriteria criteria = filterFactory
-						.and(Arrays.asList(new IFilterCriteria[] {
-								new SimpleFilterCriteria("c_id", "c_id", DataLayerComparator.EQUAL,
-										entry.getKey()),
-								new SimpleFilterCriteria("c_version_number", "c_version_number", DataLayerComparator.EQUAL,
-										entry.getValue()) }));
-				filtersAnd.add(criteria);
-			}
+			// Com base na lista de controles válidos
+			// preenchida anteriormente pelo 
+			// método fillValidControls2RiskList()
+			// é necessário agora determinar
+			// qual a versão deste controle.
+			fillValidControlsList(queryControls);
 			
-//			IFilterCriteria criteria2 = filterFactory
-//					.or(Arrays.asList(new IFilterCriteria[] {
-//							new SimpleFilterCriteria("r_version_active", "r_version_active", DataLayerComparator.EQUAL,
-//									true),
-//							new SimpleFilterCriteria("r_version_active", "r_version_active", DataLayerComparator.EQUAL,
-//									false) }));
-			
-//			query.addFilterCriteria(new SimpleFilterCriteria("deactivated", 0));	
-			query.addFilterCriteria(filterFactory.or(filtersAnd));
-//			query.addFilterCriteria(criteria2);
-
+		} catch (Exception e) {
+			queryControls.release();
+			log.info(e.getMessage());
+		} finally {
+			queryControls.release();
 		}
-		// Fim REO - 29.01.2017 - EV131567
+
+		// Agora que o dicionário hashedMapControls
+		// foi preenchido com todos controles e suas
+		// respectivas versões válidas, precisamos filtrar
+		// na query.
+		setFinalQueryFilter(query, filters);
 
 	}
 
-//	private static void printMap(Map<Integer, Integer> map) {
-//		for (Entry<Long, Long> entry : map.entrySet()) {
-//			System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
-//		}
-//	}
+	private void setFinalQueryFilter(QueryDefinition query, List<IFilterCriteria> filters) {
+		log.info("Verifica o tamanho da lista");
+		if (hashedMapControls.size() > 0) {
+
+			clearFilter(query, filters);
+
+			// Criando novo filtro de query.
+			List<IFilterCriteria> filtersAnd = new ArrayList<IFilterCriteria>();
+			IFilterFactory filterFactory = PersistenceAPI.getFilterFactory();
+			log.info("Loop nos membros da lista hashedMapControls");
+			for (Map.Entry<Long, Long> entry : hashedMapControls.entrySet()) {
+				log.info("c_id = " + entry.getKey());
+				log.info("c_version_number = " + entry.getValue());
+				IFilterCriteria criteria = filterFactory.and(Arrays.asList(new IFilterCriteria[] {
+						new SimpleFilterCriteria("c_id", "c_id", DataLayerComparator.EQUAL, entry.getKey()),
+						new SimpleFilterCriteria("c_version_number", "c_version_number", DataLayerComparator.EQUAL,
+								entry.getValue()) }));
+				filtersAnd.add(criteria);
+			}
+			
+			log.info("Adiciona o filtro para query.");
+			query.addFilterCriteria(filterFactory.or(filtersAnd));
+			
+
+		}
+	}
+
+	private void clearFilter(QueryDefinition query, List<IFilterCriteria> filters) {
+		log.info("Remove os filtros da query");
+		// Limpando query original
+		for (IQueryObjectDefinition def : query.getObjectDefinitions()) {
+			query.markAsRemovable(def);
+		}
+		filters.clear();
+	}
+
+	private void fillValidControlsList(IViewQuery queryControls) {
+		Iterator itQuery = queryControls.getResultIterator();
+		log.info("Início do iterator da query de controles.");
+		while (itQuery.hasNext()) {
+
+			IViewObj viewObj = (IViewObj) itQuery.next();
+			long c_id = (Long) viewObj.getRawValue("c_id");
+			long c_version_number = (Long) viewObj.getRawValue("c_version_number");
+			
+			log.info("c_id = " + c_id);
+			log.info("c_version_number = " + c_version_number);
+			
+			 if (validControls.contains(c_id)) {
+				 log.info("O controle " + c_id + " está válido");
+				 hashedMapControls.put(c_id,
+						 c_version_number);
+			 }
+
+		}
+	}
+
+	private IViewQuery setQueryControlFilter(List<IFilterCriteria> listCriteriaFilterControl) {
+		log.info("Gera a query de controles.");
+		IViewQuery queryTeste2 = QueryFactory.createQuery(userCtx/* this.getFullGrantUserContext() */,
+				"custom_controldataaux", 
+				listCriteriaFilterControl, 
+				null, 
+				defaultTransaction);
+		return queryTeste2;
+	}
+
+	private List<IFilterCriteria> getListControlFilter(Date criteriaDate) {
+		log.info("Criteria para query de controle.");
+		List<IFilterCriteria> listCriteriaFilterControl = new ArrayList<>();
+		log.info("Coloca o filtro de data no change date de controle.");
+		listCriteriaFilterControl.add(new SimpleFilterCriteria("c_change_date", "c_change_date",
+				DataLayerComparator.LESSOREQUAL, (Date)criteriaDate));
+		return listCriteriaFilterControl;
+	}
+
+	private void fillValidControls2RiskList(IViewQuery queryTeste) throws RightException {
+		Iterator itQuery = queryTeste.getResultIterator();
+		log.info("Início do iterator da query de riscos.");
+		while (itQuery.hasNext()) {
+
+			IViewObj viewObj = (IViewObj) itQuery.next();
+			long r_id = (Long) viewObj.getRawValue("r_id");
+			long r_version_number = (Long) viewObj.getRawValue("r_version_number");
+			
+			log.info("r_id = " + r_id);
+			log.info("r_version_number = " + r_version_number);
+
+			IOVID tcOVID = OVIDFactory.getOVID(r_id, r_version_number);
+			IAppObj rAppObj = facadeRisk.load(tcOVID, false);
+			log.info("Objeto de riscos = " + rAppObj.toString());
+
+			// Pega lista de controles da versão do risco corrente.
+			List<IOVID> controls = rAppObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getRawValue();
+			log.info("Pega os controles deste riscos para essa versão");
+
+			// Cria Iterator da lista de controles deste risco.
+			Iterator<IOVID> currRiskControlsIterator = controls.iterator();
+			log.info("Executa o iterator para os controles deste risco.");
+			while (currRiskControlsIterator.hasNext()) {
+
+				Long currentControlID = currRiskControlsIterator.next().getId();
+				log.info("Controle = " + currentControlID);
+				// Adiciona esse controle na lista de controles válidos.
+				validControls.add(currentControlID);
+			}
+		}
+	}
+
+	private IViewQuery setQueryRisksFilter(List<IFilterCriteria> listCriteriaFilterRisk) {
+		log.info("Gera a query de riscos.");
+		IViewQuery queryTeste = 
+				QueryFactory.createQuery(userCtx/* this.getFullGrantUserContext() */,
+										"custom_riskdataaux", 
+										listCriteriaFilterRisk, 
+										null, 
+										defaultTransaction);
+		return queryTeste;
+	}
+
+	private List<IFilterCriteria> getListRisksFilter(Date criteriaDate) {
+		log.info("Criteria para query de riscos.");
+		List<IFilterCriteria> listCriteriaFilterRisk = new ArrayList<>();
+		log.info("Coloca o filtro de data no change date de riscos.");
+		listCriteriaFilterRisk.add(new SimpleFilterCriteria("r_change_date", "r_change_date",
+				DataLayerComparator.LESSOREQUAL, (Date)criteriaDate));
+		return listCriteriaFilterRisk;
+	}
+
+	private Date setDateFilter(List<IFilterCriteria> filters) {
+		log.info("Criação de objeto de data.");
+		Date criteriaDate = Calendar.getInstance().getTime();
+
+		for (IFilterCriteria filter : filters) {
+			for (IFilterCriteria filter2 : filter.getFilters()) {
+				log.info("Pega data do filtro da view.");
+				criteriaDate = (Date) filter2.getValue();
+				criteriaDate.setHours(23);
+				criteriaDate.setMinutes(59);
+				criteriaDate.setSeconds(59);
+
+				// appQueryControl.addRestriction(QueryRestriction.le(IControlAttributeType.BASE_ATTR_CHANGE_DATE,
+				// criteriaDate));
+				// appQueryRisk.addRestriction(QueryRestriction.le(IRiskAttributeType.BASE_ATTR_CHANGE_DATE,
+				// criteriaDate));
+				// log.info(filter2.getValue());
+
+			}
+		}
+		return criteriaDate;
+	}
+
+	private void getFacades() {
+		facadeRisk = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.RISK);
+	}
 
 }

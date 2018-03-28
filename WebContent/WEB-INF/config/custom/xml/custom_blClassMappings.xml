@@ -11,7 +11,7 @@
 	        <mapping name="customToday"         clsName="com.aris.arcm.bl.modifier.impl.CustomTodayModifier"/>
 	    </mappingType>
 	    -->
-	    
+	    	    
 	    <mappingType name="Command">
 	    	<!-- ISSUE -->
 	    	<mapping name="customUpdateStatus"      clsName="com.idsscheer.webapps.arcm.bl.component.issuemanagement.commands.CustomUpdateIssueStatus"/>
@@ -45,7 +45,10 @@
 	        <mapping name="questionnaire_template"  clsName="com.idsscheer.webapps.arcm.bl.component.surveymanagement.tree.QuestionnaireTemplateTreeProvider"/>
 	        <mapping name="soprocess"               clsName="com.idsscheer.webapps.arcm.bl.component.signoffmanagement.tree.SignOffProcessTreeProvider"/>
     	</mappingType>
-	    
+    	
+	    <mappingType name="Filter">
+	  		<mapping name="CustomTaskObjectTypes"     clsName="com.idsscheer.webapps.arcm.bl.component.administration.filter.CustomTaskObjectTypesFilterAttribute" />
+	    </mappingType>
     </blClassMapping>
 
 </custom>

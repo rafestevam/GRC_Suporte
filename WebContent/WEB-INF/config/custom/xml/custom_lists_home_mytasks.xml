@@ -30,7 +30,7 @@
         </column>
         <column id="LC_MYTASKS_NAME" dataReference.idref="object_name" />
         <column id="LC_MYTASKS_CLIENT" align="center" dataReference.idref="task_clientSign" />
-        <column id="LC_MYTASKS_OBJTYPE" align="center" dataReference.idref="object_objtype" />
+        <column id="LC_MYTASKS_OBJTYPE" align="center" dataReference.idref="object_objtype" template="CustomObjectTypeRenderer"/>
         <column id="LC_MYTASKS_ROLE" align="center" dataReference.idref="task_role"  />
         <column id="LC_MYTASKS_STATE" align="center" dataReference.idref="task_status" />
         <column id="LC_MYTASKS_OBJECT_WORKFLOW_STATUS" dataReference.idref="object_workflow_status" template="objectWorkflowStatus"/>

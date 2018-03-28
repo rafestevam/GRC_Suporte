@@ -3,6 +3,11 @@
 
 	<uiClassMapping>
 		
+		<renderers>
+			<!-- specific task list renderer to render related AppObj workflow status -->
+        	<renderer name="CustomObjectTypeRenderer" clsName="com.idsscheer.webapps.arcm.ui.components.administration.renderer.CustomObjectTypeRenderer" />
+		</renderers>
+		
 		<controls>
 			<!-- Inicio REO - 18.08.2017 - Riscos Corporativos -->
 			<control name="customhierarchyform" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.control.object.CustomHierarchyForm" />
@@ -19,6 +24,8 @@
 			<control name="customtestdefform" clsName="com.idsscheer.webapps.arcm.ui.components.testdefinition.control.object.CustomTestdefinitionForm" />
 			<!-- Fim REO - 26.02.2018 - EV133332 -->
 		</controls>
+		
+		
 		
 	</uiClassMapping>
 

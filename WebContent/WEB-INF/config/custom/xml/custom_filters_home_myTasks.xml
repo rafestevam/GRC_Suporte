@@ -26,7 +26,7 @@
             <filterElement dataReference.idref="task_status" default="1"/>
         </filterRow>
         <filterRow id="object_objtype" propertyKey="filter.row.tasks.objecttype.DBI">
-            <filterElement dataReference.idref="object_objtype" default="-1" filterType="taskObjectTypes" template="predefinedValues"/>
+            <filterElement dataReference.idref="object_objtype" default="-1" filterType="CustomTaskObjectTypes" template="predefinedValues"/>
         </filterRow>
 
 		<!--  EV131854 - O plano de ação não aparece em "Minhas Tarefas" -->
