@@ -424,16 +424,16 @@
 		<!-- </parameterList> -->
 
 		<!-- EV133332 - Corp Risk Fixing Job -->
-		<!-- <parameterList name="CorpRiskFixingJob"> -->
-		<!-- <parameter name="jobitem" value="CorpRiskFixingJob" /> -->
-		<!-- <parameter name="startScheduler" value="true"/> -->
-		<!-- <parameter name="executionTime" value="0 59 14 ? * SUN-SAT"/> -->
-		<!-- <parameter name="clientexcludinglist" value=""/> -->
-		<!-- please do not edit -->
-		<!-- <parameter name="className" value="CorpRiskFixingJob"/> -->
-		<!-- please do not edit -->
-		<!-- <parameter name="clientbased" value="false"/> -->
-		<!-- </parameterList> -->
+		<parameterList name="CorpRiskFixingJob">
+			<parameter name="jobitem" value="CorpRiskFixingJob" />
+			<parameter name="startScheduler" value="true"/>
+			<parameter name="executionTime" value="0 50 13 ? * SUN-SAT"/>
+			<parameter name="clientexcludinglist" value=""/>
+	<!-- 		please do not edit -->
+			<parameter name="className" value="CorpRiskFixingJob"/>
+	<!-- 		please do not edit -->
+			<parameter name="clientbased" value="false"/>
+		</parameterList>
 
 		<parameterList name="ActionPlanTaskItemJob">
 			<parameter name="jobitem" value="ActionPlanTaskItemJob" />
@@ -475,7 +475,7 @@
 		<parameterList name="AdjustRisks">
 			<parameter name="jobitem" value="AdjustRisks" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 19 15 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 45 13 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustRisks" />

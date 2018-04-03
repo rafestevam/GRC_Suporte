@@ -25,7 +25,9 @@ import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockse
 @CanBeScheduled
 public class CorpRiskFixingJob extends BaseJob {
 	
+	private static final long serialVersionUID = 1L;
 	//private static final long serialVersionUID = 1L;
+	
 	public static final String KEY_JOB_NAME = "enumeration.CorpRiskFixingJob.DBI";
 	
 	public CorpRiskFixingJob(IOVID executingUserOvid, Locale executingUserLocale) {
