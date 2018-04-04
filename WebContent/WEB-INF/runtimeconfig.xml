@@ -427,7 +427,7 @@
 		<parameterList name="CorpRiskFixingJob">
 			<parameter name="jobitem" value="CorpRiskFixingJob" />
 			<parameter name="startScheduler" value="true"/>
-			<parameter name="executionTime" value="0 50 13 ? * SUN-SAT"/>
+			<parameter name="executionTime" value="0 50 01 ? * SUN-SAT"/>
 			<parameter name="clientexcludinglist" value=""/>
 	<!-- 		please do not edit -->
 			<parameter name="className" value="CorpRiskFixingJob"/>
@@ -451,7 +451,7 @@
 		<parameterList name="AdjustControl1Line">
 			<parameter name="jobitem" value="AdjustControl1Line" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 13 15 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 13 01 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustControl1Line" />
@@ -463,7 +463,7 @@
 		<parameterList name="AdjustControlOtherLines">
 			<parameter name="jobitem" value="AdjustControlOtherLines" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 16 15 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 16 01 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustControlOtherLines" />
@@ -475,7 +475,7 @@
 		<parameterList name="AdjustRisks">
 			<parameter name="jobitem" value="AdjustRisks" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 45 13 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 45 01 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustRisks" />
