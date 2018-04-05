@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
@@ -14,13 +16,16 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.common.constants.LockInfoFlag;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestcaseAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestdefinitionAttributeTypeCustom;
@@ -30,11 +35,31 @@ import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IListAttributeType;
+import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
+import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.list.BaseDetachmentActionCommand;
+import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 	
+	private IUserContext jobCtx;
+	
+	@Override
+	protected boolean beforeExecute() {
+		this.getJobCtx();
+		return super.beforeExecute();
+	}
+	
+	private void getJobCtx() {
+		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
+        this.jobCtx = jobEnv.getUserContext();
+	}
+
 	protected void execute() {
 		super.execute();
 	}
@@ -44,78 +69,191 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 	 */
 	protected void afterExecute(){
 		//this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, "attachment", new String[] { getStringRepresentation(this.formModel.getAppObj()) });
+		
+		//Inicio Alteração - REO 05.04.2018 - EV167252
+		double countTotal1 = 0;
+		double countTotal2 = 0;
+		double countTotal3 = 0;
+		double count1line = 0;
+		double count2line = 0;
+		double count3line = 0;
+		
+		String riskResidualFinal = "";
+		String riskResidual1Line = "";
+		String riskResidual2Line = "";
+		String riskResidual3Line = "";
+		
+		IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
 		try{
-			double inef1line = 0;
-			double total1line = 0;
-			double inef2line = 0;
-			double total2line = 0;
-			double inef3line = 0;
-			double total3line = 0;
-			Map<String,Double> mapTestLine = new HashMap<String,Double>();
-			Map<String,String> mapClassCtrl = new HashMap<String,String>();
+			IOVID riskOVID = this.appObj.getVersionData().getHeadOVID();
+			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
+			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
 			
-			IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
-			riskFacade.allocateLock(this.appObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+			String riscoPotencial = riskUpdObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_RESULT);
+			List<IAppObj> controlList = riskUpdObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
 			
-			IListAttribute ctrlList = this.appObj.getAttribute((IListAttributeType)lookupAttributeType(this.attributeType));
-			for(IAppObj controlObj : ctrlList.getElements(getFullGrantUserContext())){
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			
+			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
+			
+			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
+			count2line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
+			count3line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
+			countTotal1 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
+			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
+			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
+
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
+			
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
+			
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
+			
+			if(!riscoPotencial.equals("Nao Avaliado")){
+				riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
 				
-				//REO 17.08.2017 - EV108436
-				if(controlObj.getVersionData().isDeleted())
-					continue;
+				riskResidual2Line = this.riskResidualFinal(riscoPotencial, riskClass2line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
 				
-				//Contagem - Testes 1a Linha
-				total1line += 1;
-				inef1line += this.getInef1Line(controlObj);
+				riskResidual3Line = this.riskResidualFinal(riscoPotencial, riskClass3line);
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
 				
-				mapTestLine = this.getInef2and3Line(controlObj);
-				
-				//Contagem - Testes 2a Linha
-				total2line += mapTestLine.get("total2line");
-				inef2line += mapTestLine.get("inef2line");
-				
-				//Contagem - Testes 3a Linha
-				total3line += mapTestLine.get("total3line");
-				inef3line += mapTestLine.get("inef3line");
-				
+				riskResidualFinal = this.riskResidualFinal(riscoPotencial, riskClassFinal);
+				if(riskResidualFinal.equals("Não Avaliado"))
+					riskResidualFinal = riscoPotencial;
+				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			}
 			
-			if(total1line == 0)
-				inef1line = 0;
-			
-			if(total2line == 0)
-				inef2line = 0;
-			
-			if(total3line == 0)
-				inef3line = 0;
-			
-			double pond1line = inef1line / total1line;
-			double pond2line = inef2line / total2line;
-			double pond3line = inef3line / total3line;
-			
-			mapClassCtrl = this.getControlClassification(pond1line, pond2line, pond3line);
-			
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(inef1line);
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(total1line);
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(inef2line);
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL2LINE).setRawValue(total2line);
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(inef3line);
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(total3line);
-			
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(mapClassCtrl.get("control1line"));
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(mapClassCtrl.get("control2line"));
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(mapClassCtrl.get("control3line"));
-			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(mapClassCtrl.get("controlfinal"));
-			
-			riskFacade.save(this.appObj, this.getDefaultTransaction(), true);
-			riskFacade.releaseLock(this.appObj.getVersionData().getHeadOVID());
+			riskFacade.save(riskUpdObj, this.getDefaultTransaction(), true);
+			riskFacade.releaseLock(riskOVID);
 			
 		}catch(Exception e){
-			this.formModel.addControlInfoMessage(NotificationTypeEnum.ERROR, "attachment", new String[] { e.getLocalizedMessage() });
+			this.releaseLockedObjects();
+			throw new RuntimeException(e);
 		}
+		
+//		try{
+//			double inef1line = 0;
+//			double total1line = 0;
+//			double inef2line = 0;
+//			double total2line = 0;
+//			double inef3line = 0;
+//			double total3line = 0;
+//			Map<String,Double> mapTestLine = new HashMap<String,Double>();
+//			Map<String,String> mapClassCtrl = new HashMap<String,String>();
+//			
+//			IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
+//			riskFacade.allocateLock(this.appObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+//			
+//			IListAttribute ctrlList = this.appObj.getAttribute((IListAttributeType)lookupAttributeType(this.attributeType));
+//			for(IAppObj controlObj : ctrlList.getElements(getFullGrantUserContext())){
+//				
+//				//REO 17.08.2017 - EV108436
+//				if(controlObj.getVersionData().isDeleted())
+//					continue;
+//				
+//				//Contagem - Testes 1a Linha
+//				total1line += 1;
+//				inef1line += this.getInef1Line(controlObj);
+//				
+//				mapTestLine = this.getInef2and3Line(controlObj);
+//				
+//				//Contagem - Testes 2a Linha
+//				total2line += mapTestLine.get("total2line");
+//				inef2line += mapTestLine.get("inef2line");
+//				
+//				//Contagem - Testes 3a Linha
+//				total3line += mapTestLine.get("total3line");
+//				inef3line += mapTestLine.get("inef3line");
+//				
+//			}
+//			
+//			if(total1line == 0)
+//				inef1line = 0;
+//			
+//			if(total2line == 0)
+//				inef2line = 0;
+//			
+//			if(total3line == 0)
+//				inef3line = 0;
+//			
+//			double pond1line = inef1line / total1line;
+//			double pond2line = inef2line / total2line;
+//			double pond3line = inef3line / total3line;
+//			
+//			mapClassCtrl = this.getControlClassification(pond1line, pond2line, pond3line);
+//			
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(inef1line);
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(total1line);
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(inef2line);
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL2LINE).setRawValue(total2line);
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(inef3line);
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(total3line);
+//			
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(mapClassCtrl.get("control1line"));
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(mapClassCtrl.get("control2line"));
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(mapClassCtrl.get("control3line"));
+//			this.appObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(mapClassCtrl.get("controlfinal"));
+//			
+//			riskFacade.save(this.appObj, this.getDefaultTransaction(), true);
+//			riskFacade.releaseLock(this.appObj.getVersionData().getHeadOVID());
+//			
+//		}catch(Exception e){
+//			this.formModel.addControlInfoMessage(NotificationTypeEnum.ERROR, "attachment", new String[] { e.getLocalizedMessage() });
+//		}
+		//Fim Alteração - REO 05.04.2018 - EV167252
 
 	}
 	
+	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception  {
+		Object objReturn = null;
+		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
+		
+		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
+		while(iterator.hasNext()){
+			
+			Entry<String, String> entry = iterator.next();
+			
+			if(entry.getKey().equals("classification") && valueType.equals("classification"))
+				objReturn = (String)entry.getValue();
+			
+			if(entry.getKey().equals("rate") && valueType.equals("rate"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("total") && valueType.equals("total"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+		}
+		return objReturn;
+	}
+	
+	private void releaseLockedObjects() {
+		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
+		try {
+			List<ILockObject> locks = lockService.findLocks();
+			for (ILockObject lock : locks) {
+				lockService.releaseLock(lock.getLockObjectId(), lock.getLockUserId(), LockInfoFlag.CLEAN, lock.getRemoteClientID());				
+			}
+		} catch (LockServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	private Map<String,String> getControlClassification(double pond1line, double pond2line, double pond3line){
 		Map<String,String> mapReturn = new HashMap<String,String>();
 		
