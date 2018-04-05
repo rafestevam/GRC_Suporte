@@ -417,7 +417,7 @@ rule "set_assessment_ontime[I,V]"
 
 end
 
-################
+###############
 # DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
 ################
 rule "file_upload_enable[I,V]"
@@ -430,6 +430,8 @@ rule "file_upload_enable[I,V]"
 	    is in workflow state "openForReview") AND
 	  ( user is ":persistent:" member of group in list "owner_group" OR
 	  	user is ":persistent:" member of group in list "reviewer_group" )	
+		is in workflow state "openForExecution" OR
+		is in workflow state "openForReview"
 	then
 		set "documents" editable
 end
