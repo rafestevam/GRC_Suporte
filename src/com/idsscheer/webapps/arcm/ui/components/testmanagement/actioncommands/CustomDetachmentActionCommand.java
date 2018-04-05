@@ -83,14 +83,19 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 		String riskResidual2Line = "";
 		String riskResidual3Line = "";
 		
-		IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
+		//IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
+		IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
 		try{
 			IOVID riskOVID = this.appObj.getVersionData().getHeadOVID();
-			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
-			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
+//			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
+//			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
+			riskFacade.allocateLock(this.appObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+			IAppObj riskUpdObj = this.appObj;
 			
 			String riscoPotencial = riskUpdObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_RESULT);
-			List<IAppObj> controlList = riskUpdObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
+			//List<IAppObj> controlList = riskUpdObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
+			IListAttribute ctrlList = this.appObj.getAttribute((IListAttributeType)lookupAttributeType(this.attributeType));
+			List<IAppObj> controlList = ctrlList.getElements(jobCtx);
 			
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
 			
