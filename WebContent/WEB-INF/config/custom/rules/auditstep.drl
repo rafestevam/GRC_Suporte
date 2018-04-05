@@ -435,3 +435,17 @@ rule "period_sub_step_invalid_[V]"
 end
 
 
+################
+# DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
+################
+rule "file_upload_enable[I,V]"
+
+	salience 90
+	no-loop true
+	
+	when
+		is in workflow state "executionPhase" OR
+	then
+		set "documents" editable
+
+end
