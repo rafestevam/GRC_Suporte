@@ -47,7 +47,7 @@
     	</mappingType>
     	
 	    <mappingType name="Filter">
-	  		<mapping name="CustomTaskObjectTypes"     clsName="com.idsscheer.webapps.arcm.bl.component.administration.filter.CustomTaskObjectTypesFilterAttribute" />
+	  		<mapping name="taskObjectTypes"     clsName="com.idsscheer.webapps.arcm.bl.component.administration.filter.CustomTaskObjectTypesFilterAttribute" />
 	    </mappingType>
     </blClassMapping>
 
