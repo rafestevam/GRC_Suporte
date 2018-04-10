@@ -613,6 +613,8 @@ rule "file_upload_enable[I,V]"
 	  	user is ":persistent:" member of group in list "reviewer_group" )	
 		is in workflow state "openForExecution" OR
 	    is in workflow state "openForReview"		
+		is in workflow state "openForExecution AND
+		user is ":persistent:" member of group in list "owner_group" 		
 	then
 		set "documents" editable
 
