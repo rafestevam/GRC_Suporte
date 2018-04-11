@@ -276,16 +276,3 @@ end
 #	then
 #		set "documents" editable
 #end
-################
-# DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
-################
-rule "file_upload_enable[I,V]"
-
-	salience 500
-	no-loop true
-	
-	when
-		is in workflow state "openForExecution"
-	then
-		set "documents" editable
-end
