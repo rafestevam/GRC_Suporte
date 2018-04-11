@@ -29,9 +29,6 @@ public class CustomControlExecListController extends List {
 			this.renderJavaScriptAfterLoad(jScript.toString());
 		}
 		
-		jScript.append("$('#header_delete').hide()");
-		this.renderJavaScriptAfterLoad(jScript.toString());
-		
 		super.renderControlBody();
 	}
 	
