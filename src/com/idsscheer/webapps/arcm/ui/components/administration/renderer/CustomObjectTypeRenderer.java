@@ -87,6 +87,7 @@ public class CustomObjectTypeRenderer extends AbstractBaseRenderer {
 		objectDescList.put("CONTROL","Controle");
 		objectDescList.put("ISSUE","Apontamento");
 		objectDescList.put("ACTION","Plano de Ação");
+		objectDescList.put("TESTCASE","Caso de Teste");
 	}
 	
 	private String getTypeDescription(String objectType) {
