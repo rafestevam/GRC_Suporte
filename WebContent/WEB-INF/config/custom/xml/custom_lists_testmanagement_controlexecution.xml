@@ -56,7 +56,7 @@
         </listButtons>
         <rowButtons>
             <buttonReference button.idref="RELATION_POPUP"/>
-<!--             <buttonReference button.idref="LISTROW_DELETE"/> -->
+            <buttonReference button.idref="LISTROW_DELETE"/>
         </rowButtons>
     </list>
 
