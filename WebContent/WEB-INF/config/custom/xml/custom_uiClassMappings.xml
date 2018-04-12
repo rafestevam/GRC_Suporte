@@ -31,10 +31,8 @@
 	            <component name="selectcolumn"      clsName="com.idsscheer.webapps.arcm.ui.framework.controls.list.helper.ListTableSelectColumn" />
 	            <component name="toolbar"           clsName="com.idsscheer.webapps.arcm.ui.framework.controls.list.helper.ListTableToolBar" />
 	        </control>
-			
-			<control name="customlist" clsName="com.idsscheer.webapps.arcm.ui.framework.controls.list.CustomControlExecListController" extends="simple_list">
-<!-- 				<component name="cstbuttoncolumn"      clsName="com.idsscheer.webapps.arcm.ui.framework.controls.list.helper.CSTListTableButtonColumn" /> -->
-			</control>
+
+			<control name="customlist" clsName="com.idsscheer.webapps.arcm.ui.framework.controls.list.CustomControlExecListController" extends="simple_list" />
 			
 		</controls>
 		
