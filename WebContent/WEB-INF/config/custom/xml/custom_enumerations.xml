@@ -255,6 +255,8 @@
             <enumitem id="actingfront11" value="11" />
             <enumitem id="actingfront12" value="12" />
             <enumitem id="actingfront13" value="13" />
+            <!-- DMM EV190711 2018-04-12 -->
+            <enumitem id="actingfront14" value="14" />
          </enum>    
 
 <!-- Business Unit -->
@@ -438,6 +440,9 @@
         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.ActionPlanTaskItemJob"/>
         </enumitem>
         
+     
+        
+        
         <!-- GRC 82 -->
 <!-- 		<enumitem id="updateIssueSLAUpdateJob" value="54"> -->
 <!--             <parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.IssueSLAUpdateJob"/> -->
@@ -461,5 +466,18 @@
         <!-- /GRC14 -->
         
     </enum>
+    
+        <!-- DMM - EV190177 2018-04-12 -->
+        <enum id="servicetype" isMultiple="false" type="Number">
+            <enumitem id="Auditoria"  value="1"  />
+            <enumitem id="Auditoria Especial (Consultoria)"	value="2"  />
+		</enum>  
+		<enum id="auditauthor" isMultiple="false" type="Number">
+            <enumitem id="Área interna" value="1"  />
+            <enumitem id="Deloitte"		value="2"  />
+            <enumitem id="PwC"			value="3"  />
+            <enumitem id="KPMG"			value="4"  />
+            <enumitem id="Ernest Young"	value="5"  />
+		</enum>  
     
 </custom>

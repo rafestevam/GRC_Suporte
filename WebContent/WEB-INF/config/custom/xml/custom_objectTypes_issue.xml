@@ -103,7 +103,15 @@
         <enumAttrType id="custom_ap_owner_status" enumeration="cenum_ap_owner_status" defaultValue="0"/>
         <enumAttrType id="custom_ap_reviewer_status" enumeration="cenum_ap_reviewer_status" defaultValue="0"/>
 		<!-- Fim GAP - GRC66 -->
-	
+
+		<!-- DMM - INICIO - EV190711 2018-04-12 -->
+		<dateAttrType id="replanneddate"/>
+		<stringAttrType id="auditproject" maxCharCount="100" />
+		<stringAttrType id="riskowner" maxCharCount="100" />
+		<enumAttrType id="custom_servicetype" enumeration="servicetype" defaultValue="1"/>
+		<enumAttrType id="custom_auditauthor" enumeration="auditauthor" defaultValue="1"/>	
+		<!-- DMM - FIM - EV190711 2018-04-12 -->
+				
         <index id="I_ISSUE_1" type="normal">
             <attributeRef attribute="name"/>
         </index>
