@@ -15,6 +15,7 @@
 	        <object right.idref="r----" objectType.id="TESTCASE" />
 			<object right.idref="rw---" objectType.id="RISKASSESSMENT">
 				<action actionRight.idref="extend"/>
+				<relation right.idref="ar" listAttrType.id="documents" />
 	        </object>
 	        <object right.idref="r----" objectType.id="IMPACTTYPE" />
 	        <object right.idref="rw---" objectType.id="RA_IMPACTTYPE" />

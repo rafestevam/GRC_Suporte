@@ -92,6 +92,7 @@ rule "mark_editable_attributes [I,V]"
 		set "remark"                    editable
 		set "execution_documents"       editable
 		set "custom_controlexecstatus"  editable
+		set "documents"					editable
 end
 
 #########################################
