@@ -62,6 +62,7 @@
                 <row id="replanneddate">
                 	<element attribute.idref="replanneddate"/>
                 </row>
+                
 				<!-- DMM Fim - EV190711 - 2018-04-12-->                
                 <row id="stateTime">
                     <element attribute.idref="stateTime"/>
@@ -74,6 +75,10 @@
                 <!--  GAP-GRC92 INÍCIO -->
 				<row id="replanned">
                     <element attribute.idref="replanned">
+                    </element>
+                </row>
+				<row id="cst_rescheduling">
+                    <element attribute.idref="cst_rescheduling">
                     </element>
                 </row>
 				<!--  GAP-GRC92 FIM    -->
@@ -107,9 +112,10 @@
                     </element>
                 </row>
                 <row id="owner_status">
-                    <element attribute.idref="owner_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
-                    </element>
+                	<element attribute.idref="status_obj" />
+<!--                     <element attribute.idref="owner_status"> -->
+<!--                         <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/> -->
+<!--                     </element> -->
                 </row>
                 <row id="owner">
                     <element attribute.idref="owner" template="userSubstitute">
@@ -122,6 +128,9 @@
                 <row id="category">
                     <element attribute.idref="category"/>
                 </row>
+                <row id="immediateMeasure">
+                    <element attribute.idref="immediateMeasure"/>
+                </row>                
                 <row id="documents">
                     <element attribute.idref="documents" template="doclink">
                         <parameter name="selectionList" value="AUTO"/>
@@ -196,14 +205,11 @@
                  GAP-GRC74 INICIO
                 <row id="remark">
                     <element attribute.idref="remark"/>
-                </row>
-                
+                </row>                
                 <row id="created_by_testcase">
                     <element attribute.idref="created_by_testcase"/>
                 </row>
-                <row id="immediateMeasure">
-                    <element attribute.idref="immediateMeasure"/>
-                </row>
+
 				Inicio GAP - GRC66 
                 <row id="custom_is_owner_status">
                     <element attribute.idref="custom_is_owner_status">

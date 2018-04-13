@@ -108,6 +108,7 @@
 		<dateAttrType id="replanneddate"/>
 		<stringAttrType id="auditproject" maxCharCount="100" />
 		<stringAttrType id="riskowner" maxCharCount="100" />
+		<stringAttrType id="status_obj" maxCharCount="50" />
 		<enumAttrType id="custom_servicetype" enumeration="servicetype" defaultValue="1"/>
 		<enumAttrType id="custom_auditauthor" enumeration="auditauthor" defaultValue="1"/>	
 		<!-- DMM - FIM - EV190711 2018-04-12 -->
