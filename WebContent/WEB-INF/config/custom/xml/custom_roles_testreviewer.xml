@@ -36,6 +36,7 @@
 	        <object right.idref="rw---" objectType.id="TESTCASE">
 	            <!--action actionRight.idref="extend"/-->
 	            <relation right.idref="ar" listAttrType.id="recommendations"/>
+	            <relation right.idref="ar" listAttrType.id="documents" />
 	        </object>
 			<object right.idref="rwc--" objectType.id="RECOMMENDATION"/>
 			<object right.idref="r--d-" objectType.id="OFFLINEPROCESSINGENTRY"/>
