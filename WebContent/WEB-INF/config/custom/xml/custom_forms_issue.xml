@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 
-	<form id="FORM_ISSUE" controlName="customissueform">
+      <form id="FORM_ISSUE" controlName="customissueform">
         <logToolbarButtons>
             <buttonReference button.idref="ARIS_REPORT"/>
         </logToolbarButtons>
@@ -13,12 +13,12 @@
             <buttonReference button.idref="PDF_REPORT"/>
         </formButtons>
         <page id="issue" licensedComponentIds="im">
-        	<javaScriptRef scriptName="custom_GRC74"/>
+            <javaScriptRef scriptName="custom_GRC74"/>
             <rowGroup id="issue.1">
                 <!-- GAP-GRC74 Inicio -->
                 <row id="action_type">
                     <element attribute.idref="action_type">
-                    	<javaScriptEvent expression="aam_objectcommand('customissuedate')" name="onChange"/>
+                        <javaScriptEvent expression="aam_objectcommand('customissuedate')" name="onChange"/>
                     </element>
                 </row>
                 <!-- GAP-GRC74 Inicio--> 
@@ -29,14 +29,14 @@
                 <row id="obj_id" propertyKey="form.row.issue.id.DBI">
                     <element attribute.idref="obj_id"/>
                 </row>
-				<!-- GAP-GRC74 Fim--> 
+                        <!-- GAP-GRC74 Fim--> 
                 <row id="name">
                     <element attribute.idref="name"/>
                 </row>
                 <row id="issue_date" propertyKey="forms.row.issue.issue_date.DBI">
-					<element attribute.idref="issue_date"/>
-				</row>
-				                   <!--  GAP-GRC74 FIM -->
+                              <element attribute.idref="issue_date"/>
+                        </row>
+                                           <!--  GAP-GRC74 FIM -->
                 <row id="issueRelevantObjects">
                     <element attribute.idref="issueRelevantObjects" template="irorelations">
                         <parameter name="selectionList" value="IssueRelevantObjectSelection"/>
@@ -46,7 +46,7 @@
                 </row>
                 <row id="description">
                     <element attribute.idref="description"/>
-                </row>				
+                </row>                   
                 <row id="root_cause">
                     <element attribute.idref="root_cause"/>
                 </row>                  
@@ -58,27 +58,27 @@
                         <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
                     </element>
                 </row>
-				<!-- DMM Inicio - EV190711 - 2018-04-12-->
+                        <!-- DMM Inicio - EV190711 - 2018-04-12-->
                 <row id="replanneddate">
-                	<element attribute.idref="replanneddate"/>
+                  <element attribute.idref="replanneddate"/>
                 </row>
                 
-				<!-- DMM Fim - EV190711 - 2018-04-12-->                
+                        <!-- DMM Fim - EV190711 - 2018-04-12-->                
                 <!--  GAP-GRC74 INICIAL    -->   
                 <row id="fup_date" propertyKey="forms.row.issue.fup_date.DBI">
-					<element attribute.idref="fup_date"/>
-				</row>
-				<!--  GAP-GRC74 FIM    -->
+                              <element attribute.idref="fup_date"/>
+                        </row>
+                        <!--  GAP-GRC74 FIM    -->
                 <!--  GAP-GRC92 INÍCIO -->
-				<row id="replanned">
+                        <row id="replanned">
                     <element attribute.idref="replanned">
                     </element>
                 </row>
-				<row id="cst_rescheduling">
+                        <row id="cst_rescheduling">
                     <element attribute.idref="cst_rescheduling">
                     </element>
                 </row>
-				<!--  GAP-GRC92 FIM    -->
+                        <!--  GAP-GRC92 FIM    -->
                 <row id="recurrent">
                     <element attribute.idref="recurrent">
                     </element>
@@ -95,13 +95,13 @@
                 <row id="ra_resultadofinal">
                     <element attribute.idref="ra_residualfinal"/>
                 </row>
-				<row id="riskowner">
-					<element attribute.idref="riskowner" />
-				</row>                
+                        <row id="riskowner">
+                              <element attribute.idref="riskowner" />
+                        </row>                
                 <row id="creator">
                     <element attribute.idref="creator"/>
                 </row>
-				<row id="owners">
+                        <row id="owners">
                     <element attribute.idref="owners">
                         <parameter name="selectionList" value="IssueOwnerSelection"/>
                     </element>
@@ -121,7 +121,7 @@
                         <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
                     </element>
                 </row>
-                <row id="custom_is_owner_status">
+               <row id="custom_is_owner_status">
                     <element attribute.idref="custom_is_owner_status">
                         <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
                     </element>
@@ -143,7 +143,7 @@
                 </row>
                 
                 <row id="owner_status">
-                	<element attribute.idref="status_obj" />
+                  <element attribute.idref="status_obj" />
 <!--                     <element attribute.idref="owner_status"> -->
 <!--                         <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/> -->
 <!--                     </element> -->
@@ -174,7 +174,7 @@
                     <!-- <javaScriptEvent expression="aam_objectcommand('customissueyear')" name="onChange"/> --> 
                      </element>                
                 </row>          
-				<row id="process_environment">
+                        <row id="process_environment">
                     <element attribute.idref="process_environment"/>
                 </row>
                 <row id="business_unit">
@@ -183,23 +183,23 @@
                  <row id="cst_appsystem">
                     <element attribute.idref="cst_appsystem"/>                        
                 </row>              
-				<row id="servicetype">
-					<element attribute.idref="custom_servicetype" />
-				</row>
-				<row id="auditproject">
-					<element attribute.idref="auditproject" />
-				</row>
-				<row id="auditauthor">
-					<element attribute.idref="custom_auditauthor" />
-				</row>
+                        <row id="servicetype">
+                              <element attribute.idref="custom_servicetype" />
+                        </row>
+                        <row id="auditproject">
+                              <element attribute.idref="auditproject" />
+                        </row>
+                        <row id="auditauthor">
+                              <element attribute.idref="custom_auditauthor" />
+                        </row>
 
 
 
                 
-				<!-- DMM Inicio - EV190711 - 2018-04-12   
-				
+                        <!-- DMM Inicio - EV190711 - 2018-04-12   
+                        
                 <row id="issue_year" propertyKey="forms.row.issue.issue_year.DBI">
-                	<element attribute.idref="issue_year"/>
+                  <element attribute.idref="issue_year"/>
                 </row>
                  <row id="cst_modelname">
                     <element attribute.idref="cst_modelname"/>
@@ -207,7 +207,7 @@
                 <row id="cst_process">
                     <element attribute.idref="cst_process"/>
                 </row>  
-				                              
+                                                      
                 <row id="creator_status">
                     <element attribute.idref="creator_status">
                         <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
@@ -215,8 +215,8 @@
                 </row>
             </rowGroup>
             <rowGroup id="issue.2">
-            	GAP-GRC74 INICIO 
-				<row id="appsystem"> 
+                  GAP-GRC74 INICIO 
+                        <row id="appsystem"> 
                      <element attribute.idref="appsystem"/> 
                      <parameter name="selectionList" value="AUTO"/> 
                  </row> 
@@ -243,12 +243,12 @@
                 
                 GAP-GRC74 INICIAL       
                 <row id="fup_date_preview" propertyKey="forms.row.issue.fup_date_preview.DBI">
-					<element attribute.idref="fup_date_preview"/>
-				</row>				 
-				GAP-GRC74 FIM    
-				
-				 DMM Fim EV190711-->
-				
+                              <element attribute.idref="fup_date_preview"/>
+                        </row>                        
+                        GAP-GRC74 FIM    
+                        
+                         DMM Fim EV190711-->
+                        
             </rowGroup>
         </page>
     </form>
