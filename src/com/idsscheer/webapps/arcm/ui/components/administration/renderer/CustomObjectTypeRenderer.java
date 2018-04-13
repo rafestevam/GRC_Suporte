@@ -75,6 +75,7 @@ public class CustomObjectTypeRenderer extends AbstractBaseRenderer {
 		objectDescList.put("CONTROLEXECUTIONTASK","Tarefa de execução da controle");
 		objectDescList.put("TASKITEM","Tarefa");
 		objectDescList.put("RISK","Risco");
+		objectDescList.put("RISKASSESSMENT", "Avaliação de Risco");
 		objectDescList.put("REPORT","Relatórios");
 		objectDescList.put("ISSUERELEVANTOBJECT","Objeto relevante para o apontamento");
 		objectDescList.put("INTERNALMESSAGE","Notificação interna");
@@ -82,12 +83,15 @@ public class CustomObjectTypeRenderer extends AbstractBaseRenderer {
 		objectDescList.put("JOBINFORMATION","Informação sobre a tarefa");
 		objectDescList.put("HIERARCHY","Hierarquia");
 		objectDescList.put("USERGROUP","Grupo de usuários");
-		objectDescList.put("CONTROLEXECUTION","Execução da controle");
+		objectDescList.put("CONTROLEXECUTION","Execução de controle");
 		objectDescList.put("DOCUMENT","Documento");
 		objectDescList.put("CONTROL","Controle");
 		objectDescList.put("ISSUE","Apontamento");
 		objectDescList.put("ACTION","Plano de Ação");
 		objectDescList.put("TESTCASE","Caso de Teste");
+		objectDescList.put("AUDITSTEP", "Medida de Auditoria");
+		objectDescList.put("AUDIT", "Auditoria");
+		
 	}
 	
 	private String getTypeDescription(String objectType) {
