@@ -148,12 +148,14 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 					issueFacade.releaseLock(currIssueAppObj.getVersionData().getHeadOVID());
 
 					if( qtd== 1 && version == 1){
-						iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+						//iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+						iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue(true);
 						iroAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
 						issueFacade.save(iroAppObj, this.getDefaultTransaction(), true);
 						issueFacade.releaseLock(iroAppObj);							
 					}else{
-						iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+						//iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+						iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue(true);
 						iroUpdObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
 						issueFacade.save(iroUpdObj, this.getDefaultTransaction(), true);
 						issueFacade.releaseLock(iroOVID);
