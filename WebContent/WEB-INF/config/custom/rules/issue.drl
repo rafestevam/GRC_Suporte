@@ -150,7 +150,7 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              editable  #GAP - GRC74
 
-		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_status"            invisible
 		set "owner_remark"            invisible
 		set "reviewer_status"         invisible
 		set "reviewer_remark"         invisible
@@ -162,8 +162,6 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "custom_ap_creator_status"   invisible #GAP - GRC66
 		set "custom_ap_owner_status"     invisible #GAP - GRC66
 		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
-		
-		set "status_obj"             visible
 
 end
 
@@ -208,7 +206,7 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
 		
-		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_status"            invisible
 		set "owner_remark"            invisible
 		set "reviewer_status"         invisible
 		set "reviewer_remark"         invisible
@@ -264,7 +262,7 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
 
-		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_status"            invisible
 		set "owner_remark"            invisible
 		set "reviewer_status"         invisible
 		set "reviewer_remark"         invisible
@@ -320,7 +318,7 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
 
-		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_status"            invisible
 		set "owner_remark"            invisible
 		set "reviewer_status"         invisible
 		set "reviewer_remark"         invisible
@@ -606,7 +604,7 @@ rule "custom_grc66_is opened by owner & still open for owner --> init [I,V]"
 		set "custom_is_owner_status"  mandatory
 		
 		set "creator_status"             invisible
-		# DMM - EV190711 - set "owner_status"               invisible
+		set "owner_status"               invisible
 		set "reviewer_status"            invisible
 		set "custom_is_creator_status"   invisible
 		set "custom_ap_owner_status"     invisible
@@ -730,7 +728,7 @@ rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
 #		set "reviewer_status" mandatory
 
 		set "creator_status"             invisible
-		# DMM - EV190711 - set "owner_status"               invisible
+		set "owner_status"               invisible
 		set "reviewer_status"            invisible
 #		set "custom_ap_creator_status"   invisible
 #		set "custom_ap_owner_status"     invisible
@@ -762,7 +760,7 @@ rule "custom_GRC66_ap opened by reviewer, still editable --> init [I,V]"
 #		set "reviewer_status" mandatory
 
 		set "creator_status"             invisible
-		# DMM - EV190711 - set "owner_status"               invisible
+		set "owner_status"               invisible
 		set "reviewer_status"            invisible
 		set "custom_is_creator_status"   invisible
 		set "custom_is_owner_status"     invisible
@@ -973,7 +971,7 @@ rule "custom_is_set_creator_status[I,V]"
 		set "custom_is_reviewer_status"  readonly
 		
 		set "creator_status"             invisible
-		# DMM - EV190711 - set "owner_status"               invisible
+		set "owner_status"               invisible
 		set "reviewer_status"            invisible
 		
 		set "custom_ap_creator_status"   invisible
@@ -998,7 +996,7 @@ rule "custom_ap_set_creator_status[I,V]"
 		set "custom_ap_reviewer_status"  readonly
 		
 		set "creator_status"             invisible
-		# DMM - EV190711 - set "owner_status"               invisible
+		set "owner_status"               invisible
 		set "reviewer_status"            invisible
 		
 		set "custom_is_creator_status"   invisible
@@ -1164,68 +1162,5 @@ rule "file_upload_enable[I,V]"
 	then
 		set "documents" editable
 
-end
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação
-################
-rule "show_hide_action_plan_fields[I,V]"
-
-	salience 60
-	no-loop true
-	
-	when
-		( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan" )		
-	then
-#		set "custom_ap_reviewer_status" editable
-#		set "custom_ap_reviewer_status" mandatory
-	
-#		set "reviewer_status" editable
-#		set "reviewer_remark" editable
-#		set "documents"       editable	
-#		set "plannedenddate"  editable
-#		set "replanned"       editable  #GAP - GRC74 2304
-		
-#		set "reviewer_status" mandatory
-
-#		set "creator_status"             invisible
-#		set "owner_status"               invisible
-#		set "reviewer_status"            invisible
-#		set "custom_is_creator_status"   invisible
-#		set "custom_is_owner_status"     invisible
-#		set "custom_is_reviewer_status"  invisible
-		set "issuesource"  				invisible
-		set "acting_front"  			invisible
-		set "process_environment" 		invisible
-		set "business_unit"				invisible
-		set "cst_appsystem"  			invisible
-		set "custom_servicetype"  		invisible
-		set "auditproject"  			invisible
-		set "custom_auditauthor"  		invisible
-		set "riskowner"  				invisible
-		set "root_cause"  				invisible
-		set "recurrent"  				invisible		
-		set "remediationMeasure"  		invisible		
-		set "ra_result"  				invisible		
-		set "ra_residualfinal"  		invisible		
-		set "rsk_name"					invisible
-		set "fup_date"					invisible		
-		
-
-end
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Apontamento
-################
-rule "show_hide_issues_fields[I,V]"
-
-	salience 60
-	no-loop true
-	
-	when
-		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
-	then
-		set "cst_rescheduling"   invisible
-		
 end
 

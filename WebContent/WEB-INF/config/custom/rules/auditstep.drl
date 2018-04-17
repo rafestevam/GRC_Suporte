@@ -444,7 +444,7 @@ rule "file_upload_enable[I,V]"
 	no-loop true
 	
 	when
-		is in workflow state "executionPhase" OR
+		is in workflow state "executionPhase"
 	then
 		set "documents" editable
 
