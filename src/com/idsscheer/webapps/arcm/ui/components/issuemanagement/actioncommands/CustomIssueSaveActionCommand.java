@@ -60,53 +60,53 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	private static final boolean DEBUGGER_ON = true;
 	protected void afterExecute(){
 				
-		//affectPADate();
+		affectPADate();
 		
-		Map filterMap = new HashMap();
-		
-		IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
-		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.ISSUE);
-		
-		IAppObj currObj = this.formModel.getAppObj();
-		IEnumAttribute issueTypeList = currObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
-		IEnumerationItem issueType = ARCMCollections.extractSingleEntry(issueTypeList.getRawValue(), true);
-		
-		if(issueType.getId().equals("actionplan")){
-			
-			IListAttribute iroList = currObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS);
-			List<IAppObj> iroElements = iroList.getElements(this.getUserContext());
-			
-			Date currEndDate = currObj.getRawValue(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE);
-			
-			for (IAppObj iroObj : iroElements) {
-				if(iroObj.getObjectType().equals(ObjectType.ISSUE)){
-					Date iroEndDate = iroObj.getRawValue(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE);
-					
-					filterMap.put(this.filterColumn, iroObj.getObjectId());
-					Map listObjMap = this.getIssuesFromIRO(this.viewName, filterMap);
-					List <CustomIssueObj> listObj = (List<CustomIssueObj>)listObjMap.get("list");
-					
-					CustomIssueObj customIssueObj = listObj.get(0);
-					if(currEndDate.after(iroEndDate)){
-						iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE).setRawValue(customIssueObj.getObjDate());
-						iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
-					}
-					
-					try {
-						issueFacade.allocateLock(iroObj.getVersionData().getOVID(), LockType.FORCEWRITE);
-						issueFacade.save(iroObj, getDefaultTransaction(), false);
-					} catch (Exception e) {
-						throw new RuntimeException(e);
-					} finally{
-						issueFacade.releaseLock(iroObj.getVersionData().getOVID());
-					}
-					
-				}				
-			}
-			
-			
-			
-		}
+//		Map filterMap = new HashMap();
+//		
+//		IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
+//		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.ISSUE);
+//		
+//		IAppObj currObj = this.formModel.getAppObj();
+//		IEnumAttribute issueTypeList = currObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+//		IEnumerationItem issueType = ARCMCollections.extractSingleEntry(issueTypeList.getRawValue(), true);
+//		
+//		if(issueType.getId().equals("actionplan")){
+//			
+//			IListAttribute iroList = currObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS);
+//			List<IAppObj> iroElements = iroList.getElements(this.getUserContext());
+//			
+//			Date currEndDate = currObj.getRawValue(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE);
+//			
+//			for (IAppObj iroObj : iroElements) {
+//				if(iroObj.getObjectType().equals(ObjectType.ISSUE)){
+//					Date iroEndDate = iroObj.getRawValue(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE);
+//					
+//					filterMap.put(this.filterColumn, iroObj.getObjectId());
+//					Map listObjMap = this.getIssuesFromIRO(this.viewName, filterMap);
+//					List <CustomIssueObj> listObj = (List<CustomIssueObj>)listObjMap.get("list");
+//					
+//					CustomIssueObj customIssueObj = listObj.get(0);
+//					if(currEndDate.after(iroEndDate)){
+//						iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE).setRawValue(customIssueObj.getObjDate());
+//						iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+//					}
+//					
+//					try {
+//						issueFacade.allocateLock(iroObj.getVersionData().getOVID(), LockType.FORCEWRITE);
+//						issueFacade.save(iroObj, getDefaultTransaction(), false);
+//					} catch (Exception e) {
+//						throw new RuntimeException(e);
+//					} finally{
+//						issueFacade.releaseLock(iroObj.getVersionData().getOVID());
+//					}
+//					
+//				}				
+//			}
+//			
+//			
+//			
+//		}
 		
 	}
 
@@ -190,6 +190,7 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 					if(breplaned == true){											
 						
 						if(dataPlanIni==null){
+							dataPlanIni = currDataFimValue;
 							this.displayLog("Data Inicial do Planejado : " + currDataFimValue );
 							currIssueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_CST_PLANDTINI).setRawValue(currDataFimValue);
 							
@@ -205,44 +206,24 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 					this.displayLog("Quantidade de replanejamentos : " + s_resch);
 					currIssueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_CST_RESCHEDULING).setRawValue(s_resch);
 					
-//					issueFacade.save(currIssueAppObj, this.getDefaultTransaction(), true);
-//					issueFacade.releaseLock(currIssueAppObj);
-					//issueFacade.releaseLock(currIssueAppObj.getVersionData().getHeadOVID());
+					issueFacade.save(currIssueAppObj, this.getDefaultTransaction(), true);
+					issueFacade.releaseLock(currIssueAppObj.getVersionData().getHeadOVID());
 
-//					if( qtd== 1 && version == 1){
-//						//iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+					if( qtd== 1 && version == 1){
+						//iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
 						iroAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue(true);
 						iroAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
-						
-//						ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
-//						try {
-//							for (ILockObject lock : lockService.findLocks()) {
-//								if(lock.getLockObjectId().equals(iroAppObj.getVersionData().getHeadOVID()))
-//									lockService.releaseLock(lock.getObjectType(), lock.getLockUserId(), null);
-//							}
-//						} catch (LockServiceException e) {
-//							throw new RuntimeException(e);
-//							//setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
-//						}
-						
-						ITransaction newTransaction = TransactionManager.getInstance().createTransaction();
-						
-//						issueFacade.save(iroAppObj, this.getDefaultTransaction(), true);
-						issueFacade.save(iroAppObj, newTransaction, true);
-						issueFacade.releaseLock(iroAppObj);
-						newTransaction.commit();
-//					}else{
+						issueFacade.save(iroAppObj, this.getDefaultTransaction(), true);
+						issueFacade.releaseLock(iroAppObj);							
+					}else{
 						//iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
-//						iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue(true);
-//						iroUpdObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
-//						issueFacade.save(iroUpdObj, this.getDefaultTransaction(), true);
-//						issueFacade.releaseLock(iroOVID);
-//					}				
+						iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue(true);
+						iroUpdObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
+						issueFacade.save(iroUpdObj, this.getDefaultTransaction(), true);
+						issueFacade.releaseLock(iroOVID);
+					}				
 					
-						issueFacade.save(currIssueAppObj, this.getDefaultTransaction(), true);
-						issueFacade.releaseLock(currIssueAppObj);
-
-						break;
+					break;
 					
 					}else{
 			
@@ -250,15 +231,15 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 							Date lastDateLists = cstIssues.getObjDate();	
 							
 						
-//						if( qtd == 1 && version == 1){
+						if( qtd == 1 && version == 1){
 							iroAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
 							issueFacade.save(iroAppObj, this.getDefaultTransaction(), true);
 							issueFacade.releaseLock(iroAppObj);							
-//						}else{
-//							iroUpdObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
-//							issueFacade.save(iroUpdObj, this.getDefaultTransaction(), true);
-//							issueFacade.releaseLock(iroOVID);
-//						}														
+						}else{
+							iroUpdObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDateList);
+							issueFacade.save(iroUpdObj, this.getDefaultTransaction(), true);
+							issueFacade.releaseLock(iroOVID);
+						}														
 						break;							
 					}
 			
