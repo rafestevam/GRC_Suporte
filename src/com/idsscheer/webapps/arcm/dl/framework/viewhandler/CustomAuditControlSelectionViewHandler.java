@@ -27,6 +27,7 @@ import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
+import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 
@@ -40,9 +41,17 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 		// TODO Auto-generated method stub
 		try {
 			IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
-			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userCtx, currentObject.getObjMetaData().getObjectType());
+			IUserContext jobCtx = new JobUIEnvironment(userCtx).getUserContext();
+			
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, currentObject.getObjMetaData().getObjectType());
 			if(currentObject.getObjMetaData().getObjectType().getId().equalsIgnoreCase("AUDITSTEPTEMPLATE")){
-				IAppObj astAppObj = facade.load(currentObject.getHeadObjId(), true);
+//				IAppObj astAppObj = facade.load(currentObject.getHeadObjId(), true);
+				IAppObj astAppObj = null;
+				try{
+					astAppObj = facade.load(currentObject.getObjectId(), true);
+				}catch(Exception e){
+					throw new RuntimeException(e);
+				}
 				
 				// Audit Template List.
 				List<IAppObj> atAppList = astAppObj.getAttribute(IAuditsteptemplateAttributeType.LIST_AUDITTEMPLATE).getElements(userCtx);
@@ -109,9 +118,9 @@ public class CustomAuditControlSelectionViewHandler implements IViewHandler {
 			if(ctrlIDList.size() > 0)
 				filters.add(new SimpleFilterCriteria("ct_id", DataLayerComparator.IN, ctrlIDList));
 			
-		} catch (RightException | BusException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 		
 	}

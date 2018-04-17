@@ -1667,4 +1667,3 @@ rule "show_hide_issues_fields_issue_manager[I,V]"
             set "custom_auditauthor"      editable    # I
 
 end
-
