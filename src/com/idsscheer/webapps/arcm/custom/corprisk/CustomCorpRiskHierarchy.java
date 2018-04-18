@@ -323,6 +323,9 @@ public class CustomCorpRiskHierarchy {
 			residualFinal = residualCalc.getResidualFinal();
 		}
 		
+		if(residualFinal.isEmpty())
+			residualFinal = riscoPotencial;
+		
 		return residualFinal;
 		
 	}

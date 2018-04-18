@@ -18,6 +18,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IHierarchyAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskassessmentAttributeType;
@@ -26,6 +27,8 @@ import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
+import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomProcRiskResidualCalc;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceClient;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
@@ -100,6 +103,7 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				}
 				
 				rskAppFacade.save(rskUpdAppObj, getDefaultTransaction(), true);
+				this.affectCorpRisk(rskUpdAppObj);
 				//}	
 				//}
 				//Fim Alteracao - REO 18.12.2017 - EV126430
@@ -176,4 +180,47 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 			throw e;
 		}
 	}
+	
+	private void affectCorpRisk(IAppObj risk) throws Exception{
+		JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
+		IUserContext jobCtx = jobEnv.getUserContext();
+		try{
+			//Inicio REO - 27.09.2017 - EV113345
+			//IAppObjFacade crFacade = this.environment.getAppObjFacade(ObjectType.HIERARCHY);
+			IAppObjFacade crFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.HIERARCHY);
+			//Fim REO - 27.09.2017 - EV113345
+			
+			List<IAppObj> corpRiskList = risk.getAttribute(IRiskAttributeType.LIST_RISK_CATEGORY).getElements(jobCtx);
+			for(IAppObj corpRisk : corpRiskList){
+				
+				if(corpRisk.getVersionData().isDeleted())
+					continue;
+				
+				if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue() != null){
+					if(corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_CORPRISK).getRawValue()){
+						crFacade.allocateLock(corpRisk.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+						CustomCorpRiskHierarchy crHierarchy = new CustomCorpRiskHierarchy(corpRisk, jobCtx, this.getDefaultTransaction());
+						//Inicio REO - 17.01.2018 - EV124200
+						//String ret = crHierarchy.calculateResidualCR();
+						String ret = "";
+						try{
+							ret = crHierarchy.calculateResidualCR();
+						}catch(CustomCorpRiskException ex){
+							continue;
+						}
+						//Fim REO - 17.01.2018 - EV124200
+						if(ret != null || (!ret.equals(""))){
+							corpRisk.getAttribute(IHierarchyAttributeTypeCustom.ATTR_RESIDUAL).setRawValue(ret);
+							crFacade.save(corpRisk, this.getDefaultTransaction(), true);
+							crFacade.releaseLock(corpRisk.getVersionData().getHeadOVID());
+						}
+					}
+				}
+			}
+		}catch(Exception e){
+			throw e;
+		}
+		
+	}
+	
 }
