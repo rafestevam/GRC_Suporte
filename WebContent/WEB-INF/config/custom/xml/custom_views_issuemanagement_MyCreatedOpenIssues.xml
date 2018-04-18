@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
  
-     <view id="MyCreatedOpenIssues2" view.parameter="DISTINCT">
+     <view id="MyCreatedOpenIssues2" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomIssues3ViewHandler">
         <viewObject id="VO_MyCreatedIssues_ISSUE" objectType="ISSUE" isMainViewObject="true" restrictToCurrentUser.id="creator_user_id">
             <viewColumn id="creator_id" attributeType="creator_user_id"/>
             <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true" isGrouped="true"/>
@@ -18,6 +18,7 @@
             <viewColumn id="stateTime" attributeType="stateTime" isSelectColumn="true" isSortable="true" isGrouped="true"/>
             <viewColumn id="version_active" attributeType="version_active"/>
             <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="version_number" attributeType="version_number" isSelectColumn="true" isSortable="true" isGrouped="true"/>
         </viewObject>
         <viewObject id="VO_MyCreatedIssues_OWNER" objectType="USER">
             <viewColumn id="owner_id" attributeType="obj_id" isSelectColumn="true" isSortable="true" function="COUNT"/>
