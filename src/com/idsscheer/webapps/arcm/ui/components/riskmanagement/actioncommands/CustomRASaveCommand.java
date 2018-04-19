@@ -103,7 +103,6 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				}
 				
 				rskAppFacade.save(rskUpdAppObj, getDefaultTransaction(), true);
-				this.affectCorpRisk(rskUpdAppObj);
 				//}	
 				//}
 				//Fim Alteracao - REO 18.12.2017 - EV126430
@@ -154,6 +153,8 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 													
 					rskAppFacade.save(rskUpdAppObj, this.getDefaultTransaction(), true);
 					rskAppFacade.releaseLock(riskOVID);
+					
+					this.affectCorpRisk(rskUpdAppObj);
 				}
 
 			}catch(Exception e){
