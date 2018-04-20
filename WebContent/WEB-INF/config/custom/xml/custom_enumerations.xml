@@ -95,7 +95,7 @@
     
     <enum id="custom_enumactiontype" isMultiple="false" type="Number">
     	<enumitem id="all" value="-1" extendedMeaning="all" />
-    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+    	<enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="true" filterRelevant="false"/>
     	<enumitem id="actionplan" value="1"/>
     	<enumitem id="issue" value="2"/>
 <!--     	<enumitem id="empty" value="3"/> -->
@@ -469,15 +469,15 @@
     
         <!-- DMM - EV190177 2018-04-12 -->
         <enum id="servicetype" isMultiple="false" type="Number">
-            <enumitem id="Auditoria"  value="1"  />
-            <enumitem id="Auditoria Especial (Consultoria)"	value="2"  />
+            <enumitem id="audit"  value="1"  />
+            <enumitem id="specialAudit"	value="2"  />
 		</enum>  
 		<enum id="auditauthor" isMultiple="false" type="Number">
-            <enumitem id="Área interna" value="1"  />
-            <enumitem id="Deloitte"		value="2"  />
-            <enumitem id="PwC"			value="3"  />
-            <enumitem id="KPMG"			value="4"  />
-            <enumitem id="Ernest Young"	value="5"  />
+            <enumitem id="internalArea" value="1"  />
+            <enumitem id="auditCIA1"	value="2"  />
+            <enumitem id="auditCIA2"	value="3"  />
+            <enumitem id="auditCIA3"	value="4"  />
+            <enumitem id="auditCIA4"	value="5"  />
 		</enum>  
     
 </custom>

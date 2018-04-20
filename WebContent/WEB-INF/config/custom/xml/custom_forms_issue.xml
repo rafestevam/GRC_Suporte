@@ -64,9 +64,6 @@
                 </row>
                 
 				<!-- DMM Fim - EV190711 - 2018-04-12-->                
-                <row id="stateTime">
-                    <element attribute.idref="stateTime"/>
-                </row>
                 <!--  GAP-GRC74 INICIAL    -->   
                 <row id="fup_date" propertyKey="forms.row.issue.fup_date.DBI">
 					<element attribute.idref="fup_date"/>
@@ -85,6 +82,9 @@
                 <row id="recurrent">
                     <element attribute.idref="recurrent">
                     </element>
+                </row>
+                <row id="stateTime">
+                    <element attribute.idref="stateTime"/>
                 </row>
                 <row id="rsk_name">
                     <element attribute.idref="rsk_name"/>
@@ -111,6 +111,37 @@
                         <parameter name="selectionList" value="IssueReviewerSelection"/>
                     </element>
                 </row>
+                <row id="custom_is_creator_status">
+                    <element attribute.idref="custom_is_creator_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="custom_ap_creator_status">
+                    <element attribute.idref="custom_ap_creator_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+                <row id="custom_is_owner_status">
+                    <element attribute.idref="custom_is_owner_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                <row id="custom_ap_owner_status">
+                    <element attribute.idref="custom_ap_owner_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                <row id="custom_is_reviewer_status">
+                    <element attribute.idref="custom_is_reviewer_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                <row id="custom_ap_reviewer_status">
+                    <element attribute.idref="custom_ap_reviewer_status">
+                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
+                    </element>
+                </row>
+                
                 <row id="owner_status">
                 	<element attribute.idref="status_obj" />
 <!--                     <element attribute.idref="owner_status"> -->
@@ -122,12 +153,12 @@
                         <parameter name="substitute" value="owner_substitute"/>
                     </element>
                 </row>                
-                <row id="priority">
-                    <element attribute.idref="priority"/>
-                </row>
-                <row id="category">
-                    <element attribute.idref="category"/>
-                </row>
+<!--                 <row id="priority"> -->
+<!--                     <element attribute.idref="priority"/> -->
+<!--                 </row> -->
+<!--                 <row id="category"> -->
+<!--                     <element attribute.idref="category"/> -->
+<!--                 </row> -->
                 <row id="immediateMeasure">
                     <element attribute.idref="immediateMeasure"/>
                 </row>                
@@ -182,18 +213,6 @@
                         <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
                     </element>
                 </row>
-                Inicio GAP - GRC66 
-                <row id="custom_is_creator_status">
-                    <element attribute.idref="custom_is_creator_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
-                    </element>
-                </row>
-                <row id="custom_ap_creator_status">
-                    <element attribute.idref="custom_ap_creator_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
-                    </element>
-                </row>
-                Fim GAP - GRC66 
             </rowGroup>
             <rowGroup id="issue.2">
             	GAP-GRC74 INICIO 
@@ -210,18 +229,6 @@
                     <element attribute.idref="created_by_testcase"/>
                 </row>
 
-				Inicio GAP - GRC66 
-                <row id="custom_is_owner_status">
-                    <element attribute.idref="custom_is_owner_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
-                    </element>
-                </row>
-                <row id="custom_ap_owner_status">
-                    <element attribute.idref="custom_ap_owner_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
-                    </element>
-                </row>
-                Fim GAP - GRC66 
                 <row id="owner_remark">
                     <element attribute.idref="owner_remark"/>
                 </row>
@@ -230,18 +237,6 @@
                         <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
                     </element>
                 </row>
-                Inicio GAP - GRC66 
-                <row id="custom_is_reviewer_status">
-                    <element attribute.idref="custom_is_reviewer_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
-                    </element>
-                </row>
-                <row id="custom_ap_reviewer_status">
-                    <element attribute.idref="custom_ap_reviewer_status">
-                        <javaScriptEvent expression="aam_objectcommand('cache')" name="onChange"/>
-                    </element>
-                </row>
-                Fim GAP - GRC66 
                 <row id="reviewer_remark">
                     <element attribute.idref="reviewer_remark"/>
                 </row>
