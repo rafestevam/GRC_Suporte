@@ -85,76 +85,7 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 		
 		//IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
 		IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
-		
-		//Inicio Alteração - REO 05.04.2018 - EV167252
-		double countTotal1 = 0;
-		double countTotal2 = 0;
-		double countTotal3 = 0;
-		double count1line = 0;
-		double count2line = 0;
-		double count3line = 0;
-		
-		String riskResidualFinal = "";
-		String riskResidual1Line = "";
-		String riskResidual2Line = "";
-		String riskResidual3Line = "";
-		
-		IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
-		
-		//Inicio Alteração - REO 05.04.2018 - EV167252
-		double countTotal1 = 0;
-		double countTotal2 = 0;
-		double countTotal3 = 0;
-		double count1line = 0;
-		double count2line = 0;
-		double count3line = 0;
-		
-		String riskResidualFinal = "";
-		String riskResidual1Line = "";
-		String riskResidual2Line = "";
-		String riskResidual3Line = "";
-		
-		//IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
-		IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
 		try{
-			IOVID riskOVID = this.appObj.getVersionData().getHeadOVID();
-//			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
-//			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
-			riskFacade.allocateLock(this.appObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
-			IOVID riskOVID = this.appObj.getVersionData().getHeadOVID();
-			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
-			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
-			
-			String riscoPotencial = riskUpdObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_RESULT);
-			List<IAppObj> controlList = riskUpdObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
-			
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
-			
-			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
-			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
-			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
-			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
-			
-			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
-			count2line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
-			count3line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
-			countTotal1 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
-			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
-			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
-
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
-			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
-			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
-			IAppObj riskUpdObj = this.appObj;
 			IOVID riskOVID = this.appObj.getVersionData().getHeadOVID();
 //			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
 //			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
@@ -164,41 +95,6 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 			String riscoPotencial = riskUpdObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_RESULT);
 			//List<IAppObj> controlList = riskUpdObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
 			IListAttribute ctrlList = this.appObj.getAttribute((IListAttributeType)lookupAttributeType(this.attributeType));
-			List<IAppObj> controlList = ctrlList.getElements(jobCtx);
-			
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
-			
-			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
-			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
-			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
-			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
-			
-			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
-			count2line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
-			count3line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
-			countTotal1 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
-			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
-			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
-
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
-			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
-			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
-			
-			if(!riscoPotencial.equals("Nao Avaliado")){
-				riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
-			if(!riscoPotencial.equals("Nao Avaliado")){
-				riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
 			List<IAppObj> controlList = ctrlList.getElements(jobCtx);
 			
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
