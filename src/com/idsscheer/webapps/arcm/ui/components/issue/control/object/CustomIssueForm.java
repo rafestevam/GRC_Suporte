@@ -79,74 +79,82 @@ public class CustomIssueForm extends Form{
 //			jScript.append("$('#tr_origemteste').show()");
 		
 			jScript.append("$('#tr_owner_status th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("Status do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Status do Apontamento");
+			}
 			jScript.append("');");
 	
 			
 			jScript.append("$('#tr_obj_id th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("ID do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("ID do Apontamento");
+			}
 			jScript.append("');");
 	
 			
 			jScript.append("$('#tr_name th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")) {
 				jScript.append("Título do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Título do Apontamento");
+			}
 			jScript.append("');");
 	
 			
 			jScript.append("$('#tr_issue_date th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("Data de Criação do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Data de Criação do Apontamento");
+			}
 			jScript.append("');");
 	
 			
 			jScript.append("$('#tr_issueRelevantObjects th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("Objetos relevantes do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Objetos relevantes do Apontamento");
+			}
 			jScript.append("');");
 	
 			
 			jScript.append("$('#tr_creator th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("Criador do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Criador do Apontamento");
+			}
 			jScript.append("');");
 	
 	
 			jScript.append("$('#tr_reviewers th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("Revisor do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Revisor do Apontamento");
+			}
 			jScript.append("');");
 			
 			
 			jScript.append("$('#tr_owners th:nth-child(1)').text('");
-			if(issueType.getId().equals("actionplan"))
+			if(issueType.getId().equals("actionplan")){
 				jScript.append("Dono do Plano de Ação");
-			
-			if(issueType.getId().equals("issue"))
+			}
+			if(issueType.getId().equals("issue")){
 				jScript.append("Dono do Apontamento");
+			}
 			jScript.append("');");
 			
 			if(issueType.getId().equals("actionplan")){

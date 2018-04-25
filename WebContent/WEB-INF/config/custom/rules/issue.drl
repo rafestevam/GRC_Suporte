@@ -68,41 +68,41 @@ import com.idsscheer.webapps.arcm.bl.component.issuemanagement.re.IssueHelperCus
 
 rule "event import job - opened by creator --> init attribute states [I,V]"
 
-      salience 3300
-      no-loop true
+	salience 3300
+	no-loop true
 
-      when
-            ( is in workflow state "PREPARED" AND
+	when
+		( is in workflow state "PREPARED" AND
           user is executing job with id "eventImportJob" )
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "remediationMeasure"      editable
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "remediationMeasure"      editable
 
-            set "name"                    mandatory
-            set "description"             mandatory
-            #set "remediationMeasure"      mandatory
+		set "name"                    mandatory
+		set "description"             mandatory
+		#set "remediationMeasure"      mandatory
 end
 
 rule "event import job - creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
 
-      salience 3200
-      no-loop true
+	salience 3200
+	no-loop true
 
-      when
-            ( is in workflow state "PREPARED" AND
+	when
+		( is in workflow state "PREPARED" AND
           user is executing job with id "eventImportJob" )
-            value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
+		value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
 
-      then
-            set "plannedenddate"           editable
-            set "owners"                   editable
-            set "reviewers"                editable
+	then
+		set "plannedenddate"           editable
+		set "owners"                   editable
+		set "reviewers"                editable
 
-          set "plannedenddate"           mandatory
-            set "owners"                   mandatory
-            set "reviewers"                mandatory
+	    set "plannedenddate"           mandatory
+		set "owners"                   mandatory
+		set "reviewers"                mandatory
 
 end
 
@@ -111,286 +111,286 @@ end
 
 rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 
-      salience 2101
-      no-loop true
+	salience 2101
+	no-loop true
 
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "openForCreation" )
-            # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "please_select"
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+		# during creation the issue manager has the same rights as the creator
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "please_select"
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
-            set "remark"                  editable
-            set "issueRelevantObjects"    editable
-            set "immediateMeasure"        editable
-            set "remediationMeasure"      editable
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "documents"               editable
-            set "action_type"             editable #GAP - GRC66
-            set "process_environment"       editable #GAP - GRC74
-            #set "root_cause"              editable #GAP - GRC74
-            set "business_unit"           editable #GAP - GRC74
-            
-            set "name"                  mandatory
-            set "description"           mandatory
-            set "root_cause"                    mandatory
-            #set "remediationMeasure"   mandatory
-            set "action_type"           mandatory
-            
-            set "replanned"               editable  #GAP - GRC74
-            set "recurrent"                 editable  #GAP - GRC74
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "creator_status"          invisible #GAP - GRC66
+		set "remark"                  editable
+		set "issueRelevantObjects"    editable
+		set "immediateMeasure"        editable
+		set "remediationMeasure"      editable
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "documents"               editable
+		set "action_type"             editable #GAP - GRC66
+		set "process_environment"	  editable #GAP - GRC74
+		#set "root_cause"              editable #GAP - GRC74
+		set "business_unit"           editable #GAP - GRC74
+		
+		set "name"                  mandatory
+		set "description"           mandatory
+		set "root_cause"  			mandatory
+		#set "remediationMeasure"   mandatory
+		set "action_type"           mandatory
+		
+		set "replanned"               editable  #GAP - GRC74
+		set "recurrent"	              editable  #GAP - GRC74
 
-            # DMM - EV190711 - set "owner_status"            invisible
-            set "owner_remark"            invisible
-            set "reviewer_status"         invisible
-            set "reviewer_remark"         invisible
-            set "stateTime"               readonly
+		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_remark"            invisible
+		set "reviewer_status"         invisible
+		set "reviewer_remark"         invisible
+		set "stateTime"               readonly
 
-            set "issuesource"                   invisible   # I
-            set "root_cause"                    invisible   # I
-            set "remediationMeasure"      invisible   # I
-            set "fup_date"                      invisible   # I
-            set "recurrent"               invisible   # I
-            set "rsk_name"                      invisible   # I
-            set "ra_result"               invisible   # I
-            set "ra_residualfinal"        invisible   # I
-            set "riskowner"               invisible   # I
-            set "acting_front"            invisible   # I
-            set "process_environment"     invisible   # I
-            set "business_unit"                 invisible   # I
-            set "cst_appsystem"           invisible   # I
-            set "custom_servicetype"      invisible   # I
-            set "auditproject"            invisible   # I
-            set "custom_auditauthor"      invisible   # I         
-                        
-            set "custom_is_creator_status"   invisible #GAP - GRC66
-            set "custom_is_owner_status"     invisible #GAP - GRC66
-            set "custom_is_reviewer_status"  invisible #GAP - GRC66
-            set "custom_ap_creator_status"   invisible #GAP - GRC66
-            set "custom_ap_owner_status"     invisible #GAP - GRC66
-            set "custom_ap_reviewer_status"  invisible #GAP - GRC66
-            
-            set "status_obj"             visible
+		set "issuesource"  			invisible	# I
+		set "root_cause"  			invisible	# I
+		set "remediationMeasure"  	invisible	# I
+		set "fup_date"				invisible	# I
+		set "recurrent"  			invisible	# I
+		set "rsk_name"				invisible	# I
+		set "ra_result"  			invisible	# I
+		set "ra_residualfinal"  	invisible	# I
+		set "riskowner"  			invisible	# I
+		set "acting_front"  		invisible	# I
+		set "process_environment" 	invisible	# I
+		set "business_unit"			invisible	# I
+		set "cst_appsystem"  		invisible	# I
+		set "custom_servicetype"  	invisible	# I
+		set "auditproject"  		invisible	# I
+		set "custom_auditauthor"  	invisible	# I		
+				
+		set "custom_is_creator_status"   invisible #GAP - GRC66
+		set "custom_is_owner_status"     invisible #GAP - GRC66
+		set "custom_is_reviewer_status"  invisible #GAP - GRC66
+		set "custom_ap_creator_status"   invisible #GAP - GRC66
+		set "custom_ap_owner_status"     invisible #GAP - GRC66
+		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+		
+		set "status_obj"             visible
 
 end
 
 rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
 
-      salience 2100
-      no-loop true
+	salience 2100
+	no-loop true
 
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "openForCreation" )
-            # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+		# during creation the issue manager has the same rights as the creator
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
-            set "remark"                  editable
-            #set "issueRelevantObjects"    editable
-            set "priority"                editable
-            set "category"                editable
-            set "immediateMeasure"        editable
-            set "remediationMeasure"      editable
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "documents"               editable
-            set "action_type"             editable #GAP - GRC66
-            set "process_environment"       editable #GAP - GRC74
-            set "acting_front"            editable #GAP - GRC74
-            #set "root_cause"              editable #GAP - GRC74
-            set "business_unit"           editable #GAP - GRC74
-            
-            set "replanned"               editable  #GAP - GRC74
-            set "recurrent"                 editable  #GAP - GRC74
-                        
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"              mandatory
-            #set "remediationMeasure"      mandatory
-            set "acting_front"            mandatory #GAP - GRC74
-            
-            # DMM - EV190711 - set "owner_status"            invisible
-            set "owner_remark"            invisible
-            set "reviewer_status"         invisible
-            set "reviewer_remark"         invisible
-            set "stateTime"               readonly
-            
-            set "custom_is_creator_status"   editable  #GAP - GRC66
-            set "custom_is_owner_status"     invisible #GAP - GRC66
-            set "custom_is_reviewer_status"  invisible #GAP - GRC66
-            set "custom_ap_creator_status"   invisible #GAP - GRC66
-            set "custom_ap_owner_status"     invisible #GAP - GRC66
-            set "custom_ap_reviewer_status"  invisible #GAP - GRC66
-            
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "creator_status"          invisible #GAP - GRC66
+		set "remark"                  editable
+		#set "issueRelevantObjects"    editable
+		set "priority"                editable
+		set "category"                editable
+		set "immediateMeasure"        editable
+		set "remediationMeasure"      editable
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "documents"               editable
+		set "action_type"             editable #GAP - GRC66
+		set "process_environment"	  editable #GAP - GRC74
+		set "acting_front"            editable #GAP - GRC74
+		#set "root_cause"              editable #GAP - GRC74
+		set "business_unit"           editable #GAP - GRC74
+		
+		set "replanned"               editable  #GAP - GRC74
+		set "recurrent"	              editable  #GAP - GRC74
+				
+		set "name"                    mandatory
+		set "description"             mandatory
+		set "root_cause"              mandatory
+		#set "remediationMeasure"      mandatory
+		set "acting_front"            mandatory #GAP - GRC74
+		
+		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_remark"            invisible
+		set "reviewer_status"         invisible
+		set "reviewer_remark"         invisible
+		set "stateTime"               readonly
+		
+		set "custom_is_creator_status"   editable  #GAP - GRC66
+		set "custom_is_owner_status"     invisible #GAP - GRC66
+		set "custom_is_reviewer_status"  invisible #GAP - GRC66
+		set "custom_ap_creator_status"   invisible #GAP - GRC66
+		set "custom_ap_owner_status"     invisible #GAP - GRC66
+		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+
 end
 
 rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 
-      salience 2099
-      no-loop true
+	salience 2099
+	no-loop true
 
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "apOpenForCreation" )
-            # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "apOpenForCreation" )
+		# during creation the issue manager has the same rights as the creator
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
-            set "remark"                  editable
-            #set "issueRelevantObjects"    editable
-            set "priority"                editable
-            set "category"                editable
-            set "immediateMeasure"        editable
-            set "remediationMeasure"      editable
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "documents"               editable
-            set "action_type"             editable #GAP - GRC66
-            set "process_environment"       editable #GAP - GRC74
-            #set "root_cause"              editable #GAP - GRC74
-            set "business_unit"           editable #GAP - GRC74
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "creator_status"          invisible #GAP - GRC66
+		set "remark"                  editable
+		#set "issueRelevantObjects"    editable
+		set "priority"                editable
+		set "category"                editable
+		set "immediateMeasure"        editable
+		set "remediationMeasure"      editable
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "documents"               editable
+		set "action_type"             editable #GAP - GRC66
+		set "process_environment"	  editable #GAP - GRC74
+		#set "root_cause"              editable #GAP - GRC74
+		set "business_unit"           editable #GAP - GRC74
 
-            set "replanned"               editable  #GAP - GRC74
-            set "recurrent"                 readonly  #GAP - GRC74
+		set "replanned"               editable  #GAP - GRC74
+		set "recurrent"	              readonly  #GAP - GRC74
 
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                mandatory             
-            #set "remediationMeasure"      mandatory
+		set "name"                    mandatory
+		set "description"             mandatory
+		set "root_cause"			  mandatory			
+		#set "remediationMeasure"      mandatory
 
-            # DMM - EV190711 - set "owner_status"            invisible
-            set "acting_front"            invisible #GAP - GRC74       
-            set "owner_remark"            invisible
-            set "reviewer_status"         invisible
-            set "reviewer_remark"         invisible
-            set "stateTime"               readonly
-            
-            set "custom_is_creator_status"   invisible #GAP - GRC66
-            set "custom_is_owner_status"     invisible #GAP - GRC66
-            set "custom_is_reviewer_status"  invisible #GAP - GRC66
-            set "custom_ap_creator_status"   editable  #GAP - GRC66
-            set "custom_ap_owner_status"     invisible #GAP - GRC66
-            set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+		# DMM - EV190711 - set "owner_status"            invisible
+		set "acting_front"            invisible #GAP - GRC74		
+		set "owner_remark"            invisible
+		set "reviewer_status"         invisible
+		set "reviewer_remark"         invisible
+		set "stateTime"               readonly
+		
+		set "custom_is_creator_status"   invisible #GAP - GRC66
+		set "custom_is_owner_status"     invisible #GAP - GRC66
+		set "custom_is_reviewer_status"  invisible #GAP - GRC66
+		set "custom_ap_creator_status"   editable  #GAP - GRC66
+		set "custom_ap_owner_status"     invisible #GAP - GRC66
+		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
 
 end
 
 rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
 
-      salience 2098
-      no-loop true
+	salience 2098
+	no-loop true
 
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "apCreatorOnHold" )
-            # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "apCreatorOnHold" )
+		# during creation the issue manager has the same rights as the creator
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
-            set "remark"                  editable
-            #set "issueRelevantObjects"    editable
-            set "priority"                editable
-            set "category"                editable
-            set "immediateMeasure"        editable
-            set "remediationMeasure"      editable
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "documents"               editable
-            set "action_type"             editable #GAP - GRC66
-            set "process_environment"       editable #GAP - GRC74
-            #set "root_cause"              editable #GAP - GRC74
-            set "business_unit"           editable #GAP - GRC74
-            
-            set "replanned"               editable  #GAP - GRC74
-            set "recurrent"                 readonly  #GAP - GRC74
-            
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                      mandatory
-            #set "remediationMeasure"      mandatory
-            
-            # DMM - EV190711 - set "owner_status"            invisible
-            set "owner_remark"            invisible
-            set "reviewer_status"         invisible
-            set "reviewer_remark"         invisible
-            set "stateTime"               readonly
-            set "acting_front"            invisible #GAP - GRC74       
-            
-            set "custom_is_creator_status"   invisible #GAP - GRC66
-            set "custom_is_owner_status"     invisible #GAP - GRC66
-            set "custom_is_reviewer_status"  invisible #GAP - GRC66
-            set "custom_ap_creator_status"   editable  #GAP - GRC66
-            set "custom_ap_owner_status"     invisible #GAP - GRC66
-            set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "creator_status"          invisible #GAP - GRC66
+		set "remark"                  editable
+		#set "issueRelevantObjects"    editable
+		set "priority"                editable
+		set "category"                editable
+		set "immediateMeasure"        editable
+		set "remediationMeasure"      editable
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "documents"               editable
+		set "action_type"             editable #GAP - GRC66
+		set "process_environment"	  editable #GAP - GRC74
+		#set "root_cause"              editable #GAP - GRC74
+		set "business_unit"           editable #GAP - GRC74
+		
+		set "replanned"               editable  #GAP - GRC74
+		set "recurrent"	              readonly  #GAP - GRC74
+		
+		set "name"                    mandatory
+		set "description"             mandatory
+		set "root_cause"  			  mandatory
+		#set "remediationMeasure"      mandatory
+		
+		# DMM - EV190711 - set "owner_status"            invisible
+		set "owner_remark"            invisible
+		set "reviewer_status"         invisible
+		set "reviewer_remark"         invisible
+		set "stateTime"               readonly
+		set "acting_front"            invisible #GAP - GRC74		
+		
+		set "custom_is_creator_status"   invisible #GAP - GRC66
+		set "custom_is_owner_status"     invisible #GAP - GRC66
+		set "custom_is_reviewer_status"  invisible #GAP - GRC66
+		set "custom_ap_creator_status"   editable  #GAP - GRC66
+		set "custom_ap_owner_status"     invisible #GAP - GRC66
+		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
 
 end
 
 # rule engine needs to be executed when the attribute value of "owner" is changed.
 rule "custom_GRC66_is creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
 
-      salience 2000
-      no-loop true
+	salience 2000
+	no-loop true
 
-      when
-          ( is in workflow state "PREPARED" OR
-              is in workflow state "openForCreation" )
-          # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "in_review"
-#           value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
+	when
+	    ( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+	    # during creation the issue manager has the same rights as the creator
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "in_review"
+#		value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
 
-      then
-            set "plannedenddate"           mandatory
-            set "owners"                   mandatory
-            set "reviewers"                mandatory
+	then
+		set "plannedenddate"           mandatory
+		set "owners"                   mandatory
+		set "reviewers"                mandatory
 
 end
 
 rule "custom_GRC66_ap creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
 
-      salience 1999
-      no-loop true
+	salience 1999
+	no-loop true
 
-      when
-          ( is in workflow state "PREPARED" OR
-              is in workflow state "apOpenForCreation" )
-          # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-          value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "in_review"
-#           value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
+	when
+	    ( is in workflow state "PREPARED" OR
+		  is in workflow state "apOpenForCreation" )
+	    # during creation the issue manager has the same rights as the creator
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+	    value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "in_review"
+#		value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
 
-      then
-            set "plannedenddate"           mandatory
-            set "owners"                   mandatory
-            set "reviewers"                mandatory
+	then
+		set "plannedenddate"           mandatory
+		set "owners"                   mandatory
+		set "reviewers"                mandatory
 
 end
 
@@ -399,45 +399,45 @@ end
 ###########################################################
 #rule "custom_GRC66_set_issue_status[I,V]"
 #
-#     salience 1900
-#     no-loop true
-#     
-#     when
-#         ( is in workflow state "PREPARED" OR
-#             is in workflow state "openForCreation" )
-#         # during creation the issue manager has the same rights as the creator
-#           ( object is opened by its creator OR
-#             user has at object role "issuemanager" )
-#           value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-#           
-#     then
-#           set "custom_is_owner_status"      invisible
-#           set "custom_is_reviewer_status"   invisible
-#           set "custom_ap_creator_status"    invisible
-#           set "custom_ap_owner_status"      invisible
-#           set "custom_ap_reviewer_status"   invisible  
+#	salience 1900
+#	no-loop true
+#	
+#	when
+#	    ( is in workflow state "PREPARED" OR
+#		  is in workflow state "openForCreation" )
+#	    # during creation the issue manager has the same rights as the creator
+#		( object is opened by its creator OR
+#		  user has at object role "issuemanager" )
+#		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+#		
+#	then
+#		set "custom_is_owner_status"      invisible
+#		set "custom_is_reviewer_status"   invisible
+#		set "custom_ap_creator_status"    invisible
+#		set "custom_ap_owner_status"      invisible
+#		set "custom_ap_reviewer_status"   invisible  
 #
 #end
 
 #rule "custom_GRC66_set_actionplan_status[I,V]"
 #
-#     salience 1800
-#     no-loop true
-#     
-#     when
-#         ( is in workflow state "PREPARED" OR
-#             is in workflow state "openForCreation" )
-#         # during creation the issue manager has the same rights as the creator
-#           ( object is opened by its creator OR
-#             user has at object role "issuemanager" )
-#           value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-#           
-#     then
-#           set "custom_is_creator_status"    invisible
-#           set "custom_is_owner_status"      invisible
-#           set "custom_is_reviewer_status"   invisible
-#           set "custom_ap_owner_status"      invisible
-#           set "custom_ap_reviewer_status"   invisible  
+#	salience 1800
+#	no-loop true
+#	
+#	when
+#	    ( is in workflow state "PREPARED" OR
+#		  is in workflow state "openForCreation" )
+#	    # during creation the issue manager has the same rights as the creator
+#		( object is opened by its creator OR
+#		  user has at object role "issuemanager" )
+#		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+#		
+#	then
+#		set "custom_is_creator_status"    invisible
+#		set "custom_is_owner_status"      invisible
+#		set "custom_is_reviewer_status"   invisible
+#		set "custom_ap_owner_status"      invisible
+#		set "custom_ap_reviewer_status"   invisible  
 #
 #end
 
@@ -448,276 +448,277 @@ end
 rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I,V]"
 
     salience 1300
-      no-loop true
+	no-loop true
 
-      when
-            is in workflow state "openForExecution"
-            user has at object role "issuemanager"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_review"
-#           value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "new"
+	when
+		is in workflow state "openForExecution"
+		user has at object role "issuemanager"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_review"
+#		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "new"
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "remark"                  editable
-            #set "issueRelevantObjects"    editable
-            set "priority"                editable
-            set "category"                editable
-            set "immediateMeasure"        editable
-            set "remediationMeasure"      editable
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "documents"               editable
-            
-            set "replanned"               editable  #GAP - GRC74
-            set "recurrent"                 editable  #GAP - GRC74
-            
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                    mandatory
-            #set "remediationMeasure"      mandatory
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "remark"                  editable
+		#set "issueRelevantObjects"    editable
+		set "priority"                editable
+		set "category"                editable
+		set "immediateMeasure"        editable
+		set "remediationMeasure"      editable
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "documents"               editable
+		
+		set "replanned"               editable  #GAP - GRC74
+		set "recurrent"	              editable  #GAP - GRC74
+		
+		set "name"                    mandatory
+		set "description"             mandatory
+		set "root_cause"  			mandatory
+		#set "remediationMeasure"      mandatory
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+		set "owners"                  mandatory
+		set "reviewers"               mandatory
+		
 
 end
 
 rule "custom_GRC66_ap opened by manager & issue in owner_state 'new' --> init [I,V]"
 
     salience 1299
-      no-loop true
+	no-loop true
 
-      when
-            is in workflow state "apOpenForExecution"
-            user has at object role "issuemanager"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_review"
-#           value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "new"
+	when
+		is in workflow state "apOpenForExecution"
+		user has at object role "issuemanager"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_review"
+#		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "new"
 
-      then
-            set "name"                    editable
-            set "description"             editable
-            set "remark"                  editable
-            #set "issueRelevantObjects"    editable
-            set "priority"                editable
-            set "category"                editable
-            set "immediateMeasure"        editable
-            set "remediationMeasure"      editable
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "documents"               editable
+	then
+		set "name"                    editable
+		set "description"             editable
+		set "remark"                  editable
+		#set "issueRelevantObjects"    editable
+		set "priority"                editable
+		set "category"                editable
+		set "immediateMeasure"        editable
+		set "remediationMeasure"      editable
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "documents"               editable
 
-            set "replanned"               editable  #GAP - GRC74
-            set "recurrent"                 editable  #GAP - GRC74
-            
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                    mandatory
-            #set "remediationMeasure"      mandatory
+		set "replanned"               editable  #GAP - GRC74
+		set "recurrent"	              editable  #GAP - GRC74
+		
+		set "name"                    mandatory
+		set "description"             mandatory
+		set "root_cause"  		      mandatory
+		#set "remediationMeasure"      mandatory
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+		set "owners"                  mandatory
+		set "reviewers"               mandatory
 
 end
 
 rule "custom_GRC66_is opened by manager & issue in owner_state 'in_progress' or 'on_hold' --> init [I,V]"
 
     salience 1200
-      no-loop true
+	no-loop true
 
-      when        
-            ( ( is in workflow state "openForExecution" AND
-                  value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_progress" ) OR
-#               value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "in_progress" ) OR
-              is in workflow state "onHold" ) AND
-            user has at object role "issuemanager"
+	when		
+		( ( is in workflow state "openForExecution" AND
+			value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_progress" ) OR
+#		    value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "in_progress" ) OR
+		  is in workflow state "onHold" ) AND
+		user has at object role "issuemanager"
 
-      then
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
+	then
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
 
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory              
+		set "owners"                  mandatory
+		set "reviewers"               mandatory			
 
 end
 
 rule "custom_GRC66_ap opened by manager & issue in owner_state 'in_progress' or 'on_hold' --> init [I,V]"
 
     salience 1199
-      no-loop true
+	no-loop true
 
-      when        
-            ( ( is in workflow state "apOpenForExecution" AND
-                value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_progress" ) OR
-#               value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "in_progress" ) OR
-              is in workflow state "apOnHold" ) AND
-            user has at object role "issuemanager"
+	when		
+		( ( is in workflow state "apOpenForExecution" AND
+		    value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_progress" ) OR
+#		    value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "in_progress" ) OR
+		  is in workflow state "apOnHold" ) AND
+		user has at object role "issuemanager"
 
-      then
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
+	then
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
 
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+		set "owners"                  mandatory
+		set "reviewers"               mandatory
 
 end
 
 #issue owner rules
 rule "opened by owner & still open for owner --> init [I,V]"
 
-      salience 1100
-      no-loop false
+	salience 1100
+	no-loop false
 
-      when
-            ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
+	when
+		( is in workflow state "openForExecution" OR
+		  is in workflow state "onHold" )
+		user is assigned in list "owners"
 
-      then
-#           set "owner_status"  editable
-            set "owner_remark"  editable
-            set "documents"     editable
-            
-#           set "owner_status"  mandatory
+	then
+#		set "owner_status"  editable
+		set "owner_remark"  editable
+		set "documents"     editable
+		
+#		set "owner_status"  mandatory
 
 end
 
 rule "ap opened by owner & still open for owner --> init [I,V]"
 
-      salience 1099
-      no-loop false
+	salience 1099
+	no-loop false
 
-      when
-            ( is in workflow state "apOpenForExecution" OR
-              is in workflow state "apOnHold" )
-            user is assigned in list "owners"
+	when
+		( is in workflow state "apOpenForExecution" OR
+		  is in workflow state "apOnHold" )
+		user is assigned in list "owners"
 
-      then
-#           set "owner_status"  editable
-            set "owner_remark"  editable
-            set "documents"     editable
-            
-#           set "owner_status"  mandatory
+	then
+#		set "owner_status"  editable
+		set "owner_remark"  editable
+		set "documents"     editable
+		
+#		set "owner_status"  mandatory
 
 end
 
 #custom issue owner rules - GRC66
 rule "custom_grc66_is opened by owner & still open for owner --> init [I,V]"
 
-      salience 1090
-      no-loop false
+	salience 1090
+	no-loop false
 
-      when
-            ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+	when
+		( is in workflow state "openForExecution" OR
+		  is in workflow state "onHold" )
+		user is assigned in list "owners"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
 
-      then
-            set "custom_is_owner_status"  editable
-            set "custom_is_owner_status"  mandatory
-            
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            set "custom_is_creator_status"   invisible
-            set "custom_ap_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible
-            set "custom_ap_reviewer_status"  invisible
-            set "recurrent"                    editable  #GAP - GRC74
+	then
+		set "custom_is_owner_status"  editable
+		set "custom_is_owner_status"  mandatory
+		
+		set "creator_status"             invisible
+		# DMM - EV190711 - set "owner_status"               invisible
+		set "reviewer_status"            invisible
+		set "custom_is_creator_status"   invisible
+		set "custom_ap_owner_status"     invisible
+		set "custom_is_reviewer_status"  invisible
+		set "custom_ap_reviewer_status"  invisible
+		set "recurrent"	                 editable  #GAP - GRC74
 
 end
 
 rule "custom_grc66_ap opened by owner & still open for owner --> init [I,V]"
 
-      salience 1080
-      no-loop false
+	salience 1080
+	no-loop false
 
-      when
-            ( is in workflow state "apOpenForExecution" OR
-              is in workflow state "apOnHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+	when
+		( is in workflow state "apOpenForExecution" OR
+		  is in workflow state "apOnHold" )
+		user is assigned in list "owners"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
 
-      then
-            set "custom_ap_owner_status"  editable
-            set "custom_ap_owner_status"  mandatory
-            
-            set "creator_status"             invisible
-            set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            set "custom_is_creator_status"   invisible
-            set "custom_is_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible
-            set "custom_ap_reviewer_status"  invisible           
+	then
+		set "custom_ap_owner_status"  editable
+		set "custom_ap_owner_status"  mandatory
+		
+		set "creator_status"             invisible
+		set "owner_status"               invisible
+		set "reviewer_status"            invisible
+		set "custom_is_creator_status"   invisible
+		set "custom_is_owner_status"     invisible
+		set "custom_is_reviewer_status"  invisible
+		set "custom_ap_reviewer_status"  invisible		
 
 end
 
 rule "custom_GRC66_is_in_progress [I,V]"
 
     salience 1070
-      no-loop true
+	no-loop true
 
-      when
-            ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_progress"
+	when
+		( is in workflow state "openForExecution" OR
+		  is in workflow state "onHold" )
+		user is assigned in list "owners"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_progress"
 
-      then
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            
+	then
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		
 
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+		set "owners"                  mandatory
+		set "reviewers"               mandatory
 
 end
 
 rule "custom_GRC66_ap_in_progress [I,V]"
 
     salience 1060
-      no-loop true
+	no-loop true
 
-      when
-            ( is in workflow state "apOpenForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_progress"
+	when
+		( is in workflow state "apOpenForExecution" OR
+		  is in workflow state "onHold" )
+		user is assigned in list "owners"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_progress"
 
-      then
-            set "plannedenddate"          editable
-            set "owners"                  editable
-            set "reviewers"               editable
-            set "replanned"               editable  #GAP - GRC74 2304
+	then
+		set "plannedenddate"          editable
+		set "owners"                  editable
+		set "reviewers"               editable
+		set "replanned"               editable  #GAP - GRC74 2304
 
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+		set "owners"                  mandatory
+		set "reviewers"               mandatory
 
 end
 
 # rule engine needs to be executed when the attribute value of "ownerStatus" is changed.
 rule "ownerStatus just set to 'not possible'--> set fields mandatory [I,V]"
 
-      salience 1000
-      no-loop true
+	salience 1000
+	no-loop true
 
-      when
-          ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "not_possible"
+	when
+	    ( is in workflow state "openForExecution" OR
+		  is in workflow state "onHold" )
+		user is assigned in list "owners"
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "not_possible"
 
-      then
-            set "owner_remark" mandatory
+	then
+		set "owner_remark" mandatory
 
 end
 
@@ -726,203 +727,203 @@ end
 
 rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
 
-      salience 1300
-      no-loop true
+	salience 1300
+	no-loop true
 
-      when
-            is in workflow state "openForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+	when
+		is in workflow state "openForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
 
-      then
-            set "custom_is_reviewer_status" editable
-            set "custom_is_reviewer_status" mandatory
-            set "reviewers"                 mandatory
-      
-#           set "reviewer_status" editable
-            set "reviewer_remark" editable
-            set "documents"       editable
-            set "recurrent"         editable  #GAP - GRC74
-            
-#           set "reviewer_status" mandatory
+	then
+		set "custom_is_reviewer_status" editable
+		set "custom_is_reviewer_status" mandatory
+		set "reviewers"                 mandatory
+	
+#		set "reviewer_status" editable
+		set "reviewer_remark" editable
+		set "documents"       editable
+		set "recurrent"	      editable  #GAP - GRC74
+		
+#		set "reviewer_status" mandatory
 
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-#           set "custom_ap_creator_status"   invisible
-#           set "custom_ap_owner_status"     invisible
-#           set "custom_ap_reviewer_status"  invisible
+		set "creator_status"             invisible
+		# DMM - EV190711 - set "owner_status"               invisible
+		set "reviewer_status"            invisible
+#		set "custom_ap_creator_status"   invisible
+#		set "custom_ap_owner_status"     invisible
+#		set "custom_ap_reviewer_status"  invisible
 
 end
 
 rule "custom_GRC66_ap opened by reviewer, still editable --> init [I,V]"
 
-      salience 1290
-      no-loop true
+	salience 1290
+	no-loop true
 
-      when
-            ( ( is in workflow state "apOpenForReview" ) OR
-              ( is in workflow state "apDirectReview" ) )
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+	when
+		( ( is in workflow state "apOpenForReview" ) OR
+		  ( is in workflow state "apDirectReview" ) )
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
 
-      then
-            set "custom_ap_reviewer_status" editable
-            set "custom_ap_reviewer_status" mandatory
-      
-#           set "reviewer_status" editable
-            set "reviewer_remark" editable
-            set "documents"       editable      
-            set "plannedenddate"  editable
-            set "replanned"       editable  #GAP - GRC74 2304
-            
-#           set "reviewer_status" mandatory
+	then
+		set "custom_ap_reviewer_status" editable
+		set "custom_ap_reviewer_status" mandatory
+	
+#		set "reviewer_status" editable
+		set "reviewer_remark" editable
+		set "documents"       editable	
+		set "plannedenddate"  editable
+		set "replanned"       editable  #GAP - GRC74 2304
+		
+#		set "reviewer_status" mandatory
 
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            set "custom_is_creator_status"   invisible
-            set "custom_is_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible
+		set "creator_status"             invisible
+		# DMM - EV190711 - set "owner_status"               invisible
+		set "reviewer_status"            invisible
+		set "custom_is_creator_status"   invisible
+		set "custom_is_owner_status"     invisible
+		set "custom_is_reviewer_status"  invisible
 
 end
 
 rule "custom_GRC66_is opened by reviewer, remediation planned before editable [I,V]"
 
-      salience 1200
-      no-loop true
+	salience 1200
+	no-loop true
 
-      when
-          is in workflow state "openForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS" value "fup"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
+	when
+	    is in workflow state "openForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS" value "fup"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
 
-      then
-            set "plannedenddate" editable
+	then
+		set "plannedenddate" editable
 
 end
 
 rule "custom_GRC66_ap opened by reviewer, remediation planned before editable [I,V]"
 
-      salience 1190
-      no-loop true
+	salience 1190
+	no-loop true
 
-      when
-          is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "fup"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
+	when
+	    is in workflow state "apOpenForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "fup"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
 
-      then
-            set "plannedenddate" editable
+	then
+		set "plannedenddate" editable
 
 end
 
 rule "custom_GRC66_ap2 opened by reviewer, remediation planned before editable [I,V]"
 
-      salience 1180
-      no-loop true
+	salience 1180
+	no-loop true
 
-      when
-          is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "risk_assumed"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
+	when
+	    is in workflow state "apOpenForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "risk_assumed"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
 
-      then
-            set "plannedenddate" editable
+	then
+		set "plannedenddate" editable
 
 end
 
 rule "custom_GRC66_is opened by reviewer and not disagreed => plannedenddate + stateTime restored to persistent value, plannedenddate readonly [I,V]"
 
-      salience 1100
-      no-loop true
+	salience 1100
+	no-loop true
 
-      when
-          is in workflow state "openForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS NOT" value "fup"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
+	when
+	    is in workflow state "openForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS NOT" value "fup"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
 
-      then
-            set "plannedenddate" editable
+	then
+		set "plannedenddate" editable
 
 end
 
 rule "custom_GRC66_ap opened by reviewer and not disagreed => plannedenddate + stateTime restored to persistent value, plannedenddate readonly [I,V]"
 
-      salience 1090
-      no-loop true
+	salience 1090
+	no-loop true
 
-      when
-          is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS NOT" value "fup"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
+	when
+	    is in workflow state "apOpenForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS NOT" value "fup"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
 
-      then
-            set "plannedenddate" editable
+	then
+		set "plannedenddate" editable
 
 end
 
 rule "custom_GRC66_ap2 opened by reviewer and not disagreed => plannedenddate + stateTime restored to persistent value, plannedenddate readonly [I,V]"
 
-      salience 1090
-      no-loop true
+	salience 1090
+	no-loop true
 
-      when
-          is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS NOT" value "risk_assumed"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
+	when
+	    is in workflow state "apOpenForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS NOT" value "risk_assumed"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
 
-      then
-            set "plannedenddate" editable
+	then
+		set "plannedenddate" editable
 
 end
 
 rule "custom_GRC66_is reviewer has to decide to a legal issue reviewer state [V]"
 
-      salience 1000
-      no-loop true
+	salience 1000
+	no-loop true
 
-      when
-            is in workflow state "openForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS" value "in_progress"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "to_be_approved"
-            object is dirty
+	when
+		is in workflow state "openForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS" value "in_progress"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "to_be_approved"
+		object is dirty
 
-      then
-#           set "reviewer_status" invalid
-#           add "error" message "error.issue.reviewer.state.not.allowed.ERR" to "reviewer_status"
+	then
+#		set "reviewer_status" invalid
+#		add "error" message "error.issue.reviewer.state.not.allowed.ERR" to "reviewer_status"
 
 end
 
 rule "custom_GRC66_ap reviewer has to decide to a legal issue reviewer state [V]"
 
-      salience 900
-      no-loop true
+	salience 900
+	no-loop true
 
-      when
-            is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "in_progress"
-#           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "to_be_approved"
-            object is dirty
+	when
+		is in workflow state "apOpenForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "in_progress"
+#		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "to_be_approved"
+		object is dirty
 
-      then
-#           set "reviewer_status" invalid
-#           add "error" message "error.issue.reviewer.state.not.allowed.ERR" to "reviewer_status"
+	then
+#		set "reviewer_status" invalid
+#		add "error" message "error.issue.reviewer.state.not.allowed.ERR" to "reviewer_status"
 
 end
 
@@ -931,43 +932,43 @@ end
 
 rule "hide field created by test case [I,V]"
 
-      salience 130
-      no-loop true
+	salience 130
+	no-loop true
 
-      when
-            value comparison fulfilled: ":persistent:" attr_value "created_by_testcase" "EQUALS NOT" value "true"
+	when
+		value comparison fulfilled: ":persistent:" attr_value "created_by_testcase" "EQUALS NOT" value "true"
 
-      then
-            set "created_by_testcase" invisible
+	then
+		set "created_by_testcase" invisible
 
 end
 
 rule "remediation does not be a thing of the past [V]"
 
-      salience 120
-      no-loop true
+	salience 120
+	no-loop true
 
-      when
-            "plannedenddate" is dirty
-            "plannedenddate" is filled
-            value comparison fulfilled: ":transient:" attr_value "plannedenddate" "LESS THAN" value ":TODAY:"
+	when
+		"plannedenddate" is dirty
+		"plannedenddate" is filled
+		value comparison fulfilled: ":transient:" attr_value "plannedenddate" "LESS THAN" value ":TODAY:"
 
-      then
-            set "plannedenddate" invalid
-            add "error" message "issue.remediation.planned.before.not.before.today.ERR" to "plannedenddate"
+	then
+		set "plannedenddate" invalid
+		add "error" message "issue.remediation.planned.before.not.before.today.ERR" to "plannedenddate"
 
 end
 
 rule "'remediation planned before' is filled --> check overdue state [V]"
 
-      salience 110
-      no-loop true
+	salience 110
+	no-loop true
 
-      when
-            "plannedenddate" is filled
+	when
+		"plannedenddate" is filled
 
-      then
-            recalculate time dependent state
+	then
+		recalculate time dependent state
 
 end
 
@@ -977,65 +978,65 @@ end
 ###########################################################
 rule "custom_is_set_creator_status[I,V]"
 
-      salience 100
-      no-loop true
+	salience 100
+	no-loop true
 
-      when
-            is in workflow state "closedByReviewer"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-            
-      then
-            set "custom_is_creator_status"   readonly
-            set "custom_is_owner_status"     readonly
-            set "custom_is_reviewer_status"  readonly
-            
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            
-            set "custom_ap_creator_status"   invisible
-            set "custom_ap_owner_status"     invisible
-            set "custom_ap_reviewer_status"  invisible   
+	when
+		is in workflow state "closedByReviewer"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		
+	then
+		set "custom_is_creator_status"   readonly
+		set "custom_is_owner_status"     readonly
+		set "custom_is_reviewer_status"  readonly
+		
+		set "creator_status"             invisible
+		# DMM - EV190711 - set "owner_status"               invisible
+		set "reviewer_status"            invisible
+		
+		set "custom_ap_creator_status"   invisible
+		set "custom_ap_owner_status"     invisible
+		set "custom_ap_reviewer_status"  invisible   
 
-            
+		
 end
 
 rule "custom_ap_set_creator_status[I,V]"
 
-      salience 100
-      no-loop true
+	salience 100
+	no-loop true
 
-      when
-            is in workflow state "apClosedByReviewer"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            
-      then
-            set "custom_ap_creator_status"   readonly
-            set "custom_ap_owner_status"     readonly
-            set "custom_ap_reviewer_status"  readonly
-            
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            
-            set "custom_is_creator_status"   invisible
-            set "custom_is_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible   
-            
+	when
+		is in workflow state "apClosedByReviewer"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		
+	then
+		set "custom_ap_creator_status"   readonly
+		set "custom_ap_owner_status"     readonly
+		set "custom_ap_reviewer_status"  readonly
+		
+		set "creator_status"             invisible
+		# DMM - EV190711 - set "owner_status"               invisible
+		set "reviewer_status"            invisible
+		
+		set "custom_is_creator_status"   invisible
+		set "custom_is_owner_status"     invisible
+		set "custom_is_reviewer_status"  invisible   
+		
 end
 
 
 rule "custom_set_riskclassification[I,V]"
 
-      salience 85
-      no-loop true
-      
-      when
-            ( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue" ) OR
-            ( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan" )
-      
-      then
-            set risk classification
+	salience 85
+	no-loop true
+	
+	when
+		( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue" ) OR
+		( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan" )
+	
+	then
+		set risk classification
 
 end
 
@@ -1043,21 +1044,21 @@ end
 # Inicio REO 14.08.2017 - Evento EV108435
 rule "custom_set_plannedenddate_status_actionplan[I,V]"
 
-      salience 75
-      no-loop true
-      
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "apOpenForCreation" )
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "please_select"
-      
-      then
-#           set "plannedenddate" not_mandatory
-#           set "plannedenddate" readonly
-            set "custom_ap_creator_status" to value "new"
+	salience 75
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "apOpenForCreation" )
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+		value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "please_select"
+	
+	then
+#		set "plannedenddate" not_mandatory
+#		set "plannedenddate" readonly
+		set "custom_ap_creator_status" to value "new"
 
 end
 # Fim REO 14.08.2017 - Evento EV108435
@@ -1065,21 +1066,21 @@ end
 # Inicio REO 30.11.2017 - Evento EV121389
 rule "custom_set_plannedenddate_status_issue[I,V]"
 
-      salience 70
-      no-loop true
-      
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "openForCreation" )
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "please_select"
-      
-      then
-#           set "plannedenddate" not_mandatory
-#           set "plannedenddate" readonly
-            set "custom_is_creator_status" to value "new"
+	salience 70
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+		( object is opened by its creator OR
+		  user has at object role "issuemanager" )
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+		value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "please_select"
+	
+	then
+#		set "plannedenddate" not_mandatory
+#		set "plannedenddate" readonly
+		set "custom_is_creator_status" to value "new"
 
 end
 # Fim REO 30.11.2017 - Evento EV121389
@@ -1092,14 +1093,14 @@ end
 ################
 rule "file_upload_enable[I,V]"
 
-      salience 63
-      no-loop true
-      
-      when
-            is in workflow state "openForExecution" OR
-            is in workflow state "openForReview"           
-      then
-            set "documents" editable
+	salience 63
+	no-loop true
+	
+	when
+		is in workflow state "openForExecution" OR
+		is in workflow state "openForReview"		
+	then
+		set "documents" editable
 
 end
 
@@ -1109,19 +1110,19 @@ end
 ################
 rule "hide_issue_fields[I,V]"
 
-      salience 62
-      no-loop true
-      
-      when
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
-      then
+	salience 62
+	no-loop true
+	
+	when
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
 
-      set "cst_rescheduling"             invisible   # AP
-      set "custom_ap_creator_status"     invisible   # AP
-      set "custom_ap_owner_status"  invisible   # AP
-      set "custom_ap_reviewer_status"    invisible   # AP
-      
-      
+	set "cst_rescheduling"  		invisible	# AP
+	set "custom_ap_creator_status"	invisible	# AP
+	set "custom_ap_owner_status"	invisible	# AP
+	set "custom_ap_reviewer_status"	invisible	# AP
+	
+	
 end
 
 ################
@@ -1129,218 +1130,105 @@ end
 ################
 rule "hide_action_plan_fields[I,V]"
 
-      salience 61
-      no-loop true
-      
-      when
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"      
-      then
+	salience 61
+	no-loop true
+	
+	when
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
 
-            set "issuesource"                        invisible   # I
-            set "root_cause"                         invisible   # I
-            set "remediationMeasure"            invisible   # I
-            set "fup_date"                           invisible   # I
-            set "recurrent"                     invisible   # I
-            set "rsk_name"                           invisible   # I
-            set "ra_result"                     invisible   # I
-            set "ra_residualfinal"              invisible   # I
-            set "riskowner"                     invisible   # I
-            set "custom_is_creator_status"      invisible   # I
-            set "custom_is_owner_status"  invisible   # I
-            set "custom_is_reviewer_status"     invisible   # I
-            set "acting_front"                  invisible   # I
-            set "process_environment"           invisible   # I
-            set "business_unit"                      invisible   # I
-            set "cst_appsystem"                 invisible   # I
-            set "custom_servicetype"            invisible   # I
-            set "auditproject"                  invisible   # I
-            set "custom_auditauthor"            invisible   # I
-
-end
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ gestor de assunto
-################
-rule "show_hide_action_plan_fields_issue_manager[I,V]"
-
-      salience 60
-      no-loop true
-      
-      when
-            user has at object role "issuemanager"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"      
-      then
-      
-            set "custom_ap_creator_status"      invisible   # AP
-            set "custom_ap_owner_status"  invisible   # AP
-            set "custom_ap_reviewer_status"     invisible   # AP
-
-
-            set "action_type"                   editable    # AP/I
-            #     set "issuesource"                  invisible   # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          editable    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             editable    # AP/I
-            #     set "root_cause"                   invisible   # I
-            #     set "remediationMeasure"      invisible   # I
-            set "plannedenddate"          editable    # AP/I
-            set "replanneddate"                 editable    # AP/I
-            #     set "fup_date"                     invisible   # I
-            set "replanned"                     readonly    # AP/I
-            set "cst_rescheduling"        readonly    # AP
-            set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
-            #     set "rsk_name"                     invisible   # I
-            #     set "ra_result"               invisible   # I
-            #     set "ra_residualfinal"        invisible   # I
-            #     set "riskowner"               invisible   # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        editable    # AP/I
-            set "reviewers"                     editable    # AP/I
-            set "status_obj"              readonly    # AP/I
-            set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            #     set "acting_front"            invisible   # I
-            #     set "process_environment"     invisible   # I
-            #     set "business_unit"                invisible   # I
-            #     set "cst_appsystem"           invisible   # I
-            #     set "custom_servicetype"      invisible   # I
-            #     set "auditproject"            invisible   # I
-            #     set "custom_auditauthor"      invisible   # I
+		set "issuesource"  				invisible	# I
+		set "root_cause"  				invisible	# I
+		set "remediationMeasure"  		invisible	# I
+		set "fup_date"					invisible	# I
+		set "recurrent"  				invisible	# I
+		set "rsk_name"					invisible	# I
+		set "ra_result"  				invisible	# I
+		set "ra_residualfinal"  		invisible	# I
+		set "riskowner"  				invisible	# I
+		set "custom_is_creator_status"	invisible	# I
+		set "custom_is_owner_status"	invisible	# I
+		set "custom_is_reviewer_status"	invisible	# I
+		set "acting_front"  			invisible	# I
+		set "process_environment" 		invisible	# I
+		set "business_unit"				invisible	# I
+		set "cst_appsystem"  			invisible	# I
+		set "custom_servicetype"  		invisible	# I
+		set "auditproject"  			invisible	# I
+		set "custom_auditauthor"  		invisible	# I
 
 end
 
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Apontamento p/ gestor de assunto
-################
-rule "show_hide_issues_fields_issue_manager[I,V]"
-
-      salience 59
-      no-loop true
-      
-      when
-            user has at object role "issuemanager"
-            object is_not opened by its creator
-          ( user is_not assigned in list "owners" AND
-            user is_not assigned in list "reviewers" )
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
-      then
-
-            set "custom_is_creator_status"      invisible   # I
-            set "custom_is_owner_status"  invisible   # I
-            set "custom_is_reviewer_status"     invisible   # I
-
-
-            set "action_type"                   editable    # AP/I
-            set "issuesource"                   editable    # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          editable    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             editable    # AP/I
-            set "root_cause"                    editable    # I
-            set "remediationMeasure"      editable    # I
-            set "plannedenddate"          readonly    # AP/I
-            set "replanneddate"                 readonly    # AP/I
-            set "fup_date"                      readonly    # I
-            set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible   # AP
-            set "stateTime"                     readonly    # AP/I
-            set "recurrent"               editable    # I
-            set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        editable    # AP/I
-            set "reviewers"                     editable    # AP/I
-            set "status_obj"              readonly    # AP/I
-            set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            set "acting_front"            editable    # I
-            set "process_environment"     editable    # I
-            set "business_unit"                 editable    # I
-            set "cst_appsystem"           editable    # I
-            set "custom_servicetype"      editable    # I
-            set "auditproject"            editable    # I
-            set "custom_auditauthor"      editable    # I
-
-end
 
 ################
 # DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ criador na criação
 ################
 rule "show_hide_action_plan_fields_creator[I,V]"
 
-      salience 58
-      no-loop true
-      
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "apOpenForCreation" )
-            #object is opened by its creator
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"      
-      then
+	salience 60
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "apOpenForCreation" )
+		#object is opened by its creator
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
 
-            set "replanneddate"                 invisible   # AP/I
-            set "replanned"                     invisible   # AP/I
-            set "cst_rescheduling"        invisible   # AP  
-            set "custom_ap_owner_status"  invisible   # AP
-            set "custom_ap_reviewer_status"     invisible   # AP
-            set "status_obj"              invisible   # AP/I
+		set "replanneddate"			invisible	# AP/I
+		set "replanned"				invisible	# AP/I
+		set "cst_rescheduling"  	invisible	# AP	
+		set "custom_ap_owner_status"	invisible	# AP
+		set "custom_ap_reviewer_status"	invisible	# AP
+		set "status_obj"			invisible	# AP/I
 
 
-            set "action_type"                        editable    # AP/I
-            set "name"                               editable    # AP/I
-            set "description"                   editable    # AP/I
-            set "plannedenddate"                editable    # AP/I
-            set "owners"                             editable    # AP/I
-            set "reviewers"                          editable    # AP/I
-            set "custom_ap_creator_status"      editable    # AP
-            #set "status_obj"                   editable    # AP/I
-            set "immediateMeasure"              editable    # AP/I
-            set "documents"                          editable    # AP/I
+		set "action_type" 				editable	# AP/I
+		set "name"						editable	# AP/I
+		set "description"				editable	# AP/I
+		set "plannedenddate"			editable	# AP/I
+		set "owners"					editable	# AP/I
+		set "reviewers"					editable	# AP/I
+		set "custom_ap_creator_status"	editable	# AP
+		#set "status_obj"				editable	# AP/I
+		set "immediateMeasure"			editable	# AP/I
+		set "documents"					editable	# AP/I
 
-            set "action_type"                   mandatory   # AP/I
-            #     set "issuesource"                  invisible
-            set "obj_id"                        readonly    # AP/I
-            #set "name"                         invisible
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             mandatory   # AP/I
-            #     set "root_cause"                   invisible
-            #     set "remediationMeasure"      invisible
-            set "plannedenddate"          mandatory   # AP/I
-            #     set "replanneddate"                invisible
-            #     set "fup_date"                     invisible
-            #     set "replanned"                    invisible
-            #     set "cst_rescheduling"        invisible
-            set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible
-            #     set "rsk_name"                     invisible
-            #     set "ra_result"               invisible
-            #     set "ra_residualfinal"        invisible
-            #     set "riskowner"               invisible
-            set "creator"                       readonly    # AP/I
-            set "owners"                        mandatory   # AP/I
-            set "reviewers"                     mandatory   # AP/I
-            set "custom_ap_creator_status"      mandatory   # AP        
-            #set "status_obj"             mandatory   # AP/I
-            set "owner"                         readonly    # AP/I
-            #set "immediateMeasure"       invisible
-            #set "documents"              invisible
-            #     set "acting_front"            invisible
-            #     set "process_environment"     invisible
-            #     set "business_unit"                invisible
-            #     set "cst_appsystem"           invisible
-            #     set "custom_servicetype"      invisible
-            #     set "auditproject"            invisible
-            #     set "custom_auditauthor"      invisible
+		set "action_type" 			mandatory	# AP/I
+		#	set "issuesource" 			invisible
+		set "obj_id"				readonly	# AP/I
+		#set "name"					invisible
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			mandatory	# AP/I
+		#	set "root_cause"  			invisible
+		#	set "remediationMeasure"  	invisible
+		set "plannedenddate"		mandatory	# AP/I
+		#	set "replanneddate"			invisible
+		#	set "fup_date"				invisible
+		#	set "replanned"				invisible
+		#	set "cst_rescheduling"  	invisible
+		set "stateTime"				readonly	# AP/I
+		#	set "recurrent"  			invisible
+		#	set "rsk_name"				invisible
+		#	set "ra_result"  			invisible
+		#	set "ra_residualfinal"  	invisible
+		#	set "riskowner"  			invisible
+		set "creator"				readonly	# AP/I
+		set "owners"				mandatory	# AP/I
+		set "reviewers"				mandatory	# AP/I
+		set "custom_ap_creator_status"	mandatory	# AP		
+		#set "status_obj"			mandatory	# AP/I
+		set "owner"					readonly	# AP/I
+		#set "immediateMeasure"		invisible
+		#set "documents"			invisible
+		#	set "acting_front"  		invisible
+		#	set "process_environment" 	invisible
+		#	set "business_unit"			invisible
+		#	set "cst_appsystem"  		invisible
+		#	set "custom_servicetype"  	invisible
+		#	set "auditproject"  		invisible
+		#	set "custom_auditauthor"  	invisible
 
 end
 
@@ -1349,81 +1237,78 @@ end
 ################
 rule "show_hide_issues_fields_creator[I,V]"
 
-      salience 57
-      no-loop true
-      
-      when
-            ( is in workflow state "PREPARED" OR
-              is in workflow state "openForCreation" )
-            object is opened by its creator
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
-      then
+	salience 59
+	no-loop true
+	
+	when
+		( is in workflow state "PREPARED" OR
+		  is in workflow state "openForCreation" )
+		#object is opened by its creator
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
 
-            #set "replanneddate"                 invisible   # AP/I
-            set "recurrent"               invisible   # AP/I
-            set "custom_is_creator_status"  editable   # I
-            set "custom_is_creator_status"  mandatory   # I
-            set "custom_is_owner_status"  invisible   # I
-            set "custom_is_reviewer_status"     invisible   # I
-            set "status_obj"              invisible   # AP/I
+		set "replanneddate"			invisible	# AP/I
+		set "recurrent"  			invisible	# AP/I
+		set "custom_is_owner_status"	invisible	# I
+		set "custom_is_reviewer_status"	invisible	# I
+		set "status_obj"			invisible	# AP/I
 
-            set "action_type"                   editable    # AP/I
-            set "issuesource"                   editable    # I
-            set "name"                          editable    # AP/I
-            set "description"             editable    # AP/I
-            set "root_cause"                    editable    # I
-            set "remediationMeasure"      editable    # I
-            set "owners"                        editable    # AP/I
-            set "reviewers"                     editable    # AP/I
-            set "custom_is_creator_status"      editable    # I         
-            #set "status_obj"             editable    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            set "acting_front"            editable    # I
-            set "process_environment"     editable    # I
-            set "business_unit"                 editable    # I
-            set "cst_appsystem"           editable    # I
-            set "custom_servicetype"      editable    # I
-            set "auditproject"            editable    # I
-            set "custom_auditauthor"      editable    # I
+		set "action_type" 			editable	# AP/I
+		set "issuesource"  			editable	# I
+		set "name"					editable	# AP/I
+		set "description"			editable	# AP/I
+		set "root_cause"  			editable	# I
+		set "remediationMeasure"  	editable	# I
+		set "owners"				editable	# AP/I
+		set "reviewers"				editable	# AP/I
+		set "custom_is_creator_status"	editable	# I		
+		#set "status_obj"			editable	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		set "acting_front"  		editable	# I
+		set "process_environment" 	editable	# I
+		set "business_unit"			editable	# I
+		set "cst_appsystem"  		editable	# I
+		set "custom_servicetype"  	editable	# I
+		set "auditproject"  		editable	# I
+		set "custom_auditauthor"  	editable	# I
 
 
-            set "action_type"                   mandatory   # AP/I
-            set "issuesource"                   mandatory   # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          mandatory   # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             mandatory   # AP/I
-            set "root_cause"                    mandatory   # I
-            #set "remediationMeasure"     invisible         
-            set "plannedenddate"          editable    # AP/I
-            set "plannedenddate"          mandatory    # AP/I
-            #set "replanneddate"          invisible         
-            set "fup_date"                      readonly    # I
-            set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible
-            set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible         
-            set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        mandatory   # AP/I
-            set "reviewers"                     mandatory   # AP/I
-            set "custom_is_creator_status"      mandatory   # I         
-            #set "status_obj"             mandatory   # AP/I
-            set "owner"                         readonly    # AP/I
-            #set "immediateMeasure"       invisible   # AP/I
-            #set "documents"              invisible   # AP/I
-            set "acting_front"            mandatory   # I
-            #set "process_environment"    invisible   # I
-            #set "business_unit"          invisible   # I
-            #set "cst_appsystem"          invisible   # I
-            #set "custom_servicetype"     invisible   # I
-            #set "auditproject"           invisible   # I
-            #set "custom_auditauthor"     invisible   # I
+		set "action_type" 			mandatory	# AP/I
+		set "issuesource"  			mandatory	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					mandatory	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			mandatory	# AP/I
+		set "root_cause"  			mandatory	# I
+		#set "remediationMeasure"  	invisible		
+		set "plannedenddate"		readonly	# AP/I
+		#set "replanneddate"		invisible		
+		set "fup_date"				readonly	# I
+		set "replanned"				readonly	# AP/I
+		#	set "cst_rescheduling"  	invisible
+		set "stateTime"				readonly	# AP/I
+		#	set "recurrent"  			invisible		
+		set "rsk_name"				readonly	# I
+		set "ra_result"  			readonly	# I
+		set "ra_residualfinal"  	readonly	# I
+		set "riskowner"  			readonly	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				mandatory	# AP/I
+		set "reviewers"				mandatory	# AP/I
+		set "custom_is_creator_status"	mandatory	# I		
+		#set "status_obj"			mandatory	# AP/I
+		set "owner"					readonly	# AP/I
+		#set "immediateMeasure"		invisible	# AP/I
+		#set "documents"			invisible	# AP/I
+		set "acting_front"  		mandatory	# I
+		#set "process_environment" 	invisible	# I
+		#set "business_unit"		invisible	# I
+		#set "cst_appsystem"  		invisible	# I
+		#set "custom_servicetype"  	invisible	# I
+		#set "auditproject"  		invisible	# I
+		#set "custom_auditauthor"  	invisible	# I
 
 end
 
@@ -1434,58 +1319,58 @@ end
 ################
 rule "show_hide_action_plan_fields_owner_in_exec[I,V]"
 
-      salience 56
-      no-loop true
-      
-      when
-            is in workflow state "apOpenForExecution"
-            user is assigned in list "owners"        
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"      
-      then
+	salience 58
+	no-loop true
+	
+	when
+		is in workflow state "apOpenForExecution"
+		user is assigned in list "owners"		
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
 
-            set "custom_ap_creator_status"      invisible   # AP
-            set "custom_ap_reviewer_status"     invisible   # AP
-            set "status_obj"              invisible   # AP/I
+		set "custom_ap_creator_status"	invisible	# AP
+		set "custom_ap_reviewer_status"	invisible	# AP
+		set "status_obj"			invisible	# AP/I
 
-            set "action_type"                   readonly    # AP/I
-            #     set "issuesource"                  invisible   # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          editable    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             editable    # AP/I
-            #     set "root_cause"                   invisible   # I
-            #     set "remediationMeasure"      invisible   # I
-            set "plannedenddate"          readonly    # AP/I
-            set "replanneddate"                 editable    # AP/I
-            #     set "fup_date"                     invisible   # I
-            set "replanned"                     readonly    # AP/I
-            set "cst_rescheduling"        readonly    # AP
-            set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
-            #     set "rsk_name"                     invisible   # I
-            #     set "ra_result"               invisible   # I
-            #     set "ra_residualfinal"        invisible   # I
-            #     set "riskowner"               invisible   # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        readonly    # AP/I
-            set "reviewers"                     readonly    # AP/I
-            set "custom_ap_owner_status"  editable    # AP
-            set "status_obj"              editable    # AP/I
-            set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            #     set "acting_front"            invisible   # I
-            #     set "process_environment"     invisible   # I
-            #     set "business_unit"                invisible   # I
-            #     set "cst_appsystem"           invisible   # I
-            #     set "custom_servicetype"      invisible   # I
-            #     set "auditproject"            invisible   # I
-            #     set "custom_auditauthor"      invisible   # I
+		set "action_type" 			readonly	# AP/I
+		#	set "issuesource"  			invisible	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					editable	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			editable	# AP/I
+		#	set "root_cause"  			invisible	# I
+		#	set "remediationMeasure"  	invisible	# I
+		set "plannedenddate"		readonly	# AP/I
+		set "replanneddate"			editable	# AP/I
+		#	set "fup_date"				invisible	# I
+		set "replanned"				readonly	# AP/I
+		set "cst_rescheduling"  	readonly	# AP
+		set "stateTime"				readonly	# AP/I
+		#	set "recurrent"  			invisible	# I
+		#	set "rsk_name"				invisible	# I
+		#	set "ra_result"  			invisible	# I
+		#	set "ra_residualfinal"  	invisible	# I
+		#	set "riskowner"  			invisible	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				readonly	# AP/I
+		set "reviewers"				readonly	# AP/I
+		set "custom_ap_owner_status"	editable	# AP
+		set "status_obj"			editable	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		#	set "acting_front"  		invisible	# I
+		#	set "process_environment" 	invisible	# I
+		#	set "business_unit"			invisible	# I
+		#	set "cst_appsystem"  		invisible	# I
+		#	set "custom_servicetype"  	invisible	# I
+		#	set "auditproject"  		invisible	# I
+		#	set "custom_auditauthor"  	invisible	# I
 
 
-            set "custom_ap_owner_status"  mandatory   # AP
-            #set "status_obj"             mandatory   # AP/I
+		set "custom_ap_owner_status"	mandatory	# AP
+		#set "status_obj"			mandatory	# AP/I
 
 end
 
@@ -1495,58 +1380,58 @@ end
 ################
 rule "show_hide_issues_fields_owner_in_exec[I,V]"
 
-      salience 55
-      no-loop true
-      
-      when
-            is in workflow state "openForExecution"
-            user is assigned in list "owners"        
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
-      then
+	salience 57
+	no-loop true
+	
+	when
+		is in workflow state "openForExecution"
+		user is assigned in list "owners"		
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
 
-            set "recurrent"               invisible   # I
-            set "custom_is_creator_status"      invisible   # I
-            set "custom_is_reviewer_status"     invisible   # I
-            set "status_obj"              invisible   # AP/I
+		set "recurrent"  			invisible	# I
+		set "custom_is_creator_status"	invisible	# I
+		set "custom_is_reviewer_status"	invisible	# I
+		set "status_obj"			invisible	# AP/I
 
-            set "action_type"                   readonly    # AP/I
-            set "issuesource"                   readonly    # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          editable    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             editable    # AP/I
-            set "root_cause"                    editable    # I
-            set "remediationMeasure"      editable    # I
-            set "plannedenddate"          readonly    # AP/I
-            set "replanneddate"                 readonly    # AP/I
-            set "fup_date"                      readonly    # I
-            set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible   # AP
-            set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
-            set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        readonly    # AP/I
-            set "reviewers"                     readonly    # AP/I
-            set "custom_is_owner_status"  editable    # I         
-            #set "status_obj"             editable    # AP/I
-            set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            set "acting_front"            readonly    # I
-            set "process_environment"     readonly    # I
-            set "business_unit"                 readonly    # I
-            set "cst_appsystem"           readonly    # I
-            set "custom_servicetype"      readonly    # I
-            set "auditproject"            readonly    # I
-            set "custom_auditauthor"      readonly    # I
+		set "action_type" 			readonly	# AP/I
+		set "issuesource"  			readonly	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					editable	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			editable	# AP/I
+		set "root_cause"  			editable	# I
+		set "remediationMeasure"  	editable	# I
+		set "plannedenddate"		readonly	# AP/I
+		set "replanneddate"			readonly	# AP/I
+		set "fup_date"				readonly	# I
+		set "replanned"				readonly	# AP/I
+		#	set "cst_rescheduling"  	invisible	# AP
+		set "stateTime"				readonly	# AP/I
+		#	set "recurrent"  			invisible	# I
+		set "rsk_name"				readonly	# I
+		set "ra_result"  			readonly	# I
+		set "ra_residualfinal"  	readonly	# I
+		set "riskowner"  			readonly	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				readonly	# AP/I
+		set "reviewers"				readonly	# AP/I
+		set "custom_is_owner_status"	editable	# I		
+		#set "status_obj"			editable	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		set "acting_front"  		readonly	# I
+		set "process_environment" 	readonly	# I
+		set "business_unit"			readonly	# I
+		set "cst_appsystem"  		readonly	# I
+		set "custom_servicetype"  	readonly	# I
+		set "auditproject"  		readonly	# I
+		set "custom_auditauthor"  	readonly	# I
 
-            set "custom_is_owner_status"  mandatory   # I
-            #set "status_obj"             mandatory   # AP/I
+		set "custom_is_owner_status"	mandatory	# I
+		#set "status_obj"			mandatory	# AP/I
 
 end
 
@@ -1556,57 +1441,57 @@ end
 ################
 rule "show_hide_action_plan_fields_reviewer_review[I,V]"
 
-      salience 54
-      no-loop true
-      
-      when
-            is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"           
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"      
-      then
+	salience 56
+	no-loop true
+	
+	when
+		is in workflow state "apOpenForReview"
+		user is assigned in list "reviewers"		
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
 
-            set "custom_ap_creator_status"      invisible   # AP
-            set "custom_ap_owner_status"  invisible   # AP
-            set "status_obj"              invisible   # AP/I
+		set "custom_ap_creator_status"	invisible	# AP
+		set "custom_ap_owner_status"	invisible	# AP
+		set "status_obj"			invisible	# AP/I
 
-            set "action_type"                   readonly    # AP/I
-            #     set "issuesource"                  invisible   # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          readonly    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             readonly    # AP/I
-            #     set "root_cause"                   invisible   # I
-            #     set "remediationMeasure"      invisible   # I
-            set "plannedenddate"          readonly    # AP/I
-            set "replanneddate"                 readonly    # AP/I
-            #     set "fup_date"                     invisible   # I
-            set "replanned"                     readonly    # AP/I
-            set "cst_rescheduling"        readonly    # AP
-            set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
-            #     set "rsk_name"                     invisible   # I
-            #     set "ra_result"               invisible   # I
-            #     set "ra_residualfinal"        invisible   # I
-            #     set "riskowner"               invisible   # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        readonly    # AP/I
-            set "reviewers"                     readonly    # AP/I
-            set "custom_ap_reviewer_status"     editable    # AP
-            #set "status_obj"             editable    # AP/I
-            set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            #     set "acting_front"            invisible   # I
-            #     set "process_environment"     invisible   # I
-            #     set "business_unit"                invisible   # I
-            #     set "cst_appsystem"           invisible   # I
-            #     set "custom_servicetype"      invisible   # I
-            #     set "auditproject"            invisible   # I
-            #     set "custom_auditauthor"      invisible   # I
+		set "action_type" 			readonly	# AP/I
+		#	set "issuesource"  			invisible	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					readonly	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			readonly	# AP/I
+		#	set "root_cause"  			invisible	# I
+		#	set "remediationMeasure"  	invisible	# I
+		set "plannedenddate"		readonly	# AP/I
+		set "replanneddate"			readonly	# AP/I
+		#	set "fup_date"				invisible	# I
+		set "replanned"				readonly	# AP/I
+		set "cst_rescheduling"  	readonly	# AP
+		set "stateTime"				readonly	# AP/I
+		#	set "recurrent"  			invisible	# I
+		#	set "rsk_name"				invisible	# I
+		#	set "ra_result"  			invisible	# I
+		#	set "ra_residualfinal"  	invisible	# I
+		#	set "riskowner"  			invisible	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				readonly	# AP/I
+		set "reviewers"				readonly	# AP/I
+		set "custom_ap_reviewer_status"	editable	# AP
+		#set "status_obj"			editable	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		#	set "acting_front"  		invisible	# I
+		#	set "process_environment" 	invisible	# I
+		#	set "business_unit"			invisible	# I
+		#	set "cst_appsystem"  		invisible	# I
+		#	set "custom_servicetype"  	invisible	# I
+		#	set "auditproject"  		invisible	# I
+		#	set "custom_auditauthor"  	invisible	# I
 
-            set "custom_ap_reviewer_status"     mandatory   # AP
-            #set "status_obj"             mandatory   # AP/I
+		set "custom_ap_reviewer_status"	mandatory	# AP
+		#set "status_obj"			mandatory	# AP/I
 
 end
 
@@ -1616,57 +1501,204 @@ end
 ################
 rule "show_hide_issues_fields_reviewer_in_review[I,V]"
 
-      salience 53
-      no-loop true
-      
-      when
-            is in workflow state "openForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
-      then
+	salience 55
+	no-loop true
+	
+	when
+		is in workflow state "openForReview"
+		user is assigned in list "reviewers"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
 
-            set "custom_is_creator_status"      invisible   # I
-            set "custom_is_owner_status"  invisible   # I
-            set "status_obj"              invisible   # AP/I
+		set "custom_is_creator_status"	invisible	# I
+		set "custom_is_owner_status"	invisible	# I
+		set "status_obj"			invisible	# AP/I
 
 
-            set "action_type"                   readonly    # AP/I
-            set "issuesource"                   readonly    # I
-            set "obj_id"                        readonly    # AP/I
-            set "name"                          readonly    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             readonly    # AP/I
-            set "root_cause"                    readonly    # I
-            set "remediationMeasure"      editable    # I
-            set "plannedenddate"          readonly    # AP/I
-            set "replanneddate"                 readonly    # AP/I
-            set "fup_date"                      readonly    # I
-            set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible   # AP
-            set "stateTime"                     readonly    # AP/I
-            set "recurrent"               editable    # I
-            set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
-            set "creator"                       readonly    # AP/I
-            set "owners"                        readonly    # AP/I
-            set "reviewers"                     readonly    # AP/I
-            set "custom_is_reviewer_status"     editable    # I
-            #set "status_obj"             editable    # AP/I
-            set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
-            set "documents"                     editable    # AP/I
-            set "acting_front"            readonly    # I
-            set "process_environment"     readonly    # I
-            set "business_unit"                 readonly    # I
-            set "cst_appsystem"           readonly    # I
-            set "custom_servicetype"      readonly    # I
-            set "auditproject"            readonly    # I
-            set "custom_auditauthor"      readonly    # I
+		set "action_type" 			readonly	# AP/I
+		set "issuesource"  			readonly	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					readonly	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			readonly	# AP/I
+		set "root_cause"  			readonly	# I
+		set "remediationMeasure"  	editable	# I
+		set "plannedenddate"		readonly	# AP/I
+		set "replanneddate"			readonly	# AP/I
+		set "fup_date"				readonly	# I
+		set "replanned"				readonly	# AP/I
+		#	set "cst_rescheduling"  	invisible	# AP
+		set "stateTime"				readonly	# AP/I
+		set "recurrent"  			editable	# I
+		set "rsk_name"				readonly	# I
+		set "ra_result"  			readonly	# I
+		set "ra_residualfinal"  	readonly	# I
+		set "riskowner"  			readonly	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				readonly	# AP/I
+		set "reviewers"				readonly	# AP/I
+		set "custom_is_reviewer_status"	editable	# I
+		#set "status_obj"			editable	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		set "acting_front"  		readonly	# I
+		set "process_environment" 	readonly	# I
+		set "business_unit"			readonly	# I
+		set "cst_appsystem"  		readonly	# I
+		set "custom_servicetype"  	readonly	# I
+		set "auditproject"  		readonly	# I
+		set "custom_auditauthor"  	readonly	# I
 
-            set "custom_is_reviewer_status"     mandatory   # I
-            #set "status_obj"             mandatory   # AP/I
+		set "custom_is_reviewer_status"	mandatory	# I
+		#set "status_obj"			mandatory	# AP/I
 
 end
+
+
+################
+# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ gestor de assunto
+################
+rule "show_hide_action_plan_fields_issue_manager[I,V]"
+
+	salience 54
+	no-loop true
+	
+	when
+		user has in_general role "systemadmin"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
+	
+		set "custom_ap_creator_status"	invisible	# AP
+		set "custom_ap_owner_status"	invisible	# AP
+		set "custom_ap_reviewer_status"	invisible	# AP
+
+
+		set "action_type" 			editable	# AP/I
+		#	set "issuesource"  			invisible	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					editable	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	editable	# AP/I
+		set "description"			editable	# AP/I
+		#	set "root_cause"  			invisible	# I
+		#	set "remediationMeasure"  	invisible	# I
+		set "plannedenddate"		editable	# AP/I
+		set "replanneddate"			editable	# AP/I
+		#	set "fup_date"				invisible	# I
+		set "replanned"				readonly	# AP/I
+		set "cst_rescheduling"  	readonly	# AP
+		set "stateTime"				readonly	# AP/I
+		#	set "recurrent"  			invisible	# I
+		#	set "rsk_name"				invisible	# I
+		#	set "ra_result"  			invisible	# I
+		#	set "ra_residualfinal"  	invisible	# I
+		#	set "riskowner"  			invisible	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				editable	# AP/I
+		set "reviewers"				editable	# AP/I
+		set "status_obj"			readonly	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		#	set "acting_front"  		invisible	# I
+		#	set "process_environment" 	invisible	# I
+		#	set "business_unit"			invisible	# I
+		#	set "cst_appsystem"  		invisible	# I
+		#	set "custom_servicetype"  	invisible	# I
+		#	set "auditproject"  		invisible	# I
+		#	set "custom_auditauthor"  	invisible	# I
+
+end
+
+
+################
+# DMM - 2018-04-12 - EV190711 -  Reorganização do Apontamento p/ gestor de assunto
+################
+rule "show_hide_issues_fields_issue_manager[I,V]"
+
+	salience 53
+	no-loop true
+	
+	when
+		user has at object role "issuemanager"
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
+
+		set "custom_is_creator_status"	invisible	# I
+		set "custom_is_owner_status"	invisible	# I
+		set "custom_is_reviewer_status"	invisible	# I
+
+
+		set "action_type" 			editable	# AP/I
+		set "issuesource"  			editable	# I
+		set "obj_id"				readonly	# AP/I
+		set "name"					editable	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	readonly	# AP/I
+		set "description"			editable	# AP/I
+		set "root_cause"  			editable	# I
+		set "remediationMeasure"  	editable	# I
+		set "plannedenddate"		readonly	# AP/I
+		set "replanneddate"			readonly	# AP/I
+		set "fup_date"				readonly	# I
+		set "replanned"				readonly	# AP/I
+		#	set "cst_rescheduling"  	invisible	# AP
+		set "stateTime"				readonly	# AP/I
+		set "recurrent"  			editable	# I
+		set "rsk_name"				readonly	# I
+		set "ra_result"  			readonly	# I
+		set "ra_residualfinal"  	readonly	# I
+		set "riskowner"  			readonly	# I
+		set "creator"				readonly	# AP/I
+		set "owners"				editable	# AP/I
+		set "reviewers"				editable	# AP/I
+		set "status_obj"			readonly	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+		set "acting_front"  		editable	# I
+		set "process_environment" 	editable	# I
+		set "business_unit"			editable	# I
+		set "cst_appsystem"  		editable	# I
+		set "custom_servicetype"  	editable	# I
+		set "auditproject"  		editable	# I
+		set "custom_auditauthor"  	editable	# I
+
+end
+
+
+################
+# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ gestor de assunto
+################
+rule "temp_rule_for_tickets[I,V]"
+
+	salience 52
+	no-loop true
+	
+	when
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
+
+		set "action_type" 			editable	# AP/I
+		set "name"					editable	# AP/I
+		set "issue_date"			readonly	# AP/I
+		set "issueRelevantObjects"	editable	# AP/I
+		set "description"			editable	# AP/I
+		set "plannedenddate"		editable	# AP/I
+		set "replanneddate"			editable	# AP/I
+		set "replanned"				readonly	# AP/I
+		set "cst_rescheduling"  	readonly	# AP
+		set "stateTime"				readonly	# AP/I
+		set "creator"				readonly	# AP/I
+		set "owners"				editable	# AP/I
+		set "reviewers"				editable	# AP/I
+		set "status_obj"			readonly	# AP/I
+		set "owner"					readonly	# AP/I
+		set "immediateMeasure"		editable	# AP/I
+		set "documents"				editable	# AP/I
+
+end
+
+

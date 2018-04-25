@@ -36,7 +36,7 @@
 	        <file id="dashboardEventHandler" />
 	        <file id="custom_GRC39" />
 	        <file id="custom_GRC98" />
-	        <file id="custom_GRC74" />
+<!-- 	        <file id="custom_GRC74" /> -->
 	        <file id="custom_corprisk" />
 		</scripts>
 		<styles>
