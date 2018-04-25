@@ -139,11 +139,11 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		#set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
 		
-		set "name"                  mandatory
-		set "description"           mandatory
-		set "root_cause"  			mandatory
+		#set "name"                  mandatory
+		#set "description"           mandatory
+		#set "root_cause"  			mandatory
 		#set "remediationMeasure"   mandatory
-		set "action_type"           mandatory
+		#set "action_type"           mandatory
 		
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              editable  #GAP - GRC74
@@ -218,11 +218,11 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              editable  #GAP - GRC74
 				
-		set "name"                    mandatory
-		set "description"             mandatory
-		set "root_cause"              mandatory
+		#set "name"                    mandatory
+		#set "description"             mandatory
+		#set "root_cause"              mandatory
 		#set "remediationMeasure"      mandatory
-		set "acting_front"            mandatory #GAP - GRC74
+		#set "acting_front"            mandatory #GAP - GRC74
 		
 		# DMM - EV190711 - set "owner_status"            invisible
 		set "owner_remark"            invisible
@@ -274,9 +274,9 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              readonly  #GAP - GRC74
 
-		set "name"                    mandatory
-		set "description"             mandatory
-		set "root_cause"			  mandatory			
+		#set "name"                    mandatory
+		#set "description"             mandatory
+		#set "root_cause"			  mandatory			
 		#set "remediationMeasure"      mandatory
 
 		# DMM - EV190711 - set "owner_status"            invisible
@@ -330,9 +330,9 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              readonly  #GAP - GRC74
 		
-		set "name"                    mandatory
-		set "description"             mandatory
-		set "root_cause"  			  mandatory
+		#set "name"                    mandatory
+		#set "description"             mandatory
+		#set "root_cause"  			  mandatory
 		#set "remediationMeasure"      mandatory
 		
 		# DMM - EV190711 - set "owner_status"            invisible
@@ -473,13 +473,13 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              editable  #GAP - GRC74
 		
-		set "name"                    mandatory
-		set "description"             mandatory
-		set "root_cause"  			mandatory
+		#set "name"                    mandatory
+		#set "description"             mandatory
+		#set "root_cause"  			mandatory
 		#set "remediationMeasure"      mandatory
-        set "plannedenddate"          mandatory
-		set "owners"                  mandatory
-		set "reviewers"               mandatory
+        #set "plannedenddate"          mandatory
+		#set "owners"                  mandatory
+		#set "reviewers"               mandatory
 		
 
 end
@@ -512,13 +512,13 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'new' --> init [I
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              editable  #GAP - GRC74
 		
-		set "name"                    mandatory
-		set "description"             mandatory
-		set "root_cause"  		      mandatory
+		#set "name"                    mandatory
+		#set "description"             mandatory
+		#set "root_cause"  		      mandatory
 		#set "remediationMeasure"      mandatory
-        set "plannedenddate"          mandatory
-		set "owners"                  mandatory
-		set "reviewers"               mandatory
+        #set "plannedenddate"          mandatory
+		#set "owners"                  mandatory
+		#set "reviewers"               mandatory
 
 end
 

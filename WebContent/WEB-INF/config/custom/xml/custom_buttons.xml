@@ -49,5 +49,10 @@
     	<button id="CST_CR_REVDETACHROW" defaultFunction="aam_listcommand('customcrdetach', '[id]', '_parent')" />
     </buttonDefinition>
  	<!-- Fim REO - 20.02.2017 - EV133332 -->
+
+<!--     <buttonDefinition id="cstChangerole" image="iconlib/icons/select_substitute_16.png"> -->
+<!--     	<button id="CST_AP_CHANGE_ROLE" defaultFunction="aam_objectcommand('changeRole', null, null, '_parent')"/> -->
+<!--     </buttonDefinition> -->
+
  
 </custom>
