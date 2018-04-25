@@ -16,9 +16,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
-import com.idsscheer.webapps.arcm.config.Metadata;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
-import com.idsscheer.webapps.arcm.config.metadata.objecttypes.IObjectType;
 import com.idsscheer.webapps.arcm.ui.framework.renderer.AbstractBaseRenderer;
 
 public class CustomObjectTypeRenderer extends AbstractBaseRenderer {

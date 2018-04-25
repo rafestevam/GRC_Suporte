@@ -11,6 +11,11 @@ import java.util.Map;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectLockException;
+import com.idsscheer.webapps.arcm.bl.exception.ObjectNotUniqueException;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
@@ -18,6 +23,8 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IDateAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
@@ -25,6 +32,10 @@ import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
@@ -48,7 +59,58 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		
 	private static final boolean DEBUGGER_ON = true;
 	protected void afterExecute(){
-//				
+				
+		affectPADate();
+		
+//		Map filterMap = new HashMap();
+//		
+//		IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
+//		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.ISSUE);
+//		
+//		IAppObj currObj = this.formModel.getAppObj();
+//		IEnumAttribute issueTypeList = currObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+//		IEnumerationItem issueType = ARCMCollections.extractSingleEntry(issueTypeList.getRawValue(), true);
+//		
+//		if(issueType.getId().equals("actionplan")){
+//			
+//			IListAttribute iroList = currObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS);
+//			List<IAppObj> iroElements = iroList.getElements(this.getUserContext());
+//			
+//			Date currEndDate = currObj.getRawValue(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE);
+//			
+//			for (IAppObj iroObj : iroElements) {
+//				if(iroObj.getObjectType().equals(ObjectType.ISSUE)){
+//					Date iroEndDate = iroObj.getRawValue(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE);
+//					
+//					filterMap.put(this.filterColumn, iroObj.getObjectId());
+//					Map listObjMap = this.getIssuesFromIRO(this.viewName, filterMap);
+//					List <CustomIssueObj> listObj = (List<CustomIssueObj>)listObjMap.get("list");
+//					
+//					CustomIssueObj customIssueObj = listObj.get(0);
+//					if(currEndDate.after(iroEndDate)){
+//						iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE).setRawValue(customIssueObj.getObjDate());
+//						iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_REPLANNED).setRawValue("True");
+//					}
+//					
+//					try {
+//						issueFacade.allocateLock(iroObj.getVersionData().getOVID(), LockType.FORCEWRITE);
+//						issueFacade.save(iroObj, getDefaultTransaction(), false);
+//					} catch (Exception e) {
+//						throw new RuntimeException(e);
+//					} finally{
+//						issueFacade.releaseLock(iroObj.getVersionData().getOVID());
+//					}
+//					
+//				}				
+//			}
+//			
+//			
+//			
+//		}
+		
+	}
+
+	private void affectPADate() {
 		//IUIEnvironment currEnv = this.environment;
 		IAppObj currIssueAppObj = this.formModel.getAppObj();
 		IListAttribute iroList = currIssueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS);
@@ -186,7 +248,6 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 				this.formModel.addControlInfoMessage(NotificationTypeEnum.INFO, e.getMessage() , new String[] { getStringRepresentation(this.formModel.getAppObj()) });
 			}
 		}
-		
 	}
 	
 	//private List<CustomIssueObj> getIssuesFromIRO(String viewName, Map<String,Object> filterMap){

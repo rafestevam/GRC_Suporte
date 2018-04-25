@@ -59,6 +59,7 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 		ArrayList<String> controlList = new ArrayList<>();
 		
 		TreeMap<Long, Long> hashedMapControls = new TreeMap<>();
+		TreeMap<Long, Long> hashedMapIssues = new TreeMap<>();
 		
 		// Cria contexto administrativo - getFullReadAccessUserContext() utiliza o usuário internalsystem.
 		IUserContext adminCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
@@ -85,8 +86,8 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 			// regras abaixo. Desnecessário se o usuário não estiver em nenhum grupo.
 			if (listOVIDFilter.size() > 0) {
 				setQueryFilters(listOVIDFilter);
-				searchDuplicatedControls(controlList, hashedMapControls);
-				filterQuery(query, hashedMapControls);
+				searchDuplicatedControls(controlList, hashedMapControls, hashedMapIssues);
+				filterQuery(query, hashedMapControls, hashedMapIssues);
 			}			
 			
 		} catch (RightException e1) {
@@ -99,7 +100,7 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 
 	}
 
-	private void filterQuery(QueryDefinition query, TreeMap<Long, Long> hashedMapControls) {
+	private void filterQuery(QueryDefinition query, TreeMap<Long, Long> hashedMapControls, TreeMap<Long,Long> hashedMapIssues) {
 		if (hashedMapControls.size() > 0) {
 
 			// Limpando query original
@@ -114,17 +115,30 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 				query.addFilterCriteria(new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTEQUAL,
 						entry.getKey()));
 			}
+			for (Map.Entry<Long, Long> entry : hashedMapIssues.entrySet()) {
+				query.addFilterCriteria(new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTEQUAL,
+						entry.getKey()));
+			}
 
 		}
 	}
 
-	private void searchDuplicatedControls(ArrayList<String> controlList, TreeMap<Long, Long> hashedMapControls) {
+	private void searchDuplicatedControls(ArrayList<String> controlList, TreeMap<Long, Long> hashedMapControls, TreeMap<Long, Long> hashedMapIssues) {
 		IAppObjIterator iteratorTaskItem = 
 				queryTaskItem.getResultIterator();
 		
 		while ( iteratorTaskItem.hasNext() ) {
 			
 			IAppObj currentTaskItem = (IAppObj) iteratorTaskItem.next();
+			
+			if(!currentTaskItem.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).getRawValue().equals("CONTROLEXECUTION"))
+				continue;
+			
+			if(currentTaskItem.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).getRawValue().equals("ISSUE")){
+				long issueID = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_ID);
+				long issueVersionNumber = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_VERSION_NUMBER);
+				hashedMapIssues.put(issueID, issueVersionNumber);
+			}
 			
 			long ceID = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_ID);
 			long ceVersionNumber = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_VERSION_NUMBER);
@@ -183,7 +197,9 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 						QueryRestriction.or(
 							QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.OPEN), 
 							QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.NOT_COMPLETED)),
-						QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "CONTROLEXECUTION"),
+						QueryRestriction.or(
+								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "CONTROLEXECUTION"),
+								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "ISSUE")),
 						QueryRestriction.in(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERGROUPID, listOVIDFilter)));
 
 	}
