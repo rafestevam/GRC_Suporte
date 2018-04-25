@@ -11,6 +11,7 @@
             <buttonReference button.idref="OBJECT_DELETE"/>
             <buttonReference button.idref="OBJECT_REACTIVATE"/>
             <buttonReference button.idref="PDF_REPORT"/>
+<!--             <buttonReference button.idref="CST_AP_CHANGE_ROLE"/> -->
         </formButtons>
         <page id="issue" licensedComponentIds="im">
 <!--         	<javaScriptRef scriptName="custom_GRC74"/> -->
