@@ -122,33 +122,6 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
               user has at object role "issuemanager" )
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "please_select"
 
-<<<<<<< HEAD
-	then
-		set "name"                    editable
-		set "description"             editable
-		set "creator_status"          invisible #GAP - GRC66
-		set "remark"                  editable
-		set "issueRelevantObjects"    editable
-		set "immediateMeasure"        editable
-		set "remediationMeasure"      editable
-		set "plannedenddate"          editable
-		set "owners"                  editable
-		set "reviewers"               editable
-		set "documents"               editable
-		set "action_type"             editable #GAP - GRC66
-		set "process_environment"	  editable #GAP - GRC74
-		#set "root_cause"              editable #GAP - GRC74
-		set "business_unit"           editable #GAP - GRC74
-		
-		#set "name"                  mandatory
-		#set "description"           mandatory
-		#set "root_cause"  			mandatory
-		#set "remediationMeasure"   mandatory
-		#set "action_type"           mandatory
-		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
-=======
       then
             set "name"                    editable
             set "description"             editable
@@ -174,7 +147,6 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
             
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 editable  #GAP - GRC74
->>>>>>> branch 'master' of https://github.com/rafestevam/GRC_Suporte.git
 
             # DMM - EV190711 - set "owner_status"            invisible
             set "owner_remark"            invisible
@@ -223,49 +195,6 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
               user has at object role "issuemanager" )
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
 
-<<<<<<< HEAD
-	then
-		set "name"                    editable
-		set "description"             editable
-		set "creator_status"          invisible #GAP - GRC66
-		set "remark"                  editable
-		#set "issueRelevantObjects"    editable
-		set "priority"                editable
-		set "category"                editable
-		set "immediateMeasure"        editable
-		set "remediationMeasure"      editable
-		set "plannedenddate"          editable
-		set "owners"                  editable
-		set "reviewers"               editable
-		set "documents"               editable
-		set "action_type"             editable #GAP - GRC66
-		set "process_environment"	  editable #GAP - GRC74
-		set "acting_front"            editable #GAP - GRC74
-		#set "root_cause"              editable #GAP - GRC74
-		set "business_unit"           editable #GAP - GRC74
-		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
-				
-		#set "name"                    mandatory
-		#set "description"             mandatory
-		#set "root_cause"              mandatory
-		#set "remediationMeasure"      mandatory
-		#set "acting_front"            mandatory #GAP - GRC74
-		
-		# DMM - EV190711 - set "owner_status"            invisible
-		set "owner_remark"            invisible
-		set "reviewer_status"         invisible
-		set "reviewer_remark"         invisible
-		set "stateTime"               readonly
-		
-		set "custom_is_creator_status"   editable  #GAP - GRC66
-		set "custom_is_owner_status"     invisible #GAP - GRC66
-		set "custom_is_reviewer_status"  invisible #GAP - GRC66
-		set "custom_ap_creator_status"   invisible #GAP - GRC66
-		set "custom_ap_owner_status"     invisible #GAP - GRC66
-		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
-=======
       then
             set "name"                    editable
             set "description"             editable
@@ -307,8 +236,7 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
             set "custom_ap_creator_status"   invisible #GAP - GRC66
             set "custom_ap_owner_status"     invisible #GAP - GRC66
             set "custom_ap_reviewer_status"  invisible #GAP - GRC66
->>>>>>> branch 'master' of https://github.com/rafestevam/GRC_Suporte.git
-
+            
 end
 
 rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
@@ -346,17 +274,10 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 readonly  #GAP - GRC74
 
-<<<<<<< HEAD
-		#set "name"                    mandatory
-		#set "description"             mandatory
-		#set "root_cause"			  mandatory			
-		#set "remediationMeasure"      mandatory
-=======
             set "name"                    mandatory
             set "description"             mandatory
             set "root_cause"                mandatory             
             #set "remediationMeasure"      mandatory
->>>>>>> branch 'master' of https://github.com/rafestevam/GRC_Suporte.git
 
             # DMM - EV190711 - set "owner_status"            invisible
             set "acting_front"            invisible #GAP - GRC74       
@@ -387,48 +308,6 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
               user has at object role "issuemanager" )
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
 
-<<<<<<< HEAD
-	then
-		set "name"                    editable
-		set "description"             editable
-		set "creator_status"          invisible #GAP - GRC66
-		set "remark"                  editable
-		#set "issueRelevantObjects"    editable
-		set "priority"                editable
-		set "category"                editable
-		set "immediateMeasure"        editable
-		set "remediationMeasure"      editable
-		set "plannedenddate"          editable
-		set "owners"                  editable
-		set "reviewers"               editable
-		set "documents"               editable
-		set "action_type"             editable #GAP - GRC66
-		set "process_environment"	  editable #GAP - GRC74
-		#set "root_cause"              editable #GAP - GRC74
-		set "business_unit"           editable #GAP - GRC74
-		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              readonly  #GAP - GRC74
-		
-		#set "name"                    mandatory
-		#set "description"             mandatory
-		#set "root_cause"  			  mandatory
-		#set "remediationMeasure"      mandatory
-		
-		# DMM - EV190711 - set "owner_status"            invisible
-		set "owner_remark"            invisible
-		set "reviewer_status"         invisible
-		set "reviewer_remark"         invisible
-		set "stateTime"               readonly
-		set "acting_front"            invisible #GAP - GRC74		
-		
-		set "custom_is_creator_status"   invisible #GAP - GRC66
-		set "custom_is_owner_status"     invisible #GAP - GRC66
-		set "custom_is_reviewer_status"  invisible #GAP - GRC66
-		set "custom_ap_creator_status"   editable  #GAP - GRC66
-		set "custom_ap_owner_status"     invisible #GAP - GRC66
-		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
-=======
       then
             set "name"                    editable
             set "description"             editable
@@ -469,7 +348,6 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
             set "custom_ap_creator_status"   editable  #GAP - GRC66
             set "custom_ap_owner_status"     invisible #GAP - GRC66
             set "custom_ap_reviewer_status"  invisible #GAP - GRC66
->>>>>>> branch 'master' of https://github.com/rafestevam/GRC_Suporte.git
 
 end
 
@@ -578,33 +456,6 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
             value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_review"
 #           value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "new"
 
-<<<<<<< HEAD
-	then
-		set "name"                    editable
-		set "description"             editable
-		set "remark"                  editable
-		#set "issueRelevantObjects"    editable
-		set "priority"                editable
-		set "category"                editable
-		set "immediateMeasure"        editable
-		set "remediationMeasure"      editable
-		set "plannedenddate"          editable
-		set "owners"                  editable
-		set "reviewers"               editable
-		set "documents"               editable
-		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
-		
-		#set "name"                    mandatory
-		#set "description"             mandatory
-		#set "root_cause"  			mandatory
-		#set "remediationMeasure"      mandatory
-        #set "plannedenddate"          mandatory
-		#set "owners"                  mandatory
-		#set "reviewers"               mandatory
-		
-=======
       then
             set "name"                    editable
             set "description"             editable
@@ -629,8 +480,6 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
         set "plannedenddate"          mandatory
             set "owners"                  mandatory
             set "reviewers"               mandatory
-            
->>>>>>> branch 'master' of https://github.com/rafestevam/GRC_Suporte.git
 
 end
 
@@ -659,18 +508,6 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'new' --> init [I
             set "reviewers"               editable
             set "documents"               editable
 
-<<<<<<< HEAD
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
-		
-		#set "name"                    mandatory
-		#set "description"             mandatory
-		#set "root_cause"  		      mandatory
-		#set "remediationMeasure"      mandatory
-        #set "plannedenddate"          mandatory
-		#set "owners"                  mandatory
-		#set "reviewers"               mandatory
-=======
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 editable  #GAP - GRC74
             
@@ -681,7 +518,6 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'new' --> init [I
         set "plannedenddate"          mandatory
             set "owners"                  mandatory
             set "reviewers"               mandatory
->>>>>>> branch 'master' of https://github.com/rafestevam/GRC_Suporte.git
 
 end
 
