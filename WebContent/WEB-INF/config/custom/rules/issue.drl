@@ -1568,7 +1568,7 @@ rule "show_hide_action_plan_fields_issue_manager[I,V]"
 	no-loop true
 	
 	when
-		user has in_general role "systemadmin"
+		user is systemadmin
 		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
 	then
 	
