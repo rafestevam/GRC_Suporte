@@ -139,11 +139,11 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		#set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
 		
-		set "name"                  mandatory
-		set "description"           mandatory
-		set "root_cause"  			mandatory
+		# DMM - EV190711 - set "name"                  mandatory
+		# DMM - EV190711 - set "description"           mandatory
+		# DMM - EV190711 - set "root_cause"  			mandatory
 		#set "remediationMeasure"   mandatory
-		set "action_type"           mandatory
+		# DMM - EV190711 - set "action_type"           mandatory
 		
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              editable  #GAP - GRC74
@@ -178,7 +178,7 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "custom_ap_owner_status"     invisible #GAP - GRC66
 		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
 		
-		set "status_obj"             visible
+		#set "status_obj"             visible
 
 end
 
@@ -218,11 +218,11 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 editable  #GAP - GRC74
                         
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"              mandatory
+            # DMM - EV190711 - set "name"                    mandatory
+            # DMM - EV190711 - set "description"             mandatory
+            # DMM - EV190711 - set "root_cause"              mandatory
             #set "remediationMeasure"      mandatory
-            set "acting_front"            mandatory #GAP - GRC74
+            # DMM - EV190711 - set "acting_front"            mandatory #GAP - GRC74
             
             # DMM - EV190711 - set "owner_status"            invisible
             set "owner_remark"            invisible
@@ -230,12 +230,12 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
             set "reviewer_remark"         invisible
             set "stateTime"               readonly
             
-            set "custom_is_creator_status"   editable  #GAP - GRC66
-            set "custom_is_owner_status"     invisible #GAP - GRC66
-            set "custom_is_reviewer_status"  invisible #GAP - GRC66
-            set "custom_ap_creator_status"   invisible #GAP - GRC66
-            set "custom_ap_owner_status"     invisible #GAP - GRC66
-            set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_is_creator_status"   editable  #GAP - GRC66
+            # DMM - EV190711 -set "custom_is_owner_status"     invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_is_reviewer_status"  invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_ap_creator_status"   invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_ap_owner_status"     invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_ap_reviewer_status"  invisible #GAP - GRC66
             
 end
 
@@ -274,9 +274,9 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "replanned"               editable  #GAP - GRC74
 		set "recurrent"	              readonly  #GAP - GRC74
 
-		set "name"                    mandatory
-		set "description"             mandatory
-		set "root_cause"			  mandatory			
+		# DMM - EV190711 -set "name"                    mandatory
+		# DMM - EV190711 -set "description"             mandatory
+		# DMM - EV190711 -set "root_cause"			  mandatory			
 		#set "remediationMeasure"      mandatory
 
 		# DMM - EV190711 - set "owner_status"            invisible
@@ -286,12 +286,12 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "reviewer_remark"         invisible
 		set "stateTime"               readonly
 		
-		set "custom_is_creator_status"   invisible #GAP - GRC66
-		set "custom_is_owner_status"     invisible #GAP - GRC66
-		set "custom_is_reviewer_status"  invisible #GAP - GRC66
-		set "custom_ap_creator_status"   editable  #GAP - GRC66
-		set "custom_ap_owner_status"     invisible #GAP - GRC66
-		set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+		# DMM - EV190711 -set "custom_is_creator_status"   invisible #GAP - GRC66
+		# DMM - EV190711 -set "custom_is_owner_status"     invisible #GAP - GRC66
+		# DMM - EV190711 -set "custom_is_reviewer_status"  invisible #GAP - GRC66
+		# DMM - EV190711 -set "custom_ap_creator_status"   editable  #GAP - GRC66
+		# DMM - EV190711 -set "custom_ap_owner_status"     invisible #GAP - GRC66
+		# DMM - EV190711 -set "custom_ap_reviewer_status"  invisible #GAP - GRC66
 
 end
 
@@ -330,9 +330,9 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 readonly  #GAP - GRC74
             
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                      mandatory
+            # DMM - EV190711 -set "name"                    mandatory
+            # DMM - EV190711 -set "description"             mandatory
+            # DMM - EV190711 -set "root_cause"                      mandatory
             #set "remediationMeasure"      mandatory
             
             # DMM - EV190711 - set "owner_status"            invisible
@@ -342,12 +342,12 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
             set "stateTime"               readonly
             set "acting_front"            invisible #GAP - GRC74       
             
-            set "custom_is_creator_status"   invisible #GAP - GRC66
-            set "custom_is_owner_status"     invisible #GAP - GRC66
-            set "custom_is_reviewer_status"  invisible #GAP - GRC66
-            set "custom_ap_creator_status"   editable  #GAP - GRC66
-            set "custom_ap_owner_status"     invisible #GAP - GRC66
-            set "custom_ap_reviewer_status"  invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_is_creator_status"   invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_is_owner_status"     invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_is_reviewer_status"  invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_ap_creator_status"   editable  #GAP - GRC66
+            # DMM - EV190711 -set "custom_ap_owner_status"     invisible #GAP - GRC66
+            # DMM - EV190711 -set "custom_ap_reviewer_status"  invisible #GAP - GRC66
 
 end
 
@@ -473,13 +473,13 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 editable  #GAP - GRC74
             
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                    mandatory
+            # DMM - EV190711 - set "name"                    mandatory
+            # DMM - EV190711 - set "description"             mandatory
+            # DMM - EV190711 - set "root_cause"                    mandatory
             #set "remediationMeasure"      mandatory
         set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+            # DMM - EV190711 - set "owners"                  mandatory
+            # DMM - EV190711 - set "reviewers"               mandatory
 
 end
 
@@ -511,13 +511,13 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'new' --> init [I
             set "replanned"               editable  #GAP - GRC74
             set "recurrent"                 editable  #GAP - GRC74
             
-            set "name"                    mandatory
-            set "description"             mandatory
-            set "root_cause"                    mandatory
+            # DMM - EV190711 - set "name"                    mandatory
+            # DMM - EV190711 - set "description"             mandatory
+            # DMM - EV190711 - set "root_cause"                    mandatory
             #set "remediationMeasure"      mandatory
-        set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+        	# DMM - EV190711 - set "plannedenddate"          mandatory
+            # DMM - EV190711 - set "owners"                  mandatory
+            # DMM - EV190711 - set "reviewers"               mandatory
 
 end
 
@@ -1085,21 +1085,103 @@ end
 # Fim REO 30.11.2017 - Evento EV121389
 
 
+################
+# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ gestor de assunto
+################
+rule "show_hide_action_plan_fields_issue_manager[I,V]"
+
+	salience 64
+	no-loop true
+	
+	when
+		user is systemadmin
+		(user is_not assigned in list "owners" AND
+		user is_not assigned in list "reviewers")
+		object is_not opened by its creator
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
+	
+		set "custom_ap_creator_status"	invisible	# AP
+		set "custom_ap_owner_status"	invisible	# AP
+		set "custom_ap_reviewer_status"	invisible	# AP
+
+
+		set "action_type"	 			editable	# AP/I
+		set "obj_id"					readonly	# AP/I
+		set "name"						editable	# AP/I
+		set "issue_date"				readonly	# AP/I
+		set "issueRelevantObjects"		readonly	# AP/I
+		set "description"				editable	# AP/I
+		set "plannedenddate"			editable	# AP/I
+		set "replanneddate"				editable	# AP/I
+		set "replanned"					readonly	# AP/I
+		set "cst_rescheduling" 		 	readonly	# AP
+		set "stateTime"					readonly	# AP/I
+		set "creator"					readonly	# AP/I
+		set "owners"					editable	# AP/I
+		set "reviewers"					editable	# AP/I
+		set "status_obj"				readonly	# AP/I
+		set "owner"						readonly	# AP/I
+		set "immediateMeasure"			editable	# AP/I
+		set "documents"					editable	# AP/I
+
+end
 
 
 ################
-# DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
+# DMM - 2018-04-12 - EV190711 -  Reorganização do Apontamento p/ gestor de assunto
 ################
-rule "file_upload_enable[I,V]"
+rule "show_hide_issues_fields_issue_manager[I,V]"
 
-      salience 63
-      no-loop true
-      
-      when
-            is in workflow state "openForExecution" OR
-            is in workflow state "openForReview"           
-      then
-            set "documents" editable
+	salience 63
+	no-loop true
+	
+	when
+		user has at object role "issuemanager"
+		(user is_not assigned in list "owners" AND
+		user is_not assigned in list "reviewers")
+		object is_not opened by its creator
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
+
+		set "custom_is_creator_status"	invisible	# I
+		set "custom_is_owner_status"	invisible	# I
+		set "custom_is_reviewer_status"	invisible	# I
+
+
+		set "action_type" 				editable	# AP/I
+		set "issuesource"  				editable	# I
+		set "obj_id"					readonly	# AP/I
+		set "name"						editable	# AP/I
+		set "issue_date"				readonly	# AP/I
+		set "issueRelevantObjects"		readonly	# AP/I
+		set "description"				editable	# AP/I
+		set "root_cause"  				editable	# I
+		set "remediationMeasure"  		editable	# I
+		set "plannedenddate"			readonly	# AP/I
+		set "replanneddate"				readonly	# AP/I
+		set "fup_date"					readonly	# I
+		set "replanned"					readonly	# AP/I
+		set "stateTime"					readonly	# AP/I
+		set "recurrent" 	 			editable	# I
+		set "rsk_name"					readonly	# I
+		set "ra_result"  				readonly	# I
+		set "ra_residualfinal"  		readonly	# I
+		set "riskowner"  				readonly	# I
+		set "creator"					readonly	# AP/I
+		set "owners"					editable	# AP/I
+		set "reviewers"					editable	# AP/I
+		set "status_obj"				readonly	# AP/I
+		set "owner"						readonly	# AP/I
+		set "immediateMeasure"			editable	# AP/I
+		set "documents"					editable	# AP/I
+		set "acting_front"  			editable	# I
+		set "process_environment" 		editable	# I
+		set "business_unit"				editable	# I
+		set "cst_appsystem"  			editable	# I
+		set "custom_servicetype"  		editable	# I
+		set "auditproject"  			editable	# I
+		set "custom_auditauthor"  		editable	# I
 
 end
 
@@ -1118,11 +1200,12 @@ rule "hide_issue_fields[I,V]"
 
       set "cst_rescheduling"             invisible   # AP
       set "custom_ap_creator_status"     invisible   # AP
-      set "custom_ap_owner_status"  invisible   # AP
+      set "custom_ap_owner_status"  	 invisible   # AP
       set "custom_ap_reviewer_status"    invisible   # AP
       
       
 end
+
 
 ################
 # DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação - ocultar campos
@@ -1170,16 +1253,16 @@ rule "show_hide_action_plan_fields_creator[I,V]"
 	when
 		( is in workflow state "PREPARED" OR
 		  is in workflow state "apOpenForCreation" )
-		#object is opened by its creator
+		object is opened by its creator
 		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
 	then
 
-		set "replanneddate"			invisible	# AP/I
-		set "replanned"				invisible	# AP/I
-		set "cst_rescheduling"  	invisible	# AP	
+		set "replanneddate"				invisible	# AP/I
+		set "replanned"					invisible	# AP/I
+		set "cst_rescheduling"  		invisible	# AP	
 		set "custom_ap_owner_status"	invisible	# AP
 		set "custom_ap_reviewer_status"	invisible	# AP
-		set "status_obj"			invisible	# AP/I
+		set "status_obj"				invisible	# AP/I
 
 
 		set "action_type" 				editable	# AP/I
@@ -1189,47 +1272,25 @@ rule "show_hide_action_plan_fields_creator[I,V]"
 		set "owners"					editable	# AP/I
 		set "reviewers"					editable	# AP/I
 		set "custom_ap_creator_status"	editable	# AP
-		#set "status_obj"				editable	# AP/I
 		set "immediateMeasure"			editable	# AP/I
 		set "documents"					editable	# AP/I
 
-		set "action_type" 			mandatory	# AP/I
-		#	set "issuesource" 			invisible
-		set "obj_id"				readonly	# AP/I
-		#set "name"					invisible
-		set "issue_date"			readonly	# AP/I
-		set "issueRelevantObjects"	readonly	# AP/I
-		set "description"			mandatory	# AP/I
-		#	set "root_cause"  			invisible
-		#	set "remediationMeasure"  	invisible
-		set "plannedenddate"		mandatory	# AP/I
-		#	set "replanneddate"			invisible
-		#	set "fup_date"				invisible
-		#	set "replanned"				invisible
-		#	set "cst_rescheduling"  	invisible
-		set "stateTime"				readonly	# AP/I
-		#	set "recurrent"  			invisible
-		#	set "rsk_name"				invisible
-		#	set "ra_result"  			invisible
-		#	set "ra_residualfinal"  	invisible
-		#	set "riskowner"  			invisible
-		set "creator"				readonly	# AP/I
-		set "owners"				mandatory	# AP/I
-		set "reviewers"				mandatory	# AP/I
+
+		set "action_type" 				mandatory	# AP/I
+		set "obj_id"					readonly	# AP/I
+		set "issue_date"				readonly	# AP/I
+		set "issueRelevantObjects"		readonly	# AP/I
+		set "description"				mandatory	# AP/I
+		set "plannedenddate"			mandatory	# AP/I
+		set "stateTime"					readonly	# AP/I
+		set "creator"					readonly	# AP/I
+		set "owners"					mandatory	# AP/I
+		set "reviewers"					mandatory	# AP/I
 		set "custom_ap_creator_status"	mandatory	# AP		
-		#set "status_obj"			mandatory	# AP/I
-		set "owner"					readonly	# AP/I
-		#set "immediateMeasure"		invisible
-		#set "documents"			invisible
-		#	set "acting_front"  		invisible
-		#	set "process_environment" 	invisible
-		#	set "business_unit"			invisible
-		#	set "cst_appsystem"  		invisible
-		#	set "custom_servicetype"  	invisible
-		#	set "auditproject"  		invisible
-		#	set "custom_auditauthor"  	invisible
+		set "owner"						readonly	# AP/I
 
 end
+
 
 ################
 # DMM - 2018-04-12 - EV190711 -  Reorganização do Apontamento p/ criador na criação
@@ -1246,74 +1307,56 @@ rule "show_hide_issues_fields_creator[I,V]"
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
       then
 
-            #set "replanneddate"                 invisible   # AP/I
-            set "recurrent"               invisible   # AP/I
-            set "custom_is_creator_status"  editable   # I
-            set "custom_is_creator_status"  mandatory   # I
-            set "custom_is_owner_status"  invisible   # I
+            set "replanneddate"                	invisible   # AP/I
+            set "recurrent"               		invisible   # AP/I
+            set "custom_is_owner_status"  		invisible   # I
             set "custom_is_reviewer_status"     invisible   # I
-            set "status_obj"              invisible   # AP/I
+            set "status_obj"              		invisible   # AP/I
 
             set "action_type"                   editable    # AP/I
             set "issuesource"                   editable    # I
             set "name"                          editable    # AP/I
-            set "description"             editable    # AP/I
+            set "description"             		editable    # AP/I
             set "root_cause"                    editable    # I
-            set "remediationMeasure"      editable    # I
+            set "remediationMeasure"      		editable    # I
             set "owners"                        editable    # AP/I
             set "reviewers"                     editable    # AP/I
             set "custom_is_creator_status"      editable    # I         
-            #set "status_obj"             editable    # AP/I
-            set "immediateMeasure"        editable    # AP/I
+            set "immediateMeasure"        		editable    # AP/I
             set "documents"                     editable    # AP/I
-            set "acting_front"            editable    # I
-            set "process_environment"     editable    # I
+            set "acting_front"            		editable    # I
+            set "process_environment"     		editable    # I
             set "business_unit"                 editable    # I
-            set "cst_appsystem"           editable    # I
-            set "custom_servicetype"      editable    # I
-            set "auditproject"            editable    # I
-            set "custom_auditauthor"      editable    # I
+            set "cst_appsystem"           		editable    # I
+            set "custom_servicetype"      		editable    # I
+            set "auditproject"            		editable    # I
+            set "custom_auditauthor"      		editable    # I
 
 
             set "action_type"                   mandatory   # AP/I
             set "issuesource"                   mandatory   # I
             set "obj_id"                        readonly    # AP/I
             set "name"                          mandatory   # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             mandatory   # AP/I
+            set "issue_date"              		readonly    # AP/I
+            set "issueRelevantObjects"    		readonly    # AP/I
+            set "description"             		mandatory   # AP/I
             set "root_cause"                    mandatory   # I
-            #set "remediationMeasure"     invisible         
-            set "plannedenddate"          editable    # AP/I
-            set "plannedenddate"          mandatory    # AP/I
-            #set "replanneddate"          invisible         
+            set "plannedenddate"          		mandatory    # AP/I
             set "fup_date"                      readonly    # I
             set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible
             set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible         
             set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
+            set "ra_result"               		readonly    # I
+            set "ra_residualfinal"        		readonly    # I
+            set "riskowner"               		readonly    # I
             set "creator"                       readonly    # AP/I
             set "owners"                        mandatory   # AP/I
             set "reviewers"                     mandatory   # AP/I
             set "custom_is_creator_status"      mandatory   # I         
-            #set "status_obj"             mandatory   # AP/I
             set "owner"                         readonly    # AP/I
-            #set "immediateMeasure"       invisible   # AP/I
-            #set "documents"              invisible   # AP/I
-            set "acting_front"            mandatory   # I
-            #set "process_environment"    invisible   # I
-            #set "business_unit"          invisible   # I
-            #set "cst_appsystem"          invisible   # I
-            #set "custom_servicetype"     invisible   # I
-            #set "auditproject"           invisible   # I
-            #set "custom_auditauthor"     invisible   # I
+            set "acting_front"            		mandatory   # I
 
 end
-
 
 
 ################
@@ -1332,47 +1375,29 @@ rule "show_hide_action_plan_fields_owner_in_exec[I,V]"
 
             set "custom_ap_creator_status"      invisible   # AP
             set "custom_ap_reviewer_status"     invisible   # AP
-            set "status_obj"              invisible   # AP/I
+            set "status_obj"              		invisible   # AP/I
 
             set "action_type"                   readonly    # AP/I
-            #     set "issuesource"                  invisible   # I
             set "obj_id"                        readonly    # AP/I
             set "name"                          editable    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             editable    # AP/I
-            #     set "root_cause"                   invisible   # I
-            #     set "remediationMeasure"      invisible   # I
-            set "plannedenddate"          readonly    # AP/I
+            set "issue_date"              		readonly    # AP/I
+            set "issueRelevantObjects"    		readonly    # AP/I
+            set "description"	    	        editable    # AP/I
+            set "plannedenddate"	    	    readonly    # AP/I
             set "replanneddate"                 editable    # AP/I
-            #     set "fup_date"                     invisible   # I
             set "replanned"                     readonly    # AP/I
-            set "cst_rescheduling"        readonly    # AP
+            set "cst_rescheduling"        		readonly    # AP
             set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
-            #     set "rsk_name"                     invisible   # I
-            #     set "ra_result"               invisible   # I
-            #     set "ra_residualfinal"        invisible   # I
-            #     set "riskowner"               invisible   # I
             set "creator"                       readonly    # AP/I
             set "owners"                        readonly    # AP/I
             set "reviewers"                     readonly    # AP/I
-            set "custom_ap_owner_status"  editable    # AP
-            set "status_obj"              editable    # AP/I
+            set "custom_ap_owner_status"  		editable    # AP
             set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
+            set "immediateMeasure"        		editable    # AP/I
             set "documents"                     editable    # AP/I
-            #     set "acting_front"            invisible   # I
-            #     set "process_environment"     invisible   # I
-            #     set "business_unit"                invisible   # I
-            #     set "cst_appsystem"           invisible   # I
-            #     set "custom_servicetype"      invisible   # I
-            #     set "auditproject"            invisible   # I
-            #     set "custom_auditauthor"      invisible   # I
 
 
-            set "custom_ap_owner_status"  mandatory   # AP
-            #set "status_obj"             mandatory   # AP/I
+            set "custom_ap_owner_status"  		mandatory   # AP
 
 end
 
@@ -1391,49 +1416,45 @@ rule "show_hide_issues_fields_owner_in_exec[I,V]"
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
       then
 
-            set "recurrent"               invisible   # I
+            set "recurrent"               		invisible   # I
             set "custom_is_creator_status"      invisible   # I
             set "custom_is_reviewer_status"     invisible   # I
-            set "status_obj"              invisible   # AP/I
+            set "status_obj"              		invisible   # AP/I
 
             set "action_type"                   readonly    # AP/I
             set "issuesource"                   readonly    # I
             set "obj_id"                        readonly    # AP/I
             set "name"                          editable    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             editable    # AP/I
+            set "issue_date"              		readonly    # AP/I
+            set "issueRelevantObjects"    		readonly    # AP/I
+            set "description"             		editable    # AP/I
             set "root_cause"                    editable    # I
-            set "remediationMeasure"      editable    # I
-            set "plannedenddate"          readonly    # AP/I
+            set "remediationMeasure"      		editable    # I
+            set "plannedenddate"          		readonly    # AP/I
             set "replanneddate"                 readonly    # AP/I
             set "fup_date"                      readonly    # I
             set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible   # AP
             set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
             set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
+            set "ra_result"               		readonly    # I
+            set "ra_residualfinal"        		readonly    # I
+            set "riskowner"               		readonly    # I
             set "creator"                       readonly    # AP/I
             set "owners"                        readonly    # AP/I
             set "reviewers"                     readonly    # AP/I
-            set "custom_is_owner_status"  editable    # I         
-            #set "status_obj"             editable    # AP/I
+            set "custom_is_owner_status"  		editable    # I         
             set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
+            set "immediateMeasure"        		editable    # AP/I
             set "documents"                     editable    # AP/I
-            set "acting_front"            readonly    # I
-            set "process_environment"     readonly    # I
+            set "acting_front"            		readonly    # I
+            set "process_environment"     		readonly    # I
             set "business_unit"                 readonly    # I
-            set "cst_appsystem"           readonly    # I
-            set "custom_servicetype"      readonly    # I
-            set "auditproject"            readonly    # I
-            set "custom_auditauthor"      readonly    # I
+            set "cst_appsystem"           		readonly    # I
+            set "custom_servicetype"      		readonly    # I
+            set "auditproject"            		readonly    # I
+            set "custom_auditauthor"      		readonly    # I
 
-            set "custom_is_owner_status"  mandatory   # I
-            #set "status_obj"             mandatory   # AP/I
+            set "custom_is_owner_status"  		mandatory   # I
 
 end
 
@@ -1453,47 +1474,30 @@ rule "show_hide_action_plan_fields_reviewer_review[I,V]"
       then
 
             set "custom_ap_creator_status"      invisible   # AP
-            set "custom_ap_owner_status"  invisible   # AP
-            set "status_obj"              invisible   # AP/I
+            set "custom_ap_owner_status"  		invisible   # AP
+            set "status_obj"              		invisible   # AP/I
 
             set "action_type"                   readonly    # AP/I
-            #     set "issuesource"                  invisible   # I
             set "obj_id"                        readonly    # AP/I
             set "name"                          readonly    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             readonly    # AP/I
-            #     set "root_cause"                   invisible   # I
-            #     set "remediationMeasure"      invisible   # I
-            set "plannedenddate"          readonly    # AP/I
+            set "issue_date"              		readonly    # AP/I
+            set "issueRelevantObjects"    		readonly    # AP/I
+            set "description"             		readonly    # AP/I
+            set "plannedenddate"          		readonly    # AP/I
             set "replanneddate"                 readonly    # AP/I
-            #     set "fup_date"                     invisible   # I
             set "replanned"                     readonly    # AP/I
-            set "cst_rescheduling"        readonly    # AP
+            set "cst_rescheduling"        		readonly    # AP
             set "stateTime"                     readonly    # AP/I
-            #     set "recurrent"               invisible   # I
-            #     set "rsk_name"                     invisible   # I
-            #     set "ra_result"               invisible   # I
-            #     set "ra_residualfinal"        invisible   # I
-            #     set "riskowner"               invisible   # I
             set "creator"                       readonly    # AP/I
             set "owners"                        readonly    # AP/I
             set "reviewers"                     readonly    # AP/I
             set "custom_ap_reviewer_status"     editable    # AP
-            #set "status_obj"             editable    # AP/I
             set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
+            set "immediateMeasure"        		editable    # AP/I
             set "documents"                     editable    # AP/I
-            #     set "acting_front"            invisible   # I
-            #     set "process_environment"     invisible   # I
-            #     set "business_unit"                invisible   # I
-            #     set "cst_appsystem"           invisible   # I
-            #     set "custom_servicetype"      invisible   # I
-            #     set "auditproject"            invisible   # I
-            #     set "custom_auditauthor"      invisible   # I
+
 
             set "custom_ap_reviewer_status"     mandatory   # AP
-            #set "status_obj"             mandatory   # AP/I
 
 end
 
@@ -1513,194 +1517,48 @@ rule "show_hide_issues_fields_reviewer_in_review[I,V]"
       then
 
             set "custom_is_creator_status"      invisible   # I
-            set "custom_is_owner_status"  invisible   # I
-            set "status_obj"              invisible   # AP/I
+            set "custom_is_owner_status"  		invisible   # I
+            set "status_obj"              		invisible   # AP/I
 
 
             set "action_type"                   readonly    # AP/I
             set "issuesource"                   readonly    # I
             set "obj_id"                        readonly    # AP/I
             set "name"                          readonly    # AP/I
-            set "issue_date"              readonly    # AP/I
-            set "issueRelevantObjects"    readonly    # AP/I
-            set "description"             readonly    # AP/I
+            set "issue_date"              		readonly    # AP/I
+            set "issueRelevantObjects"    		readonly    # AP/I
+            set "description"             		readonly    # AP/I
             set "root_cause"                    readonly    # I
-            set "remediationMeasure"      editable    # I
-            set "plannedenddate"          readonly    # AP/I
+            set "remediationMeasure"      		editable    # I
+            set "plannedenddate"          		readonly    # AP/I
             set "replanneddate"                 readonly    # AP/I
             set "fup_date"                      readonly    # I
             set "replanned"                     readonly    # AP/I
-            #     set "cst_rescheduling"        invisible   # AP
             set "stateTime"                     readonly    # AP/I
-            set "recurrent"               editable    # I
+            set "recurrent"               		editable    # I
             set "rsk_name"                      readonly    # I
-            set "ra_result"               readonly    # I
-            set "ra_residualfinal"        readonly    # I
-            set "riskowner"               readonly    # I
+            set "ra_result"               		readonly    # I
+            set "ra_residualfinal"        		readonly    # I
+            set "riskowner"               		readonly    # I
             set "creator"                       readonly    # AP/I
             set "owners"                        readonly    # AP/I
             set "reviewers"                     readonly    # AP/I
             set "custom_is_reviewer_status"     editable    # I
-            #set "status_obj"             editable    # AP/I
             set "owner"                         readonly    # AP/I
-            set "immediateMeasure"        editable    # AP/I
+            set "immediateMeasure"        		editable    # AP/I
             set "documents"                     editable    # AP/I
-            set "acting_front"            readonly    # I
-            set "process_environment"     readonly    # I
+            set "acting_front"            		readonly    # I
+            set "process_environment"     		readonly    # I
             set "business_unit"                 readonly    # I
-            set "cst_appsystem"           readonly    # I
-            set "custom_servicetype"      readonly    # I
-            set "auditproject"            readonly    # I
-            set "custom_auditauthor"      readonly    # I
+            set "cst_appsystem"           		readonly    # I
+            set "custom_servicetype"      		readonly    # I
+            set "auditproject"            		readonly    # I
+            set "custom_auditauthor"      		readonly    # I
+
 
             set "custom_is_reviewer_status"     mandatory   # I
-            #set "status_obj"             mandatory   # AP/I
 
 end
 
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ gestor de assunto
-################
-rule "show_hide_action_plan_fields_issue_manager[I,V]"
-
-	salience 54
-	no-loop true
-	
-	when
-		user is systemadmin
-		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
-	then
-	
-		set "custom_ap_creator_status"	invisible	# AP
-		set "custom_ap_owner_status"	invisible	# AP
-		set "custom_ap_reviewer_status"	invisible	# AP
-
-
-		set "action_type" 			editable	# AP/I
-		#	set "issuesource"  			invisible	# I
-		set "obj_id"				readonly	# AP/I
-		set "name"					editable	# AP/I
-		set "issue_date"			readonly	# AP/I
-		set "issueRelevantObjects"	editable	# AP/I
-		set "description"			editable	# AP/I
-		#	set "root_cause"  			invisible	# I
-		#	set "remediationMeasure"  	invisible	# I
-		set "plannedenddate"		editable	# AP/I
-		set "replanneddate"			editable	# AP/I
-		#	set "fup_date"				invisible	# I
-		set "replanned"				readonly	# AP/I
-		set "cst_rescheduling"  	readonly	# AP
-		set "stateTime"				readonly	# AP/I
-		#	set "recurrent"  			invisible	# I
-		#	set "rsk_name"				invisible	# I
-		#	set "ra_result"  			invisible	# I
-		#	set "ra_residualfinal"  	invisible	# I
-		#	set "riskowner"  			invisible	# I
-		set "creator"				readonly	# AP/I
-		set "owners"				editable	# AP/I
-		set "reviewers"				editable	# AP/I
-		set "status_obj"			readonly	# AP/I
-		set "owner"					readonly	# AP/I
-		set "immediateMeasure"		editable	# AP/I
-		set "documents"				editable	# AP/I
-		#	set "acting_front"  		invisible	# I
-		#	set "process_environment" 	invisible	# I
-		#	set "business_unit"			invisible	# I
-		#	set "cst_appsystem"  		invisible	# I
-		#	set "custom_servicetype"  	invisible	# I
-		#	set "auditproject"  		invisible	# I
-		#	set "custom_auditauthor"  	invisible	# I
-
-end
-
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Apontamento p/ gestor de assunto
-################
-rule "show_hide_issues_fields_issue_manager[I,V]"
-
-	salience 53
-	no-loop true
-	
-	when
-		user has at object role "issuemanager"
-		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
-	then
-
-		set "custom_is_creator_status"	invisible	# I
-		set "custom_is_owner_status"	invisible	# I
-		set "custom_is_reviewer_status"	invisible	# I
-
-
-		set "action_type" 			editable	# AP/I
-		set "issuesource"  			editable	# I
-		set "obj_id"				readonly	# AP/I
-		set "name"					editable	# AP/I
-		set "issue_date"			readonly	# AP/I
-		set "issueRelevantObjects"	readonly	# AP/I
-		set "description"			editable	# AP/I
-		set "root_cause"  			editable	# I
-		set "remediationMeasure"  	editable	# I
-		set "plannedenddate"		readonly	# AP/I
-		set "replanneddate"			readonly	# AP/I
-		set "fup_date"				readonly	# I
-		set "replanned"				readonly	# AP/I
-		#	set "cst_rescheduling"  	invisible	# AP
-		set "stateTime"				readonly	# AP/I
-		set "recurrent"  			editable	# I
-		set "rsk_name"				readonly	# I
-		set "ra_result"  			readonly	# I
-		set "ra_residualfinal"  	readonly	# I
-		set "riskowner"  			readonly	# I
-		set "creator"				readonly	# AP/I
-		set "owners"				editable	# AP/I
-		set "reviewers"				editable	# AP/I
-		set "status_obj"			readonly	# AP/I
-		set "owner"					readonly	# AP/I
-		set "immediateMeasure"		editable	# AP/I
-		set "documents"				editable	# AP/I
-		set "acting_front"  		editable	# I
-		set "process_environment" 	editable	# I
-		set "business_unit"			editable	# I
-		set "cst_appsystem"  		editable	# I
-		set "custom_servicetype"  	editable	# I
-		set "auditproject"  		editable	# I
-		set "custom_auditauthor"  	editable	# I
-
-end
-
-
-################
-# DMM - 2018-04-12 - EV190711 -  Reorganização do Plano de Ação p/ gestor de assunto
-################
-rule "temp_rule_for_tickets[I,V]"
-
-	salience 52
-	no-loop true
-	
-	when
-		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
-	then
-
-		set "action_type" 			editable	# AP/I
-		set "name"					editable	# AP/I
-		set "issue_date"			readonly	# AP/I
-		set "issueRelevantObjects"	editable	# AP/I
-		set "description"			editable	# AP/I
-		set "plannedenddate"		editable	# AP/I
-		set "replanneddate"			editable	# AP/I
-		set "replanned"				readonly	# AP/I
-		set "cst_rescheduling"  	readonly	# AP
-		set "stateTime"				readonly	# AP/I
-		set "creator"				readonly	# AP/I
-		set "owners"				editable	# AP/I
-		set "reviewers"				editable	# AP/I
-		set "status_obj"			readonly	# AP/I
-		set "owner"					readonly	# AP/I
-		set "immediateMeasure"		editable	# AP/I
-		set "documents"				editable	# AP/I
-
-end
 
 
