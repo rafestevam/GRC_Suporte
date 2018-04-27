@@ -31,6 +31,13 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 
 public class IssueHelperCustom extends CollectiveHelper {
 	
+	
+	public static boolean isUserSysAdmin() {
+		REEnvironment env = REEnvironment.getInstance();
+		return env.getUserContext().getUserRights().isSysadmin();
+		
+	}
+	
 	public static void setRiskAndProcessClassification(){
 		
 		REEnvironment env = REEnvironment.getInstance();
