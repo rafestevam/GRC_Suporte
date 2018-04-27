@@ -452,6 +452,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
+			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinal);
 			
 			//Inicio Alteração - REO 03.04.2018 - EV167240
 //			String riskClassFinalVal = riskClassFinal.equals("") ? riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).getRawValue() : riskClassFinal;
