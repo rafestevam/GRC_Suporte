@@ -63,7 +63,7 @@ public class CustomUpdateIssueStatus implements ICommand {
 
 	@Override
 	public CommandResult execute(CommandContext cc) throws BLException {
-		deallocateLocalSources();
+		//deallocateLocalSources();
 		
 		// TODO Auto-generated method stub
 //		return null;
