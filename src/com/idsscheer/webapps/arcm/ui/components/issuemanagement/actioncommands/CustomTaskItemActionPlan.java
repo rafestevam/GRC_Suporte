@@ -13,6 +13,7 @@ import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
@@ -147,8 +148,11 @@ public class CustomTaskItemActionPlan {
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID));
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_CLIENTSIGN).setRawValue("CIP");
-
-			taskItemObj = this.modifyWorkflowTaskItem();
+			
+			IEnumAttribute actionTypeAttr = this.actionPlanObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+			IEnumerationItem actionType = ARCMCollections.extractSingleEntry(actionTypeAttr.getRawValue(), true);
+			if(actionType.getId().equals("actionplan"))
+				taskItemObj = this.modifyWorkflowTaskItem();
 
 		} catch (RightException e) {
 			// TODO Auto-generated catch block
