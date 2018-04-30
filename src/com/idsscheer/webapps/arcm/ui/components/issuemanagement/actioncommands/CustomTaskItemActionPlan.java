@@ -200,6 +200,9 @@ public class CustomTaskItemActionPlan {
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_PLANNEDSTARTDATE)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDSTARTDATE));
+			
+			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_PLANNEDENDDATE)
+					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDENDDATE));
 
 //			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue("ISSUE");
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue(objectType);
