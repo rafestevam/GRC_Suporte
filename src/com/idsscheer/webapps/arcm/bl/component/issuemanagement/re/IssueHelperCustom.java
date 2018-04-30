@@ -42,14 +42,16 @@ public class IssueHelperCustom extends CollectiveHelper {
 	
 	public static void setIssueDelay(){
 		IAppObj issueObj = REEnvironment.getInstance().getRuleAppObj().getAppObj();
-		Date issueDate = issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
-		Calendar calendar = Calendar.getInstance();
-		
-		if(issueDate.before(calendar.getTime()))
-			CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "overdue");
-		
-		if(!issueDate.before(calendar.getTime()))
-			CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "on_time");
+		if(!issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).isEmpty()){
+			Date issueDate = issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+			Calendar calendar = Calendar.getInstance();
+			
+			if(issueDate.before(calendar.getTime()))
+				CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "overdue");
+			
+			if(!issueDate.before(calendar.getTime()))
+				CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "on_time");
+		}
 		
 	}
 	

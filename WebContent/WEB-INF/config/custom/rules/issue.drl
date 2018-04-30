@@ -1488,10 +1488,10 @@ rule "set_issue_delay[I,V]"
 	no-loop true
 	
 	when
-	
+		( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue" OR
+		  value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan" ) 
 	then
 			set issue delay
-
 end
 
 
