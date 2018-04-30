@@ -67,6 +67,7 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		//IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
 		Map<String, Object> filterMap = new HashMap<>();
 		IAppObj currIssueAppObj = this.formModel.getAppObj();
+		//Date apDate = currIssueAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
 		//IOVID issueOVID = currIssueAppObj.getVersionData().getHeadOVID();
 		createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
 		
@@ -85,19 +86,32 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 						IAppObj iroObj = issueFacade.load(iroOVID, true);
 						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
 						
+						Date issueDate = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
 						filterMap.put(this.filterColumn, iroObj.getObjectId());
 						Map<String, Object> actionPlanMap = this.getIssuesFromIRO(this.viewName, filterMap);
 						
 						Iterator<Entry<String, Object>> itAPMap = actionPlanMap.entrySet().iterator();
 						while(itAPMap.hasNext()){
-							
-						}						
+							//break;
+							Entry<String, Object> apMapEntry = itAPMap.next();
+							if(!apMapEntry.getKey().equals("list"))
+								continue;
+							List<CustomIssueObj> issueObjList = (List<CustomIssueObj>) apMapEntry.getValue();
+							CustomIssueObj issueObj = issueObjList.get(0);
+							Date lastDate = issueObj.getObjDate();
+							//Date lastDate = (Date) apMapEntry.getValue();
+							if(lastDate.after(issueDate))
+								iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDate);
+						}
+						
+						issueFacade.save(iroObj, getDefaultTransaction(), true);
+						updateTaskItem(getFullGrantUserContext(), iroObj);
 						
 					}catch(Exception e){
 						issueFacade.releaseLock(iroOVID);
 						throw new RuntimeException(e);
 					}finally{
-						
+						issueFacade.releaseLock(iroOVID);
 					}
 					
 				}
@@ -156,6 +170,15 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 //			
 //			
 //		}
+		
+	}
+
+	private void updateTaskItem(IUserContext jobCtx, IAppObj currIssueAppObj) {
+		// TODO Auto-generated method stub
+		taskItemActionPlanEngine = 
+				new CustomTaskItemActionPlan(
+						currIssueAppObj, jobCtx, this.getDefaultTransaction(), this.getUserContext().getUser());
+		taskItemActionPlanEngine.createActionPlanTaskItem();
 		
 	}
 

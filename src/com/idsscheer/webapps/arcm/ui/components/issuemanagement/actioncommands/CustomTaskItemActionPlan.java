@@ -14,6 +14,7 @@ import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
@@ -223,6 +224,7 @@ public class CustomTaskItemActionPlan {
 			
 			if(objectType.equals("CONTROLEXECUTION"))
 				taskItemObj = this.modifyCETaskItem();
+
 
 		} catch (RightException e) {
 			// TODO Auto-generated catch block
