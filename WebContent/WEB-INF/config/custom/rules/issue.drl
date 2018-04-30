@@ -125,8 +125,6 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 	then
 		set "name"                    editable
 		set "description"             editable
-		set "creator_status"          invisible #GAP - GRC66
-		set "remark"                  editable
 		set "issueRelevantObjects"    editable
 		set "immediateMeasure"        editable
 		set "remediationMeasure"      editable
@@ -149,9 +147,6 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "recurrent"	              editable  #GAP - GRC74
 
 		# DMM - EV190711 - set "owner_status"            invisible
-		set "owner_remark"            invisible
-		set "reviewer_status"         invisible
-		set "reviewer_remark"         invisible
 		set "stateTime"               readonly
 
 		set "issuesource"  			invisible	# I
@@ -198,8 +193,6 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
       then
             set "name"                    editable
             set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
-            set "remark"                  editable
             #set "issueRelevantObjects"    editable
             set "priority"                editable
             set "category"                editable
@@ -212,7 +205,7 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
             set "action_type"             editable #GAP - GRC66
             set "process_environment"       editable #GAP - GRC74
             set "acting_front"            editable #GAP - GRC74
-            #set "root_cause"              editable #GAP - GRC74
+            set "root_cause"              editable #GAP - GRC74
             set "business_unit"           editable #GAP - GRC74
             
             set "replanned"               editable  #GAP - GRC74
@@ -225,12 +218,9 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
             # DMM - EV190711 - set "acting_front"            mandatory #GAP - GRC74
             
             # DMM - EV190711 - set "owner_status"            invisible
-            set "owner_remark"            invisible
-            set "reviewer_status"         invisible
-            set "reviewer_remark"         invisible
             set "stateTime"               readonly
             
-            # DMM - EV190711 -set "custom_is_creator_status"   editable  #GAP - GRC66
+            set "custom_is_creator_status"   editable  #GAP - GRC66
             # DMM - EV190711 -set "custom_is_owner_status"     invisible #GAP - GRC66
             # DMM - EV190711 -set "custom_is_reviewer_status"  invisible #GAP - GRC66
             # DMM - EV190711 -set "custom_ap_creator_status"   invisible #GAP - GRC66
@@ -255,7 +245,6 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
       then
             set "name"                    editable
             set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
             set "remark"                  editable
             #set "issueRelevantObjects"    editable
             set "priority"                editable
@@ -280,16 +269,12 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		#set "remediationMeasure"      mandatory
 
 		# DMM - EV190711 - set "owner_status"            invisible
-		set "acting_front"            invisible #GAP - GRC74		
-		set "owner_remark"            invisible
-		set "reviewer_status"         invisible
-		set "reviewer_remark"         invisible
 		set "stateTime"               readonly
 		
 		# DMM - EV190711 -set "custom_is_creator_status"   invisible #GAP - GRC66
 		# DMM - EV190711 -set "custom_is_owner_status"     invisible #GAP - GRC66
 		# DMM - EV190711 -set "custom_is_reviewer_status"  invisible #GAP - GRC66
-		# DMM - EV190711 -set "custom_ap_creator_status"   editable  #GAP - GRC66
+		set "custom_ap_creator_status"   editable  #GAP - GRC66
 		# DMM - EV190711 -set "custom_ap_owner_status"     invisible #GAP - GRC66
 		# DMM - EV190711 -set "custom_ap_reviewer_status"  invisible #GAP - GRC66
 
@@ -311,7 +296,6 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
       then
             set "name"                    editable
             set "description"             editable
-            set "creator_status"          invisible #GAP - GRC66
             set "remark"                  editable
             #set "issueRelevantObjects"    editable
             set "priority"                editable
@@ -336,11 +320,9 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
             #set "remediationMeasure"      mandatory
             
             # DMM - EV190711 - set "owner_status"            invisible
-            set "owner_remark"            invisible
-            set "reviewer_status"         invisible
-            set "reviewer_remark"         invisible
             set "stateTime"               readonly
-            set "acting_front"            invisible #GAP - GRC74       
+            set "custom_ap_creator_status"   editable  #GAP - GRC66
+
             
             # DMM - EV190711 -set "custom_is_creator_status"   invisible #GAP - GRC66
             # DMM - EV190711 -set "custom_is_owner_status"     invisible #GAP - GRC66
@@ -352,47 +334,40 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
 end
 
 # rule engine needs to be executed when the attribute value of "owner" is changed.
-rule "custom_GRC66_is creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
-
-      salience 2000
-      no-loop true
-
-      when
-          ( is in workflow state "PREPARED" OR
-              is in workflow state "openForCreation" )
+#rule "custom_GRC66_is creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
+#      salience 2000
+#      no-loop true
+#      when
+#          ( is in workflow state "PREPARED" OR
+#              is in workflow state "openForCreation" )
           # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-            value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "in_review"
+#            ( object is opened by its creator OR
+#              user has at object role "issuemanager" )
+#            value comparison fulfilled: ":transient:" attr_value "custom_is_creator_status" "CONTAINS" value "in_review"
 #           value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
 
-      then
-            set "plannedenddate"           mandatory
-            set "owners"                   mandatory
-            set "reviewers"                mandatory
+#     then
+#            set "plannedenddate"           mandatory
+#            set "owners"                   mandatory
+#            set "reviewers"                mandatory
+#end
 
-end
-
-rule "custom_GRC66_ap creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
-
-      salience 1999
-      no-loop true
-
-      when
-          ( is in workflow state "PREPARED" OR
-              is in workflow state "apOpenForCreation" )
-          # during creation the issue manager has the same rights as the creator
-            ( object is opened by its creator OR
-              user has at object role "issuemanager" )
-          value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "in_review"
+#rule "custom_GRC66_ap creator state set to 'released' --> set workflow fields mandatory for creator [I,V]"
+#      salience 1999
+#      no-loop true
+#      when
+#          ( is in workflow state "PREPARED" OR
+#              is in workflow state "apOpenForCreation" )
+# 			 during creation the issue manager has the same rights as the creator
+#            ( object is opened by its creator OR
+#              user has at object role "issuemanager" )
+#          value comparison fulfilled: ":transient:" attr_value "custom_ap_creator_status" "CONTAINS" value "in_review"
 #           value comparison fulfilled: ":transient:" attr_value "creator_status" "CONTAINS" value "released"
-
-      then
-            set "plannedenddate"           mandatory
-            set "owners"                   mandatory
-            set "reviewers"                mandatory
-
-end
+#      then
+#            set "plannedenddate"           mandatory
+#            set "owners"                   mandatory
+#            set "reviewers"                mandatory
+#end
 
 ###########################################################
 # Customized Rules - GAP GRC66                    #########
@@ -477,7 +452,7 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
             # DMM - EV190711 - set "description"             mandatory
             # DMM - EV190711 - set "root_cause"                    mandatory
             #set "remediationMeasure"      mandatory
-        set "plannedenddate"          mandatory
+        	#set "plannedenddate"          mandatory
             # DMM - EV190711 - set "owners"                  mandatory
             # DMM - EV190711 - set "reviewers"               mandatory
 
@@ -538,9 +513,9 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'in_progress' or 
             set "owners"                  editable
             set "reviewers"               editable
 
-        set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory              
+        	#set "plannedenddate"          mandatory
+            #set "owners"                  mandatory
+            #set "reviewers"               mandatory              
 
 end
 
@@ -552,7 +527,6 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'in_progress' or 
       when        
             ( ( is in workflow state "apOpenForExecution" AND
                 value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_progress" ) OR
-#               value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "in_progress" ) OR
               is in workflow state "apOnHold" ) AND
             user has at object role "issuemanager"
 
@@ -561,102 +535,80 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'in_progress' or 
             set "owners"                  editable
             set "reviewers"               editable
 
-        set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+        	#set "plannedenddate"          mandatory
+            #set "owners"                  mandatory
+            #set "reviewers"               mandatory
 
 end
 
 #issue owner rules
-rule "opened by owner & still open for owner --> init [I,V]"
-
-      salience 1100
-      no-loop false
-
-      when
-            ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-
-      then
+#rule "opened by owner & still open for owner --> init [I,V]"
+#      salience 1100
+#      no-loop false
+#      when
+#            ( is in workflow state "openForExecution" OR
+#              is in workflow state "onHold" )
+#            user is assigned in list "owners"
+#      then
 #           set "owner_status"  editable
-            set "owner_remark"  editable
-            set "documents"     editable
-            
+#            set "owner_remark"  editable
+#            set "documents"     editable
 #           set "owner_status"  mandatory
+#end
 
-end
-
-rule "ap opened by owner & still open for owner --> init [I,V]"
-
-      salience 1099
-      no-loop false
-
-      when
-            ( is in workflow state "apOpenForExecution" OR
-              is in workflow state "apOnHold" )
-            user is assigned in list "owners"
-
-      then
+#rule "ap opened by owner & still open for owner --> init [I,V]"
+#      salience 1099
+#      no-loop false
+#      when
+#            ( is in workflow state "apOpenForExecution" OR
+#              is in workflow state "apOnHold" )
+#            user is assigned in list "owners"
+#      then
 #           set "owner_status"  editable
-            set "owner_remark"  editable
-            set "documents"     editable
-            
+#            set "owner_remark"  editable
+#            set "documents"     editable
 #           set "owner_status"  mandatory
-
-end
+#end
 
 #custom issue owner rules - GRC66
-rule "custom_grc66_is opened by owner & still open for owner --> init [I,V]"
-
-      salience 1090
-      no-loop false
-
-      when
-            ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-
-      then
-            set "custom_is_owner_status"  editable
-            set "custom_is_owner_status"  mandatory
+#rule "custom_grc66_is opened by owner & still open for owner --> init [I,V]"
+      #salience 1090
+      #no-loop false
+      #when
+            #( is in workflow state "openForExecution" OR
+            # is in workflow state "onHold" )
+            #user is assigned in list "owners"
+            #value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+      #then
+            #set "custom_is_owner_status"  editable
+            #set "custom_is_owner_status"  mandatory
             
-            set "creator_status"             invisible
+            #set "creator_status"             invisible
             # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            set "custom_is_creator_status"   invisible
-            set "custom_ap_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible
-            set "custom_ap_reviewer_status"  invisible
-            set "recurrent"                    editable  #GAP - GRC74
+            #set "reviewer_status"            invisible
+            #set "custom_is_creator_status"   invisible
+            #set "custom_ap_owner_status"     invisible
+            #set "custom_is_reviewer_status"  invisible
+            #set "custom_ap_reviewer_status"  invisible
+            #set "recurrent"                    editable  #GAP - GRC74
+#end
 
-end
-
-rule "custom_grc66_ap opened by owner & still open for owner --> init [I,V]"
-
-      salience 1080
-      no-loop false
-
-      when
-            ( is in workflow state "apOpenForExecution" OR
-              is in workflow state "apOnHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-
-      then
-            set "custom_ap_owner_status"  editable
-            set "custom_ap_owner_status"  mandatory
-            
-            set "creator_status"             invisible
-            set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            set "custom_is_creator_status"   invisible
-            set "custom_is_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible
-            set "custom_ap_reviewer_status"  invisible           
-
-end
+#rule "custom_grc66_ap opened by owner & still open for owner --> init [I,V]"
+      #salience 1080
+      #no-loop false
+      #when
+            #( is in workflow state "apOpenForExecution" OR
+            #  is in workflow state "apOnHold" )
+            #user is assigned in list "owners"
+            #value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+      #then
+            #set "custom_ap_owner_status"  editable
+            #set "custom_ap_owner_status"  mandatory
+            #set "custom_is_creator_status"   invisible
+            #set "custom_is_owner_status"     invisible
+            #set "custom_is_reviewer_status"  invisible
+            #set "custom_ap_reviewer_status"  invisible           
+#end
 
 rule "custom_GRC66_is_in_progress [I,V]"
 
@@ -675,9 +627,9 @@ rule "custom_GRC66_is_in_progress [I,V]"
             set "reviewers"               editable
             
 
-        set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+        	#set "plannedenddate"          mandatory
+            #set "owners"                  mandatory
+            #set "reviewers"               mandatory
 
 end
 
@@ -698,28 +650,24 @@ rule "custom_GRC66_ap_in_progress [I,V]"
             set "reviewers"               editable
             set "replanned"               editable  #GAP - GRC74 2304
 
-        set "plannedenddate"          mandatory
-            set "owners"                  mandatory
-            set "reviewers"               mandatory
+        	#set "plannedenddate"          mandatory
+            #set "owners"                  mandatory
+            #set "reviewers"               mandatory
 
 end
 
 # rule engine needs to be executed when the attribute value of "ownerStatus" is changed.
-rule "ownerStatus just set to 'not possible'--> set fields mandatory [I,V]"
-
-      salience 1000
-      no-loop true
-
-      when
-          ( is in workflow state "openForExecution" OR
-              is in workflow state "onHold" )
-            user is assigned in list "owners"
-            value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "not_possible"
-
-      then
-            set "owner_remark" mandatory
-
-end
+#rule "ownerStatus just set to 'not possible'--> set fields mandatory [I,V]"
+      #salience 1000
+      #no-loop true
+      #when
+          #( is in workflow state "openForExecution" OR
+              #is in workflow state "onHold" )
+            #user is assigned in list "owners"
+            #value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "not_possible"
+      #then
+            #set "owner_remark" mandatory
+#end
 
 #######################################
 ### Workflow state "openForReview"  ###
@@ -739,20 +687,8 @@ rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
             set "custom_is_reviewer_status" mandatory
             set "reviewers"                 mandatory
       
-#           set "reviewer_status" editable
-            set "reviewer_remark" editable
-            set "documents"       editable
             set "recurrent"         editable  #GAP - GRC74
             
-#           set "reviewer_status" mandatory
-
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-#           set "custom_ap_creator_status"   invisible
-#           set "custom_ap_owner_status"     invisible
-#           set "custom_ap_reviewer_status"  invisible
-
 end
 
 rule "custom_GRC66_ap opened by reviewer, still editable --> init [I,V]"
@@ -770,20 +706,8 @@ rule "custom_GRC66_ap opened by reviewer, still editable --> init [I,V]"
             set "custom_ap_reviewer_status" editable
             set "custom_ap_reviewer_status" mandatory
       
-#           set "reviewer_status" editable
-            set "reviewer_remark" editable
-            set "documents"       editable      
             set "plannedenddate"  editable
             set "replanned"       editable  #GAP - GRC74 2304
-            
-#           set "reviewer_status" mandatory
-
-            set "creator_status"             invisible
-            # DMM - EV190711 - set "owner_status"               invisible
-            set "reviewer_status"            invisible
-            set "custom_is_creator_status"   invisible
-            set "custom_is_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible
 
 end
 
@@ -888,43 +812,35 @@ rule "custom_GRC66_ap2 opened by reviewer and not disagreed => plannedenddate + 
 
 end
 
-rule "custom_GRC66_is reviewer has to decide to a legal issue reviewer state [V]"
-
-      salience 1000
-      no-loop true
-
-      when
-            is in workflow state "openForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
-            value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS" value "in_progress"
+#rule "custom_GRC66_is reviewer has to decide to a legal issue reviewer state [V]"
+#      salience 1000
+#      no-loop true
+#      when
+#            is in workflow state "openForReview"
+#            user is assigned in list "reviewers"
+#            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"
+#            value comparison fulfilled: ":transient:" attr_value "custom_is_reviewer_status" "CONTAINS" value "in_progress"
 #           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "to_be_approved"
-            object is dirty
-
-      then
+#            object is dirty
+#      then
 #           set "reviewer_status" invalid
 #           add "error" message "error.issue.reviewer.state.not.allowed.ERR" to "reviewer_status"
+#end
 
-end
-
-rule "custom_GRC66_ap reviewer has to decide to a legal issue reviewer state [V]"
-
-      salience 900
-      no-loop true
-
-      when
-            is in workflow state "apOpenForReview"
-            user is assigned in list "reviewers"
-            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
-            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "in_progress"
+#rule "custom_GRC66_ap reviewer has to decide to a legal issue reviewer state [V]"
+#      salience 900
+#      no-loop true
+#      when
+#            is in workflow state "apOpenForReview"
+#            user is assigned in list "reviewers"
+#            value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"
+#            value comparison fulfilled: ":transient:" attr_value "custom_ap_reviewer_status" "CONTAINS" value "in_progress"
 #           value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "to_be_approved"
-            object is dirty
-
-      then
+#            object is dirty
+#      then
 #           set "reviewer_status" invalid
 #           add "error" message "error.issue.reviewer.state.not.allowed.ERR" to "reviewer_status"
-
-end
+#end
 
 ###############################################
 ### All workflow states - after state rules ###
@@ -993,9 +909,9 @@ rule "custom_is_set_creator_status[I,V]"
             # DMM - EV190711 - set "owner_status"               invisible
             set "reviewer_status"            invisible
             
-            set "custom_ap_creator_status"   invisible
-            set "custom_ap_owner_status"     invisible
-            set "custom_ap_reviewer_status"  invisible   
+            #set "custom_ap_creator_status"   invisible
+            #set "custom_ap_owner_status"     invisible
+            set "custom_ap_reviewer_status"  visible   
 
             
 end
@@ -1018,9 +934,9 @@ rule "custom_ap_set_creator_status[I,V]"
             # DMM - EV190711 - set "owner_status"               invisible
             set "reviewer_status"            invisible
             
-            set "custom_is_creator_status"   invisible
-            set "custom_is_owner_status"     invisible
-            set "custom_is_reviewer_status"  invisible   
+            #set "custom_is_creator_status"   invisible
+            #set "custom_is_owner_status"     invisible
+            set "custom_is_reviewer_status"  visible   
             
 end
 
@@ -1094,16 +1010,18 @@ rule "show_hide_action_plan_fields_issue_manager[I,V]"
 	no-loop true
 	
 	when
-		user is systemadmin
-		(user is_not assigned in list "owners" AND
-		user is_not assigned in list "reviewers")
-		object is_not opened by its creator
+		is_not in workflow state "apClosedByReviewer"
+		(user is systemadmin OR
+		user has at object role "issuemanager")
+		#(user is_not assigned in list "owners" AND
+		#user is_not assigned in list "reviewers")
+		#object is_not opened by its creator
 		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
 	then
 	
-		set "custom_ap_creator_status"	invisible	# AP
-		set "custom_ap_owner_status"	invisible	# AP
-		set "custom_ap_reviewer_status"	invisible	# AP
+		#set "custom_ap_creator_status"		invisible	# AP
+		#set "custom_ap_owner_status"		invisible	# AP
+		#set "custom_ap_reviewer_status"	invisible	# AP
 
 
 		set "action_type"	 			editable	# AP/I
@@ -1137,16 +1055,18 @@ rule "show_hide_issues_fields_issue_manager[I,V]"
 	no-loop true
 	
 	when
-		user has at object role "issuemanager"
-		(user is_not assigned in list "owners" AND
-		user is_not assigned in list "reviewers")
-		object is_not opened by its creator
+		is_not in workflow state "closedByReviewer"
+		(user is systemadmin OR
+		user has at object role "issuemanager")
+		#(user is_not assigned in list "owners" AND
+		#user is_not assigned in list "reviewers" AND
+		#object is_not opened by its creator)
 		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
 	then
 
-		set "custom_is_creator_status"	invisible	# I
-		set "custom_is_owner_status"	invisible	# I
-		set "custom_is_reviewer_status"	invisible	# I
+		#set "custom_is_creator_status"	invisible	# I
+		#set "custom_is_owner_status"	invisible	# I
+		#set "custom_is_reviewer_status"	invisible	# I
 
 
 		set "action_type" 				editable	# AP/I
@@ -1368,7 +1288,8 @@ rule "show_hide_action_plan_fields_owner_in_exec[I,V]"
       no-loop true
       
       when
-            is in workflow state "apOpenForExecution"
+            ( is in workflow state "apOpenForExecution" OR
+              is in workflow state "apOnHold" )
             user is assigned in list "owners"        
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"      
       then
@@ -1411,7 +1332,8 @@ rule "show_hide_issues_fields_owner_in_exec[I,V]"
       no-loop true
       
       when
-            is in workflow state "openForExecution"
+            ( is in workflow state "openForExecution" OR
+              is in workflow state "onHold" )      
             user is assigned in list "owners"        
             value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"           
       then
