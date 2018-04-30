@@ -1,5 +1,7 @@
 package com.idsscheer.webapps.arcm.bl.component.issuemanagement.re;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -36,6 +38,19 @@ public class IssueHelperCustom extends CollectiveHelper {
 		return env.getUserContext().getUserRights().isSysadmin();
 	}
 //	DMM - EOF- Revisão da sprint - 14/05/2018
+	
+	public static void setIssueDelay(){
+		IAppObj issueObj = REEnvironment.getInstance().getRuleAppObj().getAppObj();
+		Date issueDate = issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+		Calendar calendar = Calendar.getInstance();
+		
+		if(issueDate.before(calendar.getTime()))
+			CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "overdue");
+		
+		if(!issueDate.before(calendar.getTime()))
+			CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "on_time");
+		
+	}
 	
 	public static void setRiskAndProcessClassification(){
 		

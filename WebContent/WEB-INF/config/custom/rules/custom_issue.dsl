@@ -5,3 +5,4 @@
 #DMM - EOF - Revisão da sprint - 14/05/2018
 [consequence][]recalculate time dependent state=IssueHelper.recalculateTimeDependentState();
 [consequence][]set risk classification=IssueHelperCustom.setRiskAndProcessClassification();
+[consequence][]set issue delay=IssueHelperCustom.setIssueDelay();
