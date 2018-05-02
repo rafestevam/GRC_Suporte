@@ -1239,6 +1239,7 @@ rule "show_hide_issues_fields_creator[I,V]"
             set "description"             		editable    # AP/I
             set "root_cause"                    editable    # I
             set "remediationMeasure"      		editable    # I
+			set "plannedenddate"				editable	# AP/I            
             set "owners"                        editable    # AP/I
             set "reviewers"                     editable    # AP/I
             set "custom_is_creator_status"      editable    # I         
