@@ -3,3 +3,4 @@
 [condition][]is_not in workflow state "{stateId}"=eval( !CollectiveHelper.isInWorkflowState("{stateId}") )
 [consequence][]recalculate time dependent state=IssueHelper.recalculateTimeDependentState();
 [consequence][]set risk classification=IssueHelperCustom.setRiskAndProcessClassification();
+[consequence][]set issue delay=IssueHelperCustom.setIssueDelay();

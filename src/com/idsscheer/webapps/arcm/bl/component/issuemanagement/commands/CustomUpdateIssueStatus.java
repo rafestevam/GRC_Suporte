@@ -25,6 +25,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.common.constants.LockInfoFlag;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
@@ -34,6 +35,10 @@ import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.config.metadata.workflow.IStateMetadata;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 import com.idsscheer.webapps.arcm.ui.framework.common.UIEnvironmentManager;
@@ -58,6 +63,8 @@ public class CustomUpdateIssueStatus implements ICommand {
 
 	@Override
 	public CommandResult execute(CommandContext cc) throws BLException {
+		//deallocateLocalSources();
+		
 		// TODO Auto-generated method stub
 //		return null;
 		
@@ -739,6 +746,18 @@ public class CustomUpdateIssueStatus implements ICommand {
 		
 		//return (List<IAppObj>)retList;
 		
+	}
+	
+	private void deallocateLocalSources() {
+		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
+		try {
+			for (ILockObject lock : lockService.findLocks()) {
+				lockService.releaseLock(lock.getLockObjectId(), lock.getLockUserId(), LockInfoFlag.CLEAN, lock.getRemoteClientID());
+				//lockService.releaseLock(lock.getObjectType(), lock.getLockUserId(), null);
+			}
+		} catch (LockServiceException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	private String getWorkflowStatus(IAppObj currObj){

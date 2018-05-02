@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
@@ -59,8 +60,70 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		
 	private static final boolean DEBUGGER_ON = true;
 	protected void afterExecute(){
-				
-		affectPADate();
+		
+		//affectPADate();
+		
+		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.ISSUE);
+		//IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
+		Map<String, Object> filterMap = new HashMap<>();
+		IAppObj currIssueAppObj = this.formModel.getAppObj();
+		//Date apDate = currIssueAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+		//IOVID issueOVID = currIssueAppObj.getVersionData().getHeadOVID();
+		createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
+		
+		try{
+			//IAppObj issueObj = issueFacade.load(issueOVID, true);
+			//issueFacade.allocateLock(issueOVID, LockType.FORCEWRITE);
+			
+			List<IAppObj> iroElements = currIssueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullGrantUserContext());
+			for (IAppObj iroElement : iroElements) {
+				if(!iroElement.getObjectType().equals(ObjectType.ISSUE)){
+					continue;
+				}else{
+					
+					IOVID iroOVID = iroElement.getVersionData().getHeadOVID();
+					try{
+						IAppObj iroObj = issueFacade.load(iroOVID, true);
+						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
+						
+						Date issueDate = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+						filterMap.put(this.filterColumn, iroObj.getObjectId());
+						Map<String, Object> actionPlanMap = this.getIssuesFromIRO(this.viewName, filterMap);
+						
+						Iterator<Entry<String, Object>> itAPMap = actionPlanMap.entrySet().iterator();
+						while(itAPMap.hasNext()){
+							//break;
+							Entry<String, Object> apMapEntry = itAPMap.next();
+							if(!apMapEntry.getKey().equals("list"))
+								continue;
+							List<CustomIssueObj> issueObjList = (List<CustomIssueObj>) apMapEntry.getValue();
+							CustomIssueObj issueObj = issueObjList.get(0);
+							Date lastDate = issueObj.getObjDate();
+							//Date lastDate = (Date) apMapEntry.getValue();
+							if(lastDate.after(issueDate))
+								iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDate);
+						}
+						
+						issueFacade.save(iroObj, getDefaultTransaction(), true);
+						updateTaskItem(getFullGrantUserContext(), iroObj);
+						
+					}catch(Exception e){
+						issueFacade.releaseLock(iroOVID);
+						throw new RuntimeException(e);
+					}finally{
+						issueFacade.releaseLock(iroOVID);
+					}
+					
+				}
+			}
+			
+		}catch(Exception e){
+			//issueFacade.releaseLock(issueOVID);
+			throw new RuntimeException(e);
+		}finally{
+			//issueFacade.releaseLock(issueOVID);
+		}
+		
 		
 //		Map filterMap = new HashMap();
 //		
@@ -107,6 +170,30 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 //			
 //			
 //		}
+		
+	}
+
+	private void updateTaskItem(IUserContext jobCtx, IAppObj currIssueAppObj) {
+		// TODO Auto-generated method stub
+		taskItemActionPlanEngine = 
+				new CustomTaskItemActionPlan(
+						currIssueAppObj, jobCtx, this.getDefaultTransaction(), this.getUserContext().getUser());
+		taskItemActionPlanEngine.createActionPlanTaskItem();
+		
+	}
+
+	private void createAPTaskItem(IUserContext jobCtx, IAppObj currIssueAppObj) {
+		IEnumAttribute issueTypeList = currIssueAppObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+		IEnumerationItem issueType = ARCMCollections.extractSingleEntry(issueTypeList.getRawValue(), true);
+		if(issueType.getId().equals("actionplan")){					
+			this.displayLog("Tipo : " + issueType.getId());		
+
+			// 13.03.2018 - FCT - EV131854
+			taskItemActionPlanEngine = 
+					new CustomTaskItemActionPlan(
+							currIssueAppObj, jobCtx, this.getDefaultTransaction(), this.getUserContext().getUser());
+			taskItemActionPlanEngine.createActionPlanTaskItem();
+		}
 		
 	}
 

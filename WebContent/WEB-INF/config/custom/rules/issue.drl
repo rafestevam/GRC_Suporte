@@ -1483,5 +1483,17 @@ rule "show_hide_issues_fields_reviewer_in_review[I,V]"
 
 end
 
+rule "set_issue_delay[I,V]"
+
+	salience 52
+	no-loop true
+	
+	when
+		( value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue" OR
+		  value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan" ) 
+	then
+			set issue delay
+end
+
 
 
