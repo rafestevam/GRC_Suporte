@@ -32,6 +32,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttr
 import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
+import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
@@ -59,70 +60,19 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	private CustomTaskItemActionPlan taskItemActionPlanEngine;
 		
 	private static final boolean DEBUGGER_ON = true;
+	
+	@Override
+	protected void execute() {
+		// TODO Auto-generated method stub
+		super.execute();
+		affectIssueDate();
+	}
+	
 	protected void afterExecute(){
 		
 		//affectPADate();
 		
-		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.ISSUE);
-		//IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
-		Map<String, Object> filterMap = new HashMap<>();
-		IAppObj currIssueAppObj = this.formModel.getAppObj();
-		//Date apDate = currIssueAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
-		//IOVID issueOVID = currIssueAppObj.getVersionData().getHeadOVID();
-		createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
-		
-		try{
-			//IAppObj issueObj = issueFacade.load(issueOVID, true);
-			//issueFacade.allocateLock(issueOVID, LockType.FORCEWRITE);
-			
-			List<IAppObj> iroElements = currIssueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullGrantUserContext());
-			for (IAppObj iroElement : iroElements) {
-				if(!iroElement.getObjectType().equals(ObjectType.ISSUE)){
-					continue;
-				}else{
-					
-					IOVID iroOVID = iroElement.getVersionData().getHeadOVID();
-					try{
-						IAppObj iroObj = issueFacade.load(iroOVID, true);
-						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
-						
-						Date issueDate = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
-						filterMap.put(this.filterColumn, iroObj.getObjectId());
-						Map<String, Object> actionPlanMap = this.getIssuesFromIRO(this.viewName, filterMap);
-						
-						Iterator<Entry<String, Object>> itAPMap = actionPlanMap.entrySet().iterator();
-						while(itAPMap.hasNext()){
-							//break;
-							Entry<String, Object> apMapEntry = itAPMap.next();
-							if(!apMapEntry.getKey().equals("list"))
-								continue;
-							List<CustomIssueObj> issueObjList = (List<CustomIssueObj>) apMapEntry.getValue();
-							CustomIssueObj issueObj = issueObjList.get(0);
-							Date lastDate = issueObj.getObjDate();
-							//Date lastDate = (Date) apMapEntry.getValue();
-							if(lastDate.after(issueDate))
-								iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDate);
-						}
-						
-						issueFacade.save(iroObj, getDefaultTransaction(), true);
-						updateTaskItem(getFullGrantUserContext(), iroObj);
-						
-					}catch(Exception e){
-						issueFacade.releaseLock(iroOVID);
-						throw new RuntimeException(e);
-					}finally{
-						issueFacade.releaseLock(iroOVID);
-					}
-					
-				}
-			}
-			
-		}catch(Exception e){
-			//issueFacade.releaseLock(issueOVID);
-			throw new RuntimeException(e);
-		}finally{
-			//issueFacade.releaseLock(issueOVID);
-		}
+		//affectIssueDate();
 		
 		
 //		Map filterMap = new HashMap();
@@ -171,6 +121,69 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 //			
 //		}
 		
+	}
+
+	private void affectIssueDate() {
+		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.ISSUE);
+		//IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
+		Map<String, Object> filterMap = new HashMap<>();
+		IAppObj currIssueAppObj = this.formModel.getAppObj();
+		//Date apDate = currIssueAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+		//IOVID issueOVID = currIssueAppObj.getVersionData().getHeadOVID();
+		//createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
+		
+		try{
+			//IAppObj issueObj = issueFacade.load(issueOVID, true);
+			//issueFacade.allocateLock(issueOVID, LockType.FORCEWRITE);
+			
+			List<IAppObj> iroElements = currIssueAppObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullGrantUserContext());
+			for (IAppObj iroElement : iroElements) {
+				if(!iroElement.getObjectType().equals(ObjectType.ISSUE)){
+					continue;
+				}else{
+					
+					IOVID iroOVID = iroElement.getVersionData().getHeadOVID();
+					try{
+						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
+						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
+						
+						Date issueDate = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+						filterMap.put(this.filterColumn, iroObj.getObjectId());
+						Map<String, Object> actionPlanMap = this.getIssuesFromIRO(this.viewName, filterMap);
+						
+						Iterator<Entry<String, Object>> itAPMap = actionPlanMap.entrySet().iterator();
+						while(itAPMap.hasNext()){
+							//break;
+							Entry<String, Object> apMapEntry = itAPMap.next();
+							if(!apMapEntry.getKey().equals("list"))
+								continue;
+							List<CustomIssueObj> issueObjList = (List<CustomIssueObj>) apMapEntry.getValue();
+							CustomIssueObj issueObj = issueObjList.get(0);
+							Date lastDate = issueObj.getObjDate();
+							//Date lastDate = (Date) apMapEntry.getValue();
+							if(lastDate.after(issueDate))
+								iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDate);
+						}
+						
+						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
+						updateTaskItem(getFullGrantUserContext(), iroObj);
+						
+					}catch(Exception e){
+						issueFacade.releaseLock(iroOVID);
+						throw new RuntimeException(e);
+					}finally{
+						issueFacade.releaseLock(iroOVID);
+					}
+					
+				}
+			}
+			
+		}catch(Exception e){
+			//issueFacade.releaseLock(issueOVID);
+			throw new RuntimeException(e);
+		}finally{
+			//issueFacade.releaseLock(issueOVID);
+		}
 	}
 
 	private void updateTaskItem(IUserContext jobCtx, IAppObj currIssueAppObj) {
