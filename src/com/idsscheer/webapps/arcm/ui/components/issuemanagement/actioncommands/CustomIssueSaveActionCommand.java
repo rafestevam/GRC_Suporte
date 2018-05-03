@@ -29,6 +29,8 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestcaseAttributeType;
+import com.idsscheer.webapps.arcm.common.controllinginfo.ControlInfo;
 import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
@@ -63,11 +65,45 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	
 	@Override
 	protected void execute() {
-		// TODO Auto-generated method stub
-		super.execute();
-		affectIssueDate();
+		if(isIROValid()){
+			super.execute();
+			affectIssueDate();
+		}else{
+			ControlInfo controlInfo = this.formModel.getControlInfo();
+			controlInfo.addNotification(NotificationTypeEnum.ERROR, "message.iro.not.valid.DBI", new String[]{ getStringRepresentation(this.formModel.getAppObj()) });
+		}
 	}
 	
+	private boolean isIROValid() {
+		
+		boolean iroValid = false;
+		IAppObj currIssueObj = this.formModel.getAppObj();
+		
+		IEnumAttribute actionTypeAttr = currIssueObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+		IEnumerationItem actionType = ARCMCollections.extractSingleEntry(actionTypeAttr.getRawValue(), true);
+		
+		if(actionType.getId().equals("actionplan"))
+			return true;
+		
+		List<IAppObj> iroList = currIssueObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullGrantUserContext());
+		for (IAppObj iroObj : iroList) {
+			if(iroObj.getObjectType().equals(ObjectType.TESTCASE)){
+				IEnumAttribute reviewerStrAttr = iroObj.getAttribute(ITestcaseAttributeType.ATTR_REVIEWER_STATUS);
+				IEnumerationItem reviewerStatus = ARCMCollections.extractSingleEntry(reviewerStrAttr.getRawValue(), true);
+				if(reviewerStatus.getValue().equals("1")){
+					iroValid = true;
+					break;
+				}
+			}
+			if(iroObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)){
+				iroValid = true;
+				break;
+			}
+		}
+		
+		return iroValid;
+	}
+
 	protected void afterExecute(){
 		
 		//affectPADate();
