@@ -160,7 +160,7 @@ public class AdjustControl1Line extends BaseJob {
 					IAppObj ceAppObj = ceFacade.load(ceOVID, true);
 					ceFacade.allocateLock(ceOVID, LockType.FORCEWRITE);
 					
-					if (ceAppObj != null)
+					if (ceAppObj != null && !ceAppObj.getVersionData().isDeleted())
 						bufList.add(ceAppObj);
 					
 					ceFacade.releaseLock(ceOVID);

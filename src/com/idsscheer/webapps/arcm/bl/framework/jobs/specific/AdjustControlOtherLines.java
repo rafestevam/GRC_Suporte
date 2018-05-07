@@ -233,7 +233,7 @@ public class AdjustControlOtherLines extends BaseJob{
 //						testCaseBuffer.add(tcAppObj);
 //				}
 				
-				if(tcAppObj != null){
+				if(tcAppObj != null && !tcAppObj.getVersionData().isDeleted()){
 					IEnumAttribute reviewerStAttr = tcAppObj.getAttribute(ITestcaseAttributeType.ATTR_REVIEWER_STATUS);
 					IEnumerationItem reviewerSt = ARCMCollections.extractSingleEntry(reviewerStAttr.getRawValue(), true);
 					if(tcAppObj.getVersionData().isHeadRevision() && reviewerSt.getId().equals("accepted"))
