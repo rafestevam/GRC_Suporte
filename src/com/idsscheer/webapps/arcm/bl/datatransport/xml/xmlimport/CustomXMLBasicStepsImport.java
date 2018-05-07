@@ -773,6 +773,136 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		
 	}
 	
+	public void setstatusct1line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		
+		try{
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.CONTROL);
+			IAppObjQuery query = facade.createQuery();
+			String statusControl = "";
+			
+			query.addRestriction(QueryRestriction.eq(IControlAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj control = iterator.next();
+				IOVID controlOVID = control.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(controlOVID, true);
+				
+				statusControl = lastRisk.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_1LINE).getRawValue();
+				
+				targetRec.setString(columnMap.getSource(), statusControl);
+				
+			}
+			query.release();
+			
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}
+		
+	}
+	public void setstatusct2line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		
+		try{
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.CONTROL);
+			IAppObjQuery query = facade.createQuery();
+			String statusControl = "";
+			
+			query.addRestriction(QueryRestriction.eq(IControlAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj control = iterator.next();
+				IOVID controlOVID = control.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(controlOVID, true);
+				
+				statusControl = lastRisk.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).getRawValue();
+				
+				targetRec.setString(columnMap.getSource(), statusControl);
+				
+			}
+			query.release();
+			
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}
+		
+	}
+	
+	public void setstatusct3line(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		
+		try{
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.CONTROL);
+			IAppObjQuery query = facade.createQuery();
+			String statusControl = "";
+			
+			query.addRestriction(QueryRestriction.eq(IControlAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj control = iterator.next();
+				IOVID controlOVID = control.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(controlOVID, true);
+				
+				statusControl = lastRisk.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_3LINE).getRawValue();
+				
+				targetRec.setString(columnMap.getSource(), statusControl);
+				
+			}
+			query.release();
+			
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}
+		
+	}
+	public void setstatusctfinal(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+			throws MigrationException {
+		
+		try{
+			IUserContext fullReadCtx = ContextFactory.getFullReadAccessUserContext(Locale.ENGLISH);
+			IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(fullReadCtx, ObjectType.CONTROL);
+			IAppObjQuery query = facade.createQuery();
+			String statusControl = "";
+			
+			query.addRestriction(QueryRestriction.eq(IControlAttributeType.BASE_ATTR_GUID, sourceRec.getString("guid")));
+			
+			IAppObjIterator iterator =  query.getResultIterator();
+			
+			while(iterator.hasNext()){
+				
+				IAppObj control = iterator.next();
+				IOVID controlOVID = control.getVersionData().getHeadOVID();
+				IAppObj lastRisk = facade.load(controlOVID, true);
+				
+				statusControl = lastRisk.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_FINAL).getRawValue();
+				
+				targetRec.setString(columnMap.getSource(), statusControl);
+				
+			}
+			query.release();
+			
+			
+		}catch(Exception e){
+			throw new MigrationException(MigrationException.EX_MIGRATION_STEPS);
+		}
+		
+	}
+	
 	//Inicio REO 04.08.2017 - Riscos Corporativos
 	public void setcategory(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
 			throws MigrationException {

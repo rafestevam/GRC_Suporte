@@ -85,6 +85,8 @@ public class AdjustControlOtherLines extends BaseJob{
 				//facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
 				
+				String controlID = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue();
+				System.out.println(controlID);
 				List<IAppObj> tstDefList = controlUpdObj.getAttribute(IControlAttributeType.LIST_TESTDEFINITIONS).getElements(userContext);
 				for (IAppObj tstDefObj : tstDefList) {
 
@@ -137,6 +139,9 @@ public class AdjustControlOtherLines extends BaseJob{
 				increaseProgress();
 
 			}
+			
+			deallocateLocalSources();
+			
 		}catch(Exception e){
 			deallocateLocalSources();
 			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
@@ -223,8 +228,15 @@ public class AdjustControlOtherLines extends BaseJob{
 				IOVID tcOVID = OVIDFactory.getOVID(tcID, tcVersionNumber);
 				IAppObj tcAppObj = tcFacade.load(tcOVID, true);
 				
+//				if(tcAppObj != null){
+//					if(tcAppObj.getVersionData().isHeadRevision())
+//						testCaseBuffer.add(tcAppObj);
+//				}
+				
 				if(tcAppObj != null){
-					if(tcAppObj.getVersionData().isHeadRevision())
+					IEnumAttribute reviewerStAttr = tcAppObj.getAttribute(ITestcaseAttributeType.ATTR_REVIEWER_STATUS);
+					IEnumerationItem reviewerSt = ARCMCollections.extractSingleEntry(reviewerStAttr.getRawValue(), true);
+					if(tcAppObj.getVersionData().isHeadRevision() && reviewerSt.getId().equals("accepted"))
 						testCaseBuffer.add(tcAppObj);
 				}
 				
