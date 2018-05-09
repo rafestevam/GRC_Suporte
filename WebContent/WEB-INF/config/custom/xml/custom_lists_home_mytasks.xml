@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
 	
+<!--           defaultOrderColumn.idref="task_enddate" -->
 	<list id="myTasks"
           view.idref="myTasks"
           filter.idref="myTasks"
           idColumn.idref="obj_id"
-          defaultOrderColumn.idref="task_enddate"
+          defaultOrderColumn.idref="object_id"
+          defaultOrderDirection.idref="DESCENDING"
           canObjectsBeReactivated="false"
           relatedObjectType.idref="TASKITEM"
           propertyKey="list.mytasks.DBI"

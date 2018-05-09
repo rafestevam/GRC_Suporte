@@ -2,6 +2,7 @@
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
  
  	<view id="myTasks" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomTaskMyTasksViewHandler" relevantForMashzoneIntegration="true">
+<!--  	<view id="myTasks" view.parameter="DISTINCT" relevantForMashzoneIntegration="true"> -->
         <viewObject id="VO_myTasks_1" objectType ="TASKITEM" isMainViewObject="true" skipRightsConditionForRoleLevels="crossclient client object">
             <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="task_version" attributeType="object_version_number" isSortable="true" isSelectColumn="true"/>

@@ -45,6 +45,7 @@ import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockS
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
+import com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomTaskItemActionPlan;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
@@ -1241,6 +1242,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		IAppObjFacade ceFacade = 
 				FacadeFactory.getInstance().getAppObjFacade(this.getUserContext(), ObjectType.CONTROLEXECUTION);
 		
+		IAppObjFacade tskFacade = FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.TASKITEM);
+		
 		IAppObjQuery ceQuery = ceFacade.createQuery();
 		
 		try {
@@ -1275,6 +1278,10 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 								setRawValue(java.util.Collections.singletonList(ownerCEStatus));
 					
 					ceFacade.save(ceAuxObj, this.getDefaultTransaction(), true);
+					CustomTaskItemActionPlan taskItemActionPlanEngine = 
+							new CustomTaskItemActionPlan(
+									ceAuxObj, jobCtx, this.getDefaultTransaction(), this.getUserContext().getUser());
+					taskItemActionPlanEngine.createActionPlanTaskItem(IControlexecutionAttributeType.BASE_ATTR_OBJ_ID);
 					
 					this.controlClassification(ceAuxObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
 					this.affectResidualRisk(riskAux);

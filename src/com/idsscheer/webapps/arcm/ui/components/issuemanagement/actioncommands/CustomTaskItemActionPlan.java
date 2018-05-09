@@ -1,5 +1,6 @@
 package com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
@@ -18,7 +19,9 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations.TASKITEM_STATUS;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITaskitemAttributeType;
@@ -26,6 +29,7 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IUserAttri
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.config.metadata.objecttypes.ILongAttributeType;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 
 public class CustomTaskItemActionPlan {
@@ -69,7 +73,7 @@ public class CustomTaskItemActionPlan {
 				try {
 					taskItemObj = taskItemFacade.load(taskItemOVID, true);
 					taskItemFacade.allocateLock(taskItemObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
-					assignAttributesTaskItem();
+					assignAttributesTaskItem(actionPlanObj.getObjectType().getId());
 					
 				} catch (RightException e) {
 					// TODO Auto-generated catch block
@@ -84,7 +88,7 @@ public class CustomTaskItemActionPlan {
 		} else {
 
 			// Método escreve os campos correspondentes.
-			this.assignAttributesTaskItem();
+			this.assignAttributesTaskItem(actionPlanObj.getObjectType().getId());
 
 		}
 
@@ -113,8 +117,73 @@ public class CustomTaskItemActionPlan {
 		taskItemQuery.release();
 
 	}
+	
+	
+	public void createActionPlanTaskItem(ILongAttributeType baseAttrObj) {
 
-	public void  assignAttributesTaskItem() {
+		// Verifica se há TASKITEM para este action plan.
+		IAppObjQuery taskItemQuery = taskItemFacade.createQuery();
+		taskItemQuery.addRestriction(QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_ID,
+				actionPlanObj.getRawValue(baseAttrObj)));
+
+		IAppObjIterator taskItemIterator = taskItemQuery.getResultIterator();
+
+		// Se houver então modificar este TASKITEM.
+		if (taskItemIterator.getSize() > 0) {
+			while (taskItemIterator.hasNext()) {
+				IAppObj taskItemObjAux = taskItemIterator.next();
+				IOVID taskItemOVID = taskItemObjAux.getVersionData().getHeadOVID();
+				
+				try {
+					taskItemObj = taskItemFacade.load(taskItemOVID, true);
+					taskItemFacade.allocateLock(taskItemObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+					assignAttributesTaskItem(actionPlanObj.getObjectType().getId());
+					
+				} catch (RightException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+
+				break;
+			}
+			// Caso contrário, então será necessário criar um novo objeto
+			// TASKITEM.
+		} else {
+
+			// Método escreve os campos correspondentes.
+			this.assignAttributesTaskItem(actionPlanObj.getObjectType().getId());
+
+		}
+
+		try {
+			// Salvar o novo objeto de TASKITEM.
+			taskItemFacade.save(taskItemObj, transaction, true);
+			taskItemFacade.releaseLock(taskItemObj.getVersionData().getHeadOVID());
+			
+		} catch (ObjectLockException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ValidationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RightException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ObjectNotUniqueException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ObjectAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		taskItemQuery.release();
+
+	}
+	
+
+	public void  assignAttributesTaskItem(String objectType) {
 
 	
 		try {
@@ -131,7 +200,8 @@ public class CustomTaskItemActionPlan {
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_PLANNEDSTARTDATE)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDSTARTDATE));
 
-			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue("ISSUE");
+//			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue("ISSUE");
+			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue(objectType);
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OVID)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID).toString() + ":"
@@ -147,14 +217,61 @@ public class CustomTaskItemActionPlan {
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID));
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_CLIENTSIGN).setRawValue("CIP");
-
-			taskItemObj = this.modifyWorkflowTaskItem();
+			
+			if(objectType.equals("ISSUE"))
+				taskItemObj = this.modifyWorkflowTaskItem();
+			
+			if(objectType.equals("CONTROLEXECUTION"))
+				taskItemObj = this.modifyCETaskItem();
 
 		} catch (RightException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+	}
+
+	private IAppObj modifyCETaskItem() {
+		
+		IAppObjFacade userFacade = FacadeFactory.getInstance().getAppObjFacade(context, ObjectType.USER);
+		
+		IEnumerationItem ownerStatus = 
+				ARCMCollections.extractSingleEntry(
+						actionPlanObj.getAttribute(
+								IControlexecutionAttributeType.ATTR_OWNER_STATUS).getRawValue(), true);
+		
+		Long userOwnerID = new Long(0);
+		Long userReviewerID = new Long(0);
+		Long userCreatorID = 
+				this.actionPlanObj.
+					getRawValue(IControlexecutionAttributeType.BASE_ATTR_CREATOR_USER_ID);
+		
+		Iterator userOwnerIterator = 
+				this.actionPlanObj.getAttribute(IControlexecutionAttributeType.LIST_OWNER).
+					getElementIds().iterator();
+		
+		// Pega o primeiro owner
+		while (userOwnerIterator.hasNext()) {
+			IOVID userOVID = (IOVID) userOwnerIterator.next();
+			userOwnerID = userOVID.getId();
+			break;
+		}
+		
+		// Status de owner é Concluído, então finaliza
+		if (StringUtils.contains("3", ownerStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(-1);
+			
+			String workflowSt = "owner_status:" + TASKITEM_STATUS.COMPLETED.getId();
+			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECTWORKFLOWSTATUS).setRawValue(workflowSt);
+			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_STATUS).setRawValue(Collections.singletonList(TASKITEM_STATUS.COMPLETED));
+		}
+		
+		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_LASTEDITOR)
+				.setRawValue(userAppObj.getRawValue(IUserAttributeType.ATTR_NAME));
+
+		return taskItemObj;
+		
 	}
 
 	public IAppObj modifyWorkflowTaskItem() {
