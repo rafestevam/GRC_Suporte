@@ -62,9 +62,9 @@ public class RiskAndControlCalculation {
 		
 		for(IAppObj controlObjIt : controlList){
 			
-			IAppObj controlObj = null;
+			IAppObj controlObj = controlObjIt;
 			
-			controlObj = facade.load(controlObjIt.getVersionData().getHeadOVID(), this.transaction, true);
+			//controlObj = facade.load(controlObjIt.getVersionData().getHeadOVID(), this.transaction, true);
 			
 			//countTotal += 1;
 			
@@ -124,7 +124,7 @@ public class RiskAndControlCalculation {
 			
 			countTotal += 1;
 			
-			facade.releaseLock(controlObj);
+			//facade.releaseLock(controlObj);
 			
 		}
 		
