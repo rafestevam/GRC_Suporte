@@ -12,8 +12,10 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IQueryExpression;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
@@ -34,8 +36,14 @@ public class CustomControl2ControlExecution implements IViewHandler {
 		// TODO Auto-generated method stub
 		
 		System.out.println("teste view handler");
+		List<Long> ceIDList = new ArrayList<>();
+		if(currentObject != null)
+			ceIDList = getAllControlsFromOriginal(currentObject);
 		
-		List<Long> ceIDList = getAllControlsFromOriginal(currentObject);
+		if(currentObject == null)
+			ceIDList = getAllControlsFromOriginal(filters);
+		
+		
 		
 		if(ceIDList.size() > 0){
 			for (IQueryObjectDefinition def : query.getObjectDefinitions()) {
@@ -86,6 +94,66 @@ public class CustomControl2ControlExecution implements IViewHandler {
 			throw new RuntimeException(e);
 		}finally{
 
+		}
+		
+		return ceIDList;
+	}
+	
+	private List<Long> getAllControlsFromOriginal(List<IFilterCriteria> filters) {
+		
+		List<Long> ceIDList = new ArrayList<>();
+		
+		try{
+			IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
+			IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROL);
+			
+			IAppObjQuery controlQuery = controlFacade.createQuery();
+			for(IFilterCriteria filter : filters){
+				if(filter.getAttributeAliasName().equals("control_name")) {
+					IQueryExpression restr = QueryRestriction.like(IControlAttributeType.ATTR_NAME, (String)filter.getValue());
+					controlQuery.addRestriction(restr);
+				}
+			}
+			
+			controlQuery.setHeadRevisionsOnly(true);
+			controlQuery.setIncludeDeletedObjects(false);
+			
+			List<String> controlIDList = new ArrayList<>(); 
+			IAppObjIterator controlIterator = controlQuery.getResultIterator();
+			while(controlIterator.hasNext()){
+				IAppObj controlObj = controlIterator.next();
+				controlIDList.add(controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue());
+			}
+			controlQuery.release();
+			
+			IAppObjFacade ceFacade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROLEXECUTION);
+			
+			IAppObjQuery ceQuery = ceFacade.createQuery()
+					.addRestriction(
+							QueryRestriction.in(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, controlIDList)
+//							QueryRestriction.and(
+//									QueryRestriction.eq(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, origControlID),
+//									QueryRestriction.eq(IControlexecutionAttributeType.ATTR_OWNER_STATUS, CONTROLEXECUTION_OWNER_STATUS.COMPLETED)
+//							)
+							);
+			
+			ceQuery.setHeadRevisionsOnly(true);
+			ceQuery.setIncludeDeletedObjects(false);
+			
+			IAppObjIterator ceIterator = ceQuery.getResultIterator();
+			while(ceIterator.hasNext()){
+				
+				IAppObj ceObj = ceIterator.next();
+				ceIDList.add(ceObj.getObjectId());
+				
+			}
+			
+			ceQuery.release();
+			
+		}catch(Exception e){
+			throw new RuntimeException(e);
+		}finally{
+			
 		}
 		
 		return ceIDList;
