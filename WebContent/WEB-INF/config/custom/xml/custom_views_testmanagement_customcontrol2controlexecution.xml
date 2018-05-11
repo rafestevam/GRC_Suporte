@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
-    
+   <!-- TESTE -->
    <view id="customcontrol2controlexecution" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomRisk2ControlExecution">
         <viewObject id="VO_cet_obj" objectType="CONTROLEXECUTION" isMainViewObject="true">
             <viewColumn id="client_sign" attributeType="client_sign" isSelectColumn="true"/>
