@@ -152,6 +152,19 @@ public class RiskAndControlCalculation {
 		
 	}
 	
+	public double getCountInef() {
+		return countInef;
+	}
+	public void setCountInef(double countInef) {
+		this.countInef = countInef;
+	}
+	public double getCountEf() {
+		return countEf;
+	}
+	public void setCountEf(double countEf) {
+		this.countEf = countEf;
+	}
+	
 	private String riskClassification(double riskVuln) {
 		String riskClassif = "";
 		

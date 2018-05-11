@@ -433,10 +433,11 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK);
 			//Fim REO - 27.09.2017 - EV113345
 			
-			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
-			IAppObj riskUpdObj = riskFacade.load(riskOVID, getDefaultTransaction(), true);
-			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
-			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
+//			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
+//			IAppObj riskUpdObj = riskFacade.load(riskOVID, getDefaultTransaction(), true);
+//			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
+//			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
+			riskFacade.allocateLock(riskObj.getVersionData().getOVID(), LockType.FORCEWRITE);
 			
 			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL); //Inicio Exclusao - REO - 14.02.2018 - EV1333332
 		
@@ -445,18 +446,21 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 			//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, this.countEf, new Double(1).doubleValue());
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			objCalc.setCountEf(this.countEf);
+			objCalc.setCountInef(this.countInef);
 			
 			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
 			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
 			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
 			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
+			
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
 			
 			//Inicio Alteração - REO 03.04.2018 - EV167240
 			String riskClassFinalVal = riskClassFinal.equals("") ? "Não Avaliado" : riskClassFinal;
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinalVal);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinalVal);
 			//Fim Alteração - REO 03.04.2018 - EV167240
 			
 			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
@@ -466,29 +470,29 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
 			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
 
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
 			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
 			
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
-			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
 			
 			if(!this.riscoPotencial.equals("Nao Avaliado")){
 				riskResidual1Line = this.riskResidualFinal(this.riscoPotencial, riskClass1line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
 				
 				riskResidual2Line = this.riskResidualFinal(this.riscoPotencial, riskClass2line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
 				
 				riskResidual3Line = this.riskResidualFinal(this.riscoPotencial, riskClass3line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
 				
 				riskResidualFinal = this.riskResidualFinal(this.riscoPotencial, riskClassFinal);
 				if(riskResidualFinal.equals("Não Avaliado"))
 					riskResidualFinal = this.riscoPotencial;
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
 			}
 			//Fim Inclusão - REO - 14.02.2018 - EV1333332			
 			
@@ -622,8 +626,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			}*/
 			//Fim Exclusao - REO - 14.02.2018 - EV1333332
 			
-			riskFacade.save(riskUpdObj, this.getDefaultTransaction(), true);
-			riskFacade.releaseLock(riskOVID);
+			riskFacade.save(riskObj, this.getDefaultTransaction(), true);
+			riskFacade.releaseLock(riskObj.getVersionData().getOVID());
 		
 		}
 		catch(Exception e){
