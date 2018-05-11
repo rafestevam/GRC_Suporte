@@ -434,7 +434,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//Fim REO - 27.09.2017 - EV113345
 			
 			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
-			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
+			IAppObj riskUpdObj = riskFacade.load(riskOVID, getDefaultTransaction(), true);
 			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
 			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
 			
