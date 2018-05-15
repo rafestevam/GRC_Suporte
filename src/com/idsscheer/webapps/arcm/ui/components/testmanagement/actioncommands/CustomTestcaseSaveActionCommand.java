@@ -752,6 +752,16 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	
 	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception  {
 		Object objReturn = null;
+		
+		if(defLine.equals(DefLineEnum.LINE_2)){
+			objCalc.setCountEf(countEf2line);
+			objCalc.setCountInef(countInef2line);
+		}
+		if(defLine.equals(DefLineEnum.LINE_3)){
+			objCalc.setCountEf(countEf3line);
+			objCalc.setCountInef(countInef3line);
+		}
+		
 		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
 		
 		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
