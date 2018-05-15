@@ -30,6 +30,12 @@ import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 
 public class IssueHelperCustom extends CollectiveHelper {
+//	DMM - BOF- Revisão da sprint - 14/05/2018
+	public static boolean isUserSysAdmin() {
+		REEnvironment env = REEnvironment.getInstance();
+		return env.getUserContext().getUserRights().isSysadmin();
+	}
+//	DMM - EOF- Revisão da sprint - 14/05/2018
 	
 	
 	public static boolean isUserSysAdmin() {
