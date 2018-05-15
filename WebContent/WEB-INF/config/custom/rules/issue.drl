@@ -1164,3 +1164,103 @@ rule "file_upload_enable[I,V]"
 
 end
 
+#DMM - BOF- Revisão da sprint - 14/05/2018
+
+rule "show_hide_action_plan_fields_issue_manager[I,V]"
+
+	salience 62
+	no-loop true
+	
+	when
+		is_not in workflow state "apClosedByReviewer"
+		(user is systemadmin OR
+		user has at object role "issuemanager")
+		#(user is_not assigned in list "owners" AND
+		#user is_not assigned in list "reviewers")
+		#object is_not opened by its creator
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "actionplan"		
+	then
+	
+		#set "custom_ap_creator_status"		invisible	# AP
+		#set "custom_ap_owner_status"		invisible	# AP
+		#set "custom_ap_reviewer_status"	invisible	# AP
+
+
+		set "action_type"	 			editable	# AP/I
+		set "obj_id"					readonly	# AP/I
+		set "name"						editable	# AP/I
+		set "issue_date"				readonly	# AP/I
+		set "issueRelevantObjects"		readonly	# AP/I
+		set "description"				editable	# AP/I
+		set "plannedenddate"			editable	# AP/I
+		set "replanneddate"				editable	# AP/I
+		set "replanned"					readonly	# AP/I
+		set "cst_rescheduling" 		 	readonly	# AP
+		set "stateTime"					readonly	# AP/I
+		set "creator"					readonly	# AP/I
+		set "owners"					editable	# AP/I
+		set "reviewers"					editable	# AP/I
+		set "status_obj"				readonly	# AP/I
+		set "owner"						readonly	# AP/I
+		set "immediateMeasure"			editable	# AP/I
+		set "documents"					editable	# AP/I
+
+end
+
+rule "show_hide_issues_fields_issue_manager[I,V]"
+
+	salience 61
+	no-loop true
+	
+	when
+		is_not in workflow state "closedByReviewer"
+		(user is systemadmin OR
+		user has at object role "issuemanager")
+		#(user is_not assigned in list "owners" AND
+		#user is_not assigned in list "reviewers" AND
+		#object is_not opened by its creator)
+		value comparison fulfilled: ":transient:" attr_value "action_type" "CONTAINS" value "issue"		
+	then
+
+		#set "custom_is_creator_status"	invisible	# I
+		#set "custom_is_owner_status"	invisible	# I
+		#set "custom_is_reviewer_status"	invisible	# I
+
+
+		set "action_type" 				editable	# AP/I
+		set "issuesource"  				editable	# I
+		set "obj_id"					readonly	# AP/I
+		set "name"						editable	# AP/I
+		set "issue_date"				readonly	# AP/I
+		set "issueRelevantObjects"		readonly	# AP/I
+		set "description"				editable	# AP/I
+		set "root_cause"  				editable	# I
+		set "remediationMeasure"  		editable	# I
+		set "plannedenddate"			readonly	# AP/I
+		set "replanneddate"				readonly	# AP/I
+		set "fup_date"					readonly	# I
+		set "replanned"					readonly	# AP/I
+		set "stateTime"					readonly	# AP/I
+		set "recurrent" 	 			editable	# I
+		set "rsk_name"					readonly	# I
+		set "ra_result"  				readonly	# I
+		set "ra_residualfinal"  		readonly	# I
+		set "riskowner"  				readonly	# I
+		set "creator"					readonly	# AP/I
+		set "owners"					editable	# AP/I
+		set "reviewers"					editable	# AP/I
+		set "status_obj"				readonly	# AP/I
+		set "owner"						readonly	# AP/I
+		set "immediateMeasure"			editable	# AP/I
+		set "documents"					editable	# AP/I
+		set "acting_front"  			editable	# I
+		set "process_environment" 		editable	# I
+		set "business_unit"				editable	# I
+		set "cst_appsystem"  			editable	# I
+		set "custom_servicetype"  		editable	# I
+		set "auditproject"  			editable	# I
+		set "custom_auditauthor"  		editable	# I
+
+end
+
+#DMM - EOF- Revisão da sprint - 14/05/2018
