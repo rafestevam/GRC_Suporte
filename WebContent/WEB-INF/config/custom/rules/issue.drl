@@ -969,6 +969,7 @@ rule "custom_is_set_creator_status[I,V]"
 		set "custom_is_creator_status"   readonly
 		set "custom_is_owner_status"     readonly
 		set "custom_is_reviewer_status"  readonly
+		set "origemteste"                readonly
 		
 		set "creator_status"             invisible
 		set "owner_status"               invisible
@@ -976,7 +977,7 @@ rule "custom_is_set_creator_status[I,V]"
 		
 		set "custom_ap_creator_status"   invisible
 		set "custom_ap_owner_status"     invisible
-		set "custom_ap_reviewer_status"  invisible   
+		set "custom_ap_reviewer_status"  invisible  
 
 		
 end
@@ -994,6 +995,7 @@ rule "custom_ap_set_creator_status[I,V]"
 		set "custom_ap_creator_status"   readonly
 		set "custom_ap_owner_status"     readonly
 		set "custom_ap_reviewer_status"  readonly
+		set "origemteste"                readonly
 		
 		set "creator_status"             invisible
 		set "owner_status"               invisible
