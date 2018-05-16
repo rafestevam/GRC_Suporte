@@ -1195,7 +1195,8 @@ rule "show_hide_action_plan_fields_issue_manager[I,V]"
 		set "plannedenddate"			editable	# AP/I
 		set "replanneddate"				editable	# AP/I
 		set "replanned"					readonly	# AP/I
-		set "cst_rescheduling" 		 	readonly	# AP
+		set "cst_rescheduling" 		 	editable	# AP
+		set "recurrent" 	 			editable	# I
 		set "stateTime"					readonly	# AP/I
 		set "creator"					readonly	# AP/I
 		set "owners"					editable	# AP/I
@@ -1236,10 +1237,10 @@ rule "show_hide_issues_fields_issue_manager[I,V]"
 		set "description"				editable	# AP/I
 		set "root_cause"  				editable	# I
 		set "remediationMeasure"  		editable	# I
-		set "plannedenddate"			readonly	# AP/I
+		set "plannedenddate"			editable	# AP/I
 		set "replanneddate"				readonly	# AP/I
 		set "fup_date"					readonly	# I
-		set "replanned"					readonly	# AP/I
+		set "replanned"					editable	# AP/I
 		set "stateTime"					readonly	# AP/I
 		set "recurrent" 	 			editable	# I
 		set "rsk_name"					readonly	# I
