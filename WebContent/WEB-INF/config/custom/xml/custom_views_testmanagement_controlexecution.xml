@@ -2,7 +2,7 @@
 <custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
     
 <!--    <view id="customcontrol2controlexecution" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomRisk2ControlExecution"> -->
-	<view id="controlexecution" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomControl2ControlExecution">
+	<view id="controlexecution" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomControl2ControlExecution" relevantForMashzoneIntegration="true">
         <viewObject id="VO_cet_obj" objectType="CONTROLEXECUTION" isMainViewObject="true">
             <viewColumn id="client_sign" attributeType="client_sign" isSelectColumn="true"/>
             <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true"/>
