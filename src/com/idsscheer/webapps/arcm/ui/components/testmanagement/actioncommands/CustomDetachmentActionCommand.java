@@ -124,24 +124,26 @@ public class CustomDetachmentActionCommand extends BaseDetachmentActionCommand {
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
 			riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
 			
-			if(!riscoPotencial.equals("Nao Avaliado")){
-				riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+			if(riscoPotencial != null){
+				if(!riscoPotencial.equals("Nao Avaliado")){
+					riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+					
+					riskResidual2Line = this.riskResidualFinal(riscoPotencial, riskClass2line);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
+					
+					riskResidual3Line = this.riskResidualFinal(riscoPotencial, riskClass3line);
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
+					
+					riskResidualFinal = this.riskResidualFinal(riscoPotencial, riskClassFinal);
+					if(riskResidualFinal.equals("Não Avaliado"))
+						riskResidualFinal = riscoPotencial;
+					riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+				}
 				
-				riskResidual2Line = this.riskResidualFinal(riscoPotencial, riskClass2line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
-				
-				riskResidual3Line = this.riskResidualFinal(riscoPotencial, riskClass3line);
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
-				
-				riskResidualFinal = this.riskResidualFinal(riscoPotencial, riskClassFinal);
-				if(riskResidualFinal.equals("Não Avaliado"))
-					riskResidualFinal = riscoPotencial;
-				riskUpdObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+				riskFacade.save(riskUpdObj, this.getDefaultTransaction(), true);
+				riskFacade.releaseLock(riskOVID);
 			}
-			
-			riskFacade.save(riskUpdObj, this.getDefaultTransaction(), true);
-			riskFacade.releaseLock(riskOVID);
 			
 		}catch(Exception e){
 			this.releaseLockedObjects();

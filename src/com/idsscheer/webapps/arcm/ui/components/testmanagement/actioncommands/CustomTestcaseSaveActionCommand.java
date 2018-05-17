@@ -122,13 +122,13 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				this.tdObjectId = tdObj.getObjectId();
 			}
 				
-			log.info("Status de Proprietário: " + ownerStatus);
-			
-			log.info("Testes Inef 2a Linha: " + String.valueOf(this.countInef2line));
-			log.info("Total Testes 2a Linha: " + String.valueOf(this.countTotal2line));
-			
-			log.info("Testes Inef 3a Linha: " + String.valueOf(this.countInef3line));
-			log.info("Total Testes 3a Linha: " + String.valueOf(this.countTotal3line));
+//			log.info("Status de Proprietário: " + ownerStatus);
+//			
+//			log.info("Testes Inef 2a Linha: " + String.valueOf(this.countInef2line));
+//			log.info("Total Testes 2a Linha: " + String.valueOf(this.countTotal2line));
+//			
+//			log.info("Testes Inef 3a Linha: " + String.valueOf(this.countInef3line));
+//			log.info("Total Testes 3a Linha: " + String.valueOf(this.countTotal3line));
 		
 			//IAppObj riskParentObj = this.getRiskFromControl(currParentCtrlObj);
 			//IAppObj riskParentObj = this.getRiskFromControl(parentControlObjId);

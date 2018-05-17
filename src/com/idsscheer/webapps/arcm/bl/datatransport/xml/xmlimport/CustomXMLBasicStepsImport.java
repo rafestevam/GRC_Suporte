@@ -207,7 +207,7 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		}
 	}
 	
-	public void setracontrolfinal(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+	public void setraresult(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
 			throws MigrationException {
 		try{
 			
@@ -351,7 +351,7 @@ public class CustomXMLBasicStepsImport extends XMLImportMigrationBasisSteps {
 		}
 	}
 	
-	public void setrafinal(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
+	public void setracontrolfinal(IMigrationRecord sourceRec, IMigrationRecord targetRec, IColumnMap columnMap)
 			throws MigrationException {
 		try{
 			
