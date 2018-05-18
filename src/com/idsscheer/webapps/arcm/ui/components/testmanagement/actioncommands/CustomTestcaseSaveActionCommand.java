@@ -427,7 +427,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
 			//Fim REO - 27.09.2017 - EV113345
 			
-			IAppObj riskUpdObj = riskFacade.load(riskOVID, true);
+			IAppObj riskUpdObj = riskFacade.load(riskOVID, this.getDefaultTransaction(), true);
 			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE);
 			
 			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL);
