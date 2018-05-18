@@ -1,21 +1,27 @@
 package com.idsscheer.webapps.arcm.dl.framework.viewhandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.myfaces.shared.util.LocaleUtils;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
+import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
+import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IQueryExpression;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
-import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlexecutionAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
@@ -35,7 +41,6 @@ public class CustomControl2ControlExecution implements IViewHandler {
 			QueryDefinition parentQuery) throws BusViewException  {
 		// TODO Auto-generated method stub
 		
-		System.out.println("teste view handler");
 		List<Long> ceIDList = new ArrayList<>();
 		if(currentObject != null)
 			ceIDList = getAllControlsFromOriginal(currentObject);
@@ -105,50 +110,63 @@ public class CustomControl2ControlExecution implements IViewHandler {
 		
 		try{
 			IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
-			IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROL);
+			ITransaction transaction = TransactionManager.getInstance().createTransaction();
+//			IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROL);
+			Map filterMap = new HashMap<>();
 			
-			IAppObjQuery controlQuery = controlFacade.createQuery();
+//			IAppObjQuery controlQuery = controlFacade.createQuery();
 			for(IFilterCriteria filter : filters){
-				if(filter.getAttributeAliasName().equals("control_name")) {
-					IQueryExpression restr = QueryRestriction.like(IControlAttributeType.ATTR_NAME, (String)filter.getValue());
-					controlQuery.addRestriction(restr);
-				}
+				filterMap.put(filter.getAttributeAliasName(), filter.getValue());
+//				if(filter.getAttributeAliasName().equals("control_name")) {
+//					IQueryExpression restr = QueryRestriction.like(IControlAttributeType.ATTR_NAME, (String)filter.getValue());
+//					controlQuery.addRestriction(restr);
+//				}
 			}
 			
-			controlQuery.setHeadRevisionsOnly(true);
-			controlQuery.setIncludeDeletedObjects(false);
+			filterMap.put("version_active", true);
 			
-			List<String> controlIDList = new ArrayList<>(); 
-			IAppObjIterator controlIterator = controlQuery.getResultIterator();
-			while(controlIterator.hasNext()){
-				IAppObj controlObj = controlIterator.next();
-				controlIDList.add(controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue());
-			}
-			controlQuery.release();
-			
-			IAppObjFacade ceFacade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROLEXECUTION);
-			
-			IAppObjQuery ceQuery = ceFacade.createQuery()
-					.addRestriction(
-							QueryRestriction.in(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, controlIDList)
-//							QueryRestriction.and(
-//									QueryRestriction.eq(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, origControlID),
-//									QueryRestriction.eq(IControlexecutionAttributeType.ATTR_OWNER_STATUS, CONTROLEXECUTION_OWNER_STATUS.COMPLETED)
-//							)
-							);
-			
-			ceQuery.setHeadRevisionsOnly(true);
-			ceQuery.setIncludeDeletedObjects(false);
-			
-			IAppObjIterator ceIterator = ceQuery.getResultIterator();
-			while(ceIterator.hasNext()){
-				
-				IAppObj ceObj = ceIterator.next();
-				ceIDList.add(ceObj.getObjectId());
-				
+			IViewQuery query = QueryFactory.createQuery(userCtx, "controlexecutiondata", filterMap, null, true, transaction);
+			Iterator<IViewObj> iterator = query.getResultIterator();
+			while(iterator.hasNext()){
+				IViewObj viewObj = iterator.next();
+				ceIDList.add(viewObj.getObjectId());
 			}
 			
-			ceQuery.release();
+			
+//			controlQuery.setHeadRevisionsOnly(true);
+//			controlQuery.setIncludeDeletedObjects(false);
+			
+//			List<String> controlIDList = new ArrayList<>(); 
+//			IAppObjIterator controlIterator = controlQuery.getResultIterator();
+//			while(controlIterator.hasNext()){
+//				IAppObj controlObj = controlIterator.next();
+//				controlIDList.add(controlObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue());
+//			}
+//			controlQuery.release();
+//			
+//			IAppObjFacade ceFacade = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.CONTROLEXECUTION);
+//			
+//			IAppObjQuery ceQuery = ceFacade.createQuery()
+//					.addRestriction(
+//							QueryRestriction.in(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, controlIDList)
+////							QueryRestriction.and(
+////									QueryRestriction.eq(IControlexecutionAttributeTypeCustom.ATTR_CONTROL_ID, origControlID),
+////									QueryRestriction.eq(IControlexecutionAttributeType.ATTR_OWNER_STATUS, CONTROLEXECUTION_OWNER_STATUS.COMPLETED)
+////							)
+//							);
+//			
+//			ceQuery.setHeadRevisionsOnly(true);
+//			ceQuery.setIncludeDeletedObjects(false);
+//			
+//			IAppObjIterator ceIterator = ceQuery.getResultIterator();
+//			while(ceIterator.hasNext()){
+//				
+//				IAppObj ceObj = ceIterator.next();
+//				ceIDList.add(ceObj.getObjectId());
+//				
+//			}
+//			
+//			ceQuery.release();
 			
 		}catch(Exception e){
 			throw new RuntimeException(e);
