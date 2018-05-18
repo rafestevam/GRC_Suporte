@@ -1031,7 +1031,7 @@ rule "custom_set_issuesource[I,V]"
 
 	then
 	  	
-#		set "issuesource"       editable
+		set "issuesource"       editable
 		set "priority"          invisible
 		set "category"          invisible
 end
