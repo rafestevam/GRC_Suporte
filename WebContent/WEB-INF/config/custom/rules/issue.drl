@@ -147,8 +147,10 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
 		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
+#		set "replanned"               editable  #GAP - GRC74
+#		set "recurrent"	              editable  #GAP - GRC74
+		set "replanned"               readonly
+		set "recurrent"	              readonly
 
 		set "owner_status"            invisible
 		set "owner_remark"            invisible
@@ -198,8 +200,10 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
 		set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
 		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
+#		set "replanned"               editable  #GAP - GRC74
+#		set "recurrent"	              editable  #GAP - GRC74
+		set "replanned"               readonly
+		set "recurrent"	              readonly
 				
 		set "name"                    mandatory
 		set "description"             mandatory
@@ -254,7 +258,8 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
 
-		set "replanned"               editable  #GAP - GRC74
+#		set "replanned"               editable  #GAP - GRC74
+		set "replanned"               readonly
 		set "recurrent"	              readonly  #GAP - GRC74
 
 		set "name"                    mandatory
@@ -310,7 +315,8 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
 		set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
 		
-		set "replanned"               editable  #GAP - GRC74
+#		set "replanned"               editable  #GAP - GRC74
+		set "replanned"               readonly
 		set "recurrent"	              readonly  #GAP - GRC74
 		
 		set "name"                    mandatory
@@ -452,8 +458,10 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
 		set "reviewers"               editable
 		set "documents"               editable
 		
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
+#		set "replanned"               editable  #GAP - GRC74
+#		set "recurrent"	              editable  #GAP - GRC74
+		set "replanned"               readonly
+		set "recurrent"	              readonly
 		
 		set "name"                    mandatory
 		set "description"             mandatory
@@ -490,8 +498,10 @@ rule "custom_GRC66_ap opened by manager & issue in owner_state 'new' --> init [I
 		set "reviewers"               editable
 		set "documents"               editable
 
-		set "replanned"               editable  #GAP - GRC74
-		set "recurrent"	              editable  #GAP - GRC74
+#		set "replanned"               editable  #GAP - GRC74
+#		set "recurrent"	              editable  #GAP - GRC74
+		set "replanned"               readonly
+		set "recurrent"	              readonly
 		
 		set "name"                    mandatory
 		set "description"             mandatory
@@ -610,7 +620,8 @@ rule "custom_grc66_is opened by owner & still open for owner --> init [I,V]"
 		set "custom_ap_owner_status"     invisible
 		set "custom_is_reviewer_status"  invisible
 		set "custom_ap_reviewer_status"  invisible
-		set "recurrent"	                 editable  #GAP - GRC74
+#		set "recurrent"	                 editable  #GAP - GRC74
+		set "recurrent"	                 readonly
 
 end
 
@@ -677,7 +688,8 @@ rule "custom_GRC66_ap_in_progress [I,V]"
 		set "plannedenddate"          editable
 		set "owners"                  editable
 		set "reviewers"               editable
-		set "replanned"               editable  #GAP - GRC74 2304
+#		set "replanned"               editable  #GAP - GRC74 2304
+		set "replanned"               readonly
 
         set "plannedenddate"          mandatory
 		set "owners"                  mandatory
@@ -723,7 +735,8 @@ rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
 #		set "reviewer_status" editable
 		set "reviewer_remark" editable
 		set "documents"       editable
-		set "recurrent"	      editable  #GAP - GRC74
+#		set "recurrent"	      editable  #GAP - GRC74
+		set "recurrent"	      readonly
 		
 #		set "reviewer_status" mandatory
 
@@ -755,7 +768,8 @@ rule "custom_GRC66_ap opened by reviewer, still editable --> init [I,V]"
 		set "reviewer_remark" editable
 		set "documents"       editable	
 		set "plannedenddate"  editable
-		set "replanned"       editable  #GAP - GRC74 2304
+#		set "replanned"       editable  #GAP - GRC74 2304
+		set "replanned"       readonly
 		
 #		set "reviewer_status" mandatory
 
@@ -1127,7 +1141,8 @@ rule "custom_set_change_fields_issue[I,V]"
 		set "description" editable
 		set "plannedenddate"  editable
 		set "reviewers"   editable
-		set "replanned"   editable
+#		set "replanned"   editable
+		set "replanned"   readonly
 		set "documents"   editable
 
 end
@@ -1196,7 +1211,8 @@ rule "show_hide_action_plan_fields_issue_manager[I,V]"
 		set "description"				editable	# AP/I
 		set "plannedenddate"			editable	# AP/I
 		set "replanneddate"				editable	# AP/I
-		set "replanned"					readonly	# AP/I
+		set "replanned"					editable	# AP/I
+		set "recurrent"                 editable
 		set "cst_rescheduling" 		 	editable	# AP
 		set "recurrent" 	 			editable	# I
 		set "stateTime"					readonly	# AP/I
