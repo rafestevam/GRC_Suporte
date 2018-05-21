@@ -431,6 +431,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//Inicio REO - 27.09.2017 - EV113345
 			//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
 			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.RISK);
+			log.info("Abriu facade de RISCO");
 			//Fim REO - 27.09.2017 - EV113345
 			
 //			IOVID riskOVID = riskObj.getVersionData().getHeadOVID();
@@ -438,6 +439,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 //			//riskFacade.allocateWriteLock(riskOVID); FCT- 19.12.2017 - EV126406
 //			riskFacade.allocateLock(riskOVID, LockType.FORCEWRITE); //FCT+ 19.12.2017 - EV126406
 			riskFacade.allocateLock(riskObj.getVersionData().getOVID(), LockType.FORCEWRITE);
+			log.info("LOCK do Objeto de Risco " + riskObj.toString());
 			
 			//IAppObjFacade controlFacade = this.environment.getAppObjFacade(ObjectType.CONTROL); //Inicio Exclusao - REO - 14.02.2018 - EV1333332
 		
@@ -446,13 +448,20 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 			//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, this.countEf, new Double(1).doubleValue());
 			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			log.info("Criou objeto de Calculo de Risco Residual");
 			objCalc.setCountEf(this.countEf);
+			log.info("Set Contagem Efetivos " + this.countEf);
 			objCalc.setCountInef(this.countInef);
+			log.info("Set Contagem Inefetivos " + this.countInef);
 			
 			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			log.info("Classificação 1 Linha " + riskClass1line);
 			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+			log.info("Classificação 2 Linha " + riskClass2line);
 			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+			log.info("Classificação 3 Linha " + riskClass3line);
 			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			log.info("Classificação Final " + riskClassFinal);
 			
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
@@ -626,8 +635,16 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			}*/
 			//Fim Exclusao - REO - 14.02.2018 - EV1333332
 			
+			log.info("Class 1 Linha Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE));
+			log.info("Class 2 Linha Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE));
+			log.info("Class 3 Linha Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE));
+			log.info("Class Final Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL));
+			
 			riskFacade.save(riskObj, this.getDefaultTransaction(), true);
+			log.info("Salvou Objeto de Risco");
+			
 			riskFacade.releaseLock(riskObj.getVersionData().getOVID());
+			log.info("Liberou Objeto de Risco");
 		
 		}
 		catch(Exception e){
