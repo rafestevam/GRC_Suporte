@@ -52,6 +52,7 @@ public class CustomUpdateCreatorStatus implements ICommand {
 							log.info(this.getClass().getName(), "status issue é: " + EnumerationsCustom.CENUM_IS_CREATOR_STATUS.NEW.getId());
 						}
 					}
+					
 				}
 				if(actionTypeItem.getId().equals("actionplan")){
 					log.info(this.getClass().getName(), "apontamento é actionplan!");

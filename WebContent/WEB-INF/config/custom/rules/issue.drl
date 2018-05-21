@@ -141,6 +141,7 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "acting_front"            editable #GAP - GRC74
 		set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
+		set "issuesource"             editable
 		
 		set "name"                    mandatory
 		set "description"             mandatory
@@ -199,6 +200,7 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
 		set "acting_front"            editable #GAP - GRC74
 		set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
+		set "issuesource"             editable
 		
 #		set "replanned"               editable  #GAP - GRC74
 #		set "recurrent"	              editable  #GAP - GRC74
@@ -257,6 +259,7 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "acting_front"            editable #GAP - GRC74
 		set "root_cause"              editable #GAP - GRC74
 		set "business_unit"           editable #GAP - GRC74
+		set "issuesource"             editable
 
 #		set "replanned"               editable  #GAP - GRC74
 		set "replanned"               readonly
@@ -573,6 +576,7 @@ rule "opened by owner & still open for owner --> init [I,V]"
 #		set "owner_status"  editable
 		set "owner_remark"  editable
 		set "documents"     editable
+		set "issuesource"   readonly
 		
 #		set "owner_status"  mandatory
 
@@ -592,6 +596,7 @@ rule "ap opened by owner & still open for owner --> init [I,V]"
 #		set "owner_status"  editable
 		set "owner_remark"  editable
 		set "documents"     editable
+		set "issuesource"   readonly
 		
 #		set "owner_status"  mandatory
 
@@ -662,14 +667,12 @@ rule "custom_GRC66_is_in_progress [I,V]"
 		value comparison fulfilled: ":transient:" attr_value "custom_is_owner_status" "CONTAINS" value "in_progress"
 
 	then
-		set "plannedenddate"          editable
-		set "owners"                  editable
-		set "reviewers"               editable
-		
-
-        set "plannedenddate"          mandatory
-		set "owners"                  mandatory
-		set "reviewers"               mandatory
+#		set "plannedenddate"          editable
+#		set "owners"                  editable
+#		set "reviewers"               editable
+#       set "plannedenddate"          mandatory
+#		set "owners"                  mandatory
+#		set "reviewers"               mandatory
 
 end
 
@@ -685,15 +688,15 @@ rule "custom_GRC66_ap_in_progress [I,V]"
 		value comparison fulfilled: ":transient:" attr_value "custom_ap_owner_status" "CONTAINS" value "in_progress"
 
 	then
-		set "plannedenddate"          editable
-		set "owners"                  editable
-		set "reviewers"               editable
+#		set "plannedenddate"          editable
+#		set "owners"                  editable
+#		set "reviewers"               editable
 #		set "replanned"               editable  #GAP - GRC74 2304
 		set "replanned"               readonly
 
-        set "plannedenddate"          mandatory
-		set "owners"                  mandatory
-		set "reviewers"               mandatory
+#       set "plannedenddate"          mandatory
+#		set "owners"                  mandatory
+#		set "reviewers"               mandatory
 
 end
 
@@ -730,7 +733,7 @@ rule "custom_GRC66_is opened by reviewer, still editable --> init [I,V]"
 	then
 		set "custom_is_reviewer_status" editable
 		set "custom_is_reviewer_status" mandatory
-		set "reviewers"                 mandatory
+#		set "reviewers"                 mandatory
 	
 #		set "reviewer_status" editable
 		set "reviewer_remark" editable
@@ -767,7 +770,7 @@ rule "custom_GRC66_ap opened by reviewer, still editable --> init [I,V]"
 #		set "reviewer_status" editable
 		set "reviewer_remark" editable
 		set "documents"       editable	
-		set "plannedenddate"  editable
+#		set "plannedenddate"  editable
 #		set "replanned"       editable  #GAP - GRC74 2304
 		set "replanned"       readonly
 		
@@ -795,7 +798,7 @@ rule "custom_GRC66_is opened by reviewer, remediation planned before editable [I
 #		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
 
 	then
-		set "plannedenddate" editable
+#		set "plannedenddate" editable
 
 end
 
@@ -812,7 +815,7 @@ rule "custom_GRC66_ap opened by reviewer, remediation planned before editable [I
 #		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
 
 	then
-		set "plannedenddate" editable
+#		set "plannedenddate" editable
 
 end
 
@@ -828,7 +831,7 @@ rule "custom_GRC66_ap2 opened by reviewer, remediation planned before editable [
 #		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "not_approved"
 
 	then
-		set "plannedenddate" editable
+#		set "plannedenddate" editable
 
 end
 
@@ -845,7 +848,7 @@ rule "custom_GRC66_is opened by reviewer and not disagreed => plannedenddate + s
 #		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
 
 	then
-		set "plannedenddate" editable
+#		set "plannedenddate" editable
 
 end
 
@@ -862,7 +865,7 @@ rule "custom_GRC66_ap opened by reviewer and not disagreed => plannedenddate + s
 #		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
 
 	then
-		set "plannedenddate" editable
+#		set "plannedenddate" editable
 
 end
 
@@ -879,7 +882,7 @@ rule "custom_GRC66_ap2 opened by reviewer and not disagreed => plannedenddate + 
 #		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS NOT" value "not_approved"
 
 	then
-		set "plannedenddate" editable
+#		set "plannedenddate" editable
 
 end
 
@@ -1031,7 +1034,7 @@ rule "custom_set_issuesource[I,V]"
 
 	then
 	  	
-		set "issuesource"       editable
+#		set "issuesource"       editable
 		set "priority"          invisible
 		set "category"          invisible
 end
