@@ -14,7 +14,8 @@
 <!--             <buttonReference button.idref="CST_AP_CHANGE_ROLE"/> -->
         </formButtons>
         <page id="issue" licensedComponentIds="im">
-<!--         	<javaScriptRef scriptName="custom_GRC74"/> -->
+
+            <javaScriptRef scriptName="custom_GRC74"/>
             <rowGroup id="issue.1">
                 <!-- GAP-GRC74 Inicio -->
                 <row id="action_type">
