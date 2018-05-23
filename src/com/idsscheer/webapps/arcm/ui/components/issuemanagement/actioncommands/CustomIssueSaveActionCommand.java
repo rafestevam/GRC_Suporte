@@ -166,7 +166,7 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		IAppObj currIssueAppObj = this.formModel.getAppObj();
 		//Date apDate = currIssueAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
 		//IOVID issueOVID = currIssueAppObj.getVersionData().getHeadOVID();
-		//createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
+		createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
 		
 		try{
 			//IAppObj issueObj = issueFacade.load(issueOVID, true);

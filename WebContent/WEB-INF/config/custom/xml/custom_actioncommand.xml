@@ -22,6 +22,7 @@
 			<commandId id="customcrattach" description="Reverse Attach customizado para Risco Corporativo" />
 			<commandId id="customcrdetach" description="Reverse Detach customizado para Risco Corporativo" />
 			<!-- Fim REO - 20.02.2017 - EV133332 -->
+			<commandId id="view" description="Comando teste para verificar estado de Workflow"/>
 		</commandIds>
 		
 		
@@ -57,7 +58,8 @@
 				<actionCommand commandId="customissuedate"    clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueDateCommand" />									
 	            <actionCommand commandId="save"               clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueSaveActionCommand" />
     	        <actionCommand commandId="customissuegetrisk" clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueGetRiskActionCommand" />
-    	        <actionCommand commandId="create"		 	  clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueCreateActionCommand"/><!-- REO 17.10.2017 - EV115903 -->					
+    	        <actionCommand commandId="create"		 	  clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueCreateActionCommand"/><!-- REO 17.10.2017 - EV115903 -->
+    	        <actionCommand commandId="edit"               clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueViewActionCommand"/>					
 		    </commandSet>
 		    
 		    <!-- Inicio REO - 12.09.2017 - Riscos Corporativos -->

@@ -456,7 +456,8 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
 		set "category"                editable
 		set "immediateMeasure"        editable
 		set "remediationMeasure"      editable
-		set "plannedenddate"          editable
+#		set "plannedenddate"          editable
+		set "plannedenddate"          readonly
 		set "owners"                  editable
 		set "reviewers"               editable
 		set "documents"               editable
@@ -469,7 +470,7 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'new' --> init [I
 		set "name"                    mandatory
 		set "description"             mandatory
 		set "remediationMeasure"      mandatory
-        set "plannedenddate"          mandatory
+#        set "plannedenddate"          mandatory
 		set "owners"                  mandatory
 		set "reviewers"               mandatory
 		
@@ -528,11 +529,12 @@ rule "custom_GRC66_is opened by manager & issue in owner_state 'in_progress' or 
 		user has at object role "issuemanager"
 
 	then
-		set "plannedenddate"          editable
+#		set "plannedenddate"          editable
+		set "plannedenddate"          readonly
 		set "owners"                  editable
 		set "reviewers"               editable
 
-        set "plannedenddate"          mandatory
+#        set "plannedenddate"          mandatory
 		set "owners"                  mandatory
 		set "reviewers"               mandatory			
 
@@ -1142,7 +1144,8 @@ rule "custom_set_change_fields_issue[I,V]"
 	then
 		set "name"        editable
 		set "description" editable
-		set "plannedenddate"  editable
+#		set "plannedenddate"  editable
+#		set "plannedenddate"  readonly
 		set "reviewers"   editable
 #		set "replanned"   editable
 		set "replanned"   readonly
@@ -1259,7 +1262,8 @@ rule "show_hide_issues_fields_issue_manager[I,V]"
 		set "description"				editable	# AP/I
 		set "root_cause"  				editable	# I
 		set "remediationMeasure"  		editable	# I
-		set "plannedenddate"			editable	# AP/I
+#		set "plannedenddate"			editable	# AP/I
+#		set "plannedenddate"			readonly	# AP/I
 		set "replanneddate"				readonly	# AP/I
 		set "fup_date"					readonly	# I
 		set "replanned"					editable	# AP/I
