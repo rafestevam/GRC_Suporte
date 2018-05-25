@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -19,6 +21,7 @@ public class RiskAndControlCalculation {
 	private double countNA;
 	private IAppObjFacade facade;
 	private ITransaction transaction;
+	private Logger log = Logger.getLogger(RiskAndControlCalculation.class);
 	
 	public RiskAndControlCalculation(List<IAppObj> controlList) {
 		this.controlList = controlList;
@@ -126,6 +129,27 @@ public class RiskAndControlCalculation {
 			
 			//facade.releaseLock(controlObj);
 			
+		}
+		
+		if(defLine.equals(DefLineEnum.LINE_1)){
+			log.info("1a Linha: Contagem de controles efetivos: " + this.countEf);
+			log.info("1a Linha: Contagem de controles inefetivos: " + this.countInef);
+			log.info("1a Linha: Contagem de controles Não Avaliados: " + this.countNA);
+		}
+		if(defLine.equals(DefLineEnum.LINE_2)){
+			log.info("2a Linha: Contagem de controles efetivos: " + this.countEf);
+			log.info("2a Linha: Contagem de controles inefetivos: " + this.countInef);
+			log.info("2a Linha: Contagem de controles Não Avaliados: " + this.countNA);
+		}
+		if(defLine.equals(DefLineEnum.LINE_3)){
+			log.info("3a Linha: Contagem de controles efetivos: " + this.countEf);
+			log.info("3a Linha: Contagem de controles inefetivos: " + this.countInef);
+			log.info("3a Linha: Contagem de controles Não Avaliados: " + this.countNA);
+		}
+		if(defLine.equals(DefLineEnum.LINE_F)){
+			log.info("Final: Contagem de controles efetivos: " + this.countEf);
+			log.info("Final: Contagem de controles inefetivos: " + this.countInef);
+			log.info("Final: Contagem de controles Não Avaliados: " + this.countNA);
 		}
 		
 		try{
