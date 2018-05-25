@@ -22,6 +22,8 @@ public class RiskAndControlCalculation {
 	private IAppObjFacade facade;
 	private ITransaction transaction;
 	private Logger log = Logger.getLogger(RiskAndControlCalculation.class);
+	private long objID = 0;
+	private String lineAlreadyTested = "";
 	
 	public RiskAndControlCalculation(List<IAppObj> controlList) {
 		this.controlList = controlList;
@@ -39,6 +41,17 @@ public class RiskAndControlCalculation {
 		this.countEf = 0;
 		this.countNA = 0;
 
+	}
+	public RiskAndControlCalculation(List<IAppObj> controlList, IAppObjFacade facade, ITransaction transaction, long objID) {
+		this.controlList = controlList;
+		this.facade = facade;
+		this.transaction = transaction;
+		this.objID = objID;
+		this.countInef = 0;
+		this.countTotal = 0;
+		this.countEf = 0;
+		this.countNA = 0;
+		
 	}
 	
 	public RiskAndControlCalculation(List<IAppObj> controlList, double countInef, double countEf, double countTotal) {
@@ -66,6 +79,11 @@ public class RiskAndControlCalculation {
 		for(IAppObj controlObjIt : controlList){
 			
 			IAppObj controlObj = controlObjIt;
+			
+			if((objID != 0) && (controlObj.getObjectId() == objID) && (lineAlreadyTested.equals(defLine.name()))){
+				countTotal += 1;
+				continue;
+			}
 			
 			//controlObj = facade.load(controlObjIt.getVersionData().getHeadOVID(), this.transaction, true);
 			
@@ -152,6 +170,10 @@ public class RiskAndControlCalculation {
 			log.info("Final: Contagem de controles Não Avaliados: " + this.countNA);
 		}
 		
+		log.info("******************************************************************");
+		log.info("Total de Controles: " + countTotal);
+		log.info("******************************************************************");
+		
 		try{
 			riskVuln = (this.countInef / countTotal);
 		}catch(Exception e){
@@ -209,6 +231,14 @@ public class RiskAndControlCalculation {
 		}
 		
 		return riskClassif;
+	}
+	
+	public String getLineAlreadyTested() {
+		return lineAlreadyTested;
+	}
+	
+	public void setLineAlreadyTested(String lineAlreadyTested) {
+		this.lineAlreadyTested = lineAlreadyTested;
 	}
 
 }

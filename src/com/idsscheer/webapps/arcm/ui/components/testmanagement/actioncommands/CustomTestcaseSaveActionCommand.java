@@ -173,7 +173,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 					//Fim REO 21.02.2018 - EV133332
 					
 					//this.controlClassification(controlList);
-					this.affectResidualRisk(riskParentObj);
+					long currControlID = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext()).get(0).getObjectId();
+					this.affectResidualRisk(riskParentObj, currControlID);
 					this.affectCorpRisk(riskParentObj);
 				}
 			
@@ -187,7 +188,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		}
 		
 	}
-	
+
 	private IAppObj parentControl(IAppObj childAppObj){
 		
 		IAppObj parentControlObj = null;
@@ -393,7 +394,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		
 	}
 	
-	private void affectResidualRisk(IAppObj riskObj) throws Exception{
+	private void affectResidualRisk(IAppObj riskObj, long currControlID) throws Exception{
 		
 		/*double cntTotal2Line = 0;
 		double cntTotal3Line = 0;
@@ -437,7 +438,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 //			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
-			objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction(), currControlID);
 			log.info("Criou objeto de Calculo de Risco Residual");
 			
 			log.info("******************************************************************************************");
@@ -815,6 +816,15 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		
 		objCalc.setCountEf(new Double(0));
 		objCalc.setCountInef(new Double(0));
+
+		if(this.origemTeste.equals("1linhadefesa")){
+			objCalc.setLineAlreadyTested(DefLineEnum.LINE_2.name());
+			log.info("Set Linha de Defesa já testada " + DefLineEnum.LINE_2.name());
+		}
+		if(this.origemTeste.equals("2linhadefesa")){
+			objCalc.setLineAlreadyTested(DefLineEnum.LINE_3.name());
+			log.info("Set Linha de Defesa já testada " + DefLineEnum.LINE_3.name());
+		}
 				
 		if(defLine.equals(DefLineEnum.LINE_2)){
 			objCalc.setCountEf(countEf2line);
@@ -828,12 +838,15 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			objCalc.setCountInef(countInef3line);
 			log.info("Set Contagem Inefetivos 3 Linha " + countInef3line);
 		}
-		if(defLine.equals(DefLineEnum.LINE_F)){
-			objCalc.setCountEf(countEf2line + countEf3line);
-			log.info("Set Contagem Efetivos Final " + (countEf2line + countEf3line));
-			objCalc.setCountInef(countInef2line + countInef3line);
-			log.info("Set Contagem Inefetivos 3 Linha " + (countInef2line + countInef3line));
-		}
+//		if(defLine.equals(DefLineEnum.LINE_F)){
+//			objCalc.setCountEf(countEf2line + countEf3line);
+//			log.info("Set Contagem Efetivos Final " + (countEf2line + countEf3line));
+//			objCalc.setCountInef(countInef2line + countInef3line);
+//			log.info("Set Contagem Inefetivos Final " + (countInef2line + countInef3line));
+//			objCalc.setLineAlreadyTested(DefLineEnum.LINE_F.name());
+//			log.info("Set Linha de Defesa já testada " + DefLineEnum.LINE_F.name());
+//		}
+		
 		
 		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
 		
