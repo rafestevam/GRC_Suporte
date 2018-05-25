@@ -57,7 +57,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	private String view_testcase_obj_id = "ta_id";
 	private String view_testcase_version_number = "ta_version_number";*/
 	private String riscoPotencial = "";
-	private String fernanda = "";
+	private String efetividade = "";
 	private String origemTeste = "";
 	final Logger log = Logger.getLogger(CustomTestcaseSaveActionCommand.class.getName());
 	private double countInef2line = 0;
@@ -69,6 +69,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	private long tdObjectId = 0;
 	private String riskClass1Line = "";
 	private IUserContext jobCtx; //REO+ 27.09.2017 - EV113345
+	private RiskAndControlCalculation objCalc;
 
 	protected void addForwardDialog() {
 		this.executeCalculation();
@@ -101,7 +102,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				this.countTotal3line += 1;
 			
 			if(ownerStatus.getId().equals("effective")){
-				this.fernanda = "effective";
+				this.efetividade = "effective";
 				if(this.origemTeste.equals("1linhadefesa"))
 					this.countEf2line += 1;
 				if(this.origemTeste.equals("2linhadefesa"))
@@ -109,7 +110,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			}
 			
 			if(ownerStatus.getId().equals("noneffective")){
-				this.fernanda = "noneffective";
+				this.efetividade = "noneffective";
 				if(this.origemTeste.equals("1linhadefesa"))
 					this.countInef2line += 1;
 				if(this.origemTeste.equals("2linhadefesa"))
@@ -159,14 +160,13 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				if(!riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).isEmpty())
 					this.riskClass1Line = riskParentObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).getRawValue();
 				
-				log.info("");
-				log.info("****************************************************************************************");
-				log.info("Risco Pai: " + riskParentObj.getAttribute(IRiskAttributeType.ATTR_RISK_ID).getRawValue());
-				log.info("Controle Corrente: " + currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext()).get(0).getRawValue(IControlAttributeType.ATTR_NAME));
-				log.info("****************************************************************************************");
 				//if(ownerStatus.equals("3") || ownerStatus.equals("4"))
 				if(this.requestContext.getParameter(ITestcaseAttributeType.STR_REVIEWER_STATUS).equals("1")){
-					
+					log.info("");
+					log.info("****************************************************************************************");
+					log.info("Risco Pai: " + riskParentObj.getAttribute(IRiskAttributeType.ATTR_RISK_ID).getRawValue());
+//					log.info("Controle Corrente: " + currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext()).get(0).getRawValue(IControlAttributeType.ATTR_NAME));
+					log.info("****************************************************************************************");
 					//Inicio REO 21.02.2018 - EV133332
 					//List<IAppObj> controlList = currAppObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullGrantUserContext());
 					//List<IAppObj> controlList = riskParentObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(getFullGrantUserContext());
@@ -436,17 +436,27 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getFullGrantUserContext());
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+//			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
 			log.info("Criou objeto de Calculo de Risco Residual");
 			
-			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			log.info("******************************************************************************************");
+			log.info("Contagem - Vulnerabilidade de Controles");
+			log.info("******************************************************************************************");
+//			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			String riskClass1line = (String)this.getMapValues("classification", DefLineEnum.LINE_1);
 			log.info("Classificacao 1 Linha " + riskClass1line);
-			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+//			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+			String riskClass2line = (String)this.getMapValues("classification", DefLineEnum.LINE_2);
 			log.info("Classificacao 2 Linha " + riskClass2line);
-			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+//			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+			String riskClass3line = (String)this.getMapValues("classification", DefLineEnum.LINE_3);
 			log.info("Classificacao 3 Linha " + riskClass3line);
-			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+//			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			String riskClassFinal = (String)this.getMapValues("classification", DefLineEnum.LINE_F);
 			log.info("Classificacao Final " + riskClassFinal);
+			log.info("******************************************************************************************");
+			
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
 			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
@@ -772,9 +782,57 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		}
 		if(defLine.equals(DefLineEnum.LINE_3)){
 			objCalc.setCountEf(countEf3line);
-			log.info("Set Contagem Efetivos 2 Linha " + countEf3line);
+			log.info("Set Contagem Efetivos 3 Linha " + countEf3line);
 			objCalc.setCountInef(countInef3line);
 			log.info("Set Contagem Inefetivos 3 Linha " + countInef3line);
+		}
+		
+		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
+		
+		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
+		while(iterator.hasNext()){
+			
+			Entry<String, String> entry = iterator.next();
+			
+			if(entry.getKey().equals("classification") && valueType.equals("classification"))
+				objReturn = (String)entry.getValue();
+			
+			if(entry.getKey().equals("rate") && valueType.equals("rate"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("total") && valueType.equals("total"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+		}
+		return objReturn;
+	}
+	
+	private Object getMapValues(String valueType, DefLineEnum defLine) throws Exception  {
+		Object objReturn = null;
+		
+		objCalc.setCountEf(new Double(0));
+		objCalc.setCountInef(new Double(0));
+				
+		if(defLine.equals(DefLineEnum.LINE_2)){
+			objCalc.setCountEf(countEf2line);
+			log.info("Set Contagem Efetivos 2 Linha " + countEf2line);
+			objCalc.setCountInef(countInef2line);
+			log.info("Set Contagem Inefetivos 2 Linha " + countInef2line);
+		}
+		if(defLine.equals(DefLineEnum.LINE_3)){
+			objCalc.setCountEf(countEf3line);
+			log.info("Set Contagem Efetivos 3 Linha " + countEf3line);
+			objCalc.setCountInef(countInef3line);
+			log.info("Set Contagem Inefetivos 3 Linha " + countInef3line);
+		}
+		if(defLine.equals(DefLineEnum.LINE_F)){
+			objCalc.setCountEf(countEf2line + countEf3line);
+			log.info("Set Contagem Efetivos Final " + (countEf2line + countEf3line));
+			objCalc.setCountInef(countInef2line + countInef3line);
+			log.info("Set Contagem Inefetivos 3 Linha " + (countInef2line + countInef3line));
 		}
 		
 		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
@@ -824,7 +882,7 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				
 				//REO 08.08.2017 - EV108028
 				//if(this.fernanda.equals("ineffective")){ 
-				if(this.fernanda.equals("noneffective")){
+				if(this.efetividade.equals("noneffective")){
 					//controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS).setRawValue("ineficaz");
 					if(this.origemTeste.equals("1linhadefesa")){
 						controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CUSTOM_STATUS_2LINE).setRawValue("inefetivo");
