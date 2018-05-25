@@ -108,7 +108,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				this.cetObjectId = cetObj.getObjectId();
 			}
 			
-			modifyOtherCE(currAppObj);
+			modifyOtherCE(currAppObj, parentControlObjId);
 			
 			//
 			//IAppObj riskParentObj = this.getRiskFromControl(currParentCtrlObj);
@@ -141,7 +141,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				
 				if(this.ceControlExec.equals("3")){
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
-					this.affectResidualRisk(riskParentObj);
+					this.affectResidualRisk(riskParentObj, parentControlObjId);
 					this.affectCorpRisk(riskParentObj);
 				}
 			
@@ -407,7 +407,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 	}
 	
-	private void affectResidualRisk(IAppObj riskObj) throws Exception{
+	private void affectResidualRisk(IAppObj riskObj, long parentControlObjId) throws Exception{
 		
 		double countTotal1 = 0;
 		double countTotal2 = 0;
@@ -447,12 +447,14 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			
 			//Inicio Inclusão - REO - 14.02.2018 - EV1333332
 			//RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, this.countInef, this.countEf, new Double(1).doubleValue());
-			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction(), parentControlObjId);
 			log.info("Criou objeto de Calculo de Risco Residual");
 			objCalc.setCountEf(this.countEf);
 			log.info("Set Contagem Efetivos " + this.countEf);
 			objCalc.setCountInef(this.countInef);
 			log.info("Set Contagem Inefetivos " + this.countInef);
+			objCalc.setLineAlreadyTested(DefLineEnum.LINE_1.name());
+			log.info("Set Linha de Defesa já testada " + DefLineEnum.LINE_1.name());
 			
 			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
 			log.info("Classificação 1 Linha " + riskClass1line);
@@ -1256,7 +1258,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	}
 	//Fim REO - 27.09.2017 - EV113345
 	
-	private void modifyOtherCE(IAppObj ceObj) throws Exception{
+	private void modifyOtherCE(IAppObj ceObj, long parentControlObjId) throws Exception{
 		// Pega o ID fictício.
 		String controlID = ceObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID);
 		
@@ -1305,7 +1307,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					taskItemActionPlanEngine.createActionPlanTaskItem(IControlexecutionAttributeType.BASE_ATTR_OBJ_ID);
 					
 					this.controlClassification(ceAuxObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
-					this.affectResidualRisk(riskAux);
+					this.affectResidualRisk(riskAux, parentControlObjId);
 					this.affectCorpRisk(riskAux);
 			
 		
