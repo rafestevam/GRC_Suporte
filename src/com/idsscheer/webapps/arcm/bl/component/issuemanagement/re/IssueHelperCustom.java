@@ -7,13 +7,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.mvel2.util.ThisLiteral;
+
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
+import com.idsscheer.webapps.arcm.bl.framework.message.IMessage;
+import com.idsscheer.webapps.arcm.bl.framework.message.MessageHandler;
+import com.idsscheer.webapps.arcm.bl.framework.message.MessageUtility;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.re.REKey;
 import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
 import com.idsscheer.webapps.arcm.bl.re.ext.RuleAppObj;
@@ -26,10 +33,17 @@ import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttr
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestcaseAttributeType;
+import com.idsscheer.webapps.arcm.common.support.DateUtils;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
+import com.idsscheer.webapps.arcm.common.util.Message;
+import com.idsscheer.webapps.arcm.common.util.Message.Type;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
+import com.idsscheer.webapps.arcm.config.metadata.enumerations.MessageTemplateEnumerationItem;
+import com.idsscheer.webapps.arcm.ui.framework.common.IUIEnvironment;
+import com.idsscheer.webapps.arcm.ui.framework.common.UIEnvironmentManager;
+import com.idsscheer.webapps.arcm.ui.web.support.MessageContainer;
 
 public class IssueHelperCustom extends CollectiveHelper {
 //	DMM - BOF- Revisão da sprint - 14/05/2018
@@ -213,6 +227,53 @@ public class IssueHelperCustom extends CollectiveHelper {
 		
 		return riskAppObj;
 		
+	}
+	
+	public static boolean isLateThanFirstDate(){
+		
+		boolean isLate = false;
+		REEnvironment reenv = REEnvironment.getInstance();
+		RuleAppObj issue = reenv.getRuleAppObj();
+		REKey plannedenddateKey = issue.createAtomicKey("plannedenddate");
+		
+		Date plannedenddate = (Date) issue.getRawValue(plannedenddateKey.getString());
+		
+		if(issue.isDirty(plannedenddateKey.getString())){
+			if(plannedenddate != null){
+				IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(), ObjectType.ISSUE);
+				IOVID issueOVID = OVIDFactory.getOVID(issue.getObjectId(), 1);
+				
+				try {
+					IAppObj issueFirstVersion = issueFacade.load(issueOVID, true);
+					Date date = issueFirstVersion.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+					Date issueDate = DateUtils.normalizeLocalDate(date, DateUtils.Target.END_OF_DAY);
+					Date newDate = DateUtils.normalizeLocalDate(plannedenddate, DateUtils.Target.END_OF_DAY);
+					
+					if(newDate.before(issueDate))
+						isLate = true;
+					
+				} catch (RightException e) {
+					// TODO Auto-generated catch block
+					throw new RuntimeException(e);
+				}finally{
+					issueFacade.releaseLock(issueOVID);
+				}
+				
+			}
+		}
+		
+		return isLate;
+		
+	}
+	
+	public static void addAttributeMessage(String messageType, String key, String propertyKey) {
+		
+		//REEnvironment env = REEnvironment.getInstance();
+		//env.getMessageInformation().addErrorMessage(key, propertyKey, new Object[0]);
+		//addAttributeMessage("error", key, propertyKey, new Object[0]);
+		
+		IUIEnvironment uiEnv = UIEnvironmentManager.get();
+		uiEnv.getDialogManager().getNotificationDialog().addError("A Data Planejada Inicial não deve ser retrocedida");
 	}
 
 }

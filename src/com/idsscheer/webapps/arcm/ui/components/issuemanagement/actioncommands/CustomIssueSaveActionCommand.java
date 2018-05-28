@@ -1,5 +1,8 @@
 package com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -12,11 +15,6 @@ import java.util.Map.Entry;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
-import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
-import com.idsscheer.webapps.arcm.bl.exception.ObjectLockException;
-import com.idsscheer.webapps.arcm.bl.exception.ObjectNotUniqueException;
-import com.idsscheer.webapps.arcm.bl.exception.RightException;
-import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
@@ -24,22 +22,17 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IDateAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
-import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.ITestcaseAttributeType;
 import com.idsscheer.webapps.arcm.common.controllinginfo.ControlInfo;
 import com.idsscheer.webapps.arcm.common.notification.NotificationTypeEnum;
+import com.idsscheer.webapps.arcm.common.support.DateUtils;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
 import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
-import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
-import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
-import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
-import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
@@ -65,15 +58,52 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	
 	@Override
 	protected void execute() {
+		ControlInfo controlInfo = this.formModel.getControlInfo();
 		if(isIROValid()){
+			
+			if(isIssueEarlier()){
+				controlInfo.addNotification(NotificationTypeEnum.ERROR, "message.issue.plannedenddate.late.DBI", new String[]{ getStringRepresentation(this.formModel.getAppObj()) });
+				return;
+			}
+				
 			super.execute();
 			affectIssueDate();
 		}else{
-			ControlInfo controlInfo = this.formModel.getControlInfo();
 			controlInfo.addNotification(NotificationTypeEnum.ERROR, "message.iro.not.valid.DBI", new String[]{ getStringRepresentation(this.formModel.getAppObj()) });
 		}
 	}
 	
+	private boolean isIssueEarlier() {
+		boolean isEarlier = false;
+		
+		long issueID = this.formModel.getAppObj().getObjectId();
+		int size = this.formModel.getAppObj().getVersionHistory().size();
+		long version = new Long(size);
+		IOVID issueOVID = OVIDFactory.getOVID(issueID, version);
+		IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.ISSUE);
+		
+		String plannedenddate = this.requestContext.getParameter(IIssueAttributeType.STR_PLANNEDENDDATE);
+		DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			IAppObj issueFirst = issueFacade.load(issueOVID, false);
+			Date issueDateVal = issueFirst.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+			Date newDateVal = (Date)formatter.parse(plannedenddate);
+			Date newDate = DateUtils.normalizeLocalDate(newDateVal, DateUtils.Target.END_OF_DAY);
+			Date issueDate = DateUtils.normalizeLocalDate(issueDateVal, DateUtils.Target.END_OF_DAY);
+			
+			if(newDate.before(issueDate))
+				isEarlier = true;
+			
+			
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		} finally{
+			//issueFacade.releaseLock(issueOVID);
+		}
+		
+		return isEarlier;
+	}
+
 	private boolean isIROValid() {
 		
 		boolean iroValid = false;

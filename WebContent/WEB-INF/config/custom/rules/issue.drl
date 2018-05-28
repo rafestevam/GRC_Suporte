@@ -147,6 +147,7 @@ rule "custom_GRC66 opened by creator --> init attribute states [I,V]"
 		set "description"             mandatory
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
+		set "plannedenddate"		  mandatory
 		
 #		set "replanned"               editable  #GAP - GRC74
 #		set "recurrent"	              editable  #GAP - GRC74
@@ -211,6 +212,7 @@ rule "custom_GRC66_is opened by creator --> init attribute states [I,V]"
 		set "description"             mandatory
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
+		set "plannedenddate"		  mandatory
 		
 		set "owner_status"            invisible
 		set "owner_remark"            invisible
@@ -269,6 +271,7 @@ rule "custom_GRC66_ap opened by creator --> init attribute states [I,V]"
 		set "description"             mandatory
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
+		set "plannedenddate"		  mandatory
 
 		set "owner_status"            invisible
 		set "owner_remark"            invisible
@@ -326,6 +329,7 @@ rule "custom_GRC66_ap_hold opened by creator --> init attribute states [I,V]"
 		set "description"             mandatory
 		set "remediationMeasure"      mandatory
 		set "acting_front"            mandatory #GAP - GRC74
+		set "plannedenddate"		  mandatory
 
 		set "owner_status"            invisible
 		set "owner_remark"            invisible
@@ -968,6 +972,22 @@ rule "'remediation planned before' is filled --> check overdue state [V]"
 
 	then
 		recalculate time dependent state
+
+end
+
+rule "custom_issue_earlier_than_first_version[I,V]"
+
+	salience 105
+	no-loop true
+	
+	when
+		is issue earlier than first version
+		
+	then
+#		add "error" message "issue.remediation.planned.before.not.before.today.ERR" to "plannedenddate"
+#		adding "error" message "issue.error.plannedenddate.late.ERR" to "plannedenddate"	
+#		add object "ERROR" message "custom.error.issue.plannedenddate.late.DBI"
+#		add object "error" message "issue.error.plannedenddate.late.ERR"
 
 end
 
