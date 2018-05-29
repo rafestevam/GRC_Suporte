@@ -114,15 +114,15 @@ public class IssueOverdueJob extends BaseJob {
 				IEnumAttribute stateTimeAttr = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME);
 				IEnumerationItem stateTime = ARCMCollections.extractSingleEntry(stateTimeAttr.getRawValue(), true);
 				
-				Date actualDate = DateUtils.normalizeLocalDate(actualDateVal, DateUtils.Target.END_OF_DAY);
-				Date issuePlannedDate = DateUtils.normalizeLocalDate(issuePlannedDateVal, DateUtils.Target.END_OF_DAY);
 				
 				/*if(iroUpdObj.getObjectId() == 169560)
 					System.out.println("teste");*/
 
-				if (issuePlannedDate == null) {
+				if (issuePlannedDateVal == null) {
 					logger.info(this.getClass().getName(), "created issue date is null");
 				} else {
+					Date actualDate = DateUtils.normalizeLocalDate(actualDateVal, DateUtils.Target.END_OF_DAY);
+					Date issuePlannedDate = DateUtils.normalizeLocalDate(issuePlannedDateVal, DateUtils.Target.END_OF_DAY);
 					logger.info(this.getClass().getName(), "created issue date - " + issuePlannedDate.toString());
 					if (actualDate.after(issuePlannedDate)) {
 
