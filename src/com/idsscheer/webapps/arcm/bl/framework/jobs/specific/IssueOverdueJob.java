@@ -34,13 +34,16 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.EnumerationsCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
+import com.idsscheer.webapps.arcm.common.support.DateUtils;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
 import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
@@ -73,6 +76,12 @@ public class IssueOverdueJob extends BaseJob {
 		logger.info(this.getClass().getName(), "created facade.");
 		IAppObjQuery query = facade.createQuery();
 		logger.info(this.getClass().getName(), "created query.");
+		
+		//Somente para debug
+		query.addRestriction(
+			QueryRestriction.eq(IIssueAttributeType.ATTR_OBJ_ID, 392870)
+		);
+		
 		IAppObjIterator it = query.getResultIterator();
 		logger.info(this.getClass().getName(), "created iterator.");
 
@@ -91,7 +100,7 @@ public class IssueOverdueJob extends BaseJob {
 				IAppObj iroUpdObj = facade.load(iroOVID, true);
 				
 				logger.info(this.getClass().getName(), "created UpdObj - " + String.valueOf(iroUpdObj.getObjectId()));
-				Date actualDate = new Date();
+				Date actualDateVal = new Date();
 
 				IEnumAttribute issueActionTypeList = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
 				logger.info(this.getClass().getName(), "created action type list.");
@@ -99,11 +108,14 @@ public class IssueOverdueJob extends BaseJob {
 						true);
 				logger.info(this.getClass().getName(), "created action type - " + issueActionType.getId().toString());
 
-				Date issuePlannedDate = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE)
+				Date issuePlannedDateVal = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_PLANNEDENDDATE)
 						.getRawValue();
 				
 				IEnumAttribute stateTimeAttr = iroUpdObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME);
 				IEnumerationItem stateTime = ARCMCollections.extractSingleEntry(stateTimeAttr.getRawValue(), true);
+				
+				Date actualDate = DateUtils.normalizeLocalDate(actualDateVal, DateUtils.Target.END_OF_DAY);
+				Date issuePlannedDate = DateUtils.normalizeLocalDate(issuePlannedDateVal, DateUtils.Target.END_OF_DAY);
 				
 				/*if(iroUpdObj.getObjectId() == 169560)
 					System.out.println("teste");*/

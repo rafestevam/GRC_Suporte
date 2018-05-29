@@ -61,10 +61,10 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		ControlInfo controlInfo = this.formModel.getControlInfo();
 		if(isIROValid()){
 			
-			if(isIssueEarlier()){
-				controlInfo.addNotification(NotificationTypeEnum.ERROR, "message.issue.plannedenddate.late.DBI", new String[]{ getStringRepresentation(this.formModel.getAppObj()) });
-				return;
-			}
+//			if(isIssueEarlier()){
+//				controlInfo.addNotification(NotificationTypeEnum.ERROR, "message.issue.plannedenddate.late.DBI", new String[]{ getStringRepresentation(this.formModel.getAppObj()) });
+//				return;
+//			}
 				
 			super.execute();
 			affectIssueDate();

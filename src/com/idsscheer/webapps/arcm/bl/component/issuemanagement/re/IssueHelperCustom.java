@@ -54,6 +54,7 @@ public class IssueHelperCustom extends CollectiveHelper {
 //	DMM - EOF- Revisão da sprint - 14/05/2018
 	
 	public static void setIssueDelay(){
+		//IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(), ObjectType.ISSUE);
 		IAppObj issueObj = REEnvironment.getInstance().getRuleAppObj().getAppObj();
 		if(!issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).isEmpty()){
 			Date issueDate = issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
@@ -65,6 +66,7 @@ public class IssueHelperCustom extends CollectiveHelper {
 			if(!issueDate.before(calendar.getTime()))
 				CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "on_time");
 		}
+		//issueFacade.save(issueObj, , arg2);
 		
 	}
 	
@@ -241,7 +243,7 @@ public class IssueHelperCustom extends CollectiveHelper {
 		if(issue.isDirty(plannedenddateKey.getString())){
 			if(plannedenddate != null){
 				IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(), ObjectType.ISSUE);
-				IOVID issueOVID = OVIDFactory.getOVID(issue.getObjectId(), 1);
+				IOVID issueOVID = OVIDFactory.getOVID(issue.getObjectId(), issue.getAppObj().getVersionHistory().size());
 				
 				try {
 					IAppObj issueFirstVersion = issueFacade.load(issueOVID, true);
@@ -264,16 +266,6 @@ public class IssueHelperCustom extends CollectiveHelper {
 		
 		return isLate;
 		
-	}
-	
-	public static void addAttributeMessage(String messageType, String key, String propertyKey) {
-		
-		//REEnvironment env = REEnvironment.getInstance();
-		//env.getMessageInformation().addErrorMessage(key, propertyKey, new Object[0]);
-		//addAttributeMessage("error", key, propertyKey, new Object[0]);
-		
-		IUIEnvironment uiEnv = UIEnvironmentManager.get();
-		uiEnv.getDialogManager().getNotificationDialog().addError("A Data Planejada Inicial não deve ser retrocedida");
 	}
 
 }

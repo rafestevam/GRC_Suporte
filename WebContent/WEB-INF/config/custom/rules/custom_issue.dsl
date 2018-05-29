@@ -7,4 +7,3 @@
 [consequence][]recalculate time dependent state=IssueHelper.recalculateTimeDependentState();
 [consequence][]set risk classification=IssueHelperCustom.setRiskAndProcessClassification();
 [consequence][]set issue delay=IssueHelperCustom.setIssueDelay();
-[consequence][]adding "{type}" message "{propertyKey}" to "{attributeID}"=IssueHelperCustom.addAttributeMessage("{type}", "{attributeID}", "{propertyKey}");

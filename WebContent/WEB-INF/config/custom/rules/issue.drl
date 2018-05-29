@@ -962,6 +962,20 @@ rule "remediation does not be a thing of the past [V]"
 
 end
 
+rule "custom_remediation_is_late [V]"
+
+	salience 115
+	no-loop true
+	
+	when
+		is issue earlier than first version
+		
+	then
+		set "plannedenddate" invalid
+		add "error" message "message.issue.plannedenddate.late.DBI" to "plannedenddate"
+
+end
+
 rule "'remediation planned before' is filled --> check overdue state [V]"
 
 	salience 110
@@ -975,19 +989,18 @@ rule "'remediation planned before' is filled --> check overdue state [V]"
 
 end
 
-rule "custom_issue_earlier_than_first_version[I,V]"
+rule "custom_issue_is_overdue[I,V]"
 
 	salience 105
 	no-loop true
 	
 	when
-		is issue earlier than first version
+		"plannedenddate" is filled
+		(  is_not in workflow state "closedByReviewer" AND
+		   is_not in workflow state "apClosedByReviewer" )
 		
 	then
-#		add "error" message "issue.remediation.planned.before.not.before.today.ERR" to "plannedenddate"
-#		adding "error" message "issue.error.plannedenddate.late.ERR" to "plannedenddate"	
-#		add object "ERROR" message "custom.error.issue.plannedenddate.late.DBI"
-#		add object "error" message "issue.error.plannedenddate.late.ERR"
+#		set issue delay	
 
 end
 
