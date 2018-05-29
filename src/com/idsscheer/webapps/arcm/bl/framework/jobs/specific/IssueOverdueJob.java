@@ -77,10 +77,10 @@ public class IssueOverdueJob extends BaseJob {
 		IAppObjQuery query = facade.createQuery();
 		logger.info(this.getClass().getName(), "created query.");
 		
-		//Somente para debug
-		query.addRestriction(
-			QueryRestriction.eq(IIssueAttributeType.ATTR_OBJ_ID, 392870)
-		);
+//		//Somente para debug
+//		query.addRestriction(
+//			QueryRestriction.eq(IIssueAttributeType.ATTR_OBJ_ID, 392870)
+//		);
 		
 		IAppObjIterator it = query.getResultIterator();
 		logger.info(this.getClass().getName(), "created iterator.");
