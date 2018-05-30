@@ -247,12 +247,14 @@ public class IssueHelperCustom extends CollectiveHelper {
 				
 				try {
 					IAppObj issueFirstVersion = issueFacade.load(issueOVID, true);
-					Date date = issueFirstVersion.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
-					Date issueDate = DateUtils.normalizeLocalDate(date, DateUtils.Target.END_OF_DAY);
-					Date newDate = DateUtils.normalizeLocalDate(plannedenddate, DateUtils.Target.END_OF_DAY);
-					
-					if(newDate.before(issueDate))
-						isLate = true;
+					if(issueFirstVersion != null){
+						Date date = issueFirstVersion.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+						Date issueDate = DateUtils.normalizeLocalDate(date, DateUtils.Target.END_OF_DAY);
+						Date newDate = DateUtils.normalizeLocalDate(plannedenddate, DateUtils.Target.END_OF_DAY);
+						
+						if(newDate.before(issueDate))
+							isLate = true;
+					}
 					
 				} catch (RightException e) {
 					// TODO Auto-generated catch block
