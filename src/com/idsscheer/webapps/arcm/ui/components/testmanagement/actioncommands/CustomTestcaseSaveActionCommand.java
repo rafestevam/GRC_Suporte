@@ -15,12 +15,14 @@ import org.apache.log4j.Logger;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryOrder;
@@ -72,8 +74,14 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 	private RiskAndControlCalculation objCalc;
 
 	protected void addForwardDialog() {
-		this.executeCalculation();
+		//this.executeCalculation();
 		super.addForwardDialog();
+	}
+	
+	@Override
+	protected void afterExecute() {
+		super.afterExecute();
+		this.executeCalculation();
 	}
 	
 	//protected void afterExecute(){
@@ -878,7 +886,9 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
 		//Fim REO - 27.09.2017 - EV113345
 		
-		List<IAppObj> controlUpdList = getDuplicatedControls(controlList, controlFacade);
+		ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
+		
+		List<IAppObj> controlUpdList = getDuplicatedControls(controlList, controlFacade, otherTransaction);
 		
 		IOVID ovid = null;
 		try{
@@ -890,8 +900,10 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 				IAppObj controlObj = (IAppObj)itControl.next();
 				IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
 				ovid = controlOVID;
-				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
-				controlFacade.allocateLock(controlOVID, LockType.TYPEDFORCEWRITE);
+//				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
+//				controlFacade.allocateLock(controlOVID, LockType.TYPEDFORCEWRITE);
+				IAppObj controlUpdObj = controlFacade.load(controlOVID, otherTransaction, true);
+				controlFacade.allocateLock(controlOVID, LockType.FORCEWRITE);
 				
 				//REO 08.08.2017 - EV108028
 				//if(this.fernanda.equals("ineffective")){ 
@@ -917,7 +929,10 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 					}
 				}
 				
-				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
+//				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
+				controlFacade.save(controlUpdObj, otherTransaction, true);
+				otherTransaction.commit();
+				
 				controlFacade.releaseLock(controlOVID);
 				
 				//break;
@@ -925,13 +940,14 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			}
 		
 		}catch(Exception e){
+			otherTransaction.rollback();
 			controlFacade.releaseLock(ovid);
 			throw e;
 		}
 		
 	}
 
-	private List<IAppObj> getDuplicatedControls(List<IAppObj> controlList, IAppObjFacade controlFacade) throws Exception {
+	private List<IAppObj> getDuplicatedControls(List<IAppObj> controlList, IAppObjFacade controlFacade, ITransaction otherTransaction) throws Exception {
 		List<IAppObj> controlUpdList = new ArrayList<>();
 		Set<IAppObj> controlUpdSet = new LinkedHashSet<>();
 		
@@ -949,7 +965,8 @@ public class CustomTestcaseSaveActionCommand extends TestcaseSaveActionCommand {
 			IAppObjIterator iterator = query.getResultIterator();
 			while(iterator.hasNext()){
 				IAppObj controlObject = iterator.next();
-				IAppObj controlUpd = controlFacade.load(controlObject.getVersionData().getHeadOVID(), this.getDefaultTransaction(), true);
+//				IAppObj controlUpd = controlFacade.load(controlObject.getVersionData().getHeadOVID(), this.getDefaultTransaction(), true);
+				IAppObj controlUpd = controlFacade.load(controlObject.getVersionData().getHeadOVID(), otherTransaction, true);
 				controlUpdSet.add(controlUpd);
 				//if(!controlUpd.getVersionData().isDeleted())
 					//controlUpdList.add(controlUpd);

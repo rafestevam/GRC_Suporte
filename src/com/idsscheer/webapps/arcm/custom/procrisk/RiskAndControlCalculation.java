@@ -10,6 +10,7 @@ import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
+import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IControlAttributeTypeCustom;
 
 public class RiskAndControlCalculation {
@@ -80,8 +81,17 @@ public class RiskAndControlCalculation {
 			
 			IAppObj controlObj = controlObjIt;
 			
+			log.info("*****************************************************************");
+			log.info("Controle: " + controlObj.getAttribute(IControlAttributeType.ATTR_NAME).getRawValue() + " : " + controlObj.getObjectId());
+			log.info("Linha Testada: " + defLine.name());
+
 			if((objID != 0) && (controlObj.getObjectId() == objID) && (lineAlreadyTested.equals(defLine.name()))){
 				countTotal += 1;
+				log.info("Contagem Inefetivos: " + this.countInef);
+				log.info("Contagem Não Avaliados: " + this.countNA);
+				log.info("Contagem Efetivos: " + this.countEf);
+				log.info("Contagem Controles: " + countTotal);
+				log.info("*****************************************************************");
 				continue;
 			}
 			
@@ -137,42 +147,48 @@ public class RiskAndControlCalculation {
 					this.countInef += 1;
 				if((!statusFLineAttr.isEmpty()) && statusFLineAttr.getRawValue().equals("efetivo"))
 					this.countEf += 1;
-				if(statusFLineAttr.isEmpty())
+				if(statusFLineAttr.isEmpty() && (this.countInef == 0 && this.countEf == 0))
 					this.countNA += 1;
 				if(status1LineAttr.isEmpty() && status2LineAttr.isEmpty() && status3LineAttr.isEmpty())
 					this.countNA += 1;
 			}
 			
+			
 			countTotal += 1;
 			
+			log.info("Contagem Inefetivos: " + this.countInef);
+			log.info("Contagem Não Avaliados: " + this.countNA);
+			log.info("Contagem Efetivos: " + this.countEf);
+			log.info("Contagem Controles: " + countTotal);
+			log.info("*****************************************************************");
 			//facade.releaseLock(controlObj);
 			
 		}
 		
-		if(defLine.equals(DefLineEnum.LINE_1)){
-			log.info("1a Linha: Contagem de controles efetivos: " + this.countEf);
-			log.info("1a Linha: Contagem de controles inefetivos: " + this.countInef);
-			log.info("1a Linha: Contagem de controles Não Avaliados: " + this.countNA);
-		}
-		if(defLine.equals(DefLineEnum.LINE_2)){
-			log.info("2a Linha: Contagem de controles efetivos: " + this.countEf);
-			log.info("2a Linha: Contagem de controles inefetivos: " + this.countInef);
-			log.info("2a Linha: Contagem de controles Não Avaliados: " + this.countNA);
-		}
-		if(defLine.equals(DefLineEnum.LINE_3)){
-			log.info("3a Linha: Contagem de controles efetivos: " + this.countEf);
-			log.info("3a Linha: Contagem de controles inefetivos: " + this.countInef);
-			log.info("3a Linha: Contagem de controles Não Avaliados: " + this.countNA);
-		}
-		if(defLine.equals(DefLineEnum.LINE_F)){
-			log.info("Final: Contagem de controles efetivos: " + this.countEf);
-			log.info("Final: Contagem de controles inefetivos: " + this.countInef);
-			log.info("Final: Contagem de controles Não Avaliados: " + this.countNA);
-		}
-		
-		log.info("******************************************************************");
-		log.info("Total de Controles: " + countTotal);
-		log.info("******************************************************************");
+//		if(defLine.equals(DefLineEnum.LINE_1)){
+//			log.info("1a Linha: Contagem de controles efetivos: " + this.countEf);
+//			log.info("1a Linha: Contagem de controles inefetivos: " + this.countInef);
+//			log.info("1a Linha: Contagem de controles Não Avaliados: " + this.countNA);
+//		}
+//		if(defLine.equals(DefLineEnum.LINE_2)){
+//			log.info("2a Linha: Contagem de controles efetivos: " + this.countEf);
+//			log.info("2a Linha: Contagem de controles inefetivos: " + this.countInef);
+//			log.info("2a Linha: Contagem de controles Não Avaliados: " + this.countNA);
+//		}
+//		if(defLine.equals(DefLineEnum.LINE_3)){
+//			log.info("3a Linha: Contagem de controles efetivos: " + this.countEf);
+//			log.info("3a Linha: Contagem de controles inefetivos: " + this.countInef);
+//			log.info("3a Linha: Contagem de controles Não Avaliados: " + this.countNA);
+//		}
+//		if(defLine.equals(DefLineEnum.LINE_F)){
+//			log.info("Final: Contagem de controles efetivos: " + this.countEf);
+//			log.info("Final: Contagem de controles inefetivos: " + this.countInef);
+//			log.info("Final: Contagem de controles Não Avaliados: " + this.countNA);
+//		}
+//		
+//		log.info("******************************************************************");
+//		log.info("Total de Controles: " + countTotal);
+//		log.info("******************************************************************");
 		
 		try{
 			riskVuln = (this.countInef / countTotal);

@@ -14,11 +14,13 @@ import org.apache.log4j.Logger;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IStringAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.QueryRestriction;
@@ -84,6 +86,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			IAppObj currAppObj = this.formModel.getAppObj();
 			//IAppObj currParentCtrlObj = this.parentControl(currAppObj);
 			long parentControlObjId = this.parentControl(currAppObj.getObjectId());
+			String parentControlName = this.parentControlName(currAppObj.getObjectId());
 			
 			String ceStatus = this.requestContext.getParameter(IControlexecutionAttributeTypeCustom.STR_CUSTOMCTRLEXECSTATUS);
 			String ceOwnerStatus = this.requestContext.getParameter(IControlexecutionAttributeType.STR_OWNER_STATUS);
@@ -108,7 +111,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				this.cetObjectId = cetObj.getObjectId();
 			}
 			
-			modifyOtherCE(currAppObj, parentControlObjId);
+			modifyOtherCE(currAppObj, parentControlObjId, parentControlName);
 			
 			//
 			//IAppObj riskParentObj = this.getRiskFromControl(currParentCtrlObj);
@@ -141,7 +144,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 				
 				if(this.ceControlExec.equals("3")){
 					this.controlClassification(currAppObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
-					this.affectResidualRisk(riskParentObj, parentControlObjId);
+					this.affectResidualRisk(riskParentObj, parentControlObjId, parentControlName);
 					this.affectCorpRisk(riskParentObj);
 				}
 			
@@ -229,6 +232,39 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		}
 		
 		return controlID;
+		
+	}
+	
+	private String parentControlName(long ceObjId) throws Exception{
+		
+		Map filterMap = new HashMap();
+		filterMap.put("ce_id", ceObjId);
+		//long controlID = 0;
+		String controlName = "";
+		
+		IViewQuery query = QueryFactory.createQuery(this.jobCtx/*this.getFullGrantUserContext()*/, "custom_CE2Control", filterMap, null,
+				true, this.getDefaultTransaction());
+		
+		try{
+			
+			Iterator itQuery = query.getResultIterator();
+			
+			while(itQuery.hasNext()){
+				
+				IViewObj viewObj = (IViewObj)itQuery.next();
+				controlName = (String)viewObj.getRawValue("ct_name");
+				//controlID = (Long)viewObj.getRawValue("ct_id");
+				
+			}
+			
+		}catch(Exception e){
+			query.release();
+			throw e;
+		}finally{
+			query.release();
+		}
+		
+		return controlName;
 		
 	}
 	
@@ -407,7 +443,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		
 	}
 	
-	private void affectResidualRisk(IAppObj riskObj, long parentControlObjId) throws Exception{
+	private void affectResidualRisk(IAppObj riskObj, long parentControlObjId, String parentControlName) throws Exception{
 		
 		double countTotal1 = 0;
 		double countTotal2 = 0;
@@ -417,6 +453,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		double count3line = 0;
 		//SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 		
+		log.info("Teste 1a Linha - Controle " + parentControlName);
 		log.info("Eficacia do Controle Corrente: " + this.currStatus);
 		/*if(this.currStatus.equals("ineffective"))
 			count1line += 1;*/
@@ -838,17 +875,20 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 		IAppObjFacade controlFacade = FacadeFactory.getInstance().getAppObjFacade(this.jobCtx, ObjectType.CONTROL);
 		//Fim REO - 27.09.2017 - EV113345
 		
+		ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
+		
 		IOVID ovid = null;
 		try{
-			
+
 			Iterator itControl = controlList.iterator();
 			while(itControl.hasNext()){
 				
 				IAppObj controlObj = (IAppObj)itControl.next();
 				IOVID controlOVID = controlObj.getVersionData().getHeadOVID();
 				ovid = controlOVID;
-				IAppObj controlUpdObj = controlFacade.load(controlOVID, true);
-				controlFacade.allocateLock(controlOVID, LockType.TYPEDFORCEWRITE);
+				IAppObj controlUpdObj = controlFacade.load(controlOVID, otherTransaction, true);
+				//controlFacade.allocateLock(controlOVID, LockType.TYPEDFORCEWRITE);
+				controlFacade.allocateLock(controlOVID, LockType.FORCEWRITE);
 				
 				if(this.currStatus.equals("ineffective")){
 					//Inicio REO - 07.02.2018 - EV133332 
@@ -864,7 +904,8 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					//Fim REO - 07.02.2018 - EV133332
 				}
 				
-				controlFacade.save(controlUpdObj, this.getDefaultTransaction(), true);
+				controlFacade.save(controlUpdObj, otherTransaction, true);
+				otherTransaction.commit();
 				controlFacade.releaseLock(controlOVID);
 				
 				break;
@@ -872,6 +913,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 			}
 		
 		}catch(Exception e){
+			otherTransaction.rollback();
 			controlFacade.releaseLock(ovid);
 			throw e;
 		}
@@ -1258,7 +1300,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 	}
 	//Fim REO - 27.09.2017 - EV113345
 	
-	private void modifyOtherCE(IAppObj ceObj, long parentControlObjId) throws Exception{
+	private void modifyOtherCE(IAppObj ceObj, long parentControlObjId, String parentControlName) throws Exception{
 		// Pega o ID fictício.
 		String controlID = ceObj.getRawValue(IControlAttributeTypeCustom.ATTR_CONTROL_ID);
 		
@@ -1307,7 +1349,7 @@ public class CustomSaveCEActionCommand extends BaseSaveActionCommand {
 					taskItemActionPlanEngine.createActionPlanTaskItem(IControlexecutionAttributeType.BASE_ATTR_OBJ_ID);
 					
 					this.controlClassification(ceAuxObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getUserContext()));
-					this.affectResidualRisk(riskAux, parentControlObjId);
+					this.affectResidualRisk(riskAux, parentControlObjId, parentControlName);
 					this.affectCorpRisk(riskAux);
 			
 		

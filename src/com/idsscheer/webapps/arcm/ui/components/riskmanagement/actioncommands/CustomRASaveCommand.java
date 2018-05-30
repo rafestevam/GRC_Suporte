@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
 
 import com.idsscheer.batchserver.administration.BatchServer;
 import com.idsscheer.batchserver.administration.communication.IBatchServerCommunication;
@@ -30,6 +34,8 @@ import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskException;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomCorpRiskHierarchy;
 import com.idsscheer.webapps.arcm.custom.corprisk.CustomProcRiskResidualCalc;
+import com.idsscheer.webapps.arcm.custom.procrisk.DefLineEnum;
+import com.idsscheer.webapps.arcm.custom.procrisk.RiskAndControlCalculation;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceClient;
 import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockType;
 import com.idsscheer.webapps.arcm.ui.framework.actioncommands.object.BaseSaveActionCommand;
@@ -38,12 +44,40 @@ import com.idsscheer.webapps.arcm.ui.framework.common.JobUIEnvironment;
 
 public class CustomRASaveCommand extends BaseSaveActionCommand {
 	
+	final Logger log = Logger.getLogger(CustomRASaveCommand.class);
+	
 	//Inicio REO 06.11.2017 - EV118286
 	@Override
 	protected void execute() {
 		// TODO Auto-generated method stub
 		super.execute();
 		
+		IAppObj raObj = this.formModel.getAppObj();
+		IEnumAttribute reviewerStatusAttr = raObj.getAttribute(IRiskassessmentAttributeType.ATTR_REVIEWER_STATUS);
+		IEnumerationItem reviewerStatus = ARCMCollections.extractSingleEntry(reviewerStatusAttr.getRawValue(), true);
+		
+		try{
+			if(reviewerStatus.getId().equals("agreed")){
+				JobUIEnvironment jobEnv = new JobUIEnvironment(getFullGrantUserContext());
+				IUserContext jobCtx = jobEnv.getUserContext();
+				IAppObjFacade rskAppFacade = FacadeFactory.getInstance().getAppObjFacade(jobCtx, ObjectType.RISK);
+				
+				String riscoPotencial = raObj.getAttribute(IRiskassessmentAttributeTypeCustom.ATTR_RESULT_ASSESSMENT).getRawValue();
+				List<IAppObj> currRskList = raObj.getAttribute(IRiskassessmentAttributeType.LIST_RISK).getElements(jobEnv.getUserContext());
+				for (IAppObj riskObj : currRskList) {
+					this.affectResidualRisk(riskObj, rskAppFacade, riscoPotencial);
+				}
+			}
+		}catch(Exception e){
+			this.formModel.addControlInfoMessage(NotificationTypeEnum.ERROR, e.getMessage(), new String[] { getStringRepresentation(this.formModel.getAppObj()) });
+		}
+		
+		//oldcalculation();
+	
+	}
+	//Fim REO 06.11.2017 - EV118286
+
+	private void oldcalculation() {
 		IAppObj raObj = this.formModel.getAppObj();
 		IEnumAttribute reviewerStatusAttr = raObj.getAttribute(IRiskassessmentAttributeType.ATTR_REVIEWER_STATUS);
 		IEnumerationItem reviewerStatus = ARCMCollections.extractSingleEntry(reviewerStatusAttr.getRawValue(), true);
@@ -99,6 +133,7 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 				if (residualCalc.getResidualFinal() == "") {
 					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riscoPotencial);
 				} else {
+//					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(residualCalc.getResidualFinal());	
 					rskUpdAppObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(residualCalc.getResidualFinal());	
 				}
 				
@@ -114,9 +149,181 @@ public class CustomRASaveCommand extends BaseSaveActionCommand {
 		}catch(Exception e){
 			this.formModel.addControlInfoMessage(NotificationTypeEnum.ERROR, e.getMessage(), new String[] { getStringRepresentation(this.formModel.getAppObj()) });
 		}
-	
 	}
-	//Fim REO 06.11.2017 - EV118286
+	
+	private void affectResidualRisk(IAppObj parRiskObj, IAppObjFacade riskFacade, String riscoPotencial) throws Exception{
+		
+		double countTotal1 = 0;
+		double countTotal2 = 0;
+		double countTotal3 = 0;
+		double count1line = 0;
+		double count2line = 0;
+		double count3line = 0;
+		
+		String riskResidualFinal = "";
+		String riskResidual1Line = "";
+		String riskResidual2Line = "";
+		String riskResidual3Line = "";
+		
+		try{
+			
+			IAppObj riskObj = riskFacade.load(parRiskObj.getVersionData().getHeadOVID(), this.getDefaultTransaction(), true);
+			riskFacade.allocateLock(riskObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+			log.info("LOCK do Objeto de Risco " + riskObj.toString());
+			
+			List<IAppObj> controlList = riskObj.getAttribute(IRiskAttributeType.LIST_CONTROLS).getElements(this.getUserContext());
+			
+			RiskAndControlCalculation objCalc = new RiskAndControlCalculation(controlList, FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.CONTROL), this.getDefaultTransaction());
+			
+			String riskClass1line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_1);
+			log.info("Classificação 1 Linha " + riskClass1line);
+			String riskClass2line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_2);
+			log.info("Classificação 2 Linha " + riskClass2line);
+			String riskClass3line = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_3);
+			log.info("Classificação 3 Linha " + riskClass3line);
+			String riskClassFinal = (String)this.getMapValues(objCalc, "classification", DefLineEnum.LINE_F);
+			log.info("Classificação Final " + riskClassFinal);
+			
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE).setRawValue(riskClass1line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE).setRawValue(riskClass2line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE).setRawValue(riskClass3line);
+			
+			String riskClassFinalVal = riskClassFinal.equals("") ? "Não Avaliado" : riskClassFinal;
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL).setRawValue(riskClassFinalVal);
+			
+			count1line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_1);
+			count2line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_2);
+			count3line = (Double)this.getMapValues(objCalc, "ineffective", DefLineEnum.LINE_3);
+			countTotal1 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_1);
+			countTotal2 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_2);
+			countTotal3 = (Double)this.getMapValues(objCalc, "total", DefLineEnum.LINE_3);
+
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF1LINE).setRawValue(count1line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal1);
+			
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF2LINE).setRawValue(count2line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL1LINE).setRawValue(countTotal2);
+			
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_INEF3LINE).setRawValue(count3line);
+			riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_FINAL3LINE).setRawValue(countTotal3);
+			
+			if(!riscoPotencial.equals("Nao Avaliado")){
+				riskResidual1Line = this.riskResidualFinal(riscoPotencial, riskClass1line);
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL1LINE).setRawValue(riskResidual1Line);
+				
+				riskResidual2Line = this.riskResidualFinal(riscoPotencial, riskClass2line);
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL2LINE).setRawValue(riskResidual2Line);
+				
+				riskResidual3Line = this.riskResidualFinal(riscoPotencial, riskClass3line);
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUAL3LINE).setRawValue(riskResidual3Line); 
+				
+				riskResidualFinal = this.riskResidualFinal(riscoPotencial, riskClassFinal);
+				if(riskResidualFinal.equals("Não Avaliado"))
+					riskResidualFinal = riscoPotencial;
+				riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).setRawValue(riskResidualFinal);
+			}
+			
+			log.info("Class 1 Linha Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROL1LINE));
+			log.info("Class 2 Linha Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROL2LINE));
+			log.info("Class 3 Linha Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROL3LINE));
+			log.info("Class Final Persistido " + riskObj.getRawValue(IRiskAttributeTypeCustom.ATTR_RA_CONTROLFINAL));
+			
+			riskFacade.save(riskObj, this.getDefaultTransaction(), true);
+			log.info("Salvou Objeto de Risco");
+			
+			riskFacade.releaseLock(riskObj.getVersionData().getOVID());
+			log.info("Liberou Objeto de Risco");
+		
+		}
+		catch(Exception e){
+			throw e;
+		}
+		
+	}
+	
+	private Object getMapValues(RiskAndControlCalculation objCalc, String valueType, DefLineEnum defLine) throws Exception {
+		Object objReturn = null;
+		Map<String, String> mapReturn = objCalc.calculateControlRate(defLine);
+		
+		Iterator<Entry<String, String>> iterator = mapReturn.entrySet().iterator();
+		while(iterator.hasNext()){
+			
+			Entry<String, String> entry = iterator.next();
+			
+			if(entry.getKey().equals("classification") && valueType.equals("classification"))
+				objReturn = (String)entry.getValue();
+			
+			if(entry.getKey().equals("rate") && valueType.equals("rate"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("total") && valueType.equals("total"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+			if(entry.getKey().equals("ineffective") && valueType.equals("ineffective"))
+				objReturn = (Double)Double.valueOf(entry.getValue());
+			
+		}
+		return objReturn;
+	}
+	
+	private String riskResidualFinal(String riskPotencial, String riskControlFinal){
+		
+		String riskResidualReturn = "";
+		
+		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Muito Alto"))
+			riskResidualReturn = "Muito Alto";
+		
+		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Alto"))
+			riskResidualReturn = "Muito Alto";
+		
+		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Médio"))
+			riskResidualReturn = "Alto";
+		
+		if(riskPotencial.equals("Muito Alto") && riskControlFinal.equals("Baixo"))
+			riskResidualReturn = "Médio";
+		
+		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Muito Alto"))
+			riskResidualReturn = "Alto";
+		
+		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Alto"))
+			riskResidualReturn = "Alto";
+		
+		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Médio"))
+			riskResidualReturn = "Médio";
+		
+		if(riskPotencial.equals("Alto") && riskControlFinal.equals("Baixo"))
+			riskResidualReturn = "Médio";
+		
+		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Muito Alto"))
+			riskResidualReturn = "Médio";
+		
+		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Alto"))
+			riskResidualReturn = "Médio";
+		
+		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Médio"))
+			riskResidualReturn = "Médio";
+		
+		if(riskPotencial.equals("Médio") && riskControlFinal.equals("Baixo"))
+			riskResidualReturn = "Baixo";
+		
+		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Muito Alto"))
+			riskResidualReturn = "Baixo";
+		
+		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Alto"))
+			riskResidualReturn = "Baixo";
+		
+		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Médio"))
+			riskResidualReturn = "Baixo";
+		
+		if(riskPotencial.equals("Baixo") && riskControlFinal.equals("Baixo"))
+			riskResidualReturn = "Baixo";
+		
+		if(riskControlFinal.equals("") || riskControlFinal.equals("Não Avaliado"))
+			riskResidualReturn = "Não Avaliado";
+		
+		return riskResidualReturn;
+		
+	}
 		
 	protected void afterExecute(){
 		
