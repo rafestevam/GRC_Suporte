@@ -989,20 +989,20 @@ rule "'remediation planned before' is filled --> check overdue state [V]"
 
 end
 
-rule "custom_issue_is_overdue[I,V]"
-
-	salience 105
-	no-loop true
-	
-	when
-		"plannedenddate" is filled
-		(  is_not in workflow state "closedByReviewer" AND
-		   is_not in workflow state "apClosedByReviewer" )
-		
-	then
+#rule "custom_issue_is_overdue[I,V]"
+#
+#	salience 105
+#	no-loop true
+#	
+#	when
+#		"plannedenddate" is filled
+#		(  is_not in workflow state "closedByReviewer" AND
+#		   is_not in workflow state "apClosedByReviewer" )
+#		
+#	then
 #		set issue delay	
-
-end
+#
+#end
 
 
 ###########################################################

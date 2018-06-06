@@ -4,6 +4,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +25,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IDateAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeTypeCustom;
@@ -194,6 +198,8 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 		//IUserContext jobCtx = new JobUIEnvironment(getFullGrantUserContext()).getUserContext();
 		Map<String, Object> filterMap = new HashMap<>();
 		IAppObj currIssueAppObj = this.formModel.getAppObj();
+		Date actualDateVal = Calendar.getInstance().getTime();
+		Date actualDate = DateUtils.normalizeLocalDate(actualDateVal, DateUtils.Target.END_OF_DAY);
 		//Date apDate = currIssueAppObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
 		//IOVID issueOVID = currIssueAppObj.getVersionData().getHeadOVID();
 		createAPTaskItem(getFullGrantUserContext(), currIssueAppObj);
@@ -213,7 +219,9 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
 						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
 						
-						Date issueDate = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+						Date issueDateVal = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
+						Date issueDate = DateUtils.normalizeLocalDate(issueDateVal, DateUtils.Target.END_OF_DAY);
+						
 						filterMap.put(this.filterColumn, iroObj.getObjectId());
 						Map<String, Object> actionPlanMap = this.getIssuesFromIRO(this.viewName, filterMap);
 						
@@ -225,10 +233,20 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 								continue;
 							List<CustomIssueObj> issueObjList = (List<CustomIssueObj>) apMapEntry.getValue();
 							CustomIssueObj issueObj = issueObjList.get(0);
-							Date lastDate = issueObj.getObjDate();
+							Date lastDateVal = issueObj.getObjDate();
+							Date lastDate = DateUtils.normalizeLocalDate(lastDateVal, DateUtils.Target.END_OF_DAY);
 							//Date lastDate = (Date) apMapEntry.getValue();
 							if(lastDate.after(issueDate))
 								iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).setRawValue(lastDate);
+							
+							if(lastDate.compareTo(actualDate) >= 0){
+								List<IEnumerationItem> onTime = Collections.singletonList(Enumerations.ISSUESTATETIME.ON_TIME);
+								iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME).setRawValue(onTime);
+							}else{
+								List<IEnumerationItem> overdue = Collections.singletonList(Enumerations.ISSUESTATETIME.OVERDUE);
+								iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_STATETIME).setRawValue(overdue);
+							}
+							
 						}
 						
 						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
