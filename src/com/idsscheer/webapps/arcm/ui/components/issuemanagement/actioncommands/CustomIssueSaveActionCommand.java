@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
@@ -25,6 +26,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IDateAttribute
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IListAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.common.constants.metadata.Enumerations;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IIssueAttributeType;
@@ -215,8 +217,10 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 				}else{
 					
 					IOVID iroOVID = iroElement.getVersionData().getHeadOVID();
+					ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
 					try{
-						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
+//						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
+						IAppObj iroObj = issueFacade.load(iroOVID, otherTransaction, true);
 						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
 						
 						Date issueDateVal = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
@@ -250,10 +254,12 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 						}
 						
 						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
+						otherTransaction.commit();
 						updateTaskItem(getFullGrantUserContext(), iroObj);
 						
 					}catch(Exception e){
 						issueFacade.releaseLock(iroOVID);
+						otherTransaction.rollback();
 						throw new RuntimeException(e);
 					}finally{
 						issueFacade.releaseLock(iroOVID);

@@ -222,8 +222,11 @@ public class CustomTaskItemActionPlan {
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_CLIENTSIGN).setRawValue("CIP");
 			
+			IEnumAttribute actionTypeAttr = actionPlanObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+			IEnumerationItem actionTypeItem = ARCMCollections.extractSingleEntry(actionTypeAttr.getRawValue(), true);
+			
 			if(objectType.equals("ISSUE"))
-				taskItemObj = this.modifyWorkflowTaskItem();
+				taskItemObj = this.modifyWorkflowTaskItem(actionTypeItem.getId());
 			
 			if(objectType.equals("CONTROLEXECUTION"))
 				taskItemObj = this.modifyCETaskItem();
@@ -279,24 +282,33 @@ public class CustomTaskItemActionPlan {
 		
 	}
 
-	public IAppObj modifyWorkflowTaskItem() {
+	public IAppObj modifyWorkflowTaskItem(String actionType) {
 		
 		IAppObjFacade userFacade = FacadeFactory.getInstance().getAppObjFacade(context, ObjectType.USER);
 
-		IEnumerationItem creatorAPStatus = 
+		IEnumerationItem creatorAPStatus = actionType.equals("actionplan") ?
 				ARCMCollections.extractSingleEntry(
 						actionPlanObj.getAttribute(
-								IIssueAttributeTypeCustom.ATTR_AP_CREATOR_STATUS).getRawValue(), true);
+								IIssueAttributeTypeCustom.ATTR_AP_CREATOR_STATUS).getRawValue(), true):
+				ARCMCollections.extractSingleEntry(
+						actionPlanObj.getAttribute(
+								IIssueAttributeTypeCustom.ATTR_IS_CREATOR_STATUS).getRawValue(), true);
 		
-		IEnumerationItem ownerAPStatus = 
+		IEnumerationItem ownerAPStatus = actionType.equals("actionplan") ?
 				ARCMCollections.extractSingleEntry(
 						actionPlanObj.getAttribute(
-								IIssueAttributeTypeCustom.ATTR_AP_OWNER_STATUS).getRawValue(), true);
+								IIssueAttributeTypeCustom.ATTR_AP_OWNER_STATUS).getRawValue(), true):
+				ARCMCollections.extractSingleEntry(
+						actionPlanObj.getAttribute(
+								IIssueAttributeTypeCustom.ATTR_IS_OWNER_STATUS).getRawValue(), true);
 		
-		IEnumerationItem reviewerAPStatus = 
+		IEnumerationItem reviewerAPStatus = actionType.equals("actionplan") ?
 				ARCMCollections.extractSingleEntry(
 						actionPlanObj.getAttribute(
-								IIssueAttributeTypeCustom.ATTR_AP_REVIEWER_STATUS).getRawValue(), true);
+								IIssueAttributeTypeCustom.ATTR_AP_REVIEWER_STATUS).getRawValue(), true):
+				ARCMCollections.extractSingleEntry(
+						actionPlanObj.getAttribute(
+								IIssueAttributeTypeCustom.ATTR_IS_REVIEWER_STATUS).getRawValue(), true);
 		
 		Long userOwnerID = new Long(0);
 		Long userReviewerID = new Long(0);
@@ -326,6 +338,43 @@ public class CustomTaskItemActionPlan {
 			break;
 		}
 		
+		if(actionType.equals("actionplan"))
+			setUsersForActionPlan(creatorAPStatus, ownerAPStatus, reviewerAPStatus, userOwnerID, userReviewerID,
+					userCreatorID);
+		
+		if(actionType.equals("issue"))
+			setUsersForIssue(creatorAPStatus, ownerAPStatus, reviewerAPStatus, userOwnerID, userReviewerID,
+					userCreatorID);
+		
+		
+//		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_TASKCONFIGURATIONID).setRawValue("");
+
+//		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECTWORKFLOWSTATUS).setRawValue("");
+		
+		// Leitura do nome do usuário.
+		
+		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_LASTEDITOR)
+				.setRawValue(userAppObj.getRawValue(IUserAttributeType.ATTR_NAME));
+		
+//		IAppObjQuery userQuery = userFacade.createQuery();
+//		userQuery.addRestriction(QueryRestriction.eq(IUserAttributeType.ATTR_OBJ_ID,
+//				taskItemObj.getRawValue(
+//						 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID)));
+//
+//		IAppObjIterator userIterator = userQuery.getResultIterator();
+//
+//		while (userIterator.hasNext()) {
+//			
+//			break;
+//		}
+//
+//		userQuery.release();
+
+		return taskItemObj;
+	}
+
+	private void setUsersForActionPlan(IEnumerationItem creatorAPStatus, IEnumerationItem ownerAPStatus,
+			IEnumerationItem reviewerAPStatus, Long userOwnerID, Long userReviewerID, Long userCreatorID) {
 		// Status de revisor Baixado, Atendido, Risco Assumido = Encerrado - Remove o usuário do TASKITEM.
 		if (StringUtils.contains("456", reviewerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
@@ -356,31 +405,40 @@ public class CustomTaskItemActionPlan {
 			 taskItemObj.getAttribute(
 					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
 		}
-		
-//		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_TASKCONFIGURATIONID).setRawValue("");
-
-//		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECTWORKFLOWSTATUS).setRawValue("");
-		
-		// Leitura do nome do usuário.
-		
-		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_LASTEDITOR)
-				.setRawValue(userAppObj.getRawValue(IUserAttributeType.ATTR_NAME));
-		
-//		IAppObjQuery userQuery = userFacade.createQuery();
-//		userQuery.addRestriction(QueryRestriction.eq(IUserAttributeType.ATTR_OBJ_ID,
-//				taskItemObj.getRawValue(
-//						 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID)));
-//
-//		IAppObjIterator userIterator = userQuery.getResultIterator();
-//
-//		while (userIterator.hasNext()) {
-//			
-//			break;
-//		}
-//
-//		userQuery.release();
-
-		return taskItemObj;
+	}
+	
+	private void setUsersForIssue(IEnumerationItem creatorAPStatus, IEnumerationItem ownerAPStatus,
+			IEnumerationItem reviewerAPStatus, Long userOwnerID, Long userReviewerID, Long userCreatorID) {
+		// Status de revisor Baixado, Atendido, Risco Assumido = Encerrado - Remove o usuário do TASKITEM.
+		if (StringUtils.contains("234", reviewerAPStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(-1);
+		} 
+		// Status de reprovado volta para o owner.
+		else if (StringUtils.contains("6", reviewerAPStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+		}
+		// Status de owner concluído com risco assumido vai pro reviewer.
+		else if (StringUtils.contains("45", ownerAPStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userReviewerID);
+		}
+		// Status de owner em andamento ou pendente mantem no owner.
+		else if (StringUtils.contains("123", ownerAPStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);	
+		}
+		// Status de creator Please_Select mantem no creator.
+		else if (StringUtils.contains("01", creatorAPStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userCreatorID);
+		}
+		// Status de creator Em Andamento
+		else if (StringUtils.contains("2", creatorAPStatus.getValue().toString())) {
+			taskItemObj.getAttribute(
+					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+		}
 	}
 
 }
