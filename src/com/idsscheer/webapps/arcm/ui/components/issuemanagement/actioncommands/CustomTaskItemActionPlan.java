@@ -2,8 +2,10 @@ package com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.exception.ObjectAccessException;
@@ -16,6 +18,7 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IUserAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.attribute.IEnumAttribute;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
+import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.ValidationException;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjIterator;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.query.IAppObjQuery;
@@ -40,6 +43,7 @@ public class CustomTaskItemActionPlan {
 	private IAppObjFacade taskItemFacade;
 	private IAppObjFacade actionPlanFacade;
 	private IUserAppObj userAppObj;
+	private static final Logger log = Logger.getLogger(CustomTaskItemActionPlan.class);
 
 	private IUserContext context;
 	private ITransaction transaction;
@@ -47,12 +51,14 @@ public class CustomTaskItemActionPlan {
 	public CustomTaskItemActionPlan(IAppObj actionPlanObj, IUserContext context, ITransaction transaction, IUserAppObj userAppObj) {
 		this.actionPlanObj = actionPlanObj;
 		this.context = context;
-		this.transaction = transaction;
+		//this.transaction = transaction;
+		this.transaction = TransactionManager.getInstance().createTransaction();
 		this.taskItemObj = null;
 		this.userAppObj = userAppObj;
 		
 		taskItemFacade = FacadeFactory.getInstance().getAppObjFacade(context, ObjectType.TASKITEM);
 		actionPlanFacade = FacadeFactory.getInstance().getAppObjFacade(context, ObjectType.ISSUE);
+		log.info("58:Objeto CustomTaskItem criado");
 	}
 
 	// 13.03.2018 - FCT - EV131854
@@ -60,20 +66,31 @@ public class CustomTaskItemActionPlan {
 
 		// Verifica se há TASKITEM para este action plan.
 		IAppObjQuery taskItemQuery = taskItemFacade.createQuery();
+		log.info("66:Criou TaskItemQuery");
+		
 		taskItemQuery.addRestriction(QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_ID,
 				actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_OBJ_ID)));
+		log.info("70:Busca por objetos de TaskItem com o OBJECT_ID = " + actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_OBJ_ID));
 
 		IAppObjIterator taskItemIterator = taskItemQuery.getResultIterator();
 
 		// Se houver então modificar este TASKITEM.
 		if (taskItemIterator.getSize() > 0) {
+			log.info("76:Existem TaskItem a serem alterados");
 			while (taskItemIterator.hasNext()) {
 				IAppObj taskItemObjAux = taskItemIterator.next();
 				IOVID taskItemOVID = taskItemObjAux.getVersionData().getHeadOVID();
+				log.info("80:TaskItem a ser alterado " + taskItemOVID.toString() + 
+						" / " + 
+						taskItemObjAux.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_NAME).getRawValue());
 				
 				try {
 					taskItemObj = taskItemFacade.load(taskItemOVID, true);
+					log.info("86:Carregou objeto TaskItem " + taskItemObj.toString());
+					
 					taskItemFacade.allocateLock(taskItemObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
+					log.info("89:Lock de Objeto feito");
+					
 					assignAttributesTaskItem(actionPlanObj.getObjectType().getId());
 					
 				} catch (RightException e) {
@@ -96,22 +113,34 @@ public class CustomTaskItemActionPlan {
 		try {
 			// Salvar o novo objeto de TASKITEM.
 			taskItemFacade.save(taskItemObj, transaction, true);
+			log.info("Salvou Objeto TASKITEM " + taskItemObj.toString());
+			
+			transaction.commit();
+			log.info("Commit de Transação Interna");
+			
 			taskItemFacade.releaseLock(taskItemObj.getVersionData().getHeadOVID());
+			log.info("Liberou Objeto TASKITEM " + taskItemObj.toString());
+			
 			
 		} catch (ObjectLockException e) {
 			// TODO Auto-generated catch block
+			transaction.rollback();
 			e.printStackTrace();
 		} catch (ValidationException e) {
 			// TODO Auto-generated catch block
+			transaction.rollback();
 			e.printStackTrace();
 		} catch (RightException e) {
 			// TODO Auto-generated catch block
+			transaction.rollback();
 			e.printStackTrace();
 		} catch (ObjectNotUniqueException e) {
 			// TODO Auto-generated catch block
+			transaction.rollback();
 			e.printStackTrace();
 		} catch (ObjectAccessException e) {
 			// TODO Auto-generated catch block
+			transaction.rollback();
 			e.printStackTrace();
 		}
 
@@ -136,7 +165,7 @@ public class CustomTaskItemActionPlan {
 				IOVID taskItemOVID = taskItemObjAux.getVersionData().getHeadOVID();
 				
 				try {
-					taskItemObj = taskItemFacade.load(taskItemOVID, true);
+					taskItemObj = taskItemFacade.load(taskItemOVID, transaction, true);
 					taskItemFacade.allocateLock(taskItemObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 					assignAttributesTaskItem(actionPlanObj.getObjectType().getId());
 					
@@ -194,41 +223,54 @@ public class CustomTaskItemActionPlan {
 			}
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_CLIENTSIGNS).setRawValue(",CIP,");
+			log.info("214:Set de CLIENT SIGNS " + ",CIP,");
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_NAME)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_NAME));
+			log.info("218:Set de OBJECT_NAME " + actionPlanObj.getRawValue(IIssueAttributeType.ATTR_NAME));
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_PLANNEDSTARTDATE)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDSTARTDATE));
+			log.info("222:Set de PLANNEDSTARTDATE " + actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDSTARTDATE));
 			
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_PLANNEDENDDATE)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDENDDATE));
+			log.info("226:Set de PLANNEDENDDATE " + actionPlanObj.getRawValue(IIssueAttributeType.ATTR_PLANNEDENDDATE));
 
 //			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue("ISSUE");
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).setRawValue(objectType);
+			log.info("230:Set de OBJECT_OBJTYPE " + objectType);
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OVID)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID).toString() + ":"
 							+ actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER).toString());
+			log.info("235:Set de OBJECT_OVID " + actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID).toString() + ":"
+							+ actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER).toString());
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.BASE_ATTR_CREATOR_USER_ID)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_CREATOR_USER_ID));
+			log.info("239:Set de CREATOR_USER_ID " + actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_CREATOR_USER_ID));
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_VERSION_NUMBER)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER));
+			log.info("244:Set de OBJECT_VERSION_NUMBER " + actionPlanObj.getRawValue(IIssueAttributeType.BASE_ATTR_VERSION_NUMBER));
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_ID)
 					.setRawValue(actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID));
+			log.info("248:Set de OBJECT_ID " + actionPlanObj.getRawValue(IIssueAttributeType.ATTR_OBJ_ID));
 
 			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_CLIENTSIGN).setRawValue("CIP");
+			log.info("251:Set de CLIENT SIGN " + "CIP");
 			
 			IEnumAttribute actionTypeAttr = actionPlanObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
 			IEnumerationItem actionTypeItem = ARCMCollections.extractSingleEntry(actionTypeAttr.getRawValue(), true);
 			
 			if(objectType.equals("ISSUE"))
+				log.info("257:Objeto Filho de TaskItem é ISSUE");
 				taskItemObj = this.modifyWorkflowTaskItem(actionTypeItem.getId());
 			
 			if(objectType.equals("CONTROLEXECUTION"))
+				log.info("261:Objeto Filho de TaskItem é CONTROLEXECUTION");
 				taskItemObj = this.modifyCETaskItem();
 
 
@@ -339,10 +381,12 @@ public class CustomTaskItemActionPlan {
 		}
 		
 		if(actionType.equals("actionplan"))
+			log.info("372:Objeto ISSUE é ACTIONPLAN");
 			setUsersForActionPlan(creatorAPStatus, ownerAPStatus, reviewerAPStatus, userOwnerID, userReviewerID,
 					userCreatorID);
 		
 		if(actionType.equals("issue"))
+			log.info("377:Objeto ISSUE é ISSUE");
 			setUsersForIssue(creatorAPStatus, ownerAPStatus, reviewerAPStatus, userOwnerID, userReviewerID,
 					userCreatorID);
 		
@@ -355,6 +399,7 @@ public class CustomTaskItemActionPlan {
 		
 		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_LASTEDITOR)
 				.setRawValue(userAppObj.getRawValue(IUserAttributeType.ATTR_NAME));
+		log.info("Set de LASTEDITOR " + userAppObj.getRawValue(IUserAttributeType.ATTR_NAME));
 		
 //		IAppObjQuery userQuery = userFacade.createQuery();
 //		userQuery.addRestriction(QueryRestriction.eq(IUserAttributeType.ATTR_OBJ_ID,
@@ -375,69 +420,93 @@ public class CustomTaskItemActionPlan {
 
 	private void setUsersForActionPlan(IEnumerationItem creatorAPStatus, IEnumerationItem ownerAPStatus,
 			IEnumerationItem reviewerAPStatus, Long userOwnerID, Long userReviewerID, Long userCreatorID) {
+		
+		List<IEnumerationItem> openStatus = Collections.singletonList(TASKITEM_STATUS.OPEN);
+		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_STATUS).setRawValue(openStatus);
+		
 		// Status de revisor Baixado, Atendido, Risco Assumido = Encerrado - Remove o usuário do TASKITEM.
 		if (StringUtils.contains("456", reviewerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(-1);
+			log.info("415:Objeto TASKITEM Encerrado!");
+			List<IEnumerationItem> closeStatus = Collections.singletonList(TASKITEM_STATUS.COMPLETED);
+			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_STATUS).setRawValue(closeStatus);
 		} 
 		// Status de reprovado volta para o owner.
 		else if (StringUtils.contains("3", reviewerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+			log.info("421:Objeto TASKITEM está com o Dono " + userOwnerID);
 		}
 		// Status de owner concluído com risco assumido vai pro reviewer.
 		else if (StringUtils.contains("34", ownerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userReviewerID);
+			log.info("427:Objeto TASKITEM está com o Revisor " + userReviewerID);
 		}
 		// Status de owner em andamento ou pendente mantem no owner.
 		else if (StringUtils.contains("12", ownerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
-					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);	
+					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+			log.info("433:Objeto TASKITEM está com o Dono " + userOwnerID);
 		}
 		// Status de creator Please_Select, New, Pending mantem no creator.
 		else if (StringUtils.contains("012", creatorAPStatus.getValue().toString())) {
 			 taskItemObj.getAttribute(
 					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userCreatorID);
+			 log.info("439:Objeto TASKITEM está com o Criador " + userCreatorID);
 		}
 		// Status de creator Concluído, Risco Assumido.
 		else if (StringUtils.contains("45", creatorAPStatus.getValue().toString())) {
 			 taskItemObj.getAttribute(
 					 ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+			 log.info("445:Objeto TASKITEM está com o Dono " + userOwnerID);
 		}
 	}
 	
 	private void setUsersForIssue(IEnumerationItem creatorAPStatus, IEnumerationItem ownerAPStatus,
 			IEnumerationItem reviewerAPStatus, Long userOwnerID, Long userReviewerID, Long userCreatorID) {
+		
+		List<IEnumerationItem> openStatus = Collections.singletonList(TASKITEM_STATUS.OPEN);
+		taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_STATUS).setRawValue(openStatus);
+		
 		// Status de revisor Baixado, Atendido, Risco Assumido = Encerrado - Remove o usuário do TASKITEM.
 		if (StringUtils.contains("234", reviewerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(-1);
+			log.info("455:Objeto TASKITEM Encerrado!");
+			List<IEnumerationItem> closeStatus = Collections.singletonList(TASKITEM_STATUS.COMPLETED);
+			taskItemObj.getAttribute(ITaskitemAttributeType.ATTR_STATUS).setRawValue(closeStatus);
 		} 
 		// Status de reprovado volta para o owner.
 		else if (StringUtils.contains("6", reviewerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+			log.info("461:Objeto TASKITEM está com o Dono " + userOwnerID);
 		}
 		// Status de owner concluído com risco assumido vai pro reviewer.
 		else if (StringUtils.contains("45", ownerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userReviewerID);
+			log.info("467:Objeto TASKITEM está com o Revisor " + userReviewerID);
 		}
 		// Status de owner em andamento ou pendente mantem no owner.
 		else if (StringUtils.contains("123", ownerAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);	
+			log.info("473:Objeto TASKITEM está com o Dono " + userOwnerID);
 		}
 		// Status de creator Please_Select mantem no creator.
 		else if (StringUtils.contains("01", creatorAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userCreatorID);
+			log.info("479:Objeto TASKITEM está com o Criador " + userCreatorID);
 		}
 		// Status de creator Em Andamento
 		else if (StringUtils.contains("2", creatorAPStatus.getValue().toString())) {
 			taskItemObj.getAttribute(
 					ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID).setRawValue(userOwnerID);
+			log.info("485:Objeto TASKITEM está com o Dono " + userOwnerID);
 		}
 	}
 
