@@ -209,7 +209,7 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 
 	private void setQueryOrder() {
 		//queryTaskItem.addOrder((QueryOrder.descending(ITaskitemAttributeType.BASE_ATTR_CREATE_DATE)));
-		queryTaskItem.addOrder((QueryOrder.descending(ITaskitemAttributeType.ATTR_OBJ_ID)));
+		queryTaskItem.addOrder((QueryOrder.descending(ITaskitemAttributeType.ATTR_OBJECT_OVID)));
 	}
 
 	private void setQueryFilters(List<Long> listOVIDFilter, IUserAppObj user) {
