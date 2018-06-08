@@ -32,7 +32,10 @@ import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
 import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.IQueryObjectDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.ISimpleFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria.FilterConnect;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
 import com.idsscheer.webapps.arcm.ndl.IFilterFactory;
@@ -85,9 +88,9 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 			// Apenas se encontrar grupos para esse usuário será necessário executar as
 			// regras abaixo. Desnecessário se o usuário não estiver em nenhum grupo.
 			if (listOVIDFilter.size() > 0) {
-				setQueryFilters(listOVIDFilter);
+				setQueryFilters(listOVIDFilter, user);
 				searchDuplicatedControls(controlList, hashedMapControls, hashedMapIssues);
-				filterQuery(query, hashedMapControls, hashedMapIssues);
+				filterQuery(query, filters, hashedMapControls, hashedMapIssues);
 			}			
 			
 		} catch (RightException e1) {
@@ -100,7 +103,7 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 
 	}
 
-	private void filterQuery(QueryDefinition query, TreeMap<Long, Long> hashedMapControls, TreeMap<Long,Long> hashedMapIssues) {
+	private void filterQuery(QueryDefinition query, List<IFilterCriteria> filters, TreeMap<Long, Long> hashedMapControls, TreeMap<Long,Long> hashedMapIssues) {
 		if (hashedMapControls.size() > 0) {
 
 			// Limpando query original
@@ -113,14 +116,28 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 			IFilterFactory filterFactory = PersistenceAPI.getFilterFactory();
 			for (Map.Entry<Long, Long> entry : hashedMapControls.entrySet()) {
 				query.addFilterCriteria(new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTEQUAL,
-						entry.getKey()));
-			}
-			for (Map.Entry<Long, Long> entry : hashedMapIssues.entrySet()) {
-				query.addFilterCriteria(new SimpleFilterCriteria( "object_id", DataLayerComparator.NOTEQUAL,
-						entry.getKey()));
+						entry.getValue()));
 			}
 
 		}
+		
+		if(hashedMapIssues.size() > 0){
+			IFilterFactory filterFactory = PersistenceAPI.getFilterFactory();
+			List<IFilterCriteria> filterCriterias = new ArrayList<>();
+			for (IQueryObjectDefinition def : query.getObjectDefinitions()) {
+				query.markAsRemovable(def);
+			}
+			//filters.clear();
+			for (Map.Entry<Long, Long> entry : hashedMapIssues.entrySet()) {
+//				query.addFilterCriteria(new SimpleFilterCriteria( "obj_id", DataLayerComparator.EQUAL,
+//						entry.getKey()));
+				filterCriterias.add(new SimpleFilterCriteria( "obj_id", DataLayerComparator.EQUAL,
+						entry.getValue()));
+			}
+			ISimpleFilterCriteria filterCriteria = filterFactory.getSimpleFilterCriteria(filterCriterias, FilterConnect.OR);
+			filters.add(filterCriteria);
+		}
+		
 	}
 
 	private void searchDuplicatedControls(ArrayList<String> controlList, TreeMap<Long, Long> hashedMapControls, TreeMap<Long, Long> hashedMapIssues) {
@@ -131,15 +148,17 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 			
 			IAppObj currentTaskItem = (IAppObj) iteratorTaskItem.next();
 			
-			if(!currentTaskItem.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).getRawValue().equals("CONTROLEXECUTION"))
-				continue;
-			
 			if(currentTaskItem.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).getRawValue().equals("ISSUE")){
 				long issueID = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_ID);
 				long issueVersionNumber = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_VERSION_NUMBER);
-				hashedMapIssues.put(issueID, issueVersionNumber);
+				if(!hashedMapIssues.containsKey(issueID))
+					hashedMapIssues.put(issueID, currentTaskItem.getObjectId());
+				//hashedMapIssues.put(issueID, issueVersionNumber);
 			}
 			
+			if(!currentTaskItem.getAttribute(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE).getRawValue().equals("CONTROLEXECUTION"))
+				continue;
+
 			long ceID = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_ID);
 			long ceVersionNumber = currentTaskItem.getRawValue(ITaskitemAttributeType.ATTR_OBJECT_VERSION_NUMBER);
 			
@@ -183,6 +202,8 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 			listOVIDFilter.add(userGroup.getId());
 		}
 		
+		listOVIDFilter.add(new Long(-1));
+		
 		return listOVIDFilter;
 	}
 
@@ -190,18 +211,33 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 		queryTaskItem.addOrder((QueryOrder.descending(ITaskitemAttributeType.BASE_ATTR_CREATE_DATE)));
 	}
 
-	private void setQueryFilters(List<Long> listOVIDFilter) {
-				
+	private void setQueryFilters(List<Long> listOVIDFilter, IUserAppObj user) {
+		
 		queryTaskItem.addRestriction(
-				QueryRestriction.and(
-						QueryRestriction.or(
-							QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.OPEN), 
-							QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.NOT_COMPLETED)),
-						QueryRestriction.or(
+				QueryRestriction.or(
+						QueryRestriction.and(
+								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "ISSUE"),
+								QueryRestriction.eq(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID, user.getObjectId())
+						),
+						QueryRestriction.and(
 								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "CONTROLEXECUTION"),
-								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "ISSUE")),
-						QueryRestriction.in(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERGROUPID, listOVIDFilter)));
-
+								QueryRestriction.in(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERGROUPID, listOVIDFilter)
+						)
+				)
+		);
+		
+//		queryTaskItem.addRestriction(
+//				QueryRestriction.and(
+//						QueryRestriction.or(
+//							QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.OPEN), 
+//							QueryRestriction.eq(ITaskitemAttributeType.ATTR_STATUS, Enumerations.TASKITEM_STATUS.NOT_COMPLETED)),
+//						QueryRestriction.or(
+//								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "CONTROLEXECUTION"),
+//								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "ISSUE")),
+//						QueryRestriction.or(
+//								QueryRestriction.eq(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID, user.getObjectId()),
+//								QueryRestriction.in(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERGROUPID, listOVIDFilter))));
+//
 	}
 
 	private void createQueries() {
