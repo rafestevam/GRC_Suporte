@@ -221,7 +221,8 @@ public class CustomTaskMyTasksViewHandler implements IViewHandler {
 								QueryRestriction.eq(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERID, user.getObjectId())
 						),
 						QueryRestriction.and(
-								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "CONTROLEXECUTION"),
+//								QueryRestriction.eq(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "CONTROLEXECUTION"),
+								QueryRestriction.ne(ITaskitemAttributeType.ATTR_OBJECT_OBJTYPE, "ISSUE"),
 								QueryRestriction.in(ITaskitemAttributeType.ATTR_RESPONSIBLEUSERGROUPID, listOVIDFilter)
 						)
 				)

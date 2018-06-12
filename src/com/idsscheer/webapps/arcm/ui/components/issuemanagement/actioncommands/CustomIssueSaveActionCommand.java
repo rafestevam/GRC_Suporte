@@ -253,13 +253,14 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 							
 						}
 						
-						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
+//						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
+						issueFacade.save(iroObj, otherTransaction, true);
 						otherTransaction.commit();
 						updateTaskItem(getFullGrantUserContext(), iroObj);
 						
 					}catch(Exception e){
 						issueFacade.releaseLock(iroOVID);
-						otherTransaction.rollback();
+						//otherTransaction.rollback();
 						throw new RuntimeException(e);
 					}finally{
 						issueFacade.releaseLock(iroOVID);
