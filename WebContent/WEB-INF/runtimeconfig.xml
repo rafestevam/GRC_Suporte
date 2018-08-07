@@ -451,7 +451,7 @@
 		<parameterList name="AdjustControl1Line">
 			<parameter name="jobitem" value="AdjustControl1Line" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 18 16 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 33 15 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustControl1Line" />

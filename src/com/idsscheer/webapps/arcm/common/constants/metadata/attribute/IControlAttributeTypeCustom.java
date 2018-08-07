@@ -20,5 +20,8 @@ public interface IControlAttributeTypeCustom extends IControlAttributeType {
 	public final static String STR_CUSTOM_STATUS_FINAL = "custom_st_final";
 	public final static IStringAttributeType ATTR_CUSTOM_STATUS_FINAL = (IStringAttributeType)MetadataConstantsUtil.create(OBJECT_TYPE, STR_CUSTOM_STATUS_FINAL);
 	//Fim REO - 07.02.2018 - EV133332
+	
+	public final static String STR_CUSTOM_OVID = "custom_ovid";
+	public final static IStringAttributeType ATTR_CUSTOM_OVID = (IStringAttributeType)MetadataConstantsUtil.create(OBJECT_TYPE, STR_CUSTOM_OVID);
 
 }

@@ -232,7 +232,7 @@
 		<first id="jarId"><fileset dir="${PROJECT.DIR.BUILD.TEMP}" includes="${VERSION.SOURCE.JAR}"/></first>
 		<property name="FILE.WITH.MANIFEST" refid="jarId"/>
     	<loadmf jar="${FILE.WITH.MANIFEST}"/>
-		<substring text="${ARCM.Specification-Version}" start="0" end="7" property="ARCM.VERSION" />		
+		<substring text="${ARCM.Specification-Version}" start="0" end="7" property="ARCM.VERSION" />
 	</target>
 	
 	<macrodef name="loadmf">

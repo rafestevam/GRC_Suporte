@@ -16,6 +16,7 @@
 <!-- GRC52 ADD -->
       <listAttrType id="owner_group" maxSize="1" objectType.idref="USERGROUP" linkType="3">
             <listRestriction>
+                <attributeRestriction attribute="role" value="tester2l"/>
                 <attributeRestriction attribute="role" value="tester"/>
                 <attributeRestriction attribute="rolelevel" value="object"/>
             </listRestriction>

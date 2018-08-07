@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+	<enum id="userrole_type" isMultiple="false" type="String">  <!-- value must match with the role-id in roles.xml-->
+        <enumitem id="all" value="-1" extendedMeaning="all" formRelevant="false" />
+        <enumitem id="please_select" value="0" extendedMeaning="please_select" formRelevant="false" filterRelevant="false"/>
+        <enumitem id="none" value="-2" formRelevant="false" filterRelevant="true"/>
+        <enumitem id="auditowner" value="auditowner"/>
+        <enumitem id="auditreviewer" value="auditreviewer"/>
+        <enumitem id="auditstepowner" value="auditstepowner"/>
+        <enumitem id="auditauditor" value="auditauditor"/>
+        <enumitem id="auditmanager" value="auditmanager"/>
+        <enumitem id="deficiencyauditor_l1" value="deficiencyauditor_l1"/>
+        <enumitem id="deficiencyauditor_l2" value="deficiencyauditor_l2"/>
+        <enumitem id="deficiencyauditor_l3" value="deficiencyauditor_l3"/>
+        <enumitem id="clientadmin" value="clientadmin"/>
+        <enumitem id="controlmanager" value="controlmanager"/>
+        <enumitem id="controlexecutionowner" value="controlexecutionowner"/>
+        <enumitem id="deficiencymanager_l1" value="deficiencymanager_l1"/>
+        <enumitem id="deficiencymanager_l2" value="deficiencymanager_l2"/>
+        <enumitem id="deficiencymanager_l3" value="deficiencymanager_l3"/>
+        <enumitem id="groupusermanager" value="groupusermanager"/>
+        <enumitem id="hierarchyauditor" value="hierarchyauditor"/>
+        <enumitem id="hierarchymanager" value="hierarchymanager"/>
+        <enumitem id="hierarchyowner" value="hierarchyowner"/>
+        <enumitem id="incidentmanager" value="incidentmanager"/>
+        <enumitem id="incidentowner" value="incidentowner"/>
+        <enumitem id="incidentreviewer" value="incidentreviewer"/>
+        <enumitem id="incidentauditor" value="incidentauditor"/>
+        <enumitem id="lossmanager" value="lossmanager"/>
+        <enumitem id="lossowner" value="lossowner"/>
+        <enumitem id="lossreviewer" value="lossreviewer"/>
+        <enumitem id="lossauditor" value="lossauditor"/>
+        <enumitem id="issuemanager" value="issuemanager"/>
+        <enumitem id="issueauditor" value="issueauditor"/>
+        <enumitem id="policyowner" value="policyowner"/>
+        <!--<enumitem id="policyreviewer" value="policyreviewer"/>-->
+        <enumitem id="policyapprover" value="policyapprover"/>
+        <enumitem id="policyaddressee" value="policyaddressee"/>
+        <enumitem id="policyauditor" value="policyauditor"/>
+        <enumitem id="policymanager" value="policymanager"/>
+        <enumitem id="riskauditor" value="riskauditor"/>
+        <enumitem id="riskmanager" value="riskmanager"/>
+        <enumitem id="riskowner" value="riskowner"/>
+        <enumitem id="riskreviewer" value="riskreviewer"/>
+        <enumitem id="signoffmanager" value="signoffmanager"/>
+        <enumitem id="signoffowner" value="signoffowner"/>
+        <enumitem id="signoffreviewer" value="signoffreviewer"/>
+        <enumitem id="surveymanager" value="surveymanager"/>
+        <enumitem id="questionnaireowner" value="questionnaireowner"/>
+        <enumitem id="surveyreviewer" value="surveyreviewer"/>
+        <enumitem id="surveyauditor" value="surveyauditor"/>
+        <enumitem id="sysadmin" value="sysadmin"/>
+        <enumitem id="testauditor" value="testauditor"/>
+        <enumitem id="testauditorexternal" value="testauditorexternal"/>
+        <enumitem id="tester" value="tester"/>
+        <enumitem id="tester2l" value="tester2l"/>
+        <enumitem id="tester3l" value="tester3l"/>
+        <enumitem id="testmanager" value="testmanager"/>
+        <enumitem id="testreviewer" value="testreviewer"/>
+        <enumitem id="subscriptionmanager" value="subscriptionmanager"/>
+    </enum>
+    
+</custom>

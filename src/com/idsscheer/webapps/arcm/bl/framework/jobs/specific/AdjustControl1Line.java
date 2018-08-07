@@ -77,13 +77,14 @@ public class AdjustControl1Line extends BaseJob {
 			List<IAppObj> controlList = this.getControlList(facade);
 			setBaseObjectsToProcessCount(controlList.size());
 			for (IAppObj controlObj : controlList) {
-				
+									
 				controlOVID = controlObj.getVersionData().getHeadOVID();
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
 				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				
 				List<IAppObj> cetList = controlObj.getAttribute(IControlAttributeType.LIST_CONTROLEXECUTIONTASKS)
 						.getElements(userContext);
+				
 				for (IAppObj cetObj : cetList) {
 
 					List<IAppObj> ceList = this.getCtrlExecFromCET(cetObj.getObjectId());

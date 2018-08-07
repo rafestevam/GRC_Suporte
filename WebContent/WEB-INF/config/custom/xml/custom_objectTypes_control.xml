@@ -39,6 +39,8 @@
 		<stringAttrType id="custom_st_3line" maxCharCount="80" isMassEditable="false" />
 		<stringAttrType id="custom_st_final" maxCharCount="80" isMassEditable="false" />
 		<!-- EV133332 - Fim REO - 05.02.2018 -->
+		
+		<stringAttrType id="custom_ovid" maxCharCount="80" isMassEditable="false" />
                
         <index id="I_7_1" type="normal">
             <attributeRef attribute="name"/>

@@ -217,10 +217,10 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 				}else{
 					
 					IOVID iroOVID = iroElement.getVersionData().getHeadOVID();
-					ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
+					//ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
 					try{
-//						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
-						IAppObj iroObj = issueFacade.load(iroOVID, otherTransaction, true);
+						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
+//						IAppObj iroObj = issueFacade.load(iroOVID, otherTransaction, true);
 						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
 						
 						Date issueDateVal = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
@@ -253,9 +253,9 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 							
 						}
 						
-//						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
-						issueFacade.save(iroObj, otherTransaction, true);
-						otherTransaction.commit();
+						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
+//						issueFacade.save(iroObj, otherTransaction, true);
+//						otherTransaction.commit();
 						updateTaskItem(getFullGrantUserContext(), iroObj);
 						
 					}catch(Exception e){

@@ -1,4 +1,4 @@
-package com.idsscheer.webapps.arcm.dl.framework.viewhandler;
+package com.idsscheer.webapps.arcm.bl.framework.jobs.specific;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -17,8 +18,8 @@ import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.exception.RightException;
+import com.idsscheer.webapps.arcm.bl.framework.jobs.BaseJob;
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
-import com.idsscheer.webapps.arcm.bl.models.filter.util.FilterAttributeUtility;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IViewObj;
@@ -26,22 +27,32 @@ import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.FacadeFactory;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.impl.TransactionManager;
 import com.idsscheer.webapps.arcm.common.constants.metadata.ObjectType;
 import com.idsscheer.webapps.arcm.common.constants.metadata.attribute.IRiskAttributeType;
+import com.idsscheer.webapps.arcm.common.support.DateUtils;
+import com.idsscheer.webapps.arcm.common.util.ARCMCollections;
+import com.idsscheer.webapps.arcm.common.util.ARCMUtility;
 import com.idsscheer.webapps.arcm.common.util.ovid.IOVID;
 import com.idsscheer.webapps.arcm.common.util.ovid.OVIDFactory;
+import com.idsscheer.webapps.arcm.config.metadata.enumerations.IEnumerationItem;
 import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
 import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
 import com.idsscheer.webapps.arcm.dl.framework.IQueryObjectDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
-import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria.FilterConnect;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
 import com.idsscheer.webapps.arcm.ndl.IFilterFactory;
 import com.idsscheer.webapps.arcm.ndl.PersistenceAPI;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.ARCMServiceProvider;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.ILockService;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobAbortException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.jobs.JobWarningException;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.ILockObject;
+import com.idsscheer.webapps.arcm.services.framework.batchserver.services.lockservice.LockServiceException;
 
-public class CustomControlData3ViewHandler implements IViewHandler {
+public class FillCustomOVIDJob extends BaseJob {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Long> validControls = new ArrayList<>();
 	private TreeMap<Long, Long> hashedMapControls = new TreeMap<>();
 	
@@ -51,14 +62,17 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 	private IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
 	private ITransaction defaultTransaction = TransactionManager.getInstance().getReadOnlyTransaction();
 
-	final Logger log = Logger.getLogger(CustomControlData3ViewHandler.class.getName());
+	final Logger log = Logger.getLogger(FillCustomOVIDJob.class.getName());
+	
+	public static final String JOB_NAME_KEY = "enumeration.jobs.AdjustControl1Line.DBI";
+	
+	public FillCustomOVIDJob(IOVID executingUserOvid, Locale executingUserLocale) {
+		super(executingUserOvid, executingUserLocale);
+	}
 	
 	@Override
-	public void handleView(QueryDefinition query, List<IRightsFilterCriteria> rightsFilter,
-			List<IFilterCriteria> filters, IDataLayerObject currentObject, QueryDefinition parentQuery)
-					throws BusViewException {
+	protected void execute() throws JobAbortException, JobWarningException {
 		// TODO Auto-generated method stub
-
 		// Preenche os facades que serão utilizados.
 		getFacades();
 		
@@ -66,35 +80,35 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 		// através de variáveis GET/HTTP
 		// Exemplo: ...&qattr=C_CHANGE_DATE,LT~2018-03-28
 		//Date criteriaDate = setDateFilter(filters);
-		criteriaDate = setDateFilter(filters);
+		criteriaDate = setDateFilter();
 		
 		// Cria List com o filtro de data passada como parâmetro.
 		List<IFilterCriteria> listCriteriaFilterRisk = getListRisksFilter(criteriaDate);
-
+		
 		// Cria VIEW com base em VIEW auxiliar custom_riskdataaux.
 		IViewQuery queryRisks = setQueryRisksFilter(listCriteriaFilterRisk);
-
+		
 		try {
 			
 			// Loop nas versões de risco para determinar quais 
 			// controles e versões eram válidos naquele risco
 			// na data informada.
 			fillValidControls2RiskList(queryRisks);
-
+			
 		} catch (Exception e) {
 			queryRisks.release();
 			log.info(e.getMessage());
 		} finally {
 			queryRisks.release();
 		}
-
+		
 		// Filtro para VIEW auxiliar de controle custom_controldataaux.
 		List<IFilterCriteria> listCriteriaFilterControl = getListControlFilter(criteriaDate);
-
+		
 		IViewQuery queryControls = setQueryControlFilter(listCriteriaFilterControl);
-
+		
 		try {
-
+			
 			// Com base na lista de controles válidos
 			// preenchida anteriormente pelo 
 			// método fillValidControls2RiskList()
@@ -102,28 +116,28 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 			// qual a versão deste controle.
 			fillValidControlsList(queryControls);
 			
+			if(hashedMapControls.size() > 0){
+				for (Map.Entry<Long, Long> entry : hashedMapControls.entrySet()) {
+					log.info("c_id = " + entry.getKey());
+					log.info("c_version_number = " + entry.getValue());
+					
+				}
+			}
+			
 		} catch (Exception e) {
 			queryControls.release();
 			log.info(e.getMessage());
 		} finally {
 			queryControls.release();
 		}
-
-		// Agora que o dicionário hashedMapControls
-		// foi preenchido com todos controles e suas
-		// respectivas versões válidas, precisamos filtrar
-		// na query.
-		setFinalQueryFilter(query, filters);
-
 	}
+
 
 	private void setFinalQueryFilter(QueryDefinition query, List<IFilterCriteria> filters) {
 		log.info("Verifica o tamanho da lista");
 		if (hashedMapControls.size() > 0) {
 
-			//clearFilter(query, filters);
-			filters.clear();
-			query.getFilters().get(0).getFilters().get(0).getFilters().clear();
+			clearFilter(query, filters);
 
 //			// Criando novo filtro de query.
 			List<IFilterCriteria> filtersAnd = new ArrayList<IFilterCriteria>();
@@ -136,15 +150,15 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 						new SimpleFilterCriteria("c_id", "c_id", DataLayerComparator.EQUAL, entry.getKey()),
 						new SimpleFilterCriteria("c_version_number", "c_version_number", DataLayerComparator.EQUAL,
 								entry.getValue()) }));
-//				filtersAnd.add(criteria);
-				query.getFilters().get(0).getFilters().get(0).getFilters().add(criteria);
-				
+				filtersAnd.add(criteria);
 			}
 			
 			log.info("Adiciona o filtro para query.");
-			query.getFilters().get(0).getFilters().get(0).setConnector(FilterConnect.OR);
-//			query.getFilters().get(0).getFilters().get(0).getFilters().addAll(filtersAnd);
-//			query.addFilterCriteria(filterFactory.or(filtersAnd));
+			query.addFilterCriteria(filterFactory.or(filtersAnd));
+//			Calendar calendar = Calendar.getInstance();
+//			calendar.setTime(criteriaDate);
+//			query.addFilterCriteria(new SimpleFilterCriteria("c_change_date", "c_change_date", DataLayerComparator.LESSOREQUAL, calendar.getTimeInMillis()));
+
 		}
 	}
 
@@ -250,11 +264,13 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 		return listCriteriaFilterRisk;
 	}
 
-	private Date setDateFilter(List<IFilterCriteria> filters) {
+	private Date setDateFilter() {
 		log.info("Criação de objeto de data.");
-		Date criteriaDate = Calendar.getInstance().getTime();
-
-		for (IFilterCriteria filter : filters) {
+		Date criteriaDateBuf = Calendar.getInstance().getTime();
+		
+		Date criteriaDate = DateUtils.normalizeLocalDate(criteriaDateBuf, DateUtils.Target.END_OF_DAY);
+		
+		/*for (IFilterCriteria filter : filters) {
 			for (IFilterCriteria filter2 : filter.getFilters()) {
 				log.info("Pega data do filtro da view.");
 				criteriaDate = (Date) filter2.getValue();
@@ -269,12 +285,41 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 				// log.info(filter2.getValue());
 
 			}
-		}
+		}*/
 		return criteriaDate;
 	}
 
 	private void getFacades() {
 		facadeRisk = FacadeFactory.getInstance().getAppObjFacade(userCtx, ObjectType.RISK);
 	}
+
+	@Override
+	protected void deallocateResources() {
+		deallocateLocalSources();
+	}
+
+
+	@Override
+	public String getJobNameKey() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IEnumerationItem getJobType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	private void deallocateLocalSources() {
+		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
+		try {
+			for (ILockObject lock : lockService.findLocks()) {
+				lockService.releaseLock(lock.getObjectType(), lock.getLockUserId(), null);
+			}
+		} catch (LockServiceException e) {
+			setJobFailed(KEY_ERR_JOB_ABORT, JOB_NAME_KEY);
+		}
+	}	
 
 }
