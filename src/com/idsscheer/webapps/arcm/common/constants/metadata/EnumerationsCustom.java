@@ -110,4 +110,10 @@ public class EnumerationsCustom extends Enumerations {
 		public static final IEnumerationItem INEFFECTIVE = EnumerationsCustom.lookupEnumerationItem(ENUM, "ineffective");
 	}
 	
+	public static abstract interface CUSTOM_USERROLE_TYPE {
+		public static final EnumerationWrapper ENUM = new EnumerationWrapper("userrole_type");
+		public static final IEnumerationItem TESTER2L = EnumerationsCustom.lookupEnumerationItem(ENUM, "tester2l");
+		public static final IEnumerationItem TESTER3L = EnumerationsCustom.lookupEnumerationItem(ENUM, "tester3l");
+	}
+	
 }

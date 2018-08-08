@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<rightsPaths>
+		<paths role="tester2l">
+			<rightsObject objectType="USERGROUP">
+				<rightsPath dataKind="masterdata" />
+			</rightsObject>
+			<rightsObject objectType="USER">
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="USER" connectingAttribute="groupmembers" />
+				</rightsPath>
+			</rightsObject>
+			<rightsObject objectType="RISK">
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="TESTDEFINITION"
+						connectingAttribute="owner_group" />
+					<node from="TESTDEFINITION" to="CONTROL" connectingAttribute="testdefinitions" />
+					<node from="CONTROL" to="RISK" connectingAttribute="controls" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="RISK" connectingAttribute="risk" />
+				</rightsPath>
+			</rightsObject>
+			<rightsObject objectType="CONTROL">
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="TESTDEFINITION"
+						connectingAttribute="owner_group" />
+					<node from="TESTDEFINITION" to="CONTROL" connectingAttribute="testdefinitions" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="CONTROL" connectingAttribute="control" />
+				</rightsPath>
+			</rightsObject>
+			<rightsObject objectType="TESTDEFINITION">
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="TESTDEFINITION"
+						connectingAttribute="owner_group" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="TESTDEFINITION" connectingAttribute="testdefinition" />
+				</rightsPath>
+			</rightsObject>
+			<rightsObject objectType="HIERARCHY">
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="TESTDEFINITION"
+						connectingAttribute="owner_group" />
+					<node from="TESTDEFINITION" to="HIERARCHY"
+						connectingAttribute="orgunit" />
+				</rightsPath>
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="TESTDEFINITION"
+						connectingAttribute="owner_group" />
+					<node from="TESTDEFINITION" to="CONTROL" connectingAttribute="testdefinitions" />
+					<node from="CONTROL" to="RISK" connectingAttribute="controls" />
+					<node from="RISK" to="HIERARCHY" connectingAttribute="process" />
+				</rightsPath>
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="TESTDEFINITION"
+						connectingAttribute="owner_group" />
+					<node from="TESTDEFINITION" to="CONTROL" connectingAttribute="testdefinitions" />
+					<node from="CONTROL" to="RISK" connectingAttribute="controls" />
+					<node from="RISK" to="HIERARCHY" connectingAttribute="finaccount" />
+				</rightsPath>
+				<rightsPath dataKind="masterdata">
+					<node from="USERGROUP" to="HIERARCHY" connectingAttribute="tester" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="HIERARCHY" connectingAttribute="orgunit" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="HIERARCHY" connectingAttribute="process" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="HIERARCHY" connectingAttribute="finaccount" />
+				</rightsPath>
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="HIERARCHY" connectingAttribute="testerhierarchy" />
+				</rightsPath>
+			</rightsObject>
+			<rightsObject objectType="TESTCASE">
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+				</rightsPath>
+			</rightsObject>
+			<rightsObject objectType="RECOMMENDATION">
+				<rightsPath dataKind="transactiondata">
+					<node from="USERGROUP" to="TESTCASE" connectingAttribute="owner_group" />
+					<node from="TESTCASE" to="RECOMMENDATION" connectingAttribute="recommendations" />
+				</rightsPath>
+			</rightsObject>
+		</paths>
+	</rightsPaths>
+
+</custom>

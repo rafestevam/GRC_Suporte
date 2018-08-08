@@ -36,6 +36,8 @@
         <listAttrType id="tester" linkType="69" objectType.idref="USERGROUP">
             <listRestriction>
                 <attributeRestriction attribute="role" value="tester"/>
+                <attributeRestriction attribute="role" value="tester2l"/>
+                <attributeRestriction attribute="role" value="tester3l"/>
                 <attributeRestriction attribute="rolelevel" value="object"/>
             </listRestriction>
         </listAttrType>
