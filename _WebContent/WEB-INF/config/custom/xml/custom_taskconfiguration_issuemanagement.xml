@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<task id="issue_creator" objectType.idref="ISSUE">
+
+        <responsibility>
+            <assignedUsers objectAttribute.idref="creator"/>
+        </responsibility>
+
+        <taskState>
+            <open workflowState.idrefs="openForCreation"/>
+            <completed workflowState.idrefs="openForExecution"/>
+            <notCompleted workflowState.idrefs=""/> <!-- no monitor strategy which would lead to this state -->
+        </taskState>
+
+    </task>
+    
+    <!-- EV131854 - O plano de ação não aparece em "Minhas Tarefas" -->
+<!--     <task id="ap_issue_creator" objectType.idref="ISSUE"> -->
+
+<!--         <responsibility> -->
+<!--             <assignedUsers objectAttribute.idref="creator"/> -->
+<!--         </responsibility> -->
+
+<!--         <taskState> -->
+<!--             <open workflowState.idrefs="apOpenForCreation"/> -->
+<!--             <completed workflowState.idrefs="apOpenForExecution"/> -->
+<!--             <notCompleted workflowState.idrefs=""/> no monitor strategy which would lead to this state -->
+<!--         </taskState> -->
+
+<!--     </task> -->
+	<!-- EV131854 - O plano de ação não aparece em "Minhas Tarefas" -->
+	
+    <task id="issue_owner" objectType.idref="ISSUE">
+
+        <responsibility>
+            <assignedUsers objectAttribute.idref="owners"/>
+        </responsibility>
+
+        <taskState>
+            <open workflowState.idrefs="openForExecution"/>
+            <completed workflowState.idrefs="onHold,openForReview"/>
+            <notCompleted workflowState.idrefs=""/> <!-- monitor strategy sets issue only to 'overdue' -->
+        </taskState>
+
+        <monitorStrategy>
+            <monitorLevel type="percentage" value="100">
+                <monitorChange objectAttribute.idref="stateTime" value="overdue" />
+            </monitorLevel>
+        </monitorStrategy>
+
+    </task>
+    
+    <!-- EV131854 - O plano de ação não aparece em "Minhas Tarefas" -->
+<!--     <task id="ap_issue_owner" objectType.idref="ISSUE"> -->
+
+<!--         <responsibility> -->
+<!--             <assignedUsers objectAttribute.idref="owners"/> -->
+<!--         </responsibility> -->
+
+<!--         <taskState> -->
+<!--             <open workflowState.idrefs="apOpenForExecution"/> -->
+<!--             <completed workflowState.idrefs="onHold,openForReview"/> -->
+<!--             <notCompleted workflowState.idrefs=""/> monitor strategy sets issue only to 'overdue' -->
+<!--         </taskState> -->
+
+<!--         <monitorStrategy> -->
+<!--             <monitorLevel type="percentage" value="100"> -->
+<!--                 <monitorChange objectAttribute.idref="stateTime" value="overdue" /> -->
+<!--             </monitorLevel> -->
+<!--         </monitorStrategy> -->
+
+<!--     </task> -->
+    <!-- EV131854 - O plano de ação não aparece em "Minhas Tarefas" -->
+
+    <task id="issue_owner_on_hold" objectType.idref="ISSUE">
+
+        <responsibility>
+            <assignedUsers objectAttribute.idref="owners"/>
+        </responsibility>
+
+        <taskState>
+            <open workflowState.idrefs="onHold"/>
+            <completed workflowState.idrefs="openForExecution,openForReview"/>
+            <notCompleted workflowState.idrefs=""/> <!-- no monitor strategy which would lead to this state -->
+        </taskState>
+
+    </task>
+
+    <task id="issue_reviewer" objectType.idref="ISSUE">
+
+        <responsibility>
+            <assignedUsers objectAttribute.idref="reviewers"/>
+        </responsibility>
+
+        <taskState>
+            <open workflowState.idrefs="openForReview"/>
+            <completed workflowState.idrefs="closedByReviewer,openForExecution"/>
+            <notCompleted workflowState.idrefs=""/> <!-- no monitor strategy which would lead to this state -->
+        </taskState>
+
+    </task>
+
+</custom>

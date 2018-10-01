@@ -13,8 +13,6 @@
 	            <assignRole role.idref="testauditorexternal"    level="XC"/>
 	            <assignRole role.idref="testmanager"            level="XCO"/>
 	            <assignRole role.idref="tester"                 level="O"/>
-	            <assignRole role.idref="tester2l"                 level="O"/>
-	            <assignRole role.idref="tester3l"                 level="O"/>
 	            <assignRole role.idref="testreviewer"           level="CO"/>
 	            <assignRole role.idref="riskmanager"            level="XCO"/>
 	            <assignRole role.idref="riskowner"              level="O" />
@@ -67,8 +65,6 @@
 	            <assignRole role.idref="testauditor"            level="CO"/>
 	            <assignRole role.idref="testauditorexternal"    level="C"/>
 	            <assignRole role.idref="tester"                 level="O"/>
-	            <assignRole role.idref="tester2l"                 level="O"/>
-	            <assignRole role.idref="tester3l"                 level="O"/>
 	            <assignRole role.idref="testreviewer"           level="CO"/>
 	            <assignRole role.idref="riskmanager"            level="O"/>
 	            <assignRole role.idref="riskowner"              level="O" />

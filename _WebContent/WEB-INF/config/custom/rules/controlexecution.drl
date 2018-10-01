@@ -1,0 +1,278 @@
+package CONTROLEXECUTION_RuleSet
+expander controlexecution.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.testmanagement.re.ControlexecutionHelper;
+
+# OBJECT           client_objid            LONG       Client ID                                                                                                                                  
+# OBJECT           client_sign             CLIENTSIGN Client                                                                                                                                     
+# OBJECT           create_date             DATE       Creation date                                                                                                                              
+# OBJECT           creator_user_id         LONG       User ID (creator)                                                                                                                          
+# OBJECT           delete_date             DATE       Deletion date                                                                                                                              
+# OBJECT           guid                    STRING     GUID                                                                                                                                       
+# OBJECT           obj_id                  LONG       ID                                                                                                                                         
+# OBJECT           obj_type                OBJECTTYPE Object type                                                                                                                                
+# OBJECT           root_guid               STRING     Root GUID                                                                                                                                  
+# OBJECT           versions                LONG       Number of versions                                                                                                                         
+# VERSION          aris_change_date        DATE       ARIS change date                                                                                                                           
+# VERSION          change_date             DATE       Change date                                                                                                                                
+# VERSION          change_type             ENUM       Change type                                   changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)
+# VERSION          change_user_id          LONG       User ID (editor)                                                                                                                           
+# VERSION          deactivated             BOOLEAN    Deactivated                                                                                                                                
+# VERSION          id                      LONG       ID                                                                                                                                         
+# VERSION          substitute_user_id      LONG       User ID (substitute)                                                                                                                       
+# VERSION          version_active          BOOLEAN    Current version                                                                                                                            
+# VERSION          version_number          LONG       Version number                                                                                                                             
+# TRANSACTIONAL    execution_date          DATE       Control execution documentation date                                                                                                       
+# TRANSACTIONAL    owner                   LIST       Performed by                                  to 1 USER (LT=6057)                                                                          
+# TRANSACTIONAL    owner_group             LIST       Control execution owner group                 to 1 USERGROUP (LT=6056)                                                                     
+# TRANSACTIONAL    owner_status            ENUM       Control execution documentation status        controlexecution_owner_status (all=-1,open=0,new=1,in_progress=2,completed=3,not_possible=4) 
+# TRANSACTIONAL    owner_substitute        LIST       Performed by (substitute)                     to 1 USER (LT=6058)                                                                          
+# TRANSACTIONAL    review_date             DATE       technical Prop                                                                                                                             
+# TRANSACTIONAL    reviewer                LIST       technical Prop                                to 1 USER (LT=6060)                                                                          
+# TRANSACTIONAL    reviewer_group          LIST       technical Prop                                to 0 USERGROUPs (LT=6059)                                                                    
+# TRANSACTIONAL    reviewer_status         ENUM       technical Prop                                controlexecution_reviewer_status (all=-1)                                                    
+# TRANSACTIONAL    reviewer_substitute     LIST       technical Prop                                to 0 USERs (LT=6061)                                                                         
+# MONITORABLE      controlenddate          DATE       technical Prop                                                                                                                             
+# MONITORABLE      controlstartdate        DATE       technical Prop                                                                                                                             
+# MONITORABLE      plannedenddate          DATE       End date of control execution documentation                                                                                                
+# MONITORABLE      plannedstartdate        DATE       Start date of control execution documentation                                                                                              
+# CONTROLEXECUTION activities              TEXT       Control execution documentation activities                                                                                                 
+# CONTROLEXECUTION affected_orgunit        LIST       Affected organizational unit                  to 1 HIERARCHY (LT=6062)                                                                     
+# CONTROLEXECUTION anomalies_description   TEXT       Description of anomalies                                                                                                                   
+# CONTROLEXECUTION anomaly_rate            DOUBLE     Anomaly rate (%)                                                                                                                           
+# CONTROLEXECUTION appsystem               LIST       Application system types                      to * HIERARCHYs (LT=6069)                                                                    
+# CONTROLEXECUTION completion_rate         DOUBLE     Completion rate (%)                                                                                                                        
+# CONTROLEXECUTION control                 LIST       Control                                       to * CONTROLs (LT=6064)                                                                      
+# CONTROLEXECUTION controlexecutiontask    LIST       Control execution documentation task          to 1 CONTROLEXECUTIONTASK (LT=6055)                                                          
+# CONTROLEXECUTION documents               LIST       Documents                                     to * DOCUMENTs (LT=6063)                                                                     
+# CONTROLEXECUTION due_status              ENUM       Due status                                    due_status (all=-1,on_time=1,overdue=2)                                                      
+# CONTROLEXECUTION execution_documents     LIST       Documents                                     to * DOCUMENTs (LT=6065)                                                                     
+# CONTROLEXECUTION finaccount              LIST       Regulations                                   to * HIERARCHYs (LT=6067)                                                                    
+# CONTROLEXECUTION items_actual_controlled LONG       Number of items actually controlled                                                                                                        
+# CONTROLEXECUTION items_to_control        LONG       Number of items to be controlled                                                                                                           
+# CONTROLEXECUTION name                    STRING     Name                                                                                                                                       
+# CONTROLEXECUTION process                 LIST       Function                                      to 1 HIERARCHY (LT=6066)                                                                     
+# CONTROLEXECUTION remark                  TEXT       Remark                                                                                                                                     
+# CONTROLEXECUTION result_format           TEXT       Result format                                                                                                                              
+# CONTROLEXECUTION risk_category           LIST       Risk categories                               to * HIERARCHYs (LT=6068)                                                                    
+# CONTROLEXECUTION selected_sample_data    TEXT       Description and date of selected samples                                                                                                   
+# CONTROLEXECUTION selectivity             TEXT       Selectivity                                                                                                                                
+# CONTROLEXECUTION sum_items_not_ok        LONG       Number of items not OK (Sum)                                                                                                               
+# CONTROLEXECUTION sum_items_ok            LONG       Number of items OK (Sum)                                                                                                                   
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+########################################################
+### Workflow state "openForExecution" or "PREPARED"  ###
+
+rule "mark_editable_attributes [I,V]"
+
+	salience 2000
+	no-loop true
+	when
+	user is ":persistent:" member of group in list "owner_group"
+    (is in workflow state "PREPARED" OR
+    is in workflow state "openForExecution")
+	then
+		set "items_to_control"          editable
+		set "items_actual_controlled"   editable
+		set "selected_sample_data"      editable
+		set "sum_items_ok"              editable
+		set "sum_items_not_ok"          editable
+		set "anomalies_description"     editable
+
+		set "anomaly_rate"              visible
+		set "completion_rate"           visible
+
+		set "owner_status"              editable
+		set "remark"                    editable
+		set "execution_documents"       editable
+		set "custom_controlexecstatus"  editable
+		set "documents"					editable
+end
+
+#########################################
+### Workflow state "openForExecution" ###
+
+rule "set plannedenddate writeable if user has right 'extend' [I,V]"
+
+	salience 1300
+	no-loop true
+
+	when
+	    is in workflow state "openForExecution"
+		user has right "extend"
+
+	then
+		set "plannedenddate" editable
+		set "plannedenddate" mandatory
+
+end
+
+rule "number actual_controlled_items GE sum of items_OK and item_not_OK[I,V]"
+
+	salience 1200
+	no-loop true
+
+	when
+	    is in workflow state "openForExecution"
+		"items_actual_controlled" is filled
+		("sum_items_ok" is filled OR "sum_items_not_ok" is filled)
+		is numeric value "items_actual_controlled" less than sum of values "sum_items_ok" "sum_items_not_ok"
+
+	then
+		set "items_actual_controlled" invalid
+		set "sum_items_ok" invalid
+		set "sum_items_not_ok" invalid
+		add "error" message "error.controlexecution.calculate.item.sum.invalid.ERR" to "items_actual_controlled"
+
+end
+
+rule "mark_mandatory_attributes_status_not_possible [I,V]"
+
+	salience 1100
+	no-loop true
+
+	when
+	    user is ":persistent:" member of group in list "owner_group"
+	    is in workflow state "openForExecution"
+        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "not_possible"
+
+	then
+		set "remark"    mandatory
+
+end
+
+rule "mark_mandatory_attributes_status_complete [I,V]"
+
+	salience 1000
+	no-loop true
+
+	when
+	    user is ":persistent:" member of group in list "owner_group"
+	    is in workflow state "openForExecution"
+        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "completed"
+	then
+		set "items_to_control"          mandatory
+		set "items_actual_controlled"   mandatory
+		set "sum_items_ok"              mandatory
+		set "sum_items_not_ok"          mandatory
+
+end
+
+
+###############################################
+### All workflow states - after state rules ###
+
+rule "documentation period start date not before end date [V]"
+
+	salience 200
+	no-loop true
+
+	when
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "plannedstartdate" "GREATER THAN" ":transient:" attr_value "plannedenddate"
+
+	then
+		set "plannedenddate" invalid
+		add "error" message "error.date.range.DBI" to "plannedenddate"
+
+end
+
+rule "'plannedenddate' is changed --> check overdue state [V]"
+
+	salience 100
+	no-loop true
+
+	when
+		"plannedenddate" is dirty
+		"plannedenddate" is filled
+
+	then
+		recalculate time dependent state
+
+end
+
+# Custom Rules
+rule "GRC98_invisible_fields[I,V]"
+	salience 90
+	no-loop true
+	
+	when
+	
+	then
+		set "items_to_control"        invisible
+		set "items_actual_controlled" invisible
+		set "selected_sample_data"    invisible
+		set "sum_items_ok"            invisible
+		set "sum_items_not_ok"        invisible
+		set "anomalies_description"   invisible
+		set "completion_rate"         invisible
+		set "anomaly_rate"            invisible
+		set "execution_date"          invisible
+#		set "remark"                  invisible
+
+end
+
+rule "GRC98_set_custom_controlexecstatus_visible[I,V]"
+	salience 2100
+	no-loop true
+	
+	when
+	
+	then
+		set "custom_controlexecstatus" readonly
+		set "activities"               invisible
+		set "selectivity"              invisible
+		set "result_format"            invisible
+
+end
+
+rule "GRC29_set_controlexecutiontask_invisible[I,V]"
+
+	salience 80
+	no-loop true
+	
+	when
+	
+	then
+		set "controlexecutiontask"     invisible
+		set "plannedstartdate"         invisible
+		set "plannedenddate"           invisible
+#		set "documents"                editable
+		set "remark"                   editable
+
+end
+
+#rule "GRC98_set_custom_controlexecstatus_editable[I,V]"
+#	salience 70
+#	no-loop true
+	
+#	when
+#		user is ":persistent:" member of group in list "owner_group"
+#	    is in workflow state "openForExecution"
+#	
+#	then
+#		set "custom_controlexecstatus" editable
+#		set "custom_controlexecstatus" mandatory
+#
+#end
+
+################
+# DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
+################
+#rule "file_upload_enable[I,V]"
+#
+#	salience 500
+#	no-loop true
+#	
+#	when
+#		user is ":persistent:" member of group in list "owner_group"
+#	then
+#		set "documents" editable
+#end

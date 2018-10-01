@@ -25,7 +25,7 @@
 				PostGRE database -->
 			<!-- do not forget to use only one configuration and comment all other 
 				unused database configurations -->
-			<parameter name="dbms.system" value="infrastructure" />
+<!-- 			<parameter name="dbms.system" value="infrastructure" /> -->
 
 			<!-- <parameter name="dbms.system" value="postgresql"/> <parameter name="dbms.driver" 
 				value="org.postgresql.Driver"/> <parameter name="dbms.url" value="jdbc:postgresql://[server]:[port]/[sid]"/> 
@@ -58,6 +58,11 @@
 				<parameter name="dbms.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/> 
 				<parameter name="dbms.url" value="jdbc:sqlserver://[server]:1433;DatabaseName=[database]"/> 
 				<parameter name="dbms.user" value="[user]"/> <parameter name="dbms.pwd" value="[password]"/> -->
+				<parameter name="dbms.system" value="MSSQL"/>
+				<parameter name="dbms.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+				<parameter name="dbms.url" value="jdbc:sqlserver://CIP109DNV:1292;DataBaseName=arcm_prd"/>
+				<parameter name="dbms.user" value="arcm"/>
+				<parameter name="dbms.pwd" value="pwd!!!123456789"/>
 
 
 			<!-- idx_tablespace since ARCM 4.0 auto schema generation -->
@@ -451,7 +456,7 @@
 		<parameterList name="AdjustControl1Line">
 			<parameter name="jobitem" value="AdjustControl1Line" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 33 15 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 44 13 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustControl1Line" />
@@ -463,7 +468,7 @@
 		<parameterList name="AdjustControlOtherLines">
 			<parameter name="jobitem" value="AdjustControlOtherLines" />
 			<parameter name="startScheduler" value="true" />
-			<parameter name="executionTime" value="0 21 16 ? * SUN-SAT" />
+			<parameter name="executionTime" value="0 59 13 ? * SUN-SAT" />
 			<parameter name="clientexcludinglist" value="" />
 			<!-- please do not edit -->
 			<parameter name="className" value="AdjustControlOtherLines" />
@@ -482,6 +487,21 @@
 			<!-- please do not edit -->
 			<parameter name="clientbased" value="false" />
 		</parameterList>
+		
+		
+		<parameterList name="ControlOVIDAsStringJob">
+			<parameter name="jobitem" value="ControlOVIDAsStringJob" />
+			<parameter name="startScheduler" value="true" />
+			<parameter name="executionTime" value="0 17 11 ? * SUN-SAT" />
+			<parameter name="clientexcludinglist" value="" />
+			<!-- please do not edit -->
+			<parameter name="className" value="ControlOVIDAsStringJob" />
+			<!-- please do not edit -->
+			<parameter name="clientbased" value="false" />
+		</parameterList>
+		
+		
+		
 
 		<parameterList name="IssueOverdueJob">
 			<parameter name="jobitem" value="IssueOverdueJob" />

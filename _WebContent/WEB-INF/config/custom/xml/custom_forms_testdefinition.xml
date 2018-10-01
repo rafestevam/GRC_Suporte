@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+	<!-- GAP - GRC52 - Inicio -->
+	<form id="FORM_TESTDEFINITION" controlName="customtestdefform">
+        <logToolbarButtons>
+            <buttonReference button.idref="ARIS_REPORT"/>
+        </logToolbarButtons>
+        <formButtons>
+            <buttonReference button.idref="OBJECT_SAVE"/>
+            <buttonReference button.idref="OBJECT_SAVE_AND_NEXT"/>
+            <buttonReference button.idref="OBJECT_DELETE"/>
+            <buttonReference button.idref="OBJECT_REACTIVATE"/>
+            <buttonReference button.idref="PDF_REPORT"/>
+        </formButtons>
+        <page id="testdefinition" licensedComponentIds="tm">
+            <rowGroup id="testdefinition.1">
+                <row id="client_sign">
+                    <element attribute.idref="client_sign" template="clientSign"/>
+                </row>
+                <row id="name">
+                    <element attribute.idref="name"/>
+                </row>
+                
+                <!-- GAP-GRC52 Inicio--> 
+                <row id="origemteste">
+                    <element attribute.idref="origemteste"/>
+                </row>          
+				<!-- GAP-GRC52 Fim-->   
+                
+                <row id="testingsteps">
+                    <element attribute.idref="testingsteps"/>
+                </row>
+                <row id="test_nature">
+                    <element attribute.idref="test_nature"/>
+                </row>
+                <row id="testtype">
+                    <element attribute.idref="testtype"/>
+                </row>
+                <row id="testextend">
+                    <element attribute.idref="testextend"/>
+                </row>
+               <!-- DEL-->
+               <!--
+                <row id="manager_group">
+                    <element attribute.idref="manager_group" >
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.add button.idref="RELATION_CREATE" location="toolbar" type="writable"/>
+                    </element>
+                </row>               
+                -->  
+                <row id="owner_group">
+                    <element attribute.idref="owner_group">
+                        <parameter name="selectionList" value="testdefinition_ownergroup_sel"/>
+                        <button.add button.idref="RELATION_CREATE" location="toolbar" type="writable"/>
+                    </element>
+                </row>
+                
+                <row id="frequency">
+                    <element attribute.idref="frequency">
+                        <javaScriptEvent expression="aam_objectcommand('cache');" name="onChange"/>
+                    </element>
+                </row>
+            <!--  
+                <row id="event_driven_allowed">
+                    <element attribute.idref="event_driven_allowed"/>
+                </row>
+            -->    
+                <row id="duration">
+                    <element attribute.idref="duration"/>
+                </row>  
+             
+                <row id="startdate">
+                    <element attribute.idref="startdate"/>
+                </row>
+               
+            <!-- DEL-->   
+            <!--
+                <row id="enddate">
+                    <element attribute.idref="enddate">
+                        <parameter name="userEditable" value="true"/>
+                    </element>
+                </row>
+            -->
+            <!--    
+                <row id="control_period">
+                    <element attribute.idref="control_period"/>
+                </row>
+             -->
+             <!--      
+                <row id="offset">
+                    <element attribute.idref="control_period_offset"/>
+                </row>  
+             --> 
+            <!-- DEL--> 
+                <row id="reviewer_group">
+                    <element attribute.idref="reviewer_group">
+                        <parameter name="selectionList" value="AUTO"/>
+                        <button.add button.idref="RELATION_CREATE" location="toolbar" type="writable"/>
+                    </element>
+                </row>
+               
+                <row id="effected_orgunit">
+                    <element attribute.idref="orgunit">
+                        <parameter name="selectionList" value="AUTO"/>
+                    </element>
+                </row>
+                <!--
+                <row id="walkthroughName">
+                    <element attribute.idref="walkthroughName" />
+                </row>
+                <row id="walkthroughCounter">
+                    <element attribute.idref="walkthroughCounter" />
+                </row>
+                -->
+                <row id="isfollowup">
+                    <element attribute.idref="isfollowup"/>
+                </row>
+            </rowGroup>
+        </page>
+    </form>
+  
+</custom>

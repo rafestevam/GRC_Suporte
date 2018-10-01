@@ -1,0 +1,618 @@
+package TESTCASE_RuleSet
+expander testcase.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.testmanagement.re.TestcaseHelper;
+
+# OBJECT        client_objid          LONG       Client ID                                                                                                                                            
+# OBJECT        client_sign           CLIENTSIGN Client                                                                                                                                               
+# OBJECT        create_date           DATE       Creation date                                                                                                                                        
+# OBJECT        creator_user_id       LONG       User ID (creator)                                                                                                                                    
+# OBJECT        delete_date           DATE       Deletion date                                                                                                                                        
+# OBJECT        guid                  STRING     GUID                                                                                                                                                 
+# OBJECT        obj_id                LONG       ID                                                                                                                                                   
+# OBJECT        obj_type              OBJECTTYPE Object type                                                                                                                                          
+# OBJECT        root_guid             STRING     Root GUID                                                                                                                                            
+# OBJECT        versions              LONG       Number of versions                                                                                                                                   
+# VERSION       aris_change_date      DATE       ARIS change date                                                                                                                                     
+# VERSION       change_date           DATE       Change date                                                                                                                                          
+# VERSION       change_type           ENUM       Change type                    changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                         
+# VERSION       change_user_id        LONG       User ID (editor)                                                                                                                                     
+# VERSION       deactivated           BOOLEAN    Deactivated                                                                                                                                          
+# VERSION       id                    LONG       ID                                                                                                                                                   
+# VERSION       substitute_user_id    LONG       User ID (substitute)                                                                                                                                 
+# VERSION       version_active        BOOLEAN    Current version                                                                                                                                      
+# VERSION       version_number        LONG       Version number                                                                                                                                       
+# TRANSACTIONAL execution_date        DATE       Test date                                                                                                                                            
+# TRANSACTIONAL owner                 LIST       Performed by                   to 1 USER (LT=12)                                                                                                     
+# TRANSACTIONAL owner_group           LIST       Tester group                   to 1 USERGROUP (LT=57)                                                                                                
+# TRANSACTIONAL owner_status          ENUM       Test status                    testcase_owner_status (all=-1,open=0,new=1,in_process=2,effective=3,noneffective=4,nottestable=5,nottested=6)         
+# TRANSACTIONAL owner_substitute      LIST       Performed by (substitute)      to 1 USER (LT=3110)                                                                                                   
+# TRANSACTIONAL review_date           DATE       Review date                                                                                                                                          
+# TRANSACTIONAL reviewer              LIST       Reviewer                       to 1 USER (LT=4005)                                                                                                   
+# TRANSACTIONAL reviewer_group        LIST       Reviewer group                 to 1 USERGROUP (LT=58)                                                                                                
+# TRANSACTIONAL reviewer_status       ENUM       Reviewer status                testcase_reviewer_status (all=-1,completed=-2,to_be_reviewed=-3,to_be_checked=-4,unspecified=0,accepted=1,rejected=2) 
+# TRANSACTIONAL reviewer_substitute   LIST       Reviewer (substitute)          to 1 USER (LT=4006)                                                                                                   
+# MONITORABLE   controlenddate        DATE       End of control period                                                                                                                                
+# MONITORABLE   controlstartdate      DATE       Start of control period                                                                                                                              
+# MONITORABLE   plannedenddate        DATE       Test end                                                                                                                                             
+# MONITORABLE   plannedstartdate      DATE       Test start                                                                                                                                           
+# TESTCASE      control               LIST       Control                        to 1 CONTROL (LT=16)                                                                                                  
+# TESTCASE      control_frequency     ENUM       Control frequency (actual)     controlfrequency (all=-1,unspecified=0,daily=1,weekly=2,monthly=3,quarterly=4,semiannually=5,annually=6,eventdriven=7)
+# TESTCASE      design_description    TEXT       Test description (design)                                                                                                                            
+# TESTCASE      documents             LIST       Documents                      to * DOCUMENTs (LT=6)                                                                                                 
+# TESTCASE      effectiveness         ENUM       Effectiveness                  effectiveness (all=0,design=1,control=2)                                                                              
+# TESTCASE      finaccount            LIST       Regulations                    to * HIERARCHYs (LT=75)                                                                                               
+# TESTCASE      followup              LIST       Follow-up                      to 1 TESTCASE (LT=56)                                                                                                 
+# TESTCASE      measure               ENUM       Measure                        measure (all=-1,to_be_checked=-2,unspecified=0,none=1,deficiency=2,issue=3,deactivated=4)                             
+# TESTCASE      operative_description TEXT       Test description (operational)                                                                                                                       
+# TESTCASE      orgunit               LIST       Affected organizational unit   to 1 HIERARCHY (LT=74)                                                                                                
+# TESTCASE      predecessor           LIST       Predecessor                    to 1 TESTCASE (LT=55)                                                                                                 
+# TESTCASE      process               LIST       Function                       to 1 HIERARCHY (LT=54)                                                                                                
+# TESTCASE      recommendations       LIST       Recommendations                to * RECOMMENDATIONs (LT=7)
+# TESTCASE      remark                TEXT       Remark                                                                                                                                               
+# TESTCASE      reviewer_remark       TEXT       Reviewer remark                                                                                                                                      
+# TESTCASE      risk                  LIST       Risk                           to 1 RISK (LT=19)                                                                                                     
+# TESTCASE      test_nature           ENUM       Nature of test                 natureoftest (inquiry=1,observation=2,examination=3,reperformance=4)                                                  
+# TESTCASE      testdefinition        LIST       Test definition                to 1 TESTDEFINITION (LT=14)                                                                                           
+# TESTCASE      testerhierarchy       LIST       Tester hierarchy               to 1 HIERARCHY (LT=72)                                                                                                
+# TESTCASE      testextend            TEXT       Test size                                                                                                                                            
+# TESTCASE      testingsteps          TEXT       Test activities                                                                                                                                      
+# TESTCASE      testtype              ENUM       Test type                      testtype (testofdesign=1,testofeffectiveness=2)                                                                       
+# TESTCASE      type                  ENUM       Type                           testcasetype (all=0,standard=1,followup=2)                                                                            
+# TESTCASE      walkthroughCounter    STRING     Walkthrough counter                                                                                                                                  
+# TESTCASE      walkthroughName       STRING     Walkthrough name                                                                                                                                     
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+rule "set effectiveness invisible [I,V]"
+
+	salience 10100
+	no-loop true
+
+	when
+
+	then
+		set "effectiveness" invisible
+
+end
+
+rule "set design and operative description invisible_[I,V]"
+
+	salience 10000
+	no-loop true
+
+	when
+
+	then
+		set "design_description" invisible
+		set "operative_description" invisible
+
+end
+
+########################################################
+### Workflow state "openForExecution" or "PREPARED"  ###
+
+rule "set plannedenddate writeable if user has right 'extend' [I,V]"
+
+	salience 2900
+	no-loop true
+
+	when
+	    is in workflow state "openForExecution"
+		user has right "extend"
+
+	then
+		set "plannedenddate" editable
+		set "plannedenddate" mandatory
+
+end
+
+rule "tester mandatory attributes [I,V]"
+
+	salience 2800
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+
+	then
+		set "owner_status"          mandatory
+		set "remark"                mandatory #gap-GRC52
+		set "control_frequency"     invisible #gap-GRC52
+end
+
+rule "tester writeable attributes [I,V]"
+
+	salience 2700
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+
+	then
+		set "owner_status"          editable
+		set "control_frequency"     editable
+		set "remark"                editable
+		set "recommendations"       editable
+		set "documents"             editable
+
+end
+
+rule "tester set effectiveness design [I,V]"
+
+	salience 2600
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+	      
+		 value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "noneffective"
+
+
+        value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofdesign"
+        value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS NOT" value "testofeffectiveness"
+
+	then
+		set at multi enum "effectiveness" item "design" to boolean_value "true"
+		set at multi enum "effectiveness" item "control" to boolean_value "false"
+		set "effectiveness"         readonly
+end
+
+rule "tester set effectiveness control [I,V]"
+
+	salience 2500
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+
+	      
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "noneffective" 
+
+		
+		value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS NOT" value "testofdesign"
+        value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofeffectiveness"
+
+	then
+		set at multi enum "effectiveness" item "design" to boolean_value "false"
+		set at multi enum "effectiveness" item "control" to boolean_value "true"
+		set "effectiveness"         readonly
+end
+
+rule "tester set effectiveness both [I,V]"
+
+	salience 2400
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "noneffective"
+ 
+		
+		
+        value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofdesign"
+        value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofeffectiveness"
+
+	then
+		set "effectiveness"         editable
+		set "effectiveness"         mandatory
+	end
+
+rule "Reset effectiveness [I,V]"
+
+	salience 2700
+	no-loop true
+
+	when
+		object is dirty
+		( is in workflow state "openForExecution" AND
+          user is ":persistent:" member of group in list "owner_group" ) OR
+        ( is in workflow state "PREPARED" AND
+          user is executing job with id "eventImportJob" )
+
+        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS NOT" value "noneffective" 
+
+
+	then
+		set at multi enum "effectiveness" item "design" to boolean_value "false"
+        set at multi enum "effectiveness" item "control" to boolean_value "false"
+
+	end
+
+
+rule "tester design description mandatory if 'effective' [I,V]"
+
+	salience 2350
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "effective"
+		value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofdesign"
+
+	then
+		set "design_description" visible
+		set "design_description" editable
+		set "design_description" mandatory
+
+end
+
+
+rule "tester design description mandatory if 'noneffective' [I,V]"
+
+	salience 2300
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+      
+		 value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "noneffective" 
+
+	
+		# condition must both consider the values of "testtype" and "effectiveness" because the consequences of rules
+		# "tester_set_effectiveness_design" and "tester_set_effectiveness_control" are executed *after* this condition evaluation
+		( ( value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofdesign" AND
+            value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS NOT" value "testofeffectiveness" ) OR
+		   value comparison fulfilled: ":transient:" attr_value "effectiveness" "CONTAINS" value "design"                   )
+
+	then
+		set "design_description" visible
+		set "design_description" editable
+		set "design_description" mandatory
+
+end
+
+rule "tester operative description mandatory if 'effective' [I,V]"
+
+	salience 2250
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "effective"
+		value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofeffectiveness"
+
+	then
+		set "operative_description" visible
+		set "operative_description" editable
+		set "operative_description" mandatory
+
+end
+
+
+rule "tester operative description mandatory if 'noneffective' [I,V]"
+
+	salience 2200
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+      
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "noneffective"
+ 
+		
+
+		# condition must both consider the values of "testtype" and "effectiveness" because the consequences of rules
+		# "tester_set_effectiveness_design" and "tester_set_effectiveness_control" are executed *after* this condition evaluation
+		( ( value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS NOT" value "testofdesign" AND
+            value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofeffectiveness" ) OR
+		   value comparison fulfilled: ":transient:" attr_value "effectiveness" "CONTAINS" value "control"              )
+
+	then
+		set "operative_description" visible
+		set "operative_description" editable
+		set "operative_description" mandatory
+
+end
+
+
+rule "tester remark mandatory [I,V]"
+
+	salience 2100
+	no-loop true
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+		value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "nottestable"
+
+	then
+		set "remark" mandatory
+
+end
+
+rule "tester not in test period -> define all standard attributes readonly [I,V]"
+
+	salience 2000
+
+	when
+	    ( is in workflow state "openForExecution" AND
+		  user is ":persistent:" member of group in list "owner_group" ) OR
+	    ( is in workflow state "PREPARED" AND
+	      user is executing job with id "eventImportJob" )
+		"plannedenddate"   is_not dirty
+		( value comparison fulfilled: ":transient:" attr_value "plannedstartdate" "GREATER THAN" value ":TODAY:" OR
+		  value comparison fulfilled: ":transient:" attr_value "plannedenddate" "LESS THAN" value ":TODAY:" )
+
+	then
+		set "controlenddate"        readonly
+		set "controlstartdate"      readonly
+		set "plannedenddate"        readonly
+		set "plannedstartdate"      readonly
+		set "control"               readonly
+		set "control_frequency"     readonly
+		set "design_description"    readonly
+		set "documents"             readonly
+		set "effectiveness"         readonly
+		set "finaccount"            readonly
+		set "followup"              readonly
+		set "operative_description" readonly
+		set "orgunit"               readonly
+		set "predecessor"           readonly
+		set "process"               readonly
+		set "recommendations"       readonly
+		set "remark"                readonly
+		set "risk"                  readonly
+		set "test_nature"           readonly
+		set "testdefinition"        readonly
+		set "testerhierarchy"       readonly
+		set "testextend"            readonly
+		set "testingsteps"          readonly
+		set "testtype"              readonly
+		set "type"                  readonly
+		set "walkthroughCounter"    readonly
+		set "walkthroughName"       readonly
+		set "execution_date"        readonly
+		set "owner"                 readonly
+		set "owner_group"           readonly
+		set "owner_status"          readonly
+		set "owner_substitute"      readonly
+		set "review_date"           readonly
+		set "reviewer"              readonly
+		set "reviewer_group"        readonly
+		set "reviewer_status"       readonly
+		set "reviewer_substitute"   readonly
+		set "measure"               readonly
+		set "reviewer_remark"       readonly
+				
+        set "owner_status"          not_mandatory
+		set "effectiveness"         not_mandatory
+        set "design_description"    not_mandatory
+        set "operative_description" not_mandatory
+        set "remark"                not_mandatory
+
+
+		add object "error" message "message.testaction.test.period.not.active.ERR"
+
+end
+
+#######################################
+### Workflow state "openForReview"  ###
+
+rule "reviewer mandatory fields group [I,V]"
+
+	salience 1200
+	no-loop true
+
+	when
+	    is in workflow state "openForReview"
+		user is ":persistent:" member of group in list "reviewer_group"
+
+	then
+		set "reviewer_status"   editable
+		set "reviewer_status"   mandatory
+		set "reviewer_remark"   editable
+		set "recommendations"   editable
+
+end
+
+rule "reviewer set measure mandatory [V]"
+
+	salience 1100
+	no-loop true
+
+	when
+	    is in workflow state "openForReview"
+		user is ":persistent:" member of group in list "reviewer_group"
+		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "accepted"
+
+	then
+		set "measure"           editable
+		set "measure"           mandatory
+
+end
+
+rule "reviewer set reviewer remark mandatory [V]"
+
+	salience 1000
+	no-loop true
+
+	when
+	    is in workflow state "openForReview"
+		user is ":persistent:" member of group in list "reviewer_group"
+		value comparison fulfilled: ":transient:" attr_value "reviewer_status" "CONTAINS" value "rejected"
+
+	then
+		set "reviewer_remark"   mandatory
+		reset "measure" to default_value
+
+end
+
+#######################################
+### Workflow state "measureDeactivated"  ###
+
+rule "reviewer set measure editable [I,V]"
+
+	salience 500
+	no-loop true
+
+	when
+	    is in workflow state "measureDeactivated"
+		user is ":persistent:" member of group in list "reviewer_group"
+
+	then
+		set "measure"           editable
+
+end
+
+
+###############################################
+### All workflow states - after state rules ###
+
+rule "set effectiveness visible for noneffective testcases [I,V]"
+
+	salience 140
+	no-loop true
+
+	when
+ 	
+	    value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "noneffective" 
+
+	    
+ 	    
+		( value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofdesign" OR
+          value comparison fulfilled: ":transient:" attr_value "testtype" "CONTAINS" value "testofeffectiveness" )
+
+	then
+		set "effectiveness" visible
+
+end
+
+rule "set design and design description visible if filled [I,V]"
+
+	salience 130
+	no-loop true
+
+	when
+	    "design_description" is filled
+
+	then
+		set "design_description" visible
+
+end
+
+rule "set design and operative description visible if filled [I,V]"
+
+	salience 120
+	no-loop true
+
+	when
+	    "operative_description" is filled
+
+	then
+		set "operative_description" visible
+
+end
+
+rule "execution period start date not before end date [V]"
+
+	salience 110
+	no-loop true
+
+	when
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "plannedstartdate" "GREATER THAN" ":transient:" attr_value "plannedenddate"
+
+	then
+		set "plannedenddate" invalid
+		add "error" message "error.date.range.DBI" to "plannedenddate"
+
+end
+
+rule "execution period cannot be shortened [V]"
+
+	salience 100
+	no-loop true
+
+	when
+	    attribute comparison fulfilled: ":transient:" attr_value "plannedenddate" "LESS THAN" ":persistent:" attr_value "plannedenddate"
+
+	then
+		add "error" message "errors.periode.testing.extend.only" to "plannedenddate"
+		set "plannedenddate" invalid
+
+end
+
+##############Customize
+rule "set reviewer_status [I,V]"
+
+	salience 9000
+	no-loop true
+
+	when
+
+	then
+	#   set "reviewer_remark"   editable	
+    #	set "reviewer_status"   editable
+	#	set "reviewer_remark"   mandatory	
+    #	set "reviewer_status"   mandatory   	
+		set "origemteste"       not_mandatory
+end
+
+##############Customize GRC52 FIM
+
+# DMM 2017/07/14 - Disable Test Case Fields
+rule "disable_test_case_fields[I,V]"
+
+     salience 90
+     no-loop true
+     when
+
+     then
+#         set "operative_description" invisible
+         set "control_frequency"     invisible
+end
+
+################
+# DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
+################
+rule "file_upload_enable[I,V]"
+
+	salience 80
+	no-loop true
+	
+	when
+	  ( is in workflow state "openForExecution"  OR 
+	    is in workflow state "openForReview") AND
+	  ( user is ":persistent:" member of group in list "owner_group" OR
+	  	user is ":persistent:" member of group in list "reviewer_group" )	
+	then
+		set "documents" editable
+
+end
+

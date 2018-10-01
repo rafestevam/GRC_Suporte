@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.idsscheer.batchserver.logging.Logger;
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.common.support.AppObjUtility;

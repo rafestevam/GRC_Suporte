@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.framework.jobs.BaseJob;
@@ -45,7 +47,8 @@ public class AdjustControl1Line extends BaseJob {
 	private static final long serialVersionUID = 1L;
 	public static final String JOB_NAME_KEY = "enumeration.jobs.AdjustControl1Line.DBI";
 	//public static final String JOB_NAME_KEY = "TESTE_1";
-
+	private static final Logger log = Logger.getLogger(AdjustControl1Line.class);
+	
 	public AdjustControl1Line(IOVID executingUserOvid, Locale executingUserLocale) {
 		super(executingUserOvid, executingUserLocale);
 		// TODO Auto-generated constructor stub
@@ -60,6 +63,7 @@ public class AdjustControl1Line extends BaseJob {
 		ILockService lockService = ARCMServiceProvider.getInstance().getLockService();
 		try {
 			for (ILockObject lock : lockService.findLocks()) {
+				log.info(lock.getLockObjectId());
 				lockService.releaseLock(lock.getObjectType(), lock.getLockUserId(), null);
 			}
 		} catch (LockServiceException e) {
@@ -69,6 +73,8 @@ public class AdjustControl1Line extends BaseJob {
 
 	@Override
 	protected void execute() throws JobAbortException, JobWarningException {
+		
+		deallocateLocalSources();
 
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.CONTROL);
 		IOVID controlOVID = null;
@@ -77,14 +83,13 @@ public class AdjustControl1Line extends BaseJob {
 			List<IAppObj> controlList = this.getControlList(facade);
 			setBaseObjectsToProcessCount(controlList.size());
 			for (IAppObj controlObj : controlList) {
-									
+				
 				controlOVID = controlObj.getVersionData().getHeadOVID();
 				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
 				facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
 				
 				List<IAppObj> cetList = controlObj.getAttribute(IControlAttributeType.LIST_CONTROLEXECUTIONTASKS)
 						.getElements(userContext);
-				
 				for (IAppObj cetObj : cetList) {
 
 					List<IAppObj> ceList = this.getCtrlExecFromCET(cetObj.getObjectId());
@@ -120,6 +125,8 @@ public class AdjustControl1Line extends BaseJob {
 				increaseProgress();
 				
 			}
+			
+			deallocateLocalSources();
 			
 			//setJobEndState(JOBENDSTATE.SUCCESS);
 			
@@ -158,7 +165,7 @@ public class AdjustControl1Line extends BaseJob {
 				IOVID ceOVID = OVIDFactory.getOVID(ceID, ceVersionNumber);
 				
 				try{
-					IAppObj ceAppObj = ceFacade.load(ceOVID, true);
+					IAppObj ceAppObj = ceFacade.load(ceOVID, false);
 					ceFacade.allocateLock(ceOVID, LockType.FORCEWRITE);
 					
 					if (ceAppObj != null && !ceAppObj.getVersionData().isDeleted())

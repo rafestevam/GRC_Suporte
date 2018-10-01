@@ -440,6 +440,10 @@
         	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.ActionPlanTaskItemJob"/>
         </enumitem>
         
+        <enumitem id="ControlOVIDAsStringJob" value="60">
+        	<parameter name="ClassName" value="com.idsscheer.webapps.arcm.bl.framework.jobs.specific.ControlOVIDAsStringJob"/>
+        </enumitem>
+        
      
         
         

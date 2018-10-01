@@ -46,32 +46,34 @@ import com.idsscheer.webapps.arcm.ui.framework.common.UIEnvironmentManager;
 import com.idsscheer.webapps.arcm.ui.web.support.MessageContainer;
 
 public class IssueHelperCustom extends CollectiveHelper {
-//	DMM - BOF- Revisão da sprint - 14/05/2018
+	// DMM - BOF- Revisão da sprint - 14/05/2018
 	public static boolean isUserSysAdmin() {
 		REEnvironment env = REEnvironment.getInstance();
 		return env.getUserContext().getUserRights().isSysadmin();
 	}
-//	DMM - EOF- Revisão da sprint - 14/05/2018
-	
-	public static void setIssueDelay(){
-		//IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(), ObjectType.ISSUE);
+	// DMM - EOF- Revisão da sprint - 14/05/2018
+
+	public static void setIssueDelay() {
+		// IAppObjFacade issueFacade =
+		// FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(),
+		// ObjectType.ISSUE);
 		IAppObj issueObj = REEnvironment.getInstance().getRuleAppObj().getAppObj();
-		if(!issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).isEmpty()){
+		if (!issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).isEmpty()) {
 			Date issueDate = issueObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
 			Calendar calendar = Calendar.getInstance();
-			
-			if(issueDate.before(calendar.getTime()))
+
+			if (issueDate.before(calendar.getTime()))
 				CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "overdue");
-			
-			if(!issueDate.before(calendar.getTime()))
+
+			if (!issueDate.before(calendar.getTime()))
 				CollectiveHelper.setValue(IIssueAttributeTypeCustom.STR_STATETIME, "on_time");
 		}
-		//issueFacade.save(issueObj, , arg2);
-		
+		// issueFacade.save(issueObj, , arg2);
+
 	}
-	
-	public static void setRiskAndProcessClassification(){
-		
+
+	public static void setRiskAndProcessClassification() {
+
 		REEnvironment env = REEnvironment.getInstance();
 		RuleAppObj ra = env.getRuleAppObj();
 		REKey raResultKey = ra.createAtomicKey("ra_result");
@@ -81,66 +83,72 @@ public class IssueHelperCustom extends CollectiveHelper {
 		REKey processKey = ra.createAtomicKey("cst_process");
 		REKey appSysKey = ra.createAtomicKey("cst_appsystem");
 		IAppObj riskObj = null;
-		
-		List<IAppObj> iroList = ra.getAppObj().getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullReadAccessUserContext());
-		for(IAppObj iroObj : iroList){
-			
-			if(iroObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)){
-				List<IAppObj> ceList = iroObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getFullReadAccessUserContext());
-				for(IAppObj ceObj : ceList){
+
+		List<IAppObj> iroList = ra.getAppObj().getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS)
+				.getElements(getFullReadAccessUserContext());
+		for (IAppObj iroObj : iroList) {
+
+			if (iroObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)) {
+				List<IAppObj> ceList = iroObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL)
+						.getElements(getFullReadAccessUserContext());
+				for (IAppObj ceObj : ceList) {
 					riskObj = getRiskFromControl(ceObj.getObjectId());
 				}
-				
+
 			}
-			
-			if(iroObj.getObjectType().equals(ObjectType.TESTCASE)){
-				List<IAppObj> tcList = iroObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullReadAccessUserContext());
-				for(IAppObj tcObj : tcList){
+
+			if (iroObj.getObjectType().equals(ObjectType.TESTCASE)) {
+				List<IAppObj> tcList = iroObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL)
+						.getElements(getFullReadAccessUserContext());
+				for (IAppObj tcObj : tcList) {
 					riskObj = getRiskFromControl(tcObj.getObjectId());
 				}
 			}
-			
-			if(iroObj.getObjectType().equals(ObjectType.ISSUE)){
+
+			if (iroObj.getObjectType().equals(ObjectType.ISSUE)) {
 				IEnumAttribute issueTypeAttr = iroObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
 				IEnumerationItem issueType = ARCMCollections.extractSingleEntry(issueTypeAttr.getRawValue(), true);
-				if(issueType.getId().equals("issue")){
-					
-					List<IAppObj> issueList = iroObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullReadAccessUserContext());
-					for(IAppObj issueObj : issueList){
-						
-						if(issueObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)){
-							List<IAppObj> ceList = issueObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL).getElements(getFullReadAccessUserContext());
-							for(IAppObj ceObj : ceList){
+				if (issueType.getId().equals("issue")) {
+
+					List<IAppObj> issueList = iroObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS)
+							.getElements(getFullReadAccessUserContext());
+					for (IAppObj issueObj : issueList) {
+
+						if (issueObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)) {
+							List<IAppObj> ceList = issueObj.getAttribute(IControlexecutionAttributeType.LIST_CONTROL)
+									.getElements(getFullReadAccessUserContext());
+							for (IAppObj ceObj : ceList) {
 								riskObj = getRiskFromControl(ceObj.getObjectId());
 							}
-							
+
 						}
-						
-						if(issueObj.getObjectType().equals(ObjectType.TESTCASE)){
-							List<IAppObj> tcList = issueObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL).getElements(getFullReadAccessUserContext());
-							for(IAppObj tcObj : tcList){
+
+						if (issueObj.getObjectType().equals(ObjectType.TESTCASE)) {
+							List<IAppObj> tcList = issueObj.getAttribute(ITestcaseAttributeType.LIST_CONTROL)
+									.getElements(getFullReadAccessUserContext());
+							for (IAppObj tcObj : tcList) {
 								riskObj = getRiskFromControl(tcObj.getObjectId());
 							}
 						}
-						
+
 					}
-					
+
 				}
 			}
-			
+
 		}
-		
-		if(!(riskObj == null)){
+
+		if (!(riskObj == null)) {
 			String raResult = "Não Avaliado";
 			String raResidualFinal = "Não Avaliado";
-			
-			if(!riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).isEmpty()){
+
+			if (!riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).isEmpty()) {
 				raResult = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESULT).getRawValue();
 			}
-			if(!riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).isEmpty()){
+			if (!riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).isEmpty()) {
 				raResidualFinal = riskObj.getAttribute(IRiskAttributeTypeCustom.ATTR_RA_RESIDUALFINAL).getRawValue();
 			}
-			
+
 			ra.setRawValue(mProcessKey.getString(), getMProcess(riskObj));
 			ra.setRawValue(processKey.getString(), getProcess(riskObj));
 			ra.setRawValue(appSysKey.getString(), getAppSys(riskObj));
@@ -148,126 +156,141 @@ public class IssueHelperCustom extends CollectiveHelper {
 			ra.setRawValue(raResultKey.getString(), raResult);
 			ra.setRawValue(raResFinalKey.getString(), raResidualFinal);
 		}
-	
+
 	}
-	
-	private static String getMProcess(IAppObj riskObj){
-		
+
+	private static String getMProcess(IAppObj riskObj) {
+
 		String retMProcess = "";
-		
-		List<IAppObj> hierList = riskObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(getFullReadAccessUserContext());
-		for(IAppObj hierObj : hierList){
-			retMProcess = hierObj.getAttribute(IHierarchyAttributeType.ATTR_MODEL_NAME ).getRawValue();
+
+		List<IAppObj> hierList = riskObj.getAttribute(IRiskAttributeType.LIST_PROCESS)
+				.getElements(getFullReadAccessUserContext());
+		for (IAppObj hierObj : hierList) {
+			retMProcess = hierObj.getAttribute(IHierarchyAttributeType.ATTR_MODEL_NAME).getRawValue();
 		}
-		
+
 		return retMProcess;
-		
+
 	}
-	
-	private static String getProcess(IAppObj riskObj){
-		
+
+	private static String getProcess(IAppObj riskObj) {
+
 		String retProcess = "";
-		
-		List<IAppObj> hierList = riskObj.getAttribute(IRiskAttributeType.LIST_PROCESS).getElements(getFullReadAccessUserContext());
-		for(IAppObj hierObj : hierList){
-			retProcess = hierObj.getAttribute(IHierarchyAttributeType.ATTR_NAME ).getRawValue();
+
+		List<IAppObj> hierList = riskObj.getAttribute(IRiskAttributeType.LIST_PROCESS)
+				.getElements(getFullReadAccessUserContext());
+		for (IAppObj hierObj : hierList) {
+			retProcess = hierObj.getAttribute(IHierarchyAttributeType.ATTR_NAME).getRawValue();
 		}
-		
+
 		return retProcess;
 	}
-	
-	private static String getAppSys(IAppObj riskObj){
-		
+
+	private static String getAppSys(IAppObj riskObj) {
+
 		String retAppSys = "";
-		
-		List<IAppObj> sysList = riskObj.getAttribute(IRiskAttributeType.LIST_APPSYSTEM).getElements(getFullReadAccessUserContext());
-		for(IAppObj sysObj : sysList){
+
+		List<IAppObj> sysList = riskObj.getAttribute(IRiskAttributeType.LIST_APPSYSTEM)
+				.getElements(getFullReadAccessUserContext());
+		for (IAppObj sysObj : sysList) {
 			retAppSys = sysObj.getAttribute(IHierarchyAttributeType.ATTR_NAME).getRawValue();
 		}
-		
-		if(retAppSys.isEmpty())
+
+		if (retAppSys.isEmpty())
 			retAppSys = "N/A";
-		
+
 		return retAppSys;
 	}
-	
-	private static IAppObj getRiskFromControl(long controlObjID){
-		
+
+	private static IAppObj getRiskFromControl(long controlObjID) {
+
 		IAppObj riskAppObj = null;
 		long riskID = 0;
 		long riskVersionNumber = 0;
-		
+
 		Map filterMap = new HashMap();
 		filterMap.put("control_obj_id", controlObjID);
-		
-		IViewQuery query = QueryFactory.createQuery(getFullReadAccessUserContext(), "customcontrol2risk", null, filterMap);
-		
-		/*IViewQuery query = QueryFactory.createQuery(getFullReadAccessUserContext(), "customcontrol2risk", filterMap, null,
-				true, );*/
-		
-		try{
-		
+
+		IViewQuery query = QueryFactory.createQuery(getFullReadAccessUserContext(), "customcontrol2risk", null,
+				filterMap);
+
+		/*
+		 * IViewQuery query =
+		 * QueryFactory.createQuery(getFullReadAccessUserContext(),
+		 * "customcontrol2risk", filterMap, null, true, );
+		 */
+
+		try {
+
 			Iterator itQuery = query.getResultIterator();
-			
-			while(itQuery.hasNext()){
-				
-				IViewObj viewObj = (IViewObj)itQuery.next();
-				riskID = (Long)viewObj.getRawValue("risk_obj_id");
-				riskVersionNumber = (Long)viewObj.getRawValue("risk_version_number");
-				
+
+			while (itQuery.hasNext()) {
+
+				IViewObj viewObj = (IViewObj) itQuery.next();
+				riskID = (Long) viewObj.getRawValue("risk_obj_id");
+				riskVersionNumber = (Long) viewObj.getRawValue("risk_version_number");
+
 			}
-		
-			//IAppObjFacade riskFacade = this.environment.getAppObjFacade(ObjectType.RISK);
-			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(), ObjectType.RISK);
+
+			// IAppObjFacade riskFacade =
+			// this.environment.getAppObjFacade(ObjectType.RISK);
+			IAppObjFacade riskFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(),
+					ObjectType.RISK);
 			IOVID riskOVID = OVIDFactory.getOVID(riskID, riskVersionNumber);
 			riskAppObj = riskFacade.load(riskOVID, true);
-		}catch(Exception e){
+		} catch (Exception e) {
 			query.release();
-		}finally{
+		} finally {
 			query.release();
 		}
-		
+
 		return riskAppObj;
-		
+
 	}
-	
-	public static boolean isLateThanFirstDate(){
-		
+
+	public static boolean isLateThanFirstDate() {
+
 		boolean isLate = false;
 		REEnvironment reenv = REEnvironment.getInstance();
 		RuleAppObj issue = reenv.getRuleAppObj();
 		REKey plannedenddateKey = issue.createAtomicKey("plannedenddate");
-		
-		Date plannedenddate = (Date) issue.getRawValue(plannedenddateKey.getString());
-		
-		if(issue.isDirty(plannedenddateKey.getString())){
-			if(plannedenddate != null){
-				IAppObjFacade issueFacade = FacadeFactory.getInstance().getAppObjFacade(getFullReadAccessUserContext(), ObjectType.ISSUE);
-				IOVID issueOVID = OVIDFactory.getOVID(issue.getObjectId(), issue.getAppObj().getVersionHistory().size());
-				
-				try {
-					IAppObj issueFirstVersion = issueFacade.load(issueOVID, true);
-					if(issueFirstVersion != null){
-						Date date = issueFirstVersion.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
-						Date issueDate = DateUtils.normalizeLocalDate(date, DateUtils.Target.END_OF_DAY);
-						Date newDate = DateUtils.normalizeLocalDate(plannedenddate, DateUtils.Target.END_OF_DAY);
-						
-						if(newDate.before(issueDate))
-							isLate = true;
+
+		if (issue.getRawValue(plannedenddateKey.getString()) != null) {
+			Date plannedenddate = (Date) issue.getRawValue(plannedenddateKey.getString());
+
+			if (issue.isDirty(plannedenddateKey.getString())) {
+				if (plannedenddate != null) {
+					IAppObjFacade issueFacade = FacadeFactory.getInstance()
+							.getAppObjFacade(getFullReadAccessUserContext(), ObjectType.ISSUE);
+					IOVID issueOVID = OVIDFactory.getOVID(issue.getObjectId(),
+							issue.getAppObj().getVersionHistory().size());
+
+					try {
+						IAppObj issueFirstVersion = issueFacade.load(issueOVID, true);
+						if (issueFirstVersion != null && issueFirstVersion.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE)
+								.getRawValue() != null) {
+							Date date = issueFirstVersion.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE)
+									.getRawValue();
+							Date issueDate = DateUtils.normalizeLocalDate(date, DateUtils.Target.END_OF_DAY);
+							Date newDate = DateUtils.normalizeLocalDate(plannedenddate, DateUtils.Target.END_OF_DAY);
+
+							if (newDate.before(issueDate))
+								isLate = true;
+						}
+
+					} catch (RightException e) {
+						// TODO Auto-generated catch block
+						throw new RuntimeException(e);
+					} finally {
+						issueFacade.releaseLock(issueOVID);
 					}
-					
-				} catch (RightException e) {
-					// TODO Auto-generated catch block
-					throw new RuntimeException(e);
-				}finally{
-					issueFacade.releaseLock(issueOVID);
+
 				}
-				
 			}
 		}
-		
+
 		return isLate;
-		
+
 	}
 
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<view id="control" view.parameter="DISTINCT" relevantForMashzoneIntegration="true"><!-- viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomControlViewHandler"> -->
+        <viewObject id="VO_controls_1" objectType="CONTROL" isMainViewObject="true">
+            <viewColumn id="client_sign" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="client_id" attributeType="client_objid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true"/>
+            <viewColumn id="name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="controls" attributeType="controls" isSortable="true" isSelectColumn="true"/>
+<!--             <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/> -->
+            <viewColumn id="control_version_active" attributeType="version_active"/>
+            <viewColumn id="control_frequency" attributeType="control_frequency"/>
+            <viewColumn id="control_effect" attributeType="control_effect"/>
+            <viewColumn id="control_execution" attributeType="control_execution"/>
+            <viewColumn id="control_type" attributeType="control_type"/>
+            <viewColumn id="control_key" attributeType="key_control"/>
+            <viewColumn id="guid" attributeType="guid" isSortable="true" isSelectColumn="true"/>
+            <!-- Inicio GAP - GRC14 -->
+            <viewColumn id="control_id" attributeType="control_id" isSortable="true" isSelectColumn="true"/>
+            <!-- Fim GAP - GRC14 -->
+            <viewColumn id="control_deactivated" attributeType="deactivated" isSortable="true" isSelectColumn="true"/>
+            <!-- Inicio REO 02.03.2018 - EV133332 -->
+            <viewColumn id="control_version_number" attributeType="version_number" isSelectColumn="true"/>
+            <!-- Fim REO 02.03.2018 - EV133332 -->
+        </viewObject>
+        <viewObject id="VO_controls_2" objectType="USERGROUP">
+            <viewColumn id="userGroup_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="userGroup_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="ug_deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="ug_version_active" attributeType="version_active"/>
+        </viewObject>
+        <link linktype.id="13" firstViewObject="VO_controls_1" secondViewObject="VO_controls_2" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="controls" compareType="LIKE"/>
+                <condition column.id="userGroup_name" compareType="LIKE"/>
+<!--                 <condition column.id="deactivated" compareType="EQ" value="false"/> -->
+                <condition column.id="control_version_active" compareType="EQ" value="true"/>
+                <condition column.id="control_key" compareType="EQ"/>
+                <compoundCondition conditionConnect="OR">
+                    <condition column.id="ug_version_active" compareType="EQ" value="true"/>
+                    <condition column.id="ug_version_active" compareType="ISNULL"/>
+                </compoundCondition>
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="client_sign" compareType="LIKE"/>
+                <condition column.id="control_type" compareType="IN"/>
+                <condition column.id="control_frequency" compareType="IN"/>
+                <condition column.id="control_effect" compareType="IN"/>
+                <condition column.id="control_execution" compareType="EQ"/>
+<!--                 <condition column.id="control_id" compareType="EQ"/> -->
+                <condition column.id="guid" compareType="EQ"/>
+                <condition column.id="control_deactivated" compareType="EQ"/>
+            </compoundCondition>
+        </conditions>
+    </view>    
+
+</custom>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+<!--           defaultOrderColumn.idref="task_enddate" -->
+	<list id="myTasks"
+          view.idref="myTasks"
+          filter.idref="myTasks"
+          idColumn.idref="obj_id"
+          defaultOrderColumn.idref="object_id"
+          defaultOrderDirection.idref="DESCENDING"
+          canObjectsBeReactivated="false"
+          relatedObjectType.idref="TASKITEM"
+          propertyKey="list.mytasks.DBI"
+          useCheckBoxes="false">
+        <simpleFilterRow>
+            <simpleFilter filterRow.idref="status"/>
+            <simpleFilter filterRow.idref="duedate"/>
+        </simpleFilterRow>
+        <listHeaderRow>
+            <listHeader column="LC_MYTASKS_ID" propertyKey="tableheader.task.id.DBI" width="9%"/>
+            <listHeader column="LC_MYTASKS_NAME" propertyKey="tableheader.ope.name.DBI" width="19%"/>
+            <listHeader column="LC_MYTASKS_CLIENT" propertyKey="tableheader.ope.clientsign.DBI" width="4%"/>
+            <listHeader column="LC_MYTASKS_OBJTYPE" propertyKey="tableheader.ope.objecttype.DBI" width="8%"/>
+            <listHeader column="LC_MYTASKS_ROLE" propertyKey="tableheader.ope.role.DBI" width="12%"/>
+            <listHeader column="LC_MYTASKS_STATE" propertyKey="tableheader.ope.state.DBI" width="6%"/>
+            <listHeader column="LC_MYTASKS_OBJECT_WORKFLOW_STATUS" propertyKey="tableheader.task.object.workflow.status.DBI" width="20%"/>
+            <listHeader column="LC_LAST_EDITOR" propertyKey="tableheader.task.last.editor.DBI" width="11%"/>
+            <listHeader column="LC_MYTASKS_DATE" propertyKey="tableheader.mytask.date.DBI" width="11%"/>
+        </listHeaderRow>
+        <column id="LC_MYTASKS_ID" dataReference.idref="object_id" template="openObject">
+            <parameter name="idColumn" value="obj_id"/>
+        </column>
+        <column id="LC_MYTASKS_NAME" dataReference.idref="object_name" />
+        <column id="LC_MYTASKS_CLIENT" align="center" dataReference.idref="task_clientSign" />
+        <column id="LC_MYTASKS_OBJTYPE" align="center" dataReference.idref="object_objtype" template="CustomObjectTypeRenderer"/>
+        <column id="LC_MYTASKS_ROLE" align="center" dataReference.idref="task_role"  />
+        <column id="LC_MYTASKS_STATE" align="center" dataReference.idref="task_status" />
+        <column id="LC_MYTASKS_OBJECT_WORKFLOW_STATUS" dataReference.idref="object_workflow_status" template="objectWorkflowStatus"/>
+        <column id="LC_LAST_EDITOR" align="center" dataReference.idref="last_editor" />
+        <column id="LC_MYTASKS_DATE" align="center" dataReference.idref="task_enddate" />
+        <listButtons/>
+        <rowButtons>
+            <buttonReference button.idref="RELATION_POPUP"/>
+        </rowButtons>
+    </list>
+
+</custom>

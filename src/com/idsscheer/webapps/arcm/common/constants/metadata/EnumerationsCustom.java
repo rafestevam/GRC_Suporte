@@ -88,6 +88,7 @@ public class EnumerationsCustom extends Enumerations {
 		public static final IEnumerationItem CONTROL_A1L = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustControl1Line");
 		public static final IEnumerationItem CONTROL_AOL = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustControlOtherLines");
 		public static final IEnumerationItem CONTROL_RSK = EnumerationsCustom.lookupEnumerationItem(ENUM, "AdjustRisks");
+		public static final IEnumerationItem CONTROL_OVID = EnumerationsCustom.lookupEnumerationItem(ENUM, "ControlOVIDAsStringJob");
 		// EV131854 - Job para readequar taskitens de action plans já existentes.
 		public static final IEnumerationItem ACTIONTASKITEM = EnumerationsCustom.lookupEnumerationItem(ENUM, "ActionPlanTaskItemJob");
 	}
@@ -108,12 +109,6 @@ public class EnumerationsCustom extends Enumerations {
 		public static final EnumerationWrapper ENUM = new EnumerationWrapper("custom_controlexecstatus");
 		public static final IEnumerationItem EFFECTIVE = EnumerationsCustom.lookupEnumerationItem(ENUM, "effective");
 		public static final IEnumerationItem INEFFECTIVE = EnumerationsCustom.lookupEnumerationItem(ENUM, "ineffective");
-	}
-	
-	public static abstract interface CUSTOM_USERROLE_TYPE {
-		public static final EnumerationWrapper ENUM = new EnumerationWrapper("userrole_type");
-		public static final IEnumerationItem TESTER2L = EnumerationsCustom.lookupEnumerationItem(ENUM, "tester2l");
-		public static final IEnumerationItem TESTER3L = EnumerationsCustom.lookupEnumerationItem(ENUM, "tester3l");
 	}
 	
 }

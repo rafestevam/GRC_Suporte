@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<workflow objectType.id="controlexecution">
+
+        <state.initial>
+            <prepare chain.id="prepareJob">
+                <permission.job id="generatorJob" />
+            </prepare>
+            <!-- for ad-hoc creation -->
+            <prepare chain.id="prepareManual">
+                <permission.workflow id="controlexecution"/>
+            </prepare>
+        </state.initial>
+
+        <state.prepared>
+            <insert chain.id="insertJob" to.state.id="openForExecution">
+                <permission.job id="generatorJob" />
+            </insert>
+            <!-- for ad-hoc creation -->
+            <insert chain.id="insertManual" to.state.id="openForExecution">
+                <permission.workflow id="controlexecution"/>
+            </insert>
+        </state.prepared>
+
+        <state id="openForExecution">
+            <attribute id="owner_status" value="open"/>
+            <transitions>
+                <update to.state.id="openForExecution" chain.id="executionInProgress">
+                    <attribute.change id="owner_status" to="open"/>
+                </update>
+                <!-- Inicio GAP - GRC29 -->
+<!--                 <update to.state.id="notPossible" chain.id="notPossible"> -->
+<!--                     <attribute.change id="owner_status" to="not_possible"/> -->
+<!--                 </update> -->
+				<!-- Fim GAP - GRC29 -->
+                <update to.state.id="completed" chain.id="completed">
+                    <attribute.change id="owner_status" to="completed"/>
+                </update>
+                <delete to.state.id="deleted" chain.id="delete"/>
+            </transitions>
+        </state>
+		
+		<!-- Inicio GAP - GRC29 -->
+<!--         <state id="notPossible"> -->
+<!--             <attribute id="owner_status" value="not_possible"/> -->
+<!--         </state> -->
+		<!-- Fim GAP - GRC29 -->
+
+        <state id="completed">
+            <attribute id="owner_status" value="completed"/>            
+        </state>
+
+        <state.deleted id="deleted">
+            <recover to.state.id="openForExecution" chain.id="recover"/>
+        </state.deleted>
+
+    </workflow>
+   
+</custom>

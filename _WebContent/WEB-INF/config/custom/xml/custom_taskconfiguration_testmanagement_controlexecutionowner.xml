@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+	<task id="controlexecutionowner" objectType.idref="CONTROLEXECUTION" role.idref="controlexecutionowner">
+
+        <responsibility>
+            <assignedUsergroup objectAttribute.idref="owner_group"/>
+        </responsibility>
+
+        <taskState>
+            <open workflowState.idrefs="openForExecution"/>
+            <!-- Inicio GAP - GRC29 -->
+<!--             <completed workflowState.idrefs="completed,notPossible"/> -->
+			<completed workflowState.idrefs="completed"/>
+			 <!-- Fim GAP - GRC29 -->
+            <notCompleted workflowState.idrefs=""/> <!-- monitor strategy sets control execution only to 'overdue' -->
+        </taskState>
+
+        <monitorStrategy>
+            <monitorLevel type="percentage" value="100">
+                <monitorChange objectAttribute.idref="due_status" value="overdue" />
+            </monitorLevel>
+        </monitorStrategy>
+
+    </task>
+
+</custom>

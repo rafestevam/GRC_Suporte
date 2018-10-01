@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<view view.parameter="DISTINCT" id="issueRelevantObjects">
+        <viewObject id="VO_IRO" objectType="ISSUERELEVANTOBJECT" isMainViewObject="true" restrictToCurrentUser.id="creator_user_id">
+            <viewColumn id="creator_id" attributeType="creator_user_id" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="createDate" attributeType="create_date" isSelectColumn="true" isSortable="true" function="MAX"/>
+            <viewColumn id="obj_id" attributeType="obj_id" isSelectColumn="true" isSortable="true" function="MAX"/>
+            <viewColumn id="name" attributeType="object_name" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="objectId" attributeType="object_id" isSelectColumn="true" isSortable="true" function="MAX"/>
+            <viewColumn id="version" attributeType="object_version_number" isSelectColumn="true" isSortable="true" function="MAX"/>
+            <viewColumn id="object_objtype" attributeType="object_objtype" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="client_sign" attributeType="object_clientSign" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="clientSigns" attributeType="object_clientSigns" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="clientSignsAll" attributeType="object_clientSigns" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="iro_deactivated" attributeType="iro_deactivated" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="iro_issuesid" attributeType="iro_issueid" isSortable="true"/>
+        </viewObject>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="object_objtype" compareType="EQ"/>
+                <!-- this filter is replaced by a complex user filter ObjectContainerClientSignFilterAttribute -->
+                <compoundCondition conditionConnect="OR">
+                    <condition column.id="clientSigns" compareType="LIKE"/>
+                    <condition column.id="clientSignsAll" compareType="LIKE"/>
+                </compoundCondition>
+                <condition column.id="iro_issuesid" compareType="ISNULL"/>
+<!--                 <condition column.id="iro_deactivated" compareType="EQ" value="false"/> -->
+            </compoundCondition>
+        </conditions>
+    </view>  
+
+</custom>

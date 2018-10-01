@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+     <view id="MyCreatedOpenIssues2" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomIssues3ViewHandler">
+        <viewObject id="VO_MyCreatedIssues_ISSUE" objectType="ISSUE" isMainViewObject="true" restrictToCurrentUser.id="creator_user_id">
+            <viewColumn id="creator_id" attributeType="creator_user_id"/>
+            <viewColumn id="IssueID" attributeType="obj_id" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="action_type" attributeType="action_type" isSelectColumn="true"  isGrouped="true" isSortable="true"/>
+            <viewColumn id="name" attributeType="name" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="plannedenddate" attributeType="plannedenddate" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="plannedenddate2" attributeType="plannedenddate" isSortable="true"/>
+            <viewColumn id="creator_status" attributeType="creator_status" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="description" attributeType="description" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="remediationMeasure" attributeType="remediationMeasure" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="remark" attributeType="remark" isSortable="true"/>
+            <viewColumn id="category" attributeType="category" isSortable="true"/>
+            <viewColumn id="priority" attributeType="priority" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="stateTime" attributeType="stateTime" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+            <viewColumn id="version_active" attributeType="version_active"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true" isGrouped="true"/>
+            <viewColumn id="version_number" attributeType="version_number" isSelectColumn="true" isSortable="true" isGrouped="true"/>
+        </viewObject>
+        <viewObject id="VO_MyCreatedIssues_OWNER" objectType="USER">
+            <viewColumn id="owner_id" attributeType="obj_id" isSelectColumn="true" isSortable="true" function="COUNT"/>
+            <viewColumn id="owner_version_active" attributeType="version_active"/>
+        </viewObject>
+        <link linktype.id="3100" firstViewObject="VO_MyCreatedIssues_ISSUE" secondViewObject="VO_MyCreatedIssues_OWNER" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="deactivated" compareType="EQ"/>
+                <condition column.id="version_active" compareType="EQ" value="true"/>
+                <condition column.id="IssueID" compareType="EQ"/>
+                <condition column.id="name" compareType="LIKE"/>
+                <condition column.id="description" compareType="LIKE"/>
+                <condition column.id="remediationMeasure" compareType="LIKE"/>
+                <condition column.id="plannedenddate" compareType="GE"/>
+                <condition column.id="plannedenddate2" compareType="LE"/>
+                <condition column.id="remark" compareType="LIKE"/>
+                <condition column.id="category" compareType="IN"/>
+                <condition column.id="creator_status" compareType="IN"/>
+                <condition column.id="action_type" compareType="IN"/>
+                <compoundCondition conditionConnect="OR">
+                    <condition column.id="owner_version_active" compareType="EQ" value="true"/>
+                    <condition column.id="owner_version_active" compareType="ISNULL"/>
+                </compoundCondition>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+
+</custom>

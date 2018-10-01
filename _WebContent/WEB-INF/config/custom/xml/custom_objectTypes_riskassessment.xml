@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<objectType id="RISKASSESSMENT" xmlexport="true" extends="MONITORABLE" displayAttribute="obj_id"
+                descriptionAttributes="plannedstartdate, plannedenddate, owner_status" licensedComponentIds="rm"
+                dataKind="transactiondata"
+                mashzoneId="230" arisImportRole="riskmanager" image="iconlib/icons/content/risk_assessment_16.png">
+        <booleanAttrType id="newLossesAvailable" defaultValue="false"/>
+        <listAttrType id="process" maxSize="1" objectType.idref="HIERARCHY" linkType="3165" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="process"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="risk" maxSize="1" objectType.idref="RISK" linkType="3166" usingFixChildVersion="true"/>
+        <listAttrType id="reviewer_group" maxSize="1" objectType.idref="USERGROUP" linkType="3167">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="riskreviewer"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="owner_group" maxSize="1" objectType.idref="USERGROUP" linkType="3168">
+            <listRestriction>
+                <attributeRestriction attribute="role" value="riskowner"/>
+                <attributeRestriction attribute="rolelevel" value="object"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="owner" maxSize="1" objectType.idref="USER" linkType="3169"/>
+        <listAttrType id="owner_substitute" maxSize="1" objectType.idref="USER" linkType="3175"/>
+        <listAttrType id="reviewer" maxSize="1" objectType.idref="USER" linkType="4024"/>
+        <listAttrType id="reviewer_substitute" maxSize="1" objectType.idref="USER" linkType="4025"/>
+        <listAttrType id="risk_category" objectType.idref="HIERARCHY" linkType="3170" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="category"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="orgunit" objectType.idref="HIERARCHY" linkType="3171" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="orgunit"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="appsystem" objectType.idref="HIERARCHY" linkType="3172" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="applicationsystemtype"/>
+            </listRestriction>
+        </listAttrType>
+        <listAttrType id="finaccount" objectType.idref="HIERARCHY" linkType="3173" usingFixChildVersion="true">
+            <listRestriction>
+                <attributeRestriction attribute="type" value="financialaccount"/>
+            </listRestriction>
+        </listAttrType>
+        <textAttrType id="assessment_activities"/>
+        <enumAttrType id="basis_of_valuation" enumeration="basis_of_valuation" defaultValue="0"/>
+        <enumAttrType id="data_source" enumeration="data_source" defaultValue="0"/>
+        <enumAttrType id="currency" enumeration="currency" defaultValue="0"/>
+        <!-- Inicio GAP - GRC29 -->
+<!--         <enumAttrType id="owner_status" enumeration="assessment_state" defaultValue="1"/> -->
+        <enumAttrType id="owner_status" enumeration="assessment_state" defaultValue="1"/>
+        <!-- Fim GAP - GRC29 -->
+        <enumAttrType id="reviewer_status" enumeration="review_state" defaultValue="0"/>
+        <listAttrType id="documents" objectType.idref="DOCUMENT" linkType="3174"/>
+        <textAttrType id="remark"/>
+        <listAttrType id="impacttypes" linkType="5822" objectType.idref="RA_IMPACTTYPE" />
+        
+        <!-- Inicio GAP GRC39 -->
+        <stringAttrType id="result_assessment" maxCharCount="30" isMassEditable="false" defaultValue="Não Avaliado"/>
+        <doubleAttrType id="height" />
+<!--         <stringAttrType id="progress" maxCharCount="100" isMassEditable="false"/> -->
+		<enumAttrType id="progress" enumeration="custom_progress" defaultValue="1" />
+        <stringAttrType id="risk_id" maxCharCount="100" isMassEditable="false"/>
+        <!-- Fim GAP GRC39 -->
+        
+    </objectType>
+    
+</custom>

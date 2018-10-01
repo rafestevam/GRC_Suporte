@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<!-- Início FCT 22.12.2017 - EV109172 -->
+<!-- View consumida pela ficha de auditoria, criada para os templates de auditoria -->
+<!-- Esse desenvolvimento garantirá que apenas as Unidades Organizacionais (Areas) dos riscos -->
+<!-- atrelados ao template de auditoria aparecerão. -->
+
+	<view id="custom_area_selection" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomAuditAreaSelectionViewHandler">
+		<viewObject id="VO_EV109172_area" objectType="HIERARCHY" isMainViewObject="true">
+            <viewColumn id="area_id" attributeType="obj_id" isSelectColumn="true"/>
+            <viewColumn id="area_areaid" attributeType="id" isSelectColumn="true"/>
+            <viewColumn id="area_name" attributeType="name" isSelectColumn="true"/>
+            <viewColumn id="area_deactivated" attributeType="deactivated" isSelectColumn="true"/>
+            <viewColumn id="version_active" attributeType="version_active" isSelectColumn="true" />
+            <viewColumn id="type" attributeType="type" isSelectColumn="true" />
+            <viewColumn id="area_isroot" attributeType="isroot" isSelectColumn="true" />
+		</viewObject>
+		<conditions>
+			<compoundCondition conditionConnect="AND">
+				<condition column.id="area_deactivated" compareType="EQ" value="false"/>
+				<condition column.id="version_active" compareType="EQ" value="true"/>
+				<!-- type 3 significa área (Unidade organizacional) -->
+				<condition column.id="type" compareType="EQ" value="3"/>
+				<condition column.id="area_isroot" compareType="EQ" value="false"/>
+			</compoundCondition>
+		</conditions>
+	</view>
+<!-- Fim FCT 22.12.2017 - EV109172 -->
+</custom>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    <!-- start your customizing here -->
+    <version application="9.8.6.0" />
+    <schema version="9.8.6.0" customizing="GPRCA"/>   
+</custom>

@@ -336,7 +336,6 @@
     </view>
     
     <view id="controldata3" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomControlData3ViewHandler">
-<!--     <view id="controldata3" view.parameter="DISTINCT" relevantForMashzoneIntegration="true"> -->
         <viewObject id="VO_controldata_control" objectType="CONTROL" isMainViewObject="true">
             <viewColumn id="c_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
             <viewColumn id="c_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
@@ -357,20 +356,12 @@
             <!-- EV132664 - Relatório Risco Corporativo -->
             <viewColumn id="c_control_objective" attributeType="control_objective" mashzoneRelevant="true" isSelectColumn="true"/>
             <!-- Customizing for Mashzone -->
-			
+
         </viewObject>
         <viewObject id="VO_controldata_risk" objectType="RISK">
             <viewColumn id="r_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
         </viewObject>
         <link linktype.id="4" firstViewObject="VO_controldata_control" secondViewObject="VO_controldata_risk" joinType="LEFT" attendVersionizing="false"/>
-        <conditions>
-        	<compoundCondition conditionConnect="OR">
-        		<compoundCondition conditionConnect="AND">
-        			<condition column.id="c_id" compareType="EQ"/>
-        			<condition column.id="c_version_number" compareType="EQ"/>
-        		</compoundCondition>
-        	</compoundCondition>
-        </conditions>
     </view>
     
     <view id="custom_corpriskdata" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >

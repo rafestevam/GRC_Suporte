@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<!-- Inicio REO 31.07.2017 - Risco Corporativo -->
+	<view id="cst_view_corprisk" view.parameter="DISTINCT" relevantForMashzoneIntegration="true" >
+		<viewObject objectType="HIERARCHY" id="VO_corprisk_categ" isMainViewObject="true">
+        	<viewColumn id="ct_obj_id" attributeType="obj_id" isSelectColumn="true"/>
+        	<viewColumn id="ct_name" attributeType="name" isSelectColumn="true" isSortable="false"/>
+        	<viewColumn id="ct_version_number" attributeType="version_number" isSelectColumn="true"/>
+        	<viewColumn id="ct_version_active" attributeType="version_active" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_hierarchy" objectType="HIERARCHY" isMainViewObject="false">
+            <viewColumn id="rc_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_rcid" attributeType="riskid" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_name" attributeType="name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_csttype" attributeType="rc_csttype" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_potencial" attributeType="classpot" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_residual" attributeType="residual" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_description" attributeType="description" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="rc_residual_risk" attributeType="residual" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="deactivated" attributeType="deactivated" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_Risk" objectType="RISK" isMainViewObject="false">
+        	<viewColumn id="r_id" attributeType="risk_id" isSelectColumn="true"/>
+        	<viewColumn id="r_name" attributeType="name" isSelectColumn="true"/>
+        	<viewColumn id="r_description" attributeType="description" isSelectColumn="true" />
+        	<viewColumn id="r_potencial" attributeType="ra_result" isSelectColumn="true" />
+        	<viewColumn id="r_residual" attributeType="ra_residualfinal" isSelectColumn="true" />
+        	<viewColumn id="r_version_active" attributeType="version_active" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject objectType="CONTROL" id="VO_Control">
+        	<viewColumn id="c_id" attributeType="obj_id" isSelectColumn="true" />
+        	<viewColumn id="c_name" attributeType="name" isSelectColumn="true" />
+        	<viewColumn id="c_status" attributeType="custom_status_control" isSelectColumn="true" />
+        </viewObject>
+        <viewObject objectType="HIERARCHY" id="VO_Process">
+        	<viewColumn id="p_id" attributeType="obj_id" isSelectColumn="true" />
+        	<viewColumn id="p_name" attributeType="name" isSelectColumn="true" />
+        </viewObject>
+        <viewObject objectType="USERGROUP" id="VO_Riskowner">
+        	<viewColumn id="u_id" attributeType="obj_id" isSelectColumn="true" />
+        	<viewColumn id="u_name" attributeType="name" isSelectColumn="true" />
+        </viewObject>
+        <link firstViewObject="VO_corprisk_categ" linktype.id="46" secondViewObject="VO_hierarchy" joinType="LEFT"/>
+        <link firstViewObject="VO_Risk" linktype.id="3162" secondViewObject="VO_hierarchy" joinType="INNER"/>
+        <link firstViewObject="VO_Risk" linktype.id="4" secondViewObject="VO_Control" joinType="INNER"/>
+        <link firstViewObject="VO_Risk" linktype.id="47" secondViewObject="VO_Process" joinType="INNER" />
+        <link firstViewObject="VO_Risk" linktype.id="3160" secondViewObject="VO_Riskowner" joinType="INNER" />
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="rc_csttype" compareType="EQ" value="12"/>
+                <condition column.id="ct_version_active" compareType="EQ" value="true"/>
+                <condition column.id="r_version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+<!-- Fim REO 31.07.2017 - Risco Corporativo -->
+
+</custom>

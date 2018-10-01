@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+<!-- 	<list id="hierarchy2risk_refs"  -->
+<!-- 		view.idref="hierarchy2risk_refs_1" -->
+<!-- 		filter.idref="hierarchy2risk"  -->
+<!-- 		idColumn.idref="risk_obj_id" -->
+<!-- 		defaultOrderColumn.idref="name"  -->
+<!-- 		frame="tabcontent" -->
+<!-- 	    relatedObjectType.idref="RISK" -->
+<!--         destDataType.idref="RISK" -->
+<!--         destAttributeType.idref="risk_category" -->
+<!--         listType="assignment"> -->
+
+	<list id="hierarchy2risk_refs" 
+		view.idref="hierarchy2risk_refs_1"
+		filter.idref="hierarchy2risk" 
+		idColumn.idref="risk_obj_id"
+		defaultOrderColumn.idref="name" 
+		frame="tabcontent"
+	    relatedObjectType.idref="RISK"
+        destDataType.idref="RISK"
+        destAttributeType.idref="risk_category"
+        rightsPath.datakind="transactiondata"
+        ignoreRoleRestriction="true"
+        allowMarkAsIssueRelevant="true">
+		<simpleFilterRow>
+			<simpleFilter filterRow.idref="subordinatedMasterDataRisk" />
+			<simpleFilter filterRow.idref="name" />
+		</simpleFilterRow>
+		<simpleFilterRow>
+			<simpleFilter filterRow.idref="description" />
+		</simpleFilterRow>
+		<listHeaderRow>
+			<listHeader column="LC_hierarchy2risk_refs_1_1" propertyKey="tableheader.name" width="30%" />
+			<listHeader column="LC_hierarchy2risk_refs_1_2" propertyKey="tableheader.description" width="70%" />
+		</listHeaderRow>
+		<column id="LC_hierarchy2risk_refs_1_1" dataReference.idref="name" template="openObject">
+			<parameter name="idColumn" value="risk_obj_id" />
+		</column>
+		<column id="LC_hierarchy2risk_refs_1_2" dataReference.idref="description" />
+		<listButtons>
+			<buttonReference button.idref="LIST_ATTACH_DEST" function="aam_initlist('riskcategory2risk_rev_sel')"/>
+<!-- 			<buttonReference button.idref="LIST_REVERSE_DETACH" /> -->
+			<buttonReference button.idref="CST_CR_REVDETACH" />
+		</listButtons>
+		<rowButtons>
+<!-- 			<buttonReference button.idref="LISTROW_REVERSE_DETACH"/> -->
+			<buttonReference button.idref="CST_CR_REVDETACHROW"/>
+		</rowButtons>
+	</list>
+
+</custom>

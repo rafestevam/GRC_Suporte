@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	
+<!-- 	restrictionAttributeId="type" -->
+	<tabMapping id="hierarchy" frame="content" restrictionAttributeId="rc_csttype">
+		<tTab page="1" id="hierarchyElement" propertyKey="tab.hierarchyElement.DBI" action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=1"  restrictionValue="tester,financialaccount,orgunit,process,category,applicationsystemtype"/>
+        <tTab page="2" id="changeManagement" propertyKey="tab.changeManagement.DBI" action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=2"  restrictionValue="financialaccount" licensedComponentId="cm" roles="hierarchymanager,hierarchyowner,hierarchyauditor"/>
+        
+        <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
+        <tTab page="3" id="rcElement"        propertyKey="tab.rcElement.DBI"        action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=3"  restrictionValue="corprisk" licensedComponentId="rm" />
+        <tTab page="4" id="rcdetails"        propertyKey="tab.rcdetails.DBI"        action="object.do?__commandId=cache&amp;__objectType=hierarchy&amp;__formPage=4"  restrictionValue="corprisk" licensedComponentId="rm" />
+        <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
+        
+        <tTab id="connect" propertyKey="tab.assignment.DBI" access="persistent">
+            <tSubTab id="changereviews" propertyKey="tab.hierarchy.changereview.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2changereviews" objectType="CHANGEREVIEW"    restrictionValue="financialaccount" licensedComponentId="cm" roles="hierarchymanager,hierarchyowner,hierarchyauditor"/>
+			<tSubTab id="risks" propertyKey="tab.risks.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2risk_refs" objectType="RISK" licensedComponentId="rm" roles="riskmanager, riskauditor" restrictionValue="tester,financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<!-- Inicio REO 05.09.2017 - Riscos Corporativos -->
+			<tSubTab id="risksp" propertyKey="tab.risksp.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2risk_refs" objectType="RISK" licensedComponentId="rm" roles="riskmanager, riskauditor" restrictionValue="corprisk"/>
+			<!-- Fim REO 05.09.2017 - Riscos Corporativos -->
+			<tSubTab id="controls" propertyKey="tab.controls.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2control_refs" objectType="CONTROL"                             restrictionValue="tester,financialaccount,orgunit,process"/>
+			<tSubTab id="testdefinitions" propertyKey="tab.testdefinitions.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2testdefinition_refs" objectType="TESTDEFINITION" restrictionValue="tester,financialaccount,orgunit,process"/>
+			<tSubTab id="testactions" propertyKey="tab.testactions.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2testaction_refs" objectType="TESTCASE"                   restrictionValue="tester,financialaccount,orgunit,process"/>
+			<tSubTab id="losses" propertyKey="tab.losses.DBI"            action="list.do?__commandId=init&amp;__listName=hierarchy2losses" objectType="LOSS"                                restrictionValue="financialaccount,orgunit,process,applicationsystemtype"/>
+			<tSubTab id="incidents" propertyKey="tab.incidents.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2incidents" objectType="INCIDENT"                             restrictionValue="financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<tSubTab id="riskassessment" propertyKey="tab.risk.assessments.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2riskassessments" objectType="RISKASSESSMENT"     restrictionValue="financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<tSubTab id="survey" propertyKey="tab.surveys.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2surveys_refs" objectType="SURVEY"                                 restrictionValue="financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<tSubTab id="questionnaire" propertyKey="tab.questionnaires.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2questionnaires_refs" objectType="QUESTIONNAIRE"     restrictionValue="financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<tSubTab id="audit" propertyKey="tab.audits.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2audits" objectType="AUDIT"                                          restrictionValue="financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<tSubTab id="auditstep" propertyKey="tab.auditsteps.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2auditsteps" objectType="AUDITSTEP"                          restrictionValue="financialaccount,orgunit,process,category,applicationsystemtype"/>
+			<tSubTab id="policy" propertyKey="tab.policies.DBI"  action="list.do?__commandId=init&amp;__listName=hierarchy2policies" objectType="POLICY"                                    restrictionValue="financialaccount,orgunit,process,applicationsystemtype"/>
+			<tSubTab id="parent" propertyKey="tab.parent.DBI" action="list.do?__commandId=init&amp;__listName=hierarchie_parent_refs" />
+			<tSubTab id="child" propertyKey="tab.child.DBI" action="list.do?__commandId=init&amp;__listName=hierarchie_childs_refs" />
+		</tTab>
+        <tTab id="issue" propertyKey="tab.related.issues.DBI" action="list.do?__commandId=init&amp;__listName=HierarchyRelatedIssues" objectType="ISSUE"/>
+		<tTab id="protocol" propertyKey="tab.protocol.DBI" >
+			<tSubTab id="protocol_object" propertyKey="tab.hierarchy.DBI"  action="object.do?__objectType=hierarchy&amp;__commandId=protocol" />
+			<tSubTab id="protocol_children" propertyKey="tab.child.DBI"  action="object.do?__objectType=hierarchy&amp;__commandId=protocol&amp;relationprotocol=children" />
+		</tTab>
+	</tabMapping>	
+
+</custom>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+ 
+ 	<view id="myTasks" view.parameter="DISTINCT" viewHandler="com.idsscheer.webapps.arcm.dl.framework.viewhandler.CustomTaskMyTasksViewHandler" relevantForMashzoneIntegration="true">
+<!--  	<view id="myTasks" view.parameter="DISTINCT" relevantForMashzoneIntegration="true"> -->
+        <viewObject id="VO_myTasks_1" objectType ="TASKITEM" isMainViewObject="true" skipRightsConditionForRoleLevels="crossclient client object">
+            <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="task_version" attributeType="object_version_number" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="object_id" attributeType="object_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="object_name" attributeType="object_name" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="object_objtype" attributeType="object_objType" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="task_role" attributeType="role" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="task_clientSign" attributeType="object_clientSign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="task_clientSigns" attributeType="object_clientSigns" isSortable="true"/>
+            <viewColumn id="task_clientSignsAll" attributeType="object_clientSigns"/>
+            <viewColumn id="task_status" attributeType="status" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="object_workflow_status" attributeType="objectWorkflowStatus" isSelectColumn="true"/>
+            <viewColumn id="task_enddate" attributeType="plannedenddate" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="task_enddate_to" attributeType="plannedenddate" isSortable="true"/>
+            <viewColumn id="last_editor" attributeType="lastEditor" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="user_id" attributeType="responsibleUserID" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="group_id" attributeType="responsibleUsergroupID" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="object_id" compareType="EQ"/>
+                <condition column.id="object_name" compareType="LIKE"/>
+                <compoundCondition conditionConnect="OR">
+                    <condition column.id="task_clientSigns" compareType="LIKE"/>
+                    <condition column.id="task_clientSignsAll" compareType="LIKE"/>
+                </compoundCondition>
+                <condition column.id="object_id" compareType="EQ"/>
+                <condition column.id="object_objtype" compareType="IN"/>
+                <condition column.id="task_enddate" compareType="GE"/>
+                <condition column.id="task_enddate_to" compareType="LE"/>
+                <condition column.id="task_role" compareType="EQ"/>
+                <condition column.id="task_status" compareType="IN"/>
+                <compoundCondition conditionConnect="OR">
+                    <condition column.id="user_id" compareType="EQ" value="CURRENTUSER"/>
+                    <condition column.id="group_id" compareType="IN"/>
+                </compoundCondition>
+            </compoundCondition>
+        </conditions>
+    </view>
+    
+<!--     <view id="myTasksControlExecution" view.parameter="DISTINCT"> -->
+<!--         <viewObject id="VO_myTasks_1" objectType ="TASKITEM" isMainViewObject="true" skipRightsConditionForRoleLevels="crossclient client object"> -->
+<!--             <viewColumn id="obj_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/> -->
+<!--         </viewObject> -->
+<!--         <conditions> -->
+<!--             <compoundCondition conditionConnect="AND"> -->
+<!--                 <condition column.id="object_id" compareType="EQ"/> -->
+<!--                 <condition column.id="object_id" compareType="EQ"/> -->
+<!--                 <condition column.id="object_objtype" compareType="EQ" value="CONTROLEXECUTION"/> -->
+<!--                 <compoundCondition conditionConnect="OR"> -->
+<!--                     <condition column.id="user_id" compareType="EQ" value="CURRENTUSER"/> -->
+<!--                     <condition column.id="group_id" compareType="IN"/> -->
+<!--                 </compoundCondition> -->
+<!--             </compoundCondition> -->
+<!--         </conditions> -->
+<!--     </view> -->
+
+</custom>
+

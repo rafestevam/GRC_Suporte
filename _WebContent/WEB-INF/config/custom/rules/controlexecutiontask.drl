@@ -1,0 +1,134 @@
+package CONTROLEXECUTIONTASK_RuleSet
+expander controlexecutiontask.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+
+# OBJECT               client_objid         LONG       Client ID                                                                                                                                                                                                
+# OBJECT               client_sign          CLIENTSIGN Client                                                                                                                                                                                                   
+# OBJECT               create_date          DATE       Creation date                                                                                                                                                                                            
+# OBJECT               creator_user_id      LONG       User ID (creator)                                                                                                                                                                                        
+# OBJECT               delete_date          DATE       Deletion date                                                                                                                                                                                            
+# OBJECT               guid                 STRING     GUID                                                                                                                                                                                                     
+# OBJECT               obj_id               LONG       ID                                                                                                                                                                                                       
+# OBJECT               obj_type             OBJECTTYPE Object type                                                                                                                                                                                              
+# OBJECT               root_guid            STRING     Root GUID                                                                                                                                                                                                
+# OBJECT               versions             LONG       Number of versions                                                                                                                                                                                       
+# VERSION              aris_change_date     DATE       ARIS change date                                                                                                                                                                                         
+# VERSION              change_date          DATE       Change date                                                                                                                                                                                              
+# VERSION              change_type          ENUM       Change type                                            changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                                                     
+# VERSION              change_user_id       LONG       User ID (editor)                                                                                                                                                                                         
+# VERSION              deactivated          BOOLEAN    Deactivated                                                                                                                                                                                              
+# VERSION              id                   LONG       ID                                                                                                                                                                                                       
+# VERSION              substitute_user_id   LONG       User ID (substitute)                                                                                                                                                                                     
+# VERSION              version_active       BOOLEAN    Current version                                                                                                                                                                                          
+# VERSION              version_number       LONG       Version number                                                                                                                                                                                           
+# CONTROLEXECUTIONTASK activities           TEXT       Control execution documentation activities                                                                                                                                                               
+# CONTROLEXECUTIONTASK affected_orgunit     LIST       Affected organizational unit                           to 1 HIERARCHY (LT=6052)                                                                                                                          
+# CONTROLEXECUTIONTASK control_period       ENUM       Length of control period                               controlperiod (unspecified=0,day=1,week=2,month=3,quarter=4,semiannual=5,year=6)                                                                  
+# CONTROLEXECUTIONTASK documents            LIST       Documents                                              to * DOCUMENTs (LT=6053)                                                                                                                          
+# CONTROLEXECUTIONTASK duration             LONG       Time limit for control execution documentation in days                                                                                                                                                   
+# CONTROLEXECUTIONTASK enddate              DATE       End date of control execution documentation                                                                                                                                                              
+# CONTROLEXECUTIONTASK event_driven_allowed BOOLEAN    Event-driven allowed                                                                                                                                                                                     
+# CONTROLEXECUTIONTASK frequency            ENUM       Control execution documentation frequency              frequency_including_none (all=-1,unspecified=0,oneoff=1,daily=2,weekly=3,monthly=4,quarterly=5,semiannually=6,annually=7,everysecondyear=8,none=9)
+# CONTROLEXECUTIONTASK name                 STRING     Name                                                                                                                                                                                                     
+# CONTROLEXECUTIONTASK offset               LONG       Offset in days                                                                                                                                                                                           
+# CONTROLEXECUTIONTASK owner_group          LIST       Control execution owner group                          to 1 USERGROUP (LT=6051)                                                                                                                          
+# CONTROLEXECUTIONTASK result_format        TEXT       Result format                                                                                                                                                                                            
+# CONTROLEXECUTIONTASK selectivity          TEXT       Selectivity                                                                                                                                                                                              
+# CONTROLEXECUTIONTASK startdate            DATE       Start date of control execution documentation                                                                                                                                                            
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+
+rule "define all standard attributes editable [I,V]"
+
+	salience 10400
+	when
+
+	then
+	    set "name"                  editable
+		set "owner_group"           editable
+		set "control_period"        editable
+		set "affected_orgunit"      editable
+		set "duration"              editable
+		set "control_period_offset" editable
+		set "frequency"             editable
+		set "event_driven_allowed"  editable
+		set "startdate"             editable
+		set "enddate"               editable
+		set "activities"            editable
+		set "selectivity"           editable
+		set "result_format"         editable
+		set "documents"             editable
+end
+
+rule "mark_mandatory_fields [I,V]"
+
+	salience 10300
+	no-loop true
+
+	when
+
+	then
+	    set "name"                  mandatory
+		set "owner_group"           mandatory
+		set "control_period"        mandatory
+		set "affected_orgunit"      mandatory
+		set "duration"              mandatory
+		set "control_period_offset" mandatory
+		set "frequency"             mandatory
+		set "event_driven_allowed"  mandatory
+		set "startdate"             mandatory
+		set "activities"            mandatory
+		set "selectivity"           mandatory
+		set "result_format"         mandatory
+end
+
+rule "testcase_frequency=none --> event_driven_allowed:=true [I,V]"
+
+	salience 10200
+	no-loop true
+
+	when
+	    value comparison fulfilled: ":transient:" attr_value "frequency" "CONTAINS" value "none"
+
+	then
+		set "event_driven_allowed" to value "true"
+		set "event_driven_allowed" not_mandatory
+		set "event_driven_allowed" readonly
+
+end
+
+
+rule "startdate_invalid_[V]"
+
+	salience 10000
+	no-loop true
+
+	when
+		"startdate" is filled
+		"enddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "startdate" "GREATER THAN" ":transient:" attr_value "enddate"
+
+	then
+		set "startdate" invalid
+		add "error" message "error.date.range.DBI" to "startdate"
+
+end
+
+#Customized Rules
+rule "GRC29_off_fields[I,V]"
+
+	salience 9000
+	no-loop true
+	
+	when
+	
+	then
+		set "activities"              invisible
+		set "selectivity"             invisible
+		set "result_format"           invisible
+		set "control_period_offset"   invisible
+		set "control_period"          invisible
+
+end

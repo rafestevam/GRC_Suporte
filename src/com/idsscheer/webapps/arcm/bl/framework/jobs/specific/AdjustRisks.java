@@ -65,6 +65,8 @@ public class AdjustRisks extends BaseJob {
 	protected void execute() throws JobAbortException, JobWarningException {
 		// TODO Auto-generated method stub
 		
+		deallocateLocalSources();
+		
 		String riskResidualFinal = "";
 		String riskResidual1Line = "";
 		String riskResidual2Line = "";
@@ -161,6 +163,7 @@ public class AdjustRisks extends BaseJob {
 			throw new JobAbortException(e.getLocalizedMessage(), JOB_NAME_KEY);
 		}finally{
 			query.release();
+			deallocateLocalSources();
 		}
 		
 		

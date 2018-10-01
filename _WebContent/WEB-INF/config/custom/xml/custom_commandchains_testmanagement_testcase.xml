@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<!--
+    *
+    *   TESTCASE
+    *
+    -->
+    <catalog id="testcase">
+
+        <commandchain id="prepareJob">
+            <command id="testdefinitionFindLinkedControlAndRisks" />
+            <command id="testdefinitionActiveHierarchiesCheck" />
+            <command id="assignedUsergroupsCheck" />
+            <command id="dueCheck" />
+<!--             <command id="testdefinitionRunningSignoffCheck" /> -->
+            <command id="testcaseGenerate" />
+        </commandchain>
+
+        <commandchain id="prepareFollowupJob">
+            <command id="testcaseFindLinkedTestdefinitionControlAndRisks" />
+            <command id="testcaseFollowupExistenceCheck" />
+            <command id="testcaseActiveHierarchiesCheck"/>
+            <command id="testcaseRunningSignoffCheck" />
+            <command id="testcaseFollowupGenerate" />
+        </commandchain>
+
+        <commandchain id="prepareManual">
+            <command id="checkObjectPersistent" />
+            <command id="isEventDrivenCheck" />
+            <command id="testdefinitionFindLinkedControlAndRisks" />
+            <command id="testdefinitionActiveHierarchiesCheck" />
+            <command id="assignedUsergroupsCheck" />
+            <command id="dueCheck" />
+<!--             <command id="testdefinitionRunningSignoffCheck" /> -->
+            <command id="testcaseGenerate" />
+        </commandchain>
+
+        <commandchain id="insertJob">
+            <command id="prepareJobMessage"> 
+                <parameter name="message_template" value="generatorjob" />
+                <parameter name="list_name" value="testactionTester" />
+                <parameter name="filter_name" value="testactionstate" />
+                <parameter name="filter_value" value="open" />
+            </command>
+        </commandchain>
+
+        <commandchain id="insertFollowupJob">
+            <command id="prepareJobMessage">
+                <parameter name="message_template" value="followupgeneratorjob" />
+                <parameter name="list_name" value="testactionTester" />
+                <parameter name="filter_name" value="testactionstate" />
+                <parameter name="filter_value" value="open" />
+            </command>
+        </commandchain>
+
+        <commandchain id="insertManual">
+            <command id="update">
+                <parameter name="effectiveness" value="$null" />
+                <parameter name="design_description" value="$null" />
+                <parameter name="operative_description" value="$null" />
+            </command>
+        </commandchain>
+
+        <commandchain id="executionInProgress">
+            <command id="update">
+                <parameter name="owner_status" value="in_process" />
+            </command>
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            <command id="update">
+                <parameter name="effectiveness" value="$null" />
+                <parameter name="design_description" value="$null" />
+                <parameter name="operative_description" value="$null" />
+            </command>
+        </commandchain>
+
+        <commandchain id="executionEffective">
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            <command id="update">
+                <parameter name="execution_date" value="$now" />
+            </command>
+            <command id="update">
+                <parameter name="reviewer_status" value="unspecified" />
+            </command>
+            <command id="update">
+                <parameter name="effectiveness" value="$null" />
+            </command>
+            <command id="sendRecommendations" />
+        </commandchain>
+
+        <commandchain id="executionNotEffective">
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            <!--
+            <command id="clearOperator">
+                <parameter name="operator" value="reviewer" />
+            </command>
+            -->
+            <command id="update">
+                <parameter name="execution_date" value="$now" />
+            </command>
+            <command id="update">
+                <parameter name="reviewer_status" value="unspecified" />
+            </command>
+            <command id="sendMail">
+                <parameter name="template" value="testcase_noneffective"/>
+                <parameter name="to" value="reviewer_group"/>
+            </command>
+            <command id="sendRecommendations" />
+        </commandchain>
+
+
+        <commandchain id="executionNotTestable">
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            <command id="update">
+                <parameter name="reviewer_status" value="unspecified" />
+            </command>
+            <command id="update">
+                <parameter name="effectiveness" value="$null" />
+                <parameter name="design_description" value="$null" />
+                <parameter name="operative_description" value="$null" />
+            </command>
+            <command id="sendRecommendations" />
+        </commandchain>
+
+        <commandchain id="followupNotTestable"/>
+
+        <commandchain id="executionNotTested"/>
+
+        <commandchain id="followupNotTested"/>
+
+		<!-- Desativação da verificação de deleção dos Test Case -->
+        <commandchain id="delete"/>
+        <!-- 
+            <command id="checkSignOffLockForDeletion" />
+        </commandchain>
+		-->
+	
+        <commandchain id="recover"/>
+
+        <commandchain id="reviewReject">
+            <command id="resetTestcase" />
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="reviewer" />
+            </command>
+            <!--
+            <command id="clearOperator">
+                <parameter name="operator" value="owner" />
+            </command>
+            -->
+            <command id="update">
+                <parameter name="owner_status" value="in_process" />
+            </command>
+            <command id="update">
+                <parameter name="effectiveness" value="$null" />
+                <parameter name="design_description" value="$null" />
+                <parameter name="operative_description" value="$null" />
+                <parameter name="measure" value="$null" />
+            </command>
+            <command id="prolongDate">
+                <parameter name="attributeID" value="plannedenddate"/>
+                <parameter name="minimumDays" value="14"/>
+            </command>
+            <command id="sendMail">
+                <parameter name="template" value="testcase_rejected"/>
+                <parameter name="to" value="owner_group"/>
+            </command>
+        </commandchain>
+
+        <commandchain id="reviewAccept">
+            <command id="closingObjectDialog" />
+            <command id="setOperator">
+                <parameter name="operator" value="reviewer" />
+            </command>
+            <command id="createDeficiency" />
+<!--             <command id="createIssue"> -->
+			<command id="customCreateIssue">
+                <parameter name="rootObjectType" value="TESTCASE" />
+            </command>
+        </commandchain>
+
+        <commandchain id="measureDeactivated"/>
+
+        <commandchain id="newMeasureUnspecified"/>
+
+        <commandchain id="newMeasureNone"/>
+
+        <commandchain id="reviewCreateDeficiency">
+            <command id="createDeficiency" />
+        </commandchain>
+
+        <commandchain id="reviewCreateIssue">
+<!--             <command id="createIssue" /> -->
+			<command id="customCreateIssue" /> 
+        </commandchain>
+
+        <commandchain id="followupWhileReview"/>
+
+    </catalog>    
+
+</custom>
+
+    

@@ -72,6 +72,8 @@ public class AdjustControlOtherLines extends BaseJob{
 	@Override
 	protected void execute() throws JobAbortException, JobWarningException {
 		
+		deallocateLocalSources();
+		
 		IAppObjFacade facade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.CONTROL);
 		
 		try {
@@ -83,7 +85,7 @@ public class AdjustControlOtherLines extends BaseJob{
 			for (IAppObj controlObj : controlList) {
 				
 				//facade.allocateLock(controlObj.getVersionData().getHeadOVID(), LockType.FORCEWRITE);
-				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), true);
+				IAppObj controlUpdObj = facade.load(controlObj.getVersionData().getHeadOVID(), false);
 				
 				String controlID = controlUpdObj.getAttribute(IControlAttributeTypeCustom.ATTR_CONTROL_ID).getRawValue();
 				System.out.println(controlID);
@@ -124,9 +126,9 @@ public class AdjustControlOtherLines extends BaseJob{
 										this.setFinalControlStatus(dupControlObj, "efetivo");
 									}
 								}
-								facade.save(dupControlObj, getInternalTransaction(), true);
+								facade.save(dupControlObj, getInternalTransaction(), false);
 								increaseEditedObjectsCounter(1);
-								facade.releaseLock(controlObj.getVersionData().getOVID());
+								facade.releaseLock(dupControlObj.getVersionData().getOVID());
 							}
 							
 						}
@@ -172,7 +174,7 @@ public class AdjustControlOtherLines extends BaseJob{
 					
 					//IAppObjFacade ctFacade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.TESTCASE);
 					IOVID ctOVID = OVIDFactory.getOVID(controlID, ctVersionNumber);
-					IAppObj ctAppObj = controlFacade.load(ctOVID, true);
+					IAppObj ctAppObj = controlFacade.load(ctOVID, false);
 					
 					if(ctAppObj != null && !ctAppObj.getVersionData().isDeleted()){
 						if(ctAppObj.getVersionData().isHeadRevision()){
@@ -226,7 +228,7 @@ public class AdjustControlOtherLines extends BaseJob{
 				
 				IAppObjFacade tcFacade = FacadeFactory.getInstance().getAppObjFacade(userContext, ObjectType.TESTCASE);
 				IOVID tcOVID = OVIDFactory.getOVID(tcID, tcVersionNumber);
-				IAppObj tcAppObj = tcFacade.load(tcOVID, true);
+				IAppObj tcAppObj = tcFacade.load(tcOVID, false);
 				
 //				if(tcAppObj != null){
 //					if(tcAppObj.getVersionData().isHeadRevision())

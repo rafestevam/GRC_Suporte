@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<view id="customIssue_ap_2Object" view.parameter="DISTINCT" relevantForMashzoneIntegration="true">
+        <viewObject id="VO_issue_ap_2Object_issue" objectType="ISSUE" isMainViewObject="true">
+            <viewColumn id="is_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="issue_version_active" attributeType="version_active" mashzoneRelevant="false"/>
+            <viewColumn id="deactivated" attributeType="deactivated" mashzoneRelevant="false"/>
+            <viewColumn id="is_creator_id" attributeType="creator" mashzoneRelevant="false"/>
+            <viewColumn id="creatorStatus" attributeType="custom_ap_creator_status" isSortable="true" isSelectColumn="true" />
+            <viewColumn id="ownerStatus" attributeType="custom_ap_owner_status" isSortable="true" isSelectColumn="true" />
+            <viewColumn id="reviewerStatus" attributeType="custom_ap_reviewer_status" isSortable="true" isSelectColumn="true"  />
+            <viewColumn id="plannedenddate" attributeType="plannedenddate" isSortable="true" isSelectColumn="true" />
+        </viewObject>
+        <viewObject id="VO_issue_ap_2Object_iro" objectType="OBJECT">
+            <viewColumn id="iro_id" attributeType="obj_id" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="iro_client" attributeType="client_sign" isSortable="true" isSelectColumn="true"/>
+            <viewColumn id="iro_obj_type" attributeType="obj_type" isSortable="true" isSelectColumn="true"/>
+        </viewObject>
+        <viewObject id="VO_issue_ap_2Object_owner" objectType="USER">
+            <viewColumn id="is_own_id" attributeType="obj_id" mashzoneRelevant="false"/>
+        </viewObject>
+        <viewObject id="VO_issue_ap_2Object_reviewer" objectType="USER">
+            <viewColumn id="is_rev_id" attributeType="obj_id" mashzoneRelevant="false"/>
+        </viewObject>
+        <link linktype.id="3102" firstViewObject="VO_issue_ap_2Object_issue" secondViewObject="VO_issue_ap_2Object_iro"/>
+        <link linktype.id="3100" firstViewObject="VO_issue_ap_2Object_issue" secondViewObject="VO_issue_ap_2Object_owner" joinType="LEFT"/>
+        <link linktype.id="3101" firstViewObject="VO_issue_ap_2Object_issue" secondViewObject="VO_issue_ap_2Object_reviewer" joinType="LEFT"/>
+        <conditions>
+            <compoundCondition conditionConnect="AND">
+                <condition column.id="issue_version_active" compareType="EQ" value="true"/>
+                <condition column.id="deactivated" compareType="EQ" value="false"/>
+            </compoundCondition>
+        </conditions>
+    </view>
+
+</custom>

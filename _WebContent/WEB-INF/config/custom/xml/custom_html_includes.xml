@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+	<includes>
+		<scripts>
+			<file id="listhelper" />
+			<file id="objecthelper" />
+			<file id="evaluationhelper" />
+			<file id="dialoghelper" />
+			<file id="toolbar"  />
+			<file id="logic" />
+			<file id="filter" />
+	
+			<file id="submit" />
+			<file id="questionnaire" />
+			<file id="messagetemplates" />
+	
+			<file id="tabcontrol" />
+			<file id="walkthrough"/>
+	
+	        <file id="buttontooltip"/>
+	
+			<file id="frame_manager"/>
+			<file id="domLib"/>
+			<file id="domTT" />
+	
+			<file id="jquery" />
+	        <file id="jquery-ui" localized="true"/>
+	        <file id="jquery.colorpicker"/>
+	        <file id="jbind" />
+	        <file id="mashzoneintegration" />
+	        <file id="sidenavigation" />
+	        <file id="inputmask" />
+	        <file id="inputmask.date.extensions" />
+	        <file id="inputmask,jquery.inputmask" />
+	        <file id="reports" />
+	        <file id="dashboardEventHandler" />
+	        <file id="custom_GRC39" />
+	        <file id="custom_GRC98" />
+	        <file id="custom_GRC74" />
+	        <file id="custom_corprisk" />
+		</scripts>
+		<styles>
+	        <file id="styles"/>
+	        <file id="base"/>
+	
+	        <file id="topnav"/>
+	        <file id="sidenav"/>
+	
+	        <file id="dialogs"/>
+			<file id="tabs" IECompatible="true"/>
+			<file id="trees" />
+			<file id="evaluation"/>
+	
+	        <file id="forms"/>
+	        <file id="forms_questionnaire"/>
+	
+	        <file id="jquery" />
+	        <file id="mashzoneintegration" />
+	
+	        <file id="lists"/>
+	        <file id="filter"/>
+	        <file id="protocol"/>
+	
+			<file id="tooltip" />
+			<file id="head" />
+	        <file id="administration" IECompatible="true"/>
+	        <file id="button"/>
+			<file id="head"/>
+	        <file id="jquery.colorpicker"/>
+		</styles>
+	</includes>
+</custom>

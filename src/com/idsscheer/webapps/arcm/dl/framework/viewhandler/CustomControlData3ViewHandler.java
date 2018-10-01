@@ -5,12 +5,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.apache.myfaces.shared.util.LocaleUtils;
+import org.hsqldb.lib.HashMap;
 
 import com.idsscheer.webapps.arcm.bl.authentication.context.ContextFactory;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
@@ -18,6 +20,7 @@ import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
 import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
+import com.idsscheer.webapps.arcm.bl.models.filter.attribute.impl.FilterAttributeFactory;
 import com.idsscheer.webapps.arcm.bl.models.filter.util.FilterAttributeUtility;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -32,9 +35,13 @@ import com.idsscheer.webapps.arcm.dl.framework.BusViewException;
 import com.idsscheer.webapps.arcm.dl.framework.DataLayerComparator;
 import com.idsscheer.webapps.arcm.dl.framework.IDataLayerObject;
 import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria.FilterConnect;
 import com.idsscheer.webapps.arcm.dl.framework.IQueryObjectDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.IRightsFilterCriteria;
-import com.idsscheer.webapps.arcm.dl.framework.IFilterCriteria.FilterConnect;
+import com.idsscheer.webapps.arcm.dl.framework.ISimpleFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.dllogic.BaseFilterCriteria;
+import com.idsscheer.webapps.arcm.dl.framework.dllogic.FilterFactory;
+import com.idsscheer.webapps.arcm.dl.framework.dllogic.PersistenceAPIInternal;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.QueryDefinition;
 import com.idsscheer.webapps.arcm.dl.framework.dllogic.SimpleFilterCriteria;
 import com.idsscheer.webapps.arcm.ndl.IFilterFactory;
@@ -46,12 +53,11 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 	private TreeMap<Long, Long> hashedMapControls = new TreeMap<>();
 	
 	private IAppObjFacade facadeRisk;
-	private Date criteriaDate;
 	
 	private IUserContext userCtx = ContextFactory.getFullReadAccessUserContext(LocaleUtils.toLocale("US"));
 	private ITransaction defaultTransaction = TransactionManager.getInstance().getReadOnlyTransaction();
-
-	final Logger log = Logger.getLogger(CustomControlData3ViewHandler.class.getName());
+	
+	final Logger log = Logger.getLogger(CustomControlData3ViewHandler.class);
 	
 	@Override
 	public void handleView(QueryDefinition query, List<IRightsFilterCriteria> rightsFilter,
@@ -65,9 +71,8 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 		// Pega a data informada no atributo C_CHANGE_DATE da query "controldata3". Data é informada 
 		// através de variáveis GET/HTTP
 		// Exemplo: ...&qattr=C_CHANGE_DATE,LT~2018-03-28
-		//Date criteriaDate = setDateFilter(filters);
-		criteriaDate = setDateFilter(filters);
-		
+		Date criteriaDate = setDateFilter(filters);
+
 		// Cria List com o filtro de data passada como parâmetro.
 		List<IFilterCriteria> listCriteriaFilterRisk = getListRisksFilter(criteriaDate);
 
@@ -121,30 +126,35 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 		log.info("Verifica o tamanho da lista");
 		if (hashedMapControls.size() > 0) {
 
-			//clearFilter(query, filters);
-			filters.clear();
-			query.getFilters().get(0).getFilters().get(0).getFilters().clear();
+			clearFilter(query, filters);
 
-//			// Criando novo filtro de query.
+			// Criando novo filtro de query.
+			//List<IFilterCriteria> filtersOr = new ArrayList<>();
 			List<IFilterCriteria> filtersAnd = new ArrayList<IFilterCriteria>();
+						
 			IFilterFactory filterFactory = PersistenceAPI.getFilterFactory();
 			log.info("Loop nos membros da lista hashedMapControls");
 			for (Map.Entry<Long, Long> entry : hashedMapControls.entrySet()) {
 				log.info("c_id = " + entry.getKey());
 				log.info("c_version_number = " + entry.getValue());
-				IFilterCriteria criteria = filterFactory.and(Arrays.asList(new IFilterCriteria[] {
-						new SimpleFilterCriteria("c_id", "c_id", DataLayerComparator.EQUAL, entry.getKey()),
-						new SimpleFilterCriteria("c_version_number", "c_version_number", DataLayerComparator.EQUAL,
-								entry.getValue()) }));
+				
+//				IFilterCriteria criteria = filterFactory.and(Arrays.asList(new IFilterCriteria[] {
+//							new SimpleFilterCriteria("c_id", "c_id", DataLayerComparator.EQUAL, entry.getKey()),
+//							new SimpleFilterCriteria("c_version_number", "c_version_number", DataLayerComparator.EQUAL,
+//									entry.getValue()) }));
+//				
 //				filtersAnd.add(criteria);
-				query.getFilters().get(0).getFilters().get(0).getFilters().add(criteria);
+				String controlOVID = String.valueOf(entry.getKey()) + ":" + String.valueOf(entry.getValue());
+				filtersAnd.add(new SimpleFilterCriteria("c_ovid", "c_ovid", DataLayerComparator.EQUAL, controlOVID));
 				
 			}
 			
 			log.info("Adiciona o filtro para query.");
-			query.getFilters().get(0).getFilters().get(0).setConnector(FilterConnect.OR);
-//			query.getFilters().get(0).getFilters().get(0).getFilters().addAll(filtersAnd);
-//			query.addFilterCriteria(filterFactory.or(filtersAnd));
+			ISimpleFilterCriteria simpleCriteria = filterFactory.getSimpleFilterCriteria(filtersAnd, FilterConnect.OR);
+			query.addFilterCriteria(simpleCriteria);
+			//ISimpleFilterCriteria simpleCriteria = filterFactory.getSimpleFilterCriteria(filtersOr, FilterConnect.OR);
+			//query.addFilterCriteria(criteria);
+			
 		}
 	}
 
@@ -226,6 +236,7 @@ public class CustomControlData3ViewHandler implements IViewHandler {
 				log.info("Controle = " + currentControlID);
 				// Adiciona esse controle na lista de controles válidos.
 				validControls.add(currentControlID);
+				log.info("Tamanho do array VALIDCONTROLS " + validControls.size());
 			}
 		}
 	}

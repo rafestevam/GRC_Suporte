@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+
+	<actionCommands>
+		<commandIds>
+			<commandId id="customrisksave" description="Custom Risk Save Action" />
+			<commandId id="customrasave" description="Custom Risk Assessment Save Action" />
+			<commandId id="customracache" description="Custom Risk Assessment Cache Action 2" />
+			<commandId id="customriskcache" description="Custom Risk Assessment Cache Action" />
+			<commandId id="customriskload" description="Custom Risk Assessment Load Action" />
+			<commandId id="customcachersk" description="Custom Cache Action for Risk" />
+			<commandId id="customissuedate" description="Custom Issue Issue Date" />	
+			<commandId id="customissuegetrisk" description="Custom pegar risco" />
+			<!-- Inicio REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
+			<commandId id="customdetach" description="Remover Atribuicao Controles de Risco" />
+			<!-- Fim REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
+			<!-- Inicio REO - 12.09.2017 - Riscos Corporativos -->
+			<commandId id="customcrvalidation" description="Avaliação de Calculo do Risco Residual - RC" />
+			<!-- Fim REO - 12.09.2017 - Riscos Corporativos -->
+			<!-- Inicio REO - 20.02.2017 - EV133332 -->
+			<commandId id="customprvalidation" description="Avaliação de Calculo do Risco Residual - Riscos Processos" />
+			<commandId id="customcrattach" description="Reverse Attach customizado para Risco Corporativo" />
+			<commandId id="customcrdetach" description="Reverse Detach customizado para Risco Corporativo" />
+			<!-- Fim REO - 20.02.2017 - EV133332 -->
+			<commandId id="view" description="Comando teste para verificar estado de Workflow"/>
+		</commandIds>
+		
+		
+		<objectTypeCommands>
+			<commandSet name="risk">
+				<actionCommand commandId="customrisksave" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomRiskSaveCommand" /> <!-- GAP GRC39 -->
+				<actionCommand commandId="customcachersk" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomCacheRsk" /> <!-- GAP GRC39 -->
+				<actionCommand commandId="customprvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomPREvaluation"/><!-- EV133332 -->
+			</commandSet>
+			
+			<commandSet name="riskassessment">
+				<actionCommand commandId="customriskcache" clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskCacheCommand" /><!-- GAP GRC39 --> 
+				<actionCommand commandId="customriskload"  clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRiskLoadCommand" /><!-- GAP GRC39 -->
+				<actionCommand commandId="customrasave"    clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRASaveCommand" /><!-- GAP GRC14 -->
+				<actionCommand commandId="customracache"   clsName="com.idsscheer.webapps.arcm.ui.components.riskmanagement.actioncommands.CustomRACacheCommand" /><!-- GAP GRC14 -->
+			</commandSet>
+			
+			<commandSet name="control">
+				<actionCommand commandId="save"        clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomSaveControl" /><!-- GAP GRC14 -->
+				<actionCommand commandId="saveAndNext" clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomSaveControl" /><!-- GAP GRC14 -->
+			</commandSet>
+			
+			<commandSet name="controlexecution">
+				<actionCommand commandId="save"        clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomSaveCEActionCommand" /><!-- GAP GRC14 -->
+			</commandSet>
+			
+			<commandSet name="testcase">						
+				<actionCommand commandId="save" 			clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomTestcaseSaveActionCommand"/>
+				<actionCommand commandId="saveAndNext" 		clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomTestcaseSaveActionCommand"/>
+			</commandSet>			
+		
+			<commandSet name="issue">
+				<actionCommand commandId="customissuedate"    clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueDateCommand" />									
+	            <actionCommand commandId="save"               clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueSaveActionCommand" />
+    	        <actionCommand commandId="customissuegetrisk" clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueGetRiskActionCommand" />
+    	        <actionCommand commandId="create"		 	  clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueCreateActionCommand"/><!-- REO 17.10.2017 - EV115903 -->
+    	        <actionCommand commandId="edit"               clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIssueViewActionCommand"/>					
+		    </commandSet>
+		    
+		    <!-- Inicio REO - 12.09.2017 - Riscos Corporativos -->
+		    <commandSet name="hierarchy">
+		    	<actionCommand commandId="customcrvalidation" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCREvaluation"/>
+		    </commandSet>
+		    <!-- Fim REO - 12.09.2017 - Riscos Corporativos -->
+		    
+		    <!-- Inicio REO 25.10.2017 - EV115928 -->
+		    <commandSet name="issuerelevantobject">
+            	<actionCommand commandId="delete"		 	clsName="com.idsscheer.webapps.arcm.ui.components.issuemanagement.actioncommands.CustomIRODeleteActionCommand"/>
+			</commandSet>
+		    <!-- Fim REO 25.10.2017 - EV115928 -->
+		        
+		</objectTypeCommands>
+		
+		<!-- Inicio REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
+		<listCommands>
+			<commandSet name="common">
+				<actionCommand commandId="customdetach" 	   clsName="com.idsscheer.webapps.arcm.ui.components.testmanagement.actioncommands.CustomDetachmentActionCommand"/>
+			</commandSet>
+			
+			<!-- Inicio REO - 26.02.2018 - EV133332 -->
+			<commandSet name="hierarchy2risk_refs">
+		    	<actionCommand commandId="customcrdetach" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCRDetach"/>
+		    </commandSet>
+		    <commandSet name="riskcategory2risk_rev_sel">
+		    	<actionCommand commandId="customcrattach" clsName="com.idsscheer.webapps.arcm.ui.components.hierarchy.actioncommands.CustomCRAttach"/>
+		    </commandSet>
+		    <!-- Fim REO - 26.02.2018 - EV133332 -->
+			
+		</listCommands>
+		<!-- Fim REO - 25.08.2017 - EV108436 - Correção do programa de contagem de controles -->
+			
+		
+	</actionCommands>
+
+</custom>

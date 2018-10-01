@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<custom xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../xsd/custom.xsd">
+    
+    <!-- Inicio REO 25.07.2017 - Riscos Corporativos -->
+	<enum id="custom_hierarchy_type" isMultiple="false" type="Number">
+        <enumitem id="all" value="0" extendedMeaning="all" formRelevant="false"/>
+        <enumitem id="tester" value="1">
+            <parameter name="LicensedComponent" value="tm"/>
+        </enumitem>
+        <enumitem id="financialaccount" value="2"/>
+        <enumitem id="orgunit" value="3"/>
+        <enumitem id="process" value="4"/>
+        <enumitem id="category" value="10"/>
+        <enumitem id="applicationsystemtype" value="11"/>
+        <enumitem id="corprisk" value="12"/>
+    </enum>
+    <!-- Fim REO 25.07.2017 - Riscos Corporativos -->
+    
+</custom>

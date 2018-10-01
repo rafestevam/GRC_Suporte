@@ -1,0 +1,451 @@
+package AUDITSTEP_RuleSet
+expander auditstep.dsl
+
+import com.idsscheer.webapps.arcm.bl.re.ext.CollectiveHelper;
+import com.idsscheer.webapps.arcm.bl.component.auditmanagement.re.AuditstepHelper;
+
+# OBJECT        client_objid            LONG       Client ID                                                                                                                                                                               
+# OBJECT        client_sign             CLIENTSIGN Client                                                                                                                                                                                  
+# OBJECT        create_date             DATE       Creation date                                                                                                                                                                           
+# OBJECT        creator_user_id         LONG       User ID (creator)                                                                                                                                                                       
+# OBJECT        delete_date             DATE       Deletion date                                                                                                                                                                           
+# OBJECT        guid                    STRING     GUID                                                                                                                                                                                    
+# OBJECT        obj_id                  LONG       ID                                                                                                                                                                                      
+# OBJECT        obj_type                OBJECTTYPE Object type                                                                                                                                                                             
+# OBJECT        root_guid               STRING     Root GUID                                                                                                                                                                               
+# OBJECT        versions                LONG       Number of versions                                                                                                                                                                      
+# VERSION       aris_change_date        DATE       ARIS change date                                                                                                                                                                        
+# VERSION       change_date             DATE       Change date                                                                                                                                                                             
+# VERSION       change_type             ENUM       Change type                       changetype (created=0,unchanged=1,changed=2,deleted=3,xmlcreated=4,xmlchanged=5,xmldeleted=6)                                                         
+# VERSION       change_user_id          LONG       User ID (editor)                                                                                                                                                                        
+# VERSION       deactivated             BOOLEAN    Deactivated                                                                                                                                                                             
+# VERSION       id                      LONG       ID                                                                                                                                                                                      
+# VERSION       substitute_user_id      LONG       User ID (substitute)                                                                                                                                                                    
+# VERSION       version_active          BOOLEAN    Current version                                                                                                                                                                         
+# VERSION       version_number          LONG       Version number                                                                                                                                                                          
+# TRANSACTIONAL execution_date          DATE       Processed on                                                                                                                                                                            
+# TRANSACTIONAL owner                   LIST       Performed by                      to 1 USER (LT=5290)                                                                                                                                   
+# TRANSACTIONAL owner_group             LIST       Audit step owner group            to 1 USERGROUP (LT=5280)                                                                                                                              
+# TRANSACTIONAL owner_status            ENUM       Status                            auditstepstatus (all=-1,closed=-3,deletable=-4,in_preparation=1,open=-2,released=2,in_progress=3,conform=4,notconform=5,notauditable=6,notcompleted=7)
+# TRANSACTIONAL owner_substitute        LIST       Substitute                        to 1 USER (LT=5300)                                                                                                                                   
+# TRANSACTIONAL review_date             DATE       Review date                                                                                                                                                                             
+# TRANSACTIONAL reviewer                LIST       Reviewer                          to 1 USER (LT=5340)                                                                                                                                   
+# TRANSACTIONAL reviewer_group          LIST       Reviewer group                    to 1 USERGROUP (LT=5320)                                                                                                                              
+# TRANSACTIONAL reviewer_status         ENUM       Reviewer status                   reviewer_status (all=-1,completed=-2,to_be_reviewed=-3,unspecified=0,accepted=1,rejected=2,deactivated=3)                                             
+# TRANSACTIONAL reviewer_substitute     LIST       Reviewer (substitute)             to 1 USER (LT=5350)                                                                                                                                   
+# MONITORABLE   controlenddate          DATE       End date of control                                                                                                                                                                     
+# MONITORABLE   controlstartdate        DATE       Start date of control                                                                                                                                                                   
+# MONITORABLE   plannedenddate          DATE       End date of audit step (target)                                                                                                                                                         
+# MONITORABLE   plannedstartdate        DATE       Start date of audit step (target)                                                                                                                                                       
+# AUDITSTEP     actualenddate           DATE       End date of audit step (actual)                                                                                                                                                         
+# AUDITSTEP     actualprocessingtime    LONG       Processing time (actual)                                                                                                                                                                
+# AUDITSTEP     actualstartdate         DATE       Start date of audit step (actual)                                                                                                                                                       
+# AUDITSTEP     answers                 LIST       Questions                         to * ANSWERs (LT=5351)
+# AUDITSTEP     audit                   LIST       Related audit                     to 1 AUDIT (LT=5311)
+# AUDITSTEP     auditsteptemplate       LIST       Related audit step template       to 1 AUDITSTEPTEMPLATE (LT=5330)                                                                                                                      
+# AUDITSTEP     description             TEXT       Description                                                                                                                                                                             
+# AUDITSTEP     detached                BOOLEAN    Deleted                                                                                                                                                                                 
+# AUDITSTEP     documents               LIST       Documents                         to * DOCUMENTs (LT=5250)                                                                                                                              
+# AUDITSTEP     duestatus               ENUM       Due status                        duestatus (all=-1,on_time=1,overdue=2)                                                                                                                
+# AUDITSTEP     manuallyCreated         BOOLEAN    Generated manually                                                                                                                                                                      
+# AUDITSTEP     name                    STRING     Name                                                1
+# AUDITSTEP     notconformreason        ENUM       Reason                            notconformreason (all=-1,please_select=0,major=1,minor=2)                                                                                             
+# AUDITSTEP     measure                 ENUM       Measure_AuditStep                        measure (all=-1,to_be_checked=-2,unspecified=0,none=1,deficiency=2,issue=3,deactivated=4)
+# AUDITSTEP     processingtime          LONG       Processing time (target)
+# AUDITSTEP     remark                  TEXT       Remark
+# AUDITSTEP     scope                   LIST       Audit step scope                  to 1 OBJECT (LT=5260)
+# AUDITSTEP     step_type               ENUM       Audit step type                       auditsteptype (all=-1,please_select=0,point_of_audit_task=1,logistic_task=2)
+# AUDITSTEP     stepconclusion          TEXT       Result                                                                                                                                                                                  
+# AUDITSTEP     stepconclusiondocuments LIST       Result documents                  to * DOCUMENTs (LT=5270)                                                                                                                              
+# AUDITSTEP     steps                   LIST       Audit steps                       to * AUDITSTEPs (LT=5310)                                                                                                                             
+
+# DO NOT CHANGE THE LINES ABOVE - all of them will be updated automatically by tool com.idsscheer.webapps.arcm.bl.re.RETemplater
+
+################################################
+### All workflow states - before state rules ###
+
+rule "set audit step attributes invisible [I,V]"
+
+    salience 10000
+    no-loop true
+
+    when
+
+    then
+        set "notconformreason" invisible
+        set "measure" invisible
+
+end
+
+###############################################################
+### Workflow state "preparationPhase" and "executionPhase"  ###
+rule "define step type editable [I,V]"
+
+    salience 2500
+    no-loop true
+
+    when
+        ( is in workflow state "PREPARED" OR
+          is in workflow state "preparationPhase")
+    	user has at object role "auditowner"
+
+    then
+        set "step_type" editable
+end
+
+rule "define auditowner mandatory [I,V]"
+
+    salience 2400
+    no-loop true
+
+    when
+        ( is in workflow state "PREPARED" OR
+          is in workflow state "preparationPhase" OR
+          is in workflow state "executionPhase" )
+    	user has at object role "auditowner"
+
+    then
+        set "name" mandatory
+        set "processingtime" mandatory
+        set "plannedenddate" mandatory
+        set "plannedstartdate" mandatory
+        set "owner_group" mandatory
+        
+end
+
+rule "define auditowner editable [I,V]"
+
+    salience 2300
+    no-loop true
+
+    when
+        ( is in workflow state "PREPARED" OR
+          is in workflow state "preparationPhase" OR
+          is in workflow state "executionPhase" )
+    	user has at object role "auditowner"
+
+    then
+		set "name" editable
+		set "description" editable
+		set "scope" editable
+		set "owner_group" editable
+		set "processingtime" editable
+        set "plannedenddate" editable
+        set "plannedstartdate" editable
+        set "documents" editable
+		set "steps" editable
+
+end
+
+rule "define auditowner status editable [I,V]"
+
+    salience 2200
+    no-loop true
+
+    when
+        is in workflow state "preparationPhase"
+    	user has at object role "auditowner"
+    	audit is in execution
+
+    then
+		set "owner_status" editable
+
+end
+
+rule "processingtime_invalid_[V]"
+
+	salience 2100
+	no-loop true
+
+	when
+	    ( is in workflow state "PREPARED" OR
+          is in workflow state "preparationPhase" OR
+          is in workflow state "executionPhase" )
+    	user has at object role "auditowner"
+		"processingtime" is filled
+        value comparison fulfilled: ":transient:" attr_value "processingtime" "EQUALS" value "0000:00:00:00"
+
+	then
+		set "processingtime" invalid
+		add "error" message "error.auditstep.processingtime.invalid.ERR" to "processingtime"
+
+end
+
+rule "planned_processing_time_exceeds_planned_processing_period_[V]"
+
+    salience 2000
+	no-loop true
+
+	when
+	    ( is in workflow state "PREPARED" OR
+          is in workflow state "preparationPhase" OR
+          is in workflow state "executionPhase" )
+    	user has at object role "auditowner"
+		"processingtime" is filled
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+        audit step processing time "processingtime" exceeds the planned processing period of "plannedstartdate" and "plannedenddate"
+
+	then
+	    set "processingtime" invalid
+		add "error" message "error.auditstep.processingtime.not.in.target.period.ERR" to "processingtime"
+
+end
+
+########################################
+### Workflow state "executionPhase"  ###
+rule "add audit step changed by another user information [I]"
+
+    salience 1700
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+    	user has at object role "auditstepowner"
+    	audit step changed by another user
+    	"owner" is filled
+        value comparison fulfilled: ":persistent:" attr_value "owner_status" "CONTAINS" value "in_progress"
+
+    then
+        add changed user information
+        
+end
+
+rule "define auditstepowner mandatory [I,V]"
+
+    salience 1600
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+    	user has at object role "auditstepowner"
+
+    then
+		set "owner_status" mandatory
+
+end
+
+rule "define auditstepowner editable [I,V]"
+
+    salience 1500
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+    	user has at object role "auditstepowner"
+		value comparison fulfilled: ":persistent:" attr_value "plannedstartdate" "LESS EQUAL" value ":TODAY:"
+
+    then
+		set "actualprocessingtime" editable
+		set "documents" editable
+		set "owner_status" editable
+		set "stepconclusion" editable
+		set "stepconclusiondocuments" editable
+		set "remark" editable
+		set "percentage_completed" editable
+
+end
+
+rule "define notconformreason mandatory [I,V]"
+
+    salience 1400
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+        user has at object role "auditstepowner"
+        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "notconform"
+
+	then
+	    set "notconformreason" visible
+	    set "notconformreason" editable
+        set "notconformreason" mandatory
+
+end
+
+rule "define measure mandatory [I,V]"
+
+    salience 1300
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+        user has at object role "auditstepowner"
+        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "notconform"
+        value comparison fulfilled: ":transient:" attr_value "notconformreason" "CONTAINS" value "major"
+
+	then
+	    set "measure" visible
+	    set "measure" editable
+        set "measure" mandatory
+
+end
+
+rule "define stepconclusion mandatory [I,V]"
+
+    salience 1200
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+        user has at object role "auditstepowner"
+        ( value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "notconform" OR
+          value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "notauditable")
+
+	then
+		set "stepconclusion" mandatory
+
+end
+
+rule "define actual processing time mandatory [I,V]"
+
+    salience 1100
+    no-loop true
+
+    when
+        is in workflow state "executionPhase"
+    	user has at object role "auditstepowner"
+        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "closed"
+
+    then
+		set "actualprocessingtime" mandatory
+
+end
+
+rule "actualprocessingtime_invalid_[V]"
+
+	salience 1000
+	no-loop true
+
+	when
+	    is in workflow state "executionPhase"
+    	user has at object role "auditstepowner"
+    	value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS" value "closed"
+		"actualprocessingtime" is filled
+        value comparison fulfilled: ":transient:" attr_value "actualprocessingtime" "EQUALS" value "0000:00:00:00"
+
+	then
+		set "actualprocessingtime" invalid
+		add "error" message "error.auditstep.processingtime.invalid.ERR" to "actualprocessingtime"
+
+end
+
+###############################################
+### All workflow states - after state rules ###
+
+rule "protect auditsteps from being edited as long as audit step is not persistent yet [I,V]"
+
+	salience 160
+	when
+		user has at object role "auditowner"
+		object is new
+
+	then
+		set "steps" readonly
+		add object "information" message "auditmanagement.auditsteps.deny.assigning.auditsteps.DBI"
+
+end
+
+# ---- not needed because the for renderer prevents forbidden owner status changes ----
+#rule "prevent forbidden owner status change [V]"
+#
+#    salience 140
+#    no-loop true
+#
+#    when
+#        value comparison fulfilled: ":persistent:" attr_value "owner_status" "CONTAINS" value "in_preparation"
+#        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS NOT" value "in_preparation"
+#        value comparison fulfilled: ":transient:" attr_value "owner_status" "CONTAINS NOT" value "released"
+#
+#    then
+#        set "owner_status" invalid
+#		add "error" message "error.audit.owner.status.change.forbidden.ERR" to "owner_status"
+#
+#end
+
+rule "show invisible measure [I, V]"
+
+    salience 150
+    no-loop true
+
+    when
+        "measure" is filled
+
+    then
+        set "measure" visible
+end
+
+rule "show invisible notconformreason [I, V]"
+
+    salience 140
+    no-loop true
+
+    when
+        "notconformreason" is filled
+
+    then
+        set "notconformreason" visible
+end
+
+rule "plannedstartdate_invalid_[V]"
+
+	salience 120
+	no-loop true
+
+	when
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+		attribute comparison fulfilled: ":transient:" attr_value "plannedstartdate" "GREATER THAN" ":transient:" attr_value "plannedenddate"
+
+	then
+		set "plannedstartdate" invalid
+		add "error" message "error.date.range.DBI" to "plannedstartdate"
+
+end
+
+rule "period_invalid_[V]"
+
+	salience 110
+	no-loop true
+
+	when
+		"plannedstartdate" is filled
+		"plannedenddate" is filled
+		audit step period is not within audit period
+
+	then
+		set "plannedstartdate" invalid
+		add "error" message "error.auditstepperiod.not.in.auditperiod.ERR" to "plannedstartdate"
+
+end
+
+rule "period_sub_step_invalid_[V]"
+
+	salience 100
+	no-loop true
+
+	when
+		"steps" is dirty
+		audit step period of sub step is not within audit period
+
+	then
+		set "steps" invalid
+		add "error" message "error.auditstepperiod.not.in.auditperiod.ERR" to "steps"
+
+end
+
+
+################
+# DMM - 2018-04-03 - EV167233 -  Impossibilidade de anexar arquivos
+################
+rule "file_upload_enable[I,V]"
+
+	salience 90
+	no-loop true
+	
+	when
+		is in workflow state "executionPhase"
+	then
+		set "documents" editable
+
+end

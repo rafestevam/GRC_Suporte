@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import com.idsscheer.webapps.arcm.bl.authentication.context.IUserContext;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.IViewQuery;
 import com.idsscheer.webapps.arcm.bl.dataaccess.query.QueryFactory;
+import com.idsscheer.webapps.arcm.bl.exception.RightException;
 import com.idsscheer.webapps.arcm.bl.framework.transaction.ITransaction;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObj;
 import com.idsscheer.webapps.arcm.bl.models.objectmodel.IAppObjFacade;
@@ -113,31 +114,42 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 	private boolean isIROValid() {
 		
 		boolean iroValid = false;
-		IAppObj currIssueObj = this.formModel.getAppObj();
-		
-		IEnumAttribute actionTypeAttr = currIssueObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
-		IEnumerationItem actionType = ARCMCollections.extractSingleEntry(actionTypeAttr.getRawValue(), true);
-		
-		if(actionType.getId().equals("actionplan"))
-			return true;
-		
-		List<IAppObj> iroList = currIssueObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullGrantUserContext());
-		for (IAppObj iroObj : iroList) {
-			if(iroObj.getObjectType().equals(ObjectType.TESTCASE)){
-				IEnumAttribute reviewerStrAttr = iroObj.getAttribute(ITestcaseAttributeType.ATTR_REVIEWER_STATUS);
-				IEnumerationItem reviewerStatus = ARCMCollections.extractSingleEntry(reviewerStrAttr.getRawValue(), true);
-				if(reviewerStatus.getValue().equals("1")){
-					iroValid = true;
-					break;
-				}
-			}
-			if(iroObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)){
-				iroValid = true;
-				break;
-			}
-		}
-		
-		return iroValid;
+        IAppObj currIssueObj = this.formModel.getAppObj();
+        
+        IAppObjFacade tcFacade = FacadeFactory.getInstance().getAppObjFacade(getFullGrantUserContext(), ObjectType.TESTCASE);
+        
+        IEnumAttribute actionTypeAttr = currIssueObj.getAttribute(IIssueAttributeTypeCustom.ATTR_ACTIONTYPE);
+        IEnumerationItem actionType = ARCMCollections.extractSingleEntry(actionTypeAttr.getRawValue(), true);
+        
+        if(actionType.getId().equals("actionplan"))
+              return true;
+        
+        List<IAppObj> iroList = currIssueObj.getAttribute(IIssueAttributeType.LIST_ISSUERELEVANTOBJECTS).getElements(getFullGrantUserContext());
+        for (IAppObj iroObj : iroList) {
+              if(iroObj.getObjectType().equals(ObjectType.TESTCASE)){
+                    
+                    IAppObj tcObj = null;
+                    try {
+                          tcObj = tcFacade.load(iroObj.getVersionData().getHeadOVID(), getDefaultTransaction(), false);
+                    } catch (RightException e) {
+                          throw new RuntimeException(e);
+                    }
+                    
+                    IEnumAttribute reviewerStrAttr = tcObj.getAttribute(ITestcaseAttributeType.ATTR_REVIEWER_STATUS);
+                    IEnumerationItem reviewerStatus = ARCMCollections.extractSingleEntry(reviewerStrAttr.getRawValue(), true);
+                    if(reviewerStatus.getValue().equals("1")){
+                          iroValid = true;
+                          break;
+                    }
+              }
+              if(iroObj.getObjectType().equals(ObjectType.CONTROLEXECUTION)){
+                    iroValid = true;
+                    break;
+              }
+        }
+        
+        return iroValid;
+
 	}
 
 	protected void afterExecute(){
@@ -217,10 +229,10 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 				}else{
 					
 					IOVID iroOVID = iroElement.getVersionData().getHeadOVID();
-					//ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
+					ITransaction otherTransaction = TransactionManager.getInstance().createTransaction();
 					try{
-						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
-//						IAppObj iroObj = issueFacade.load(iroOVID, otherTransaction, true);
+//						IAppObj iroObj = issueFacade.load(iroOVID, this.getDefaultTransaction(), true);
+						IAppObj iroObj = issueFacade.load(iroOVID, otherTransaction, true);
 						issueFacade.allocateLock(iroOVID, LockType.FORCEWRITE);
 						
 						Date issueDateVal = iroObj.getAttribute(IIssueAttributeType.ATTR_PLANNEDENDDATE).getRawValue();
@@ -253,9 +265,9 @@ public class CustomIssueSaveActionCommand extends IssueSaveActionCommand  {
 							
 						}
 						
-						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
-//						issueFacade.save(iroObj, otherTransaction, true);
-//						otherTransaction.commit();
+//						issueFacade.save(iroObj, this.getDefaultTransaction(), true);
+						issueFacade.save(iroObj, otherTransaction, true);
+						otherTransaction.commit();
 						updateTaskItem(getFullGrantUserContext(), iroObj);
 						
 					}catch(Exception e){
